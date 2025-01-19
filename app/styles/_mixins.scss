@@ -1,0 +1,21 @@
+@use './variables' as *;
+
+@mixin respond-to($breakpoint) {
+    @if $breakpoint == s {
+        @media (min-width: $breakpoint-small) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint == m {
+        @media (min-width: $breakpoint-medium) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint == l {
+        @media (min-width: $breakpoint-large) {
+            @content;
+        }
+    }
+}

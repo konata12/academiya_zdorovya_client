@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  sassOptions: {
-    implementation: 'sass-embedded'
-  }
+    // experimental: {
+    //     ppr: 'incremental',
+    // },
 };
 
 export default nextConfig;
