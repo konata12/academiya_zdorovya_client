@@ -1,4 +1,4 @@
-import { fetchDepartments } from "@/app/(client)/lib/data";
+import { use, useEffect, useState } from "react";
 import Select from "react-select";
 
 const options = [
@@ -7,23 +7,38 @@ const options = [
     { value: 'vanilla', label: 'Vanilla' },
 ]
 
-export const getStaticProps = async () => {
-    console.log('jopa')
-    const data = await fetchDepartments()
-    console.log(data, 666)
-    return {
-        props: {
-            data
+export default function Departments_select() {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<null | string>(null);
+    console.log(data, 1)
+
+    async function fetchData() {
+        try {
+            const response = await fetch('http://localhost:5000/departments'); // Replace with your API endpoint
+            if (!response.ok) {
+                throw new Error('Network response was not ok((((((((((');
+            }
+            const jsonData = await response.json();
+            setData(jsonData);
+        } catch (err) {
+            // setError(err.message);
+        } finally {
+            setLoading(false);
         }
     }
-}
 
+    useEffect(() => {
+        fetchData();
+    }, []); // Empty dependency array ensures it runs once on mount
 
-export default function Departments_select({ data }: any) {
-    console.log(data, 123)
+    console.log(data, 2)
+
+    if (loading) return <p>Loading...</p>
+
     return <>
         <p>123123123</p>
-        {/* <Select options={options} /> */}
+        <Select options={options} />
     </>
 }
 

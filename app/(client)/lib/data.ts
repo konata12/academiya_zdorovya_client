@@ -2,12 +2,13 @@ import axios from '../utils/axios'
 
 export async function fetchDepartments() {
     try {
-        const data = await axios.get('departments')
-        console.log(axios.getUri)
-        console.log(data, 444)
+        const res = await fetch(`http://localhost:5000/departments`, {
+            method: 'GET'
+        })
 
-        return data
+        return res
     } catch (error) {
         console.log(error)
+        throw Error('failed to fetch departments')
     }
 }
