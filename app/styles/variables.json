@@ -1,0 +1,181 @@
+{
+  "variables": [],
+  "colors": [
+    {
+      "name": "$text-color-black",
+      "value": "#2F3035",
+      "compiledValue": "#2F3035"
+    },
+    {
+      "name": "$text-color-white",
+      "value": "#fff",
+      "compiledValue": "#fff"
+    },
+    {
+      "name": "$primary-color",
+      "value": "#004BAE",
+      "compiledValue": "#004BAE"
+    },
+    {
+      "name": "$primary-color-active",
+      "value": "#4D68ED",
+      "compiledValue": "#4D68ED"
+    },
+    {
+      "name": "$secondary-color",
+      "value": "#F8E00F",
+      "compiledValue": "#F8E00F"
+    },
+    {
+      "name": "$secondary-color-active",
+      "value": "#FFF200",
+      "compiledValue": "#FFF200"
+    },
+    {
+      "name": "$disabled-color",
+      "value": "#CCDBEF",
+      "compiledValue": "#CCDBEF"
+    },
+    {
+      "name": "$background-color-primary",
+      "value": "#F1F5F8",
+      "compiledValue": "#F1F5F8"
+    },
+    {
+      "name": "$background-color-secondary",
+      "value": "#FAFCFE",
+      "compiledValue": "#FAFCFE"
+    },
+    {
+      "name": "$black-bg-color",
+      "value": "#000",
+      "compiledValue": "#000"
+    }
+  ],
+  "pc-fonts": [
+    {
+      "name": "$pc-h1-fz",
+      "value": "64px",
+      "compiledValue": "64px"
+    },
+    {
+      "name": "$pc-h2-fz",
+      "value": "52px",
+      "compiledValue": "52px"
+    },
+    {
+      "name": "$pc-h3-fz",
+      "value": "32px",
+      "compiledValue": "32px"
+    },
+    {
+      "name": "$pc-h4-fz",
+      "value": "29px",
+      "compiledValue": "29px"
+    },
+    {
+      "name": "$pc-h5-fz",
+      "value": "23px",
+      "compiledValue": "23px"
+    },
+    {
+      "name": "$pc-h6-fz",
+      "value": "20px",
+      "compiledValue": "20px"
+    },
+    {
+      "name": "$pc-t1-fz",
+      "value": "20px",
+      "compiledValue": "20px"
+    },
+    {
+      "name": "$pc-t2-fz",
+      "value": "17px",
+      "compiledValue": "17px"
+    },
+    {
+      "name": "$pc-t3-fz",
+      "value": "14px",
+      "compiledValue": "14px"
+    }
+  ],
+  "mobile-fonts": [
+    {
+      "name": "$mob-h1-fz",
+      "value": "52px",
+      "compiledValue": "52px"
+    },
+    {
+      "name": "$mob-h2-fz",
+      "value": "32px",
+      "compiledValue": "32px"
+    },
+    {
+      "name": "$mob-h3-fz",
+      "value": "26px",
+      "compiledValue": "26px"
+    },
+    {
+      "name": "$mob-h4-fz",
+      "value": "23px",
+      "compiledValue": "23px"
+    },
+    {
+      "name": "$mob-h5-fz",
+      "value": "20px",
+      "compiledValue": "20px"
+    },
+    {
+      "name": "$mob-h6-fz",
+      "value": "17px",
+      "compiledValue": "17px"
+    },
+    {
+      "name": "$mob-t1-fz",
+      "value": "17px",
+      "compiledValue": "17px"
+    },
+    {
+      "name": "$mob-t2-fz",
+      "value": "14px",
+      "compiledValue": "14px"
+    },
+    {
+      "name": "$mob-t3-fz",
+      "value": "11px",
+      "compiledValue": "11px"
+    }
+  ],
+  "breakpoints": [
+    {
+      "name": "$breakpoint-small",
+      "value": "320px",
+      "compiledValue": "320px"
+    },
+    {
+      "name": "$breakpoint-medium",
+      "value": "744px",
+      "compiledValue": "744px"
+    },
+    {
+      "name": "$breakpoint-large",
+      "value": "1025px",
+      "compiledValue": "1025px"
+    },
+    {
+      "name": "$container-size-small",
+      "value": "480px",
+      "compiledValue": "480px"
+    },
+    {
+      "name": "$container-size-medium",
+      "value": "1024px",
+      "compiledValue": "1024px"
+    },
+    {
+      "name": "$container-size-large",
+      "value": "1440px",
+      "compiledValue": "1440px"
+    }
+  ]
+}

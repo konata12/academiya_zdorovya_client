@@ -1,4 +1,6 @@
-// PC
+/**
+ * @sass-export-section="pc-fonts"
+ */
 $pc-h1-fz: 64px;
 $pc-h2-fz: 52px;
 $pc-h3-fz: 32px;
@@ -10,7 +12,9 @@ $pc-t1-fz: 20px;
 $pc-t2-fz: 17px;
 $pc-t3-fz: 14px;
 
-// MOBILE
+/**
+ * @sass-export-section="mobile-fonts"
+ */
 $mob-h1-fz: 52px;
 $mob-h2-fz: 32px;
 $mob-h3-fz: 26px;

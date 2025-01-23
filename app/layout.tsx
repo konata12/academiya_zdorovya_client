@@ -9,19 +9,6 @@ export const metadata: Metadata = {
   description: "Оригінальна назва",
 };
 
-export const experimental_ppr = true;
-
-// export const getStaticProps = async () => {
-//   console.log('jopa')
-//   const data = await fetchDepartments()
-//   console.log(data, 666)
-//   return {
-//       props: {
-//           data
-//       }
-//   }
-// }
-
 export default async function RootLayout({
   children,
 }: Readonly<{
