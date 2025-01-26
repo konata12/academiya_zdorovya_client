@@ -50,9 +50,6 @@ export default function Departments_select() {
                 control: (base, state) => ({
                     display: 'flex',
                 }),
-                input: (base, state) => ({
-                    background: 
-                }),
             }}
         />
     </>

@@ -1,0 +1,9 @@
+@use '../../../../styles/variables' as *;
+
+.links {
+
+    a {
+        color: $text-color-white;
+        text-decoration: none;
+    }
+}

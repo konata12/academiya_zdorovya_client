@@ -1,0 +1,31 @@
+@use '../../../styles/variables' as *;
+
+.header {
+    background-color: $primary-color;
+    display: flex;
+    border-bottom: $secondary-color 2px solid;
+
+    .logo {
+
+    }
+
+    .links {
+
+        .link {
+            text-decoration: none;
+            color: $text-color-white;
+            font-size: $pc-t2-fz;
+
+            display: inline-block;
+            margin: 25px 20px;
+
+            transition: all 0.3s ease-out;
+
+            &:hover {
+                color: $secondary-color-active;
+                margin: 25px 20px 23px 20px;
+                border-bottom: $secondary-color 2px solid;
+            }
+        }
+    }
+}

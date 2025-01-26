@@ -1,0 +1,13 @@
+@use '../../../styles/variables' as *;
+
+.footer {
+    background-color: $primary-color;
+    color: $text-color-white;
+    padding: 30px 0;
+    border-top: $secondary-color 2px solid;
+
+    p {
+        text-align: center;
+        font-size: $pc-t3-fz;
+    }
+}
