@@ -3,10 +3,24 @@
 .header {
     background-color: $primary-color;
     display: flex;
+    align-items: center;
+    justify-content: center;
     border-bottom: $secondary-color 2px solid;
 
-    .logo {
+    &.login {
 
+        .logo {
+            padding-bottom: 25px;
+        }
+        
+        .links {
+            display: none;
+        }
+    }
+
+    .logo {
+        height: 100%;
+        padding-top: 8px;
     }
 
     .links {

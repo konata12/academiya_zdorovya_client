@@ -1,21 +1,25 @@
 @use './variables' as *;
 
 @mixin respond-to($breakpoint) {
-    @if $breakpoint == s {
+    @if $breakpoint ==s {
         @media (min-width: $breakpoint-small) {
             @content;
         }
     }
 
-    @else if $breakpoint == m {
+    @else if $breakpoint ==m {
         @media (min-width: $breakpoint-medium) {
             @content;
         }
     }
 
-    @else if $breakpoint == l {
+    @else if $breakpoint ==l {
         @media (min-width: $breakpoint-large) {
             @content;
         }
     }
+}
+
+@mixin rgba-text($color, $opacity) {
+    color: rgba(red($color), green($color), blue($color), $opacity);
 }

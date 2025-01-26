@@ -1,11 +1,11 @@
 'use client'
 
 import axiosInstance from "@/app/utils/axios";
-import Button from "@/app/common_ui/buttons/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/utils/context/authContext";
+import styles from './Login.module.scss'
 
 export default function Login() {
     const [userName, setUserName] = useState('')
@@ -13,6 +13,7 @@ export default function Login() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<null | string>(null)
     const { accessToken, setAccessToken } = useAuth()
+    console.log(accessToken, 112233)
 
     const router = useRouter()
 
@@ -24,7 +25,6 @@ export default function Login() {
                 userName,
                 password
             })
-            console.log(response)
             setError(null)
             setAccessToken(response.data.access_token)
             router.push('departments')
@@ -38,11 +38,26 @@ export default function Login() {
         }
     }
 
+    useEffect(() => {
+        if (accessToken) {
+            router.push('departments')
+        }
+    }, [accessToken, router])
+
+    // If the user is already logged in, prevent rendering the login form
+    if (accessToken) return <div className={styles.isLogged}>
+        Ви вже увійшли, зараз вас перенесе на сторінку відділень
+    </div>
+
     return (
-        <div>
-            <form onSubmit={login}>
-                <p>Вхід</p>
+        <div className={styles.container}>
+            <form
+                className={styles.form}
+                onSubmit={login}
+            >
+                <p className={styles.title}>Вхід</p>
                 <input
+                    className={`input ${styles.login}`}
                     type="text"
                     placeholder="Логін"
                     value={userName}
@@ -50,6 +65,7 @@ export default function Login() {
                     required
                 />
                 <input
+                    className={`input ${styles.password}`}
                     type="text"
                     placeholder="Пароль"
                     value={password}
@@ -57,9 +73,9 @@ export default function Login() {
                     required
                 />
                 {error && <p>{error}</p>}
-                <Button
-                    text={loading ? 'Очікуєм' : 'Увійти'}
-                />
+                <button className={`btn_blue ${styles.btn}`}>
+                    Увійти
+                </button>
             </form>
         </div>
     );

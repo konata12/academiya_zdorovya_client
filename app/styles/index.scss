@@ -28,3 +28,36 @@ body {
         max-width: 1440px;
     }
 }
+
+.input {
+    background-color: $disabled-color;
+    border: none;
+    padding: 28px;
+    border-radius: $border-rad-l;
+
+    font-size: $pc-t1-fz;
+    color: $text-color-black;
+
+    &:focus-visible {
+        border: none;
+        outline: none;
+    }
+
+    &::placeholder {
+        @include rgba-text($text-color-black, 0.5)
+    }
+}
+
+.btn_blue {
+    background-color: $primary-color;
+    border: none;
+    border-radius: $border-rad-xl;
+    padding: $padding-xxl;
+    transition: all 0.3s ease-out;
+
+    color: $text-color-white;
+
+    &:hover {
+        color: $secondary-color-active;
+    }
+}

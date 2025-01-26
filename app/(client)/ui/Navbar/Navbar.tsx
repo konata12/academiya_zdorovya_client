@@ -6,7 +6,6 @@ import logo from '@/public/icons/logo.svg'
 import Departments_select from "@/app/(client)/ui/Navbar/Departments_select/Departments_select"
 import Links from "@/app/(client)/ui/Navbar/Links/Links"
 import Link from "next/link"
-import Button from "@/app/common_ui/buttons/Button"
 
 export default function Navbar() {
     // if admin page then don't appear
@@ -23,11 +22,11 @@ export default function Navbar() {
             </Link>
             <Departments_select />
             <Links />
-            <Button
-                text="Запис на прийом"
-                isLink={true}
-                url="contacts"
-            />
+            <Link
+                href={'/contacts'}
+            >
+                Запис на прийом
+            </Link>
         </div>
     </div>
 }

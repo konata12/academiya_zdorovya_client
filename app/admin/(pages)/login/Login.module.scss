@@ -1,0 +1,36 @@
+@use '../../../styles/variables' as *;
+
+.isLogged {
+    text-align: center;
+    color: $text-color-black;
+    font-size: $pc-h1-fz;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        width: 632px;
+
+        .title {
+            margin-bottom: 64px;
+
+            text-align: center;
+            font-size: $pc-h1-fz;
+            color: $text-color-black;
+        }
+
+        .login {
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            margin-top: 64px;
+        }
+    }
+}
