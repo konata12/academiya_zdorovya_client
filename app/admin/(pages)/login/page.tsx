@@ -73,7 +73,7 @@ export default function Login() {
                     required
                 />
                 {error && <p>{error}</p>}
-                <button className={`btn_blue ${styles.btn}`}>
+                <button className={`btn blue xl ${styles.btn}`}>
                     Увійти
                 </button>
             </form>

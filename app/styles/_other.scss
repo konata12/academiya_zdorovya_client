@@ -1,12 +1,47 @@
 /**
  * @sass-export-section="border-radius"
  */
-$border-rad-xl: 28px;
-$border-rad-l: 22px; 
+$border-rad-1: 64px;
+$border-rad-2: 42px;
+$border-rad-3: 36px;
+$border-rad-4: 28px;
+$border-rad-5: 22px;
+$border-rad-6: 18px;
+$border-rad-7: 14px;
+$border-rad-8: 12px;
+$border-rad-round: 50%;
+
+// BUTTONS
+$pc-btn-border-rad-xxl: $border-rad-3;
+$pc-btn-border-rad-xl: $border-rad-4;
+$pc-btn-border-rad-lg: $border-rad-5;
+$pc-btn-border-rad-md: $border-rad-6;
+$pc-btn-border-rad-sm: $border-rad-8;
+
+// INPUT
+$pc-input-border-rad: $border-rad-5;
+
 
 /**
  * @sass-export-section="padding"
  */
-$padding-xxl: 32px;
-$padding-xl: 28px;
-$padding-l: 20px;
+$padding-1: 64px; 
+$padding-2: 48px;
+$padding-3: 44px;
+$padding-4: 32px;
+$padding-5: 28px;
+$padding-6: 20px;
+$padding-7: 15px;
+$padding-8: 13px;
+$padding-9: 11px;
+$padding-10: 9px;
+
+// BUTTONS
+$pc-btn-padding-xl: $padding-4;
+$pc-btn-padding-lg: $padding-5;
+$pc-btn-padding-md: $padding-6;
+$pc-btn-padding-sm-h: $padding-7;
+$pc-btn-padding-sm-w: $padding-8;
+
+// INPUT
+$pc-input-padding: $padding-5;

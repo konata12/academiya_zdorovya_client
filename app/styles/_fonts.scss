@@ -1,4 +1,16 @@
 /**
+ * @sass-export-section="fonts"
+ */
+$main-font: 'ubuntu';
+$not-found-font: 'unbounded';
+
+/**
+ * @sass-export-section="font-weight"
+ */
+$font-weight-reg: 400;
+$font-weight-med: 500;
+
+/**
  * @sass-export-section="pc-fonts"
  */
 $pc-h1-fz: 64px;
@@ -25,3 +37,13 @@ $mob-h6-fz: 17px;
 $mob-t1-fz: 17px;
 $mob-t2-fz: 14px;
 $mob-t3-fz: 11px;
+
+/**
+ * @sass-export-section="pc-buttons-fonts"
+ */
+$pc-btn-fz-sm-blue: $pc-t3-fz;
+$pc-btn-fz-sm-yellow: $pc-t3-fz;
+$pc-btn-fz-md-blue: $pc-t2-fz;
+$pc-btn-fz-md-gray: $pc-t2-fz;
+$pc-btn-fz-lg: $pc-h6-fz;
+$pc-btn-fz-xl: $pc-h5-fz;

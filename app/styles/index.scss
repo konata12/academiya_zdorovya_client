@@ -1,5 +1,6 @@
 @use './variables' as *;
 @use './mixins' as *;
+@use './functions' as *;
 
 * {
     margin: 0;
@@ -10,12 +11,14 @@
 
 body {
     background-color: $background-color-primary;
+    font-family: $main-font;
+    font-weight: $font-weight-reg;
 }
 
 .container {
     margin: auto;
     padding: 0 24px;
-    
+
     @include respond-to(s) {
         max-width: 375px;
     }
@@ -32,8 +35,8 @@ body {
 .input {
     background-color: $disabled-color;
     border: none;
-    padding: 28px;
-    border-radius: $border-rad-l;
+    border-radius: $pc-input-border-rad;
+    padding: $pc-input-padding;
 
     font-size: $pc-t1-fz;
     color: $text-color-black;
@@ -48,16 +51,127 @@ body {
     }
 }
 
-.btn_blue {
-    background-color: $primary-color;
+.btn {
+
     border: none;
-    border-radius: $border-rad-xl;
-    padding: $padding-xxl;
-    transition: all 0.3s ease-out;
+    transition: all $anim-time $slow;
+    font-weight: $font-weight-reg;
 
-    color: $text-color-white;
+    &.blue {
 
-    &:hover {
-        color: $secondary-color-active;
+        background-color: $primary-color;
+        color: $text-color-white;
+
+        &:hover {
+            color: $secondary-color;
+            box-shadow: $shadow-size $primary-color-active;
+        }
+
+        &.xxl {
+            border-radius: $pc-btn-border-rad-xxl;
+            padding: $pc-btn-padding-xl;
+
+            font-weight: $font-weight-med;
+            font-size: $pc-btn-fz-xl;
+        }
+        &.xl {
+            border-radius: $pc-btn-border-rad-xl;
+            padding: $pc-btn-padding-xl;
+
+            font-weight: $font-weight-med;
+            font-size: $pc-btn-fz-xl;
+        }
+        &.lg {
+            border-radius: $pc-btn-border-rad-lg;
+            padding: $pc-btn-padding-lg;
+
+            font-weight: $font-weight-med;
+            font-size: $pc-btn-fz-lg;
+        }
+        &.md {
+            border-radius: $pc-btn-border-rad-md;
+            padding: $pc-btn-padding-md;
+
+            font-size: $pc-btn-fz-md-blue;
+        }
+        &.sm {
+            border-radius: $pc-btn-border-rad-sm;
+            padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
+
+            font-size: $pc-btn-fz-sm-blue;
+        }
+    }
+
+    &.yellow {
+
+        background-color: $secondary-color;
+        color: $text-color-black;
+
+        &:hover {
+            color: $primary-color;
+            box-shadow: $shadow-size $secondary-color;
+        }
+
+        &.xxl {
+            border-radius: $pc-btn-border-rad-xxl;
+            padding: $pc-btn-padding-xl;
+
+            font-weight: $font-weight-med;
+            font-size: $pc-btn-fz-xl;
+
+            &.brown {
+                color: $secondary-color;
+                outline: 2px solid $secondary-color;
+                background-color: rgba(47, 48, 53, 0.32);
+
+                &:hover {
+                    background-color: rgba(81, 82, 28, 0.64);
+                }
+            }
+        }
+        &.sm {
+            border-radius: $pc-btn-border-rad-sm;
+            padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
+
+            font-size: $pc-btn-fz-sm-yellow;
+        }
+    }
+
+    &.gray {
+
+        background-color: $disabled-color;
+        @include rgba-text($text-color-black, 0.5);
+
+        &:hover {
+            color: $text-color-black;
+            box-shadow: $shadow-size rgba(141, 152, 203, 0.64);
+        }
+
+        &.xxl {
+            border-radius: $pc-btn-border-rad-xxl;
+            padding: $pc-btn-padding-xl;
+
+            font-weight: $font-weight-med;
+            font-size: $pc-btn-fz-xl;
+        }
+        &.xl {
+            border-radius: $pc-btn-border-rad-xl;
+            padding: $pc-btn-padding-xl;
+
+            font-weight: $font-weight-med;
+            font-size: $pc-btn-fz-xl;
+        }
+        &.md {
+            border-radius: $pc-btn-border-rad-md;
+            padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
+
+            font-size: $pc-btn-fz-md-gray;
+        }
+        &.sm {
+            border-radius: $pc-btn-border-rad-sm;
+            padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
+
+            font-size: $pc-btn-fz-md-gray;
+        }
     }
 }

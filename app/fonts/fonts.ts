@@ -11,12 +11,7 @@ export const ubuntu = localFont({
             path: './ubuntu/Ubuntu-Medium.ttf',
             weight: '500',
             style: 'normal'
-        },
-        {
-            path: './ubuntu/Ubuntu-Bold.ttf',
-            weight: '700',
-            style: 'normal'
-        },
+        }
     ]
 })
 
