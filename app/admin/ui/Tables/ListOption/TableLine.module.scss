@@ -1,0 +1,26 @@
+@use '../../../../styles/_variables.scss' as *;
+
+.option {
+    display: flex;
+    // justify-content: space-between;
+    width: 100%;
+    padding: $admin-common-table-line-padding;
+    border-radius: $admin-common-table-line-border-rad;
+    background-color: $text-color-white;
+
+    color: $text-color-black;
+    font-size: $admin-common-table-line-fz;
+
+    span {
+        display: flex;
+        justify-content: center;
+        flex: 1;
+
+        &:first-child {
+            justify-content: left;
+        }
+        &:last-child {
+            justify-content: right;
+        }
+    }
+}

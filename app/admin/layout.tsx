@@ -44,13 +44,15 @@ export default function Layout({
         <>
             <div className={styles.layout}>
                 <AuthContext.Provider value={{ accessToken, setAccessToken }}>
-                    <div className={styles.container}>
+                    <div className={`${styles.container} ${!isLoginPage && styles.loggedIn}`}>
                         <Header isLoginPage={isLoginPage} />
-                        {(!isLoginPage && accessToken) && <SideNavigation />}
                         <div className={styles.main}>
-                            {((isLoginPage || accessToken) && children) || <div className={styles.not_logged_in}>
-                                Ввійдіть в адмін панель
-                            </div>}
+                            <div className={`container ${styles.container}`}>
+                                {(!isLoginPage && accessToken) && <SideNavigation />}
+                                {((isLoginPage || accessToken) && children) || <div className={styles.not_logged_in}>
+                                    Ввійдіть в адмін панель
+                                </div>}
+                            </div>
                         </div>
                         <Footer />
                     </div>

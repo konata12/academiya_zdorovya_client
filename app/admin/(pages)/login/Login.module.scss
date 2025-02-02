@@ -16,7 +16,7 @@
     justify-content: center;
     align-items: center;
     height: 100%;
-    padding: 30px 0;
+    width: 100%;
 
     .form {
         display: flex;
@@ -25,11 +25,7 @@
 
         .title {
             margin-bottom: 64px;
-
             text-align: center;
-            font-size: $pc-h1-fz;
-            font-weight: $font-weight-med;
-            color: $text-color-black;
         }
 
         .login {

@@ -10,15 +10,24 @@
 
         .main {
             flex-grow: 1;
+            padding-top: 70px;
             color: $text-color-black;
 
-            .not_logged_in {
+            .container {
                 display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100%;
+                flex-direction: row;
+                gap: 64px;
+                padding: 93px 0;
 
-                font-size: $pc-h1-fz;
+                .not_logged_in {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    width: 100%;
+    
+                    font-size: $pc-h1-fz;
+                }
             }
         }
     }

@@ -1,41 +1,37 @@
 import Image from 'next/image'
 import logo from '@/public/icons/logo_admin.png'
 import styles from './Header.module.scss'
-import Link from 'next/link'
+import NavLink from '@/app/common_ui/NavLink/NavLink'
+import { routes } from '@/app/admin/ui/SideNavigation/SideNavigation'
 
 export default function Header({
     isLoginPage
 }: {
     isLoginPage: boolean
-}) {
+    }) {
+    const urlsForRedactive = routes.map(route => route.path)
 
     return (
-        <div className={`${styles.header} ${isLoginPage && styles.login}`}>
-            <div className={styles.logo}>
-                <Image
-                    src={logo}
-                    alt='logo'
-                />
-            </div>
-            {/* <Link
-                href={'/admin/login'}
-            >
-                login
-            </Link> */}
+        <div className={`${styles.header}`}>
+            <div className={`container ${styles.container} ${isLoginPage && styles.login}`}>
+                <div className={styles.logo}>
+                    <Image
+                        src={logo}
+                        alt='logo'
+                    />
+                </div>
 
-            <div className={styles.links}>
-                <Link
-                    className={styles.link}
-                    href={'/admin/departments'}
-                >
-                    Редактор сайту
-                </Link>
-                <Link
-                    className={styles.link}
-                    href={'/admin/bookings'}
-                >
-                    Записи на прийом(число) {/* must load from database amount of appointments */}
-                </Link>
+                <div className={styles.links}>
+                    <NavLink
+                        text='Редактор сайту'
+                        url='/admin/departments'
+                        urlsForActive={urlsForRedactive}
+                    />
+                    <NavLink
+                        text='Записи на прийом(число)'
+                        url='/admin/bookings'
+                    /> {/* must load from database amount of appointments */}
+                </div>
             </div>
         </div>
     )

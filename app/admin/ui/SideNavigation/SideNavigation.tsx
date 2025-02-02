@@ -1,6 +1,7 @@
-import Link from "next/link"
+import styles from './SideNavigatin.module.scss'
+import SideNavButton from "@/app/admin/ui/SideNavigation/SideNavButton/SideNavButton"
 
-const routes = [
+export const routes = [
     { label: 'Відділення', path: '/admin/departments' },
     { label: 'Наповнення відділення', path: '/admin/fill_departments' },
     { label: 'Юридична інформація', path: '/admin/law_info' },
@@ -12,16 +13,17 @@ const routes = [
     { label: 'Відгуки', path: '/admin/reviews' },
     { label: 'Новини', path: '/admin/news' },
 ]
+
 export default function SideNavigation() {
+
     return (
-        <div>
+        <div className={styles.sideNav}>
             {routes.map(route => {
-                return (<Link
-                    href={route.path}
+                return (<SideNavButton
+                    path={route.path}
+                    label={route.label}
                     key={route.path}
-                >
-                    {route.label}
-                </Link>)
+                />)
             })}
         </div>
     )

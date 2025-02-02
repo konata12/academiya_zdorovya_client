@@ -30,18 +30,33 @@ $padding-2: 48px;
 $padding-3: 44px;
 $padding-4: 32px;
 $padding-5: 28px;
-$padding-6: 20px;
-$padding-7: 15px;
-$padding-8: 13px;
-$padding-9: 11px;
-$padding-10: 9px;
+$padding-6: 24px;
+$padding-7: 20px;
+$padding-8: 15px;
+$padding-9: 13px;
+$padding-10: 11px;
+$padding-11: 9px;
 
 // BUTTONS
 $pc-btn-padding-xl: $padding-4;
 $pc-btn-padding-lg: $padding-5;
-$pc-btn-padding-md: $padding-6;
-$pc-btn-padding-sm-h: $padding-7;
-$pc-btn-padding-sm-w: $padding-8;
+$pc-btn-padding-md: $padding-7;
+$pc-btn-padding-sm-h: $padding-8;
+$pc-btn-padding-sm-w: $padding-9;
 
 // INPUT
 $pc-input-padding: $padding-5;
+
+// ADMIN
+// SIDE NAVIGATION
+$admin-side-nav-padding-vert: $padding-7;
+$admin-side-nav-padding-horz: $padding-6;
+
+// COMMON TABLE
+$admin-common-table-padding: $padding-6;
+$admin-common-table-border-rad: $border-rad-4;
+
+$admin-common-table-title-padding: $padding-2;
+
+$admin-common-table-line-padding: $padding-6;
+$admin-common-table-line-border-rad: $border-rad-5;

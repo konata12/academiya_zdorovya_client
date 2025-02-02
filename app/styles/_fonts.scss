@@ -24,9 +24,7 @@ $pc-t1-fz: 20px;
 $pc-t2-fz: 17px;
 $pc-t3-fz: 14px;
 
-/**
- * @sass-export-section="mobile-fonts"
- */
+// mobile-fonts
 $mob-h1-fz: 52px;
 $mob-h2-fz: 32px;
 $mob-h3-fz: 26px;
@@ -38,12 +36,18 @@ $mob-t1-fz: 17px;
 $mob-t2-fz: 14px;
 $mob-t3-fz: 11px;
 
-/**
- * @sass-export-section="pc-buttons-fonts"
- */
+// pc-buttons-fonts
 $pc-btn-fz-sm-blue: $pc-t3-fz;
 $pc-btn-fz-sm-yellow: $pc-t3-fz;
 $pc-btn-fz-md-blue: $pc-t2-fz;
 $pc-btn-fz-md-gray: $pc-t2-fz;
 $pc-btn-fz-lg: $pc-h6-fz;
 $pc-btn-fz-xl: $pc-h5-fz;
+
+// ADMIN
+// SIDENAV
+$admin-side-nav-fz: $pc-t2-fz;
+
+// COMMON TABLE
+$admin-common-table-title-fz: $pc-h6-fz;
+$admin-common-table-line-fz: $pc-h6-fz;

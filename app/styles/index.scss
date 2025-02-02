@@ -32,6 +32,15 @@ body {
     }
 }
 
+.title {
+
+    &.lg {
+        font-size: $pc-h1-fz;
+        font-weight: $font-weight-med;
+        color: $text-color-black;
+    }
+}
+
 .input {
     background-color: $disabled-color;
     border: none;
@@ -52,7 +61,7 @@ body {
 }
 
 .btn {
-
+    cursor: pointer;
     border: none;
     transition: all $anim-time $slow;
     font-weight: $font-weight-reg;
@@ -74,6 +83,7 @@ body {
             font-weight: $font-weight-med;
             font-size: $pc-btn-fz-xl;
         }
+
         &.xl {
             border-radius: $pc-btn-border-rad-xl;
             padding: $pc-btn-padding-xl;
@@ -81,6 +91,7 @@ body {
             font-weight: $font-weight-med;
             font-size: $pc-btn-fz-xl;
         }
+
         &.lg {
             border-radius: $pc-btn-border-rad-lg;
             padding: $pc-btn-padding-lg;
@@ -88,12 +99,14 @@ body {
             font-weight: $font-weight-med;
             font-size: $pc-btn-fz-lg;
         }
+
         &.md {
             border-radius: $pc-btn-border-rad-md;
             padding: $pc-btn-padding-md;
 
             font-size: $pc-btn-fz-md-blue;
         }
+
         &.sm {
             border-radius: $pc-btn-border-rad-sm;
             padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
@@ -129,6 +142,7 @@ body {
                 }
             }
         }
+
         &.sm {
             border-radius: $pc-btn-border-rad-sm;
             padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
@@ -154,6 +168,7 @@ body {
             font-weight: $font-weight-med;
             font-size: $pc-btn-fz-xl;
         }
+
         &.xl {
             border-radius: $pc-btn-border-rad-xl;
             padding: $pc-btn-padding-xl;
@@ -161,12 +176,14 @@ body {
             font-weight: $font-weight-med;
             font-size: $pc-btn-fz-xl;
         }
+
         &.md {
             border-radius: $pc-btn-border-rad-md;
             padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
 
             font-size: $pc-btn-fz-md-gray;
         }
+
         &.sm {
             border-radius: $pc-btn-border-rad-sm;
             padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
@@ -174,4 +191,9 @@ body {
             font-size: $pc-btn-fz-md-gray;
         }
     }
+}
+
+// SERVICE CLASSES
+.fw {
+    width: 100%;
 }

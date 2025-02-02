@@ -13,7 +13,6 @@ export default function Login() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<null | string>(null)
     const { accessToken, setAccessToken } = useAuth()
-    console.log(accessToken, 112233)
 
     const router = useRouter()
 
@@ -55,7 +54,7 @@ export default function Login() {
                 className={styles.form}
                 onSubmit={login}
             >
-                <p className={styles.title}>Вхід</p>
+                <p className={`title lg ${styles.title}`}>Вхід</p>
                 <input
                     className={`input ${styles.login}`}
                     type="text"
