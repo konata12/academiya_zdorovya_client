@@ -10,7 +10,7 @@
     .titles {
         display: flex;
         justify-content: space-between;
-        padding: $admin-common-table-title-padding 0;
+        padding: $admin-common-table-title-padding-h $admin-common-table-title-padding-w;
 
         color: $primary-color;
         font-size: $admin-common-table-title-fz;

@@ -65,13 +65,13 @@ export default function Login() {
                 />
                 <input
                     className={`input ${styles.password}`}
-                    type="text"
+                    type="password"
                     placeholder="Пароль"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                {error && <p>{error}</p>}
+                {error && <p className='error'>{error}</p>}
                 <button className={`btn blue xl ${styles.btn}`}>
                     Увійти
                 </button>

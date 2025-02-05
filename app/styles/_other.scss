@@ -21,6 +21,10 @@ $pc-btn-border-rad-sm: $border-rad-8;
 // INPUT
 $pc-input-border-rad: $border-rad-5;
 
+// ADMIN
+// MODAL WINDOW
+$admin-modal-window-bor-rad: $border-rad-2;
+
 
 /**
  * @sass-export-section="padding"
@@ -38,6 +42,7 @@ $padding-10: 11px;
 $padding-11: 9px;
 
 // BUTTONS
+$pc-cancel-btn-padding: $padding-2;
 $pc-btn-padding-xl: $padding-4;
 $pc-btn-padding-lg: $padding-5;
 $pc-btn-padding-md: $padding-7;
@@ -56,7 +61,11 @@ $admin-side-nav-padding-horz: $padding-6;
 $admin-common-table-padding: $padding-6;
 $admin-common-table-border-rad: $border-rad-4;
 
-$admin-common-table-title-padding: $padding-2;
+$admin-common-table-title-padding-h: $padding-2;
+$admin-common-table-title-padding-w: $padding-3;
 
 $admin-common-table-line-padding: $padding-6;
 $admin-common-table-line-border-rad: $border-rad-5;
+
+// MODAL WINDOW
+$admin-modal-window-pad: $padding-2;

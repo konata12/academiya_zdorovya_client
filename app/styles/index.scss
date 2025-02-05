@@ -11,6 +11,7 @@
 
 body {
     background-color: $background-color-primary;
+
     font-family: $main-font;
     font-weight: $font-weight-reg;
 }
@@ -33,12 +34,22 @@ body {
 }
 
 .title {
+    text-align: center;
 
+    &.left {
+        text-align: left;
+    }
     &.lg {
         font-size: $pc-h1-fz;
         font-weight: $font-weight-med;
         color: $text-color-black;
     }
+}
+
+.inputLabel {
+    color: $text-color-black;
+    font-size: $pc-h5-fz;
+    font-weight: $font-weight-med;
 }
 
 .input {
@@ -179,18 +190,38 @@ body {
 
         &.md {
             border-radius: $pc-btn-border-rad-md;
-            padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
+            padding: $pc-btn-padding-md;
 
             font-size: $pc-btn-fz-md-gray;
         }
 
         &.sm {
             border-radius: $pc-btn-border-rad-sm;
-            padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
+            padding: $pc-btn-padding-md;
 
             font-size: $pc-btn-fz-md-gray;
         }
     }
+
+    &.cancel {
+        margin: $pc-cancel-btn-padding 0;
+        background-color: $text-color-white;
+
+        color: $text-color-black;
+        font-size: $pc-h6-fz;
+        font-weight: $font-weight-med;
+    }
+}
+
+.error {
+    padding: $padding-7;
+    margin-top: 24px;
+    border: 2px solid $error-color;
+    border-radius: $border-rad-5;
+
+    color: $error-color;
+    text-align: center;
+    font-size: $pc-h6-fz;
 }
 
 // SERVICE CLASSES
