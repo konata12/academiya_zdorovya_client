@@ -16,36 +16,43 @@ export default function CreateDepartmentForm({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const { accessToken, setAccessToken } = useAuth()
+    const { accessToken, refreshToken } = useAuth()
     const [error, setError] = useState<string | null>(null)
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<DepartmentsFormData>()
-    const { getDepartments } = useDepartmentsFunc()
+    const { getDepartments, setGetDepartmentsError } = useDepartmentsFunc()
     const router = useRouter()
 
     const createDepartment: SubmitHandler<DepartmentsFormData> = async (data) => {
-        const { city, address, hotline } = data
         try {
-            await axiosInstance.post('departments/admin/create', {
-                city,
-                address,
-                hotline,
-                mapLink: `https://www.google.com/maps/place/Akademiya+Zdorov'ya`
-            }, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            })
+            await axiosInstance.post('departments/admin/create', data)
 
             await getDepartments()
+            setGetDepartmentsError(null)
             router.push('/admin/departments')
         } catch (error) {
+            console.log(error)
+
             if (error instanceof AxiosError) {
-                console.log(error)
-                setError(error.response?.data.error)
+                if (error.response?.status === 401) {
+                    try {
+                        await refreshToken() // Refresh token and update context
+                        // Retry the original request with the new token
+                        await axiosInstance.post('departments/admin/create', data)
+    
+                        await getDepartments()
+                        setGetDepartmentsError(null)
+                        router.push('/admin/departments')
+                    } catch (refreshError) {
+                        console.log("Failed to refresh token:", refreshError)
+                        router.push('/admin/login') // Redirect to login if refresh fails
+                    }
+                } else {
+                    setError(error.response?.data.error);
+                }
             }
         }
     }
@@ -64,7 +71,7 @@ export default function CreateDepartmentForm({
                         Місто
                     </label>
                     <input
-                        className={`input`}
+                        className={`input ${errors.city && 'wrong'}`}
                         {...register('city', {
                             required: "Місто обов'язкове",
                         })}
@@ -81,7 +88,7 @@ export default function CreateDepartmentForm({
                         Гаряча лінія
                     </label>
                     <input
-                        className={`input`}
+                        className={`input ${errors.hotline && 'wrong'}`}
                         {...register('hotline', {
                             required: "Гаряча лінія обов'язкова",
                             pattern: {
@@ -104,7 +111,7 @@ export default function CreateDepartmentForm({
                         Адреса
                     </label>
                     <input
-                        className={`input`}
+                        className={`input ${errors.address && 'wrong'}`}
                         {...register('address', {
                             required: "Адреса обов'язкова",
                         })}
@@ -121,7 +128,7 @@ export default function CreateDepartmentForm({
                         Посилання на гугл карти
                     </label>
                     <input
-                        className={`input`}
+                        className={`input ${errors.googleMapUrl && 'wrong'}`}
                         {...register('googleMapUrl', {
                             required: "Посилання на відділення в гугл картах обов'язкове",
                             pattern: {
@@ -143,7 +150,7 @@ export default function CreateDepartmentForm({
                     Посилання на відгуки гугл карт
                 </label>
                 <input
-                    className={`input`}
+                    className={`input ${errors.googleMapReviewsUrl && 'wrong'}`}
                     {...register('googleMapReviewsUrl', {
                         required: "Посилання на відгуки відділення в обов'язкове",
                         pattern: {

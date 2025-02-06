@@ -6,6 +6,8 @@
     margin: 0;
     padding: 0;
 
+    font-family: $main-font;
+
     box-sizing: border-box;
 }
 
@@ -61,13 +63,41 @@ body {
     font-size: $pc-t1-fz;
     color: $text-color-black;
 
+    // Override autofill styles for WebKit browsers (Chrome, Safari)
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 1000px $disabled-color inset !important; // Match the background color
+        -webkit-text-fill-color: $text-color-black !important; // Match the text color
+        transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s; // Prevent color change
+    }
+    // Override autofill styles for Firefox
+    &:-moz-autofill,
+    &:-moz-autofill:hover,
+    &:-moz-autofill:focus,
+    &:-moz-autofill:active {
+        background-color: $disabled-color !important; // Match the background color
+        color: $text-color-black !important; // Match the text color
+    }
+
     &:focus-visible {
         border: none;
         outline: none;
+        background-color: $disabled-color;
     }
 
     &::placeholder {
         @include rgba-text($text-color-black, 0.5)
+    }
+
+    &.wrong {
+        outline: 2px solid $error-color;
+
+        &:focus-visible {
+            outline: 2px solid $error-color;
+            background-color: $disabled-color;
+        }
     }
 }
 
@@ -75,6 +105,7 @@ body {
     cursor: pointer;
     border: none;
     transition: all $anim-time $slow;
+
     font-weight: $font-weight-reg;
 
     &.blue {
@@ -94,7 +125,6 @@ body {
             font-weight: $font-weight-med;
             font-size: $pc-btn-fz-xl;
         }
-
         &.xl {
             border-radius: $pc-btn-border-rad-xl;
             padding: $pc-btn-padding-xl;
@@ -102,7 +132,6 @@ body {
             font-weight: $font-weight-med;
             font-size: $pc-btn-fz-xl;
         }
-
         &.lg {
             border-radius: $pc-btn-border-rad-lg;
             padding: $pc-btn-padding-lg;
@@ -110,15 +139,19 @@ body {
             font-weight: $font-weight-med;
             font-size: $pc-btn-fz-lg;
         }
-
         &.md {
             border-radius: $pc-btn-border-rad-md;
             padding: $pc-btn-padding-md;
 
             font-size: $pc-btn-fz-md-blue;
         }
-
         &.sm {
+            border-radius: $pc-btn-border-rad-sm;
+            padding: $pc-btn-padding-md;
+
+            font-size: $pc-btn-fz-md-blue;
+        }
+        &.xs {
             border-radius: $pc-btn-border-rad-sm;
             padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
 
@@ -214,9 +247,7 @@ body {
 }
 
 .error {
-    padding: $padding-7;
-    margin-top: 24px;
-    border: 2px solid $error-color;
+    margin-top: 12px;
     border-radius: $border-rad-5;
 
     color: $error-color;

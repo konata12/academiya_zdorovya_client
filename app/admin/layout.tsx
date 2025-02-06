@@ -8,6 +8,7 @@ import { AxiosError } from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import SideNavigation from "@/app/admin/ui/SideNavigation/SideNavigation";
 import styles from './layout.module.scss';
+import { setAccessTokenGlob } from "@/app/utils/data_stores/tokens_store";
 
 export default function Layout({
     children,
@@ -25,14 +26,17 @@ export default function Layout({
 
             console.log('response:', response)
             setAccessToken(response.data.access_token)
+            setAccessTokenGlob(response.data.access_token)
         } catch (error) {
             if (error instanceof AxiosError) {
                 console.log(error.message)
             } else {
                 console.log(error)
             }
+
             setAccessToken(null)
-            router.push('login')
+            setAccessTokenGlob(null)
+            router.push('/admin/login')
         }
     }
 
@@ -42,13 +46,16 @@ export default function Layout({
 
     return (
         <>
-            <div className={styles.layout}>
-                <AuthContext.Provider value={{ accessToken, setAccessToken }}>
+            <AuthContext.Provider value={{ accessToken, setAccessToken, refreshToken }}>
+                <div className={styles.layout}>
                     <div className={`${styles.container} ${!isLoginPage && styles.loggedIn}`}>
                         <Header isLoginPage={isLoginPage} />
                         <div className={styles.main}>
                             <div className={`container ${styles.container}`}>
-                                {(!isLoginPage && accessToken) && <SideNavigation />}
+                                {(!isLoginPage && accessToken) && <>
+                                    <SideNavigation />
+                                    <div className={styles.empty}>0</div>
+                                </>}
                                 {((isLoginPage || accessToken) && children) || <div className={styles.not_logged_in}>
                                     Ввійдіть в адмін панель
                                 </div>}
@@ -56,8 +63,8 @@ export default function Layout({
                         </div>
                         <Footer />
                     </div>
-                </AuthContext.Provider>
-            </div>
+                </div>
+            </AuthContext.Provider>
         </>
     )
 }

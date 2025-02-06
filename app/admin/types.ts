@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
 
 export type AuthContextType = {
-    accessToken: string | null;
-    setAccessToken: Dispatch<SetStateAction<string | null>>;
+    accessToken: string | null
+    setAccessToken: Dispatch<SetStateAction<string | null>>
+    refreshToken: () => Promise<void>
 } | null;
 
 export type DepartmentsFormData = {

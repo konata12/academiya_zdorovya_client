@@ -10,6 +10,8 @@ import Link from "next/link"
 import { DepartmentsContext } from "@/app/utils/context/departmentsFuncContext"
 import ModalWindow from "@/app/admin/ui/Forms/ModalWindow/ModalWindow"
 import { useAuth } from "@/app/utils/context/authContext"
+import { AxiosError } from "axios"
+import { ErrorResponse } from "@/app/types/response"
 
 const titles = ['Місто', 'Адреса', 'Гаряча лінія', 'Опції']
 
@@ -19,7 +21,10 @@ export default function Departments({
     children: React.ReactNode;
 }>) {
     const { accessToken, setAccessToken } = useAuth()
-    const [departments, setDepartments] = useState<Departments[] | null>(null)
+    const [departments, setDepartments] = useState<Departments[]>([])
+    // need to correctly display error or departments in CommonTable
+    const [getDepartmentsError, setGetDepartmentsError] = useState<AxiosError | null>(null)
+    // need for every department to have seperate state for ModalWindow of every department
     const [departmentsIsModalOpen, setDepartmentsIsModalOpen] = useState<boolean[]>([])
 
     useEffect(() => {
@@ -35,6 +40,7 @@ export default function Departments({
             setDepartments(response.data)
         } catch (error) {
             console.log(error)
+            if (error instanceof AxiosError) setGetDepartmentsError(error)
         }
     }
 
@@ -67,56 +73,61 @@ export default function Departments({
     }
 
     return (
-        <div className={`fw ${styles.container}`}>
-            <p className={`title lg ${styles.title}`}>Відділення</p>
-            <CommonTable titles={titles}>
-                {departments && departments.map((department, i) => <TableLine key={department.id}>
-                    <span>{department.city}</span>
-                    <span>{department.address}</span>
-                    <span>{department.hotline}</span>
-                    {departmentsIsModalOpen[i] && <ModalWindow
-                        title="Ви дійсно бажаєте видалити це відділеня?"
-                    >
-                        <button
-                            className={`btn cancel`}
-                            onClick={() => { closeModalWindow(i) }}
+        <DepartmentsContext.Provider value={{ getDepartments, setGetDepartmentsError, departments }}>
+            <div className={`fw ${styles.container}`}>
+                <p className={`title lg ${styles.title}`}>Відділення</p>
+                <CommonTable titles={titles}>
+                    {getDepartmentsError ? (
+                        <p className={styles.departmentsResponseError}>
+                            {(getDepartmentsError.response?.data as ErrorResponse)?.message
+                                || 'Невідома помилка'}
+                        </p>
+                    ) : (departments.map((department, i) => <TableLine key={department.id}>
+                        <span>{department.city}</span>
+                        <span>{department.address}</span>
+                        <span>{department.hotline}</span>
+                        {departmentsIsModalOpen[i] && <ModalWindow
+                            title="Ви дійсно бажаєте видалити це відділеня?"
                         >
-                            Скасувати видалення
-                        </button>
-                        <button
-                            onClick={() => { deleteDepartment(department.id, i) }}
-                            className={`btn blue lg`}
-                        >
-                            Підтвердити
-                        </button>
-                    </ModalWindow>}
-                    <span className={styles.buttons}>
-                        <button
-                            onClick={() => { openModalWindow(i) }}
-                            className={`btn gray sm`}
-                        >
-                            Видалити
-                        </button>
-                        <Link href={`/admin/departments/update/${department.id}`}>
                             <button
-                                className={`btn blue md`}
+                                className={`btn cancel`}
+                                onClick={() => { closeModalWindow(i) }}
                             >
-                                Змінити
+                                Скасувати видалення
                             </button>
-                        </Link>
-                    </span>
-                </TableLine>)}
-            </CommonTable>
-            <Link href={'/admin/departments/create'}>
-                <button
-                    className={`btn blue xl ${styles.addButton}`}
-                >
-                    Додати відділення
-                </button>
-            </Link>
-            <DepartmentsContext.Provider value={{ getDepartments }}>
+                            <button
+                                onClick={() => { deleteDepartment(department.id, i) }}
+                                className={`btn blue lg`}
+                            >
+                                Підтвердити
+                            </button>
+                        </ModalWindow>}
+                        <span className={styles.buttons}>
+                            <button
+                                onClick={() => { openModalWindow(i) }}
+                                className={`btn gray sm`}
+                            >
+                                Видалити
+                            </button>
+                            <Link href={`/admin/departments/update/${department.id}`}>
+                                <button
+                                    className={`btn blue sm`}
+                                >
+                                    Змінити
+                                </button>
+                            </Link>
+                        </span>
+                    </TableLine>))}
+                </CommonTable>
+                <Link href={'/admin/departments/create'}>
+                    <button
+                        className={`btn blue xl ${styles.addButton}`}
+                    >
+                        Додати відділення
+                    </button>
+                </Link>
                 {children}
-            </DepartmentsContext.Provider>
-        </div>
+            </div>
+        </DepartmentsContext.Provider>
     )
 }

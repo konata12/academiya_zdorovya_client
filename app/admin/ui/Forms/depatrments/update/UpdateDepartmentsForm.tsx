@@ -1,38 +1,50 @@
+'use client'
+
 import { useAuth } from '@/app/utils/context/authContext';
 import styles from './UpdateDepartmentsForm.module.scss'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { DepartmentsFormData } from '@/app/admin/types';
 import { useDepartmentsFunc } from '@/app/utils/context/departmentsFuncContext';
-import { useRouter } from 'next/router';
+import { useParams, useRouter } from 'next/navigation';
 import axiosInstance from '@/app/utils/axios';
 import { AxiosError } from 'axios';
 import { GOOGLE_MAPS_URL, PHONE_NUMBER } from '@/app/utils/regex';
 
 export default function UpdateDepartmentForm({
     children,
+    onErrors,
+    handleModal
 }: Readonly<{
-    children: React.ReactNode;
+    children: React.ReactNode
+    onErrors: Function
+    handleModal: Function
 }>) {
+    const [responseError, setResponseError] = useState<string | null>(null)
     const { accessToken, setAccessToken } = useAuth()
-    const [error, setError] = useState<string | null>(null)
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<DepartmentsFormData>()
-    const { getDepartments } = useDepartmentsFunc()
     const router = useRouter()
 
-    const createDepartment: SubmitHandler<DepartmentsFormData> = async (data) => {
-        const { city, address, hotline } = data
+    useEffect(() => {
+        if (onErrors) {
+            onErrors(errors, responseError);
+        }
+    }, [errors, onErrors]);
+
+    const { getDepartments, departments } = useDepartmentsFunc()
+    const { id } = useParams() // get departments id from url
+    const department = departments.find((department) => {
+        return department.id === Number(id)
+    })
+    console.log(department)
+
+    const updateDepartment: SubmitHandler<DepartmentsFormData> = async (data) => {
         try {
-            await axiosInstance.post('departments/admin/create', {
-                city,
-                address,
-                hotline,
-                mapLink: `https://www.google.com/maps/place/Akademiya+Zdorov'ya`
-            }, {
+            await axiosInstance.put(`departments/admin/${id}`, data, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -43,7 +55,8 @@ export default function UpdateDepartmentForm({
         } catch (error) {
             if (error instanceof AxiosError) {
                 console.log(error)
-                setError(error.response?.data.error)
+                setResponseError(error.response?.data.error)
+                handleModal()
             }
         }
     }
@@ -51,7 +64,7 @@ export default function UpdateDepartmentForm({
     return (
         <form
             className={styles.form}
-            onSubmit={handleSubmit(createDepartment)}
+            onSubmit={handleSubmit(updateDepartment)}
         >
             <div className={styles.line}>
                 <div className={styles.inputContainer}>
@@ -62,7 +75,7 @@ export default function UpdateDepartmentForm({
                         Місто
                     </label>
                     <input
-                        className={`input`}
+                        className={`input ${errors.city && 'wrong'}`}
                         {...register('city', {
                             required: "Місто обов'язкове",
                         })}
@@ -79,7 +92,7 @@ export default function UpdateDepartmentForm({
                         Гаряча лінія
                     </label>
                     <input
-                        className={`input`}
+                        className={`input ${errors.hotline && 'wrong'}`}
                         {...register('hotline', {
                             required: "Гаряча лінія обов'язкова",
                             pattern: {
@@ -102,7 +115,7 @@ export default function UpdateDepartmentForm({
                         Адреса
                     </label>
                     <input
-                        className={`input`}
+                        className={`input ${errors.address && 'wrong'}`}
                         {...register('address', {
                             required: "Адреса обов'язкова",
                         })}
@@ -119,7 +132,7 @@ export default function UpdateDepartmentForm({
                         Посилання на гугл карти
                     </label>
                     <input
-                        className={`input`}
+                        className={`input ${errors.googleMapUrl && 'wrong'}`}
                         {...register('googleMapUrl', {
                             required: "Посилання на відділення в гугл картах обов'язкове",
                             pattern: {
@@ -141,7 +154,7 @@ export default function UpdateDepartmentForm({
                     Посилання на відгуки гугл карт
                 </label>
                 <input
-                    className={`input`}
+                    className={`input ${errors.googleMapReviewsUrl && 'wrong'}`}
                     {...register('googleMapReviewsUrl', {
                         required: "Посилання на відгуки відділення в обов'язкове",
                         pattern: {
@@ -154,7 +167,7 @@ export default function UpdateDepartmentForm({
                 />
                 {errors.googleMapReviewsUrl && <p className="error">{errors.googleMapReviewsUrl.message}</p>}
             </div>
-            {error && <p className="error">{error}</p>}
+            {responseError && <p className="error">{responseError}</p>}
             {children}
         </form>
     )

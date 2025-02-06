@@ -17,7 +17,13 @@
                 display: flex;
                 flex-direction: row;
                 gap: 64px;
-                padding: 93px 0;
+                padding: 93px 24px;
+
+                .empty {
+                    max-width: 240px;
+                    width: 100%;
+                    color: transparent;
+                }
 
                 .not_logged_in {
                     display: flex;

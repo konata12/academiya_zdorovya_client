@@ -15,4 +15,11 @@
         width: 100%;
         margin-top: 32px;
     }
+
+    .departmentsResponseError {
+        text-align: center;
+        font-size: $pc-h5-fz;
+        font-weight: $font-weight-med;
+        color: $text-color-black;
+    }
 }

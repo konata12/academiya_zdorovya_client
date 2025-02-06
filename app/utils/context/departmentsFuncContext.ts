@@ -1,9 +1,15 @@
-import { createContext, useContext } from "react";
+import { Departments } from "@/app/types/departments";
+import { AxiosError } from "axios";
+import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
 export const DepartmentsContext = createContext<{
-    getDepartments: () => Promise<void>;
+    getDepartments: () => Promise<void>,
+    setGetDepartmentsError: Dispatch<SetStateAction<AxiosError | null>>,
+    departments: Departments[]
 }>({
-    getDepartments: async () => {},
+    getDepartments: async () => { },
+    setGetDepartmentsError:  () => { },
+    departments: []
 })
 
 export function useDepartmentsFunc() {
