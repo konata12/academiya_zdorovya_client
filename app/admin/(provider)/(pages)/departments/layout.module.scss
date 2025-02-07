@@ -1,0 +1,25 @@
+@use '../../../../styles/variables' as *;
+
+.container {
+
+    .title {
+        margin-bottom: 64px;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .addButton {
+        width: 100%;
+        margin-top: 32px;
+    }
+
+    .departmentsResponseError {
+        text-align: center;
+        font-size: $pc-h5-fz;
+        font-weight: $font-weight-med;
+        color: $text-color-black;
+    }
+}

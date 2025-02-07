@@ -1,0 +1,33 @@
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/functions' as *;
+
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba-color($disabled-color, 0.5);
+
+    .window {
+        display: flex;
+        flex-direction: column;
+        max-width: 512px;
+        padding: $admin-modal-window-pad;
+        border-radius: $admin-modal-window-bor-rad;
+        background-color: $text-color-white;
+
+        text-align: center;
+        color: $text-color-black;
+
+        .title {
+            font-size: $admin-modal-window-fz;
+            font-weight: $font-weight-med;
+        }
+    }
+}

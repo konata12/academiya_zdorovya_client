@@ -1,0 +1,23 @@
+@use '../../../../../../styles/variables' as *;
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+
+    .line {
+        display: flex;
+        gap: 32px;
+    }
+
+    .inputContainer {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .label {
+            margin-bottom: $padding-4;
+        }
+    }
+}

@@ -1,5 +1,4 @@
-import { useAuth } from "@/app/utils/context/authContext";
-import { getAccessTokenGlob, setAccessTokenGlob } from "@/app/utils/data_stores/tokens_store";
+import store from "@/app/utils/redux/store";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -10,7 +9,8 @@ const axiosInstance = axios.create({
 // Request Interceptor: Attach Authorization Header
 axiosInstance.interceptors.request.use(
     (config) => {
-        const accessToken = getAccessTokenGlob() // Fetch from React context or storage
+        const state = store.getState() // Fetch from redux context or storage
+        const accessToken = state.auth.accessToken
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`
         }
@@ -19,39 +19,39 @@ axiosInstance.interceptors.request.use(
     (error) => Promise.reject(error)
 )
 
-export const useAdminApi = () => {
-    const { setAccessToken } = useAuth(); // Get token setter for context
+// export const useAdminApi = () => {
+//     const { setAccessToken } = useAuth(); // Get token setter for context
 
-    // 🔹 Handle 401 Errors & Refresh Token
-    axiosInstance.interceptors.response.use(
-        (response) => response,
-        async (error) => {
-            if (error.response?.status === 401) {
-                try {
-                    const response = await axios.post(
-                        "/auth/refresh",
-                        {},
-                    );
+//     // 🔹 Handle 401 Errors & Refresh Token
+//     axiosInstance.interceptors.response.use(
+//         (response) => response,
+//         async (error) => {
+//             if (error.response?.status === 401) {
+//                 try {
+//                     const response = await axios.post(
+//                         "/auth/refresh",
+//                         {},
+//                     );
 
-                    const newToken = response.data.access_token;
-                    setAccessToken(newToken); // ✅ Update Context
-                    setAccessTokenGlob(newToken)
+//                     const newToken = response.data.access_token;
+//                     setAccessToken(newToken); // ✅ Update Context
+//                     setAccessTokenGlob(newToken)
 
-                    // Retry failed request with new token
-                    error.config.headers.Authorization = `Bearer ${newToken}`;
-                    return axiosInstance(error.config);
-                } catch (refreshError) {
-                    console.error("Refresh token failed:", refreshError);
-                    setAccessToken(null)
-                    setAccessTokenGlob(null)
-                    window.location.href = "/admin/login"; // Redirect if refresh fails
-                }
-            }
-            return Promise.reject(error);
-        }
-    );
+//                     // Retry failed request with new token
+//                     error.config.headers.Authorization = `Bearer ${newToken}`;
+//                     return axiosInstance(error.config);
+//                 } catch (refreshError) {
+//                     console.error("Refresh token failed:", refreshError);
+//                     setAccessToken(null)
+//                     setAccessTokenGlob(null)
+//                     window.location.href = "/admin/login"; // Redirect if refresh fails
+//                 }
+//             }
+//             return Promise.reject(error);
+//         }
+//     );
 
-    return axiosInstance;
-};
+//     return axiosInstance;
+// };
 
 export default axiosInstance

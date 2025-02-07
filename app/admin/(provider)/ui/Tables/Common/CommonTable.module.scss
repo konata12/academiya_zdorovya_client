@@ -1,0 +1,39 @@
+@use '../../../../../styles/variables' as *;
+
+.table {
+    width: 100%;
+    padding: $admin-common-table-padding;
+    padding-top: 0;
+    background-color: $disabled-color;
+    border-radius: $border-rad-4;
+
+    .titles {
+        display: flex;
+        justify-content: space-between;
+        padding: $admin-common-table-title-padding-h $admin-common-table-title-padding-w;
+
+        color: $primary-color;
+        font-size: $admin-common-table-title-fz;
+        font-weight: $font-weight-med;
+
+        .title {
+            display: flex;
+            justify-content: center;
+            flex: 1;
+
+            &:first-child {
+                justify-content: left;
+            }
+
+            &:last-child {
+                justify-content: right;
+            }
+        }
+    }
+
+    .list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+}
