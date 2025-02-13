@@ -1,27 +1,16 @@
+import { AccessToken, Auth, Login } from "@/app/types/auth";
 import { ErrorResponse } from "@/app/types/response";
 import axiosInstance from "@/app/utils/axios";
-import { AccessToken } from "@/app/utils/redux/auth/types";
-import { createAsyncThunk, createSlice, isRejectedWithValue, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-
-interface Auth {
-    accessToken: string | null
-    status: null
-    | 'loading'
-    | 'succeeded'
-    | 'failed'
-    error: ErrorResponse | null
-}
-
-export interface Login {
-    userName: string
-    password: string
-}
 
 const initialState: Auth = {
     accessToken: null,
     status: null,
-    error: null
+    error: {
+        login: null,
+        refresh: null,
+    }
 }
 
 export const login = createAsyncThunk("auth/login", async ({
@@ -41,7 +30,7 @@ export const login = createAsyncThunk("auth/login", async ({
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.message,
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -49,7 +38,7 @@ export const login = createAsyncThunk("auth/login", async ({
     }
 })
 
-export const refreshTokens = createAsyncThunk("auth/refreshTokens", async (empty, {
+export const refreshTokens = createAsyncThunk("auth/refreshTokens", async (_, {
     rejectWithValue
 }) => {
     try {
@@ -57,14 +46,8 @@ export const refreshTokens = createAsyncThunk("auth/refreshTokens", async (empty
         console.log(response)
         return response.data
     } catch (error) {
-        if (error instanceof AxiosError) {
-            console.log(error)
-            const serializableError: ErrorResponse = {
-                message: error.response?.data.message,
-                statusCode: error.status || 500
-            }
-            return rejectWithValue(serializableError)
-        }
+        console.log(error)
+        return rejectWithValue(0)
     }
 })
 
@@ -77,8 +60,7 @@ export const authSlice = createSlice({
             // LOGIN
             .addCase(login.pending, (state) => {
                 state.status = "loading"
-                state.accessToken = null
-                state.error = null
+                state.error.login = null
             })
             .addCase(login.fulfilled, (state, action: PayloadAction<AccessToken>) => {
                 state.status = "succeeded"
@@ -86,14 +68,14 @@ export const authSlice = createSlice({
             })
             .addCase(login.rejected, (state, action) => {
                 state.status = "failed"
-                state.error = action.payload as ErrorResponse
+                state.error.login = action.payload as ErrorResponse
             })
 
             // REFRESH
             .addCase(refreshTokens.pending, (state) => {
                 state.status = "loading"
                 state.accessToken = null
-                state.error = null
+                state.error.refresh = null
             })
             .addCase(refreshTokens.fulfilled, (state, action: PayloadAction<AccessToken>) => {
                 state.status = "succeeded"
@@ -101,13 +83,9 @@ export const authSlice = createSlice({
             })
             .addCase(refreshTokens.rejected, (state, action) => {
                 state.status = "failed"
-                state.error = action.payload as ErrorResponse
+                state.error.refresh = action.payload as ErrorResponse
             })
     },
 })
 
-// Export the actions
-// export const { increment, decrement, incrementByAmount } = authSlice.actions
-
-// Export the reducer
 export default authSlice.reducer

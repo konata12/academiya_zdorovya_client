@@ -2,14 +2,14 @@
 
 import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable"
 import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine"
-import type { Departments } from "@/app/types/departments"
-import axiosInstance from "@/app/utils/axios"
-import { useEffect, useState } from "react"
+import type { Department } from "@/app/types/departments"
+import { useEffect } from "react"
 import styles from './layout.module.scss'
 import Link from "next/link"
 import ModalWindow from "@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow"
-import { AxiosError } from "axios"
-import { ErrorResponse } from "@/app/types/response"
+import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks"
+import { closeModal, fetchDepartments, openModal, deleteDepartment as deleteDepartmentAction, deleteDepartmentFromState } from "@/app/utils/redux/departments/departmentsSlice"
+import { RootState } from "@/app/utils/redux/store"
 
 const titles = ['Місто', 'Адреса', 'Гаряча лінія', 'Опції']
 
@@ -18,63 +18,41 @@ export default function Departments({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const [departments, setDepartments] = useState<Departments[]>([])
-    // need to correctly display error or departments in CommonTable
-    const [getDepartmentsError, setGetDepartmentsError] = useState<AxiosError | null>(null)
-    // need for every department to have seperate state for ModalWindow of every department
-    const [departmentsIsModalOpen, setDepartmentsIsModalOpen] = useState<boolean[]>([])
+    const dispatch = useAppDispatch()
+    const { departments, departmentsIsModalOpen, error } = useAppSelector((state: RootState) => state.departments)
 
     useEffect(() => {
         getDepartments()
     }, [])
 
     const getDepartments = async () => {
-        try {
-            const response = await axiosInstance.get('departments')
-            console.log('departments: ', response)
-            const departmentsModalState = new Array(response.data.length).fill(false)
-            setDepartmentsIsModalOpen(departmentsModalState)
-            setDepartments(response.data)
-        } catch (error) {
-            console.log(error)
-            if (error instanceof AxiosError) setGetDepartmentsError(error)
-        }
+        await dispatch(fetchDepartments())
     }
 
-    const deleteDepartment = async (id: number, i: number) => {
-        try {
-            const response = await axiosInstance.delete(`departments/admin/${id}`)
-            await getDepartments()
-            console.log(response)
-            closeModalWindow(i)
-        } catch (error) {
-            console.log(error)
-            closeModalWindow(i)
-        }
+    const deleteDepartment = async (id: number) => {
+        await dispatch(deleteDepartmentAction(id))
+        dispatch(deleteDepartmentFromState({ id }))
     }
 
     const openModalWindow = (i: number) => {
-        const updatedStates = [...departmentsIsModalOpen]
-        updatedStates[i] = true
-        setDepartmentsIsModalOpen(updatedStates)
+        dispatch(openModal({ i }))
     }
 
     const closeModalWindow = (i: number) => {
-        const updatedStates = [...departmentsIsModalOpen]
-        updatedStates[i] = false
-        setDepartmentsIsModalOpen(updatedStates)
+        dispatch(closeModal({ i }))
     }
 
     return (
-        <div className={`fw ${styles.container}`}>
+        <>
             <p className={`title lg ${styles.title}`}>Відділення</p>
             <CommonTable titles={titles}>
-                {getDepartmentsError ? (
+                {!departments.length ? (
                     <p className={styles.departmentsResponseError}>
-                        {(getDepartmentsError.response?.data as ErrorResponse)?.message
-                            || 'Невідома помилка'}
+                        {error.get?.statusCode === 404 ?
+                            'Немає відділень' :
+                            'Виникла помилка'}
                     </p>
-                ) : (departments.map((department, i) => <TableLine key={department.id}>
+                ) : (departments && departments.map((department, i) => <TableLine key={department.id}>
                     <span>{department.city}</span>
                     <span>{department.address}</span>
                     <span>{department.hotline}</span>
@@ -88,7 +66,7 @@ export default function Departments({
                             Скасувати видалення
                         </button>
                         <button
-                            onClick={() => { deleteDepartment(department.id, i) }}
+                            onClick={() => { deleteDepartment(department.id) }}
                             className={`btn blue lg`}
                         >
                             Підтвердити
@@ -119,6 +97,6 @@ export default function Departments({
                 </button>
             </Link>
             {children}
-        </div>
+        </>
     )
 }

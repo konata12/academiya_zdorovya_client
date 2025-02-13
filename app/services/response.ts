@@ -1,4 +1,4 @@
-// CHECK IF ASYNC THUNK FILFILLED
-export const fulfilled = (type: string) => {
+// CHECK IF ASYNC THUNK FULLFILLED
+export const fullfilled = (type: string) => {
     return type === 'fulfilled'
 }

@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import styles from './SideNavButton.module.scss'
 import { usePathname } from 'next/navigation'
-import { routes } from '@/app/admin/ui/SideNavigation/SideNavigation'
 
 export default function SideNavButton({
     path,

@@ -1,4 +1,4 @@
-import CreateDepartmentForm from '@/app/admin/ui/Forms/depatrments/create/CreateDepartmentForm'
+import CreateDepartmentForm from '@/app/admin/(provider)/ui/Forms/depatrments/create/CreateDepartmentForm'
 import styles from './page.module.scss'
 
 export default function CreateDepartment() {

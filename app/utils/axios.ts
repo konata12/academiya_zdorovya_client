@@ -1,4 +1,6 @@
-import store from "@/app/utils/redux/store";
+import { refreshTokens } from "@/app/utils/redux/auth/authSlice";
+import { useAppSelector } from "@/app/utils/redux/hooks";
+import store, { RootState } from "@/app/utils/redux/store";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -19,39 +21,38 @@ axiosInstance.interceptors.request.use(
     (error) => Promise.reject(error)
 )
 
-// export const useAdminApi = () => {
-//     const { setAccessToken } = useAuth(); // Get token setter for context
+axiosInstance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
 
-//     // 🔹 Handle 401 Errors & Refresh Token
-//     axiosInstance.interceptors.response.use(
-//         (response) => response,
-//         async (error) => {
-//             if (error.response?.status === 401) {
-//                 try {
-//                     const response = await axios.post(
-//                         "/auth/refresh",
-//                         {},
-//                     );
+        // Check for 401 Unauthorized error
+        if (error.response?.status === 401
+            && originalRequest.url !== "auth/refresh"
+            && !originalRequest._retry) {
+            originalRequest._retry = true; // Mark the request as retried
 
-//                     const newToken = response.data.access_token;
-//                     setAccessToken(newToken); // ✅ Update Context
-//                     setAccessTokenGlob(newToken)
+            try {
+                await store.dispatch(refreshTokens()); // Attempt to refresh the token
 
-//                     // Retry failed request with new token
-//                     error.config.headers.Authorization = `Bearer ${newToken}`;
-//                     return axiosInstance(error.config);
-//                 } catch (refreshError) {
-//                     console.error("Refresh token failed:", refreshError);
-//                     setAccessToken(null)
-//                     setAccessTokenGlob(null)
-//                     window.location.href = "/admin/login"; // Redirect if refresh fails
-//                 }
-//             }
-//             return Promise.reject(error);
-//         }
-//     );
+                // Retry the original request with the new token
+                const state = store.getState();
+                const newAccessToken = state.auth.accessToken;
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return axiosInstance(originalRequest); // Retry the request
+            } catch (refreshError) {
+                console.error("Token refresh failed:", refreshError);
 
-//     return axiosInstance;
-// };
+                // Redirect to login page if token refresh fails
+                if (typeof window !== "undefined") {
+                    window.location.href = "/admin/login"; // Use window.location for redirection
+                }
+                return Promise.reject(refreshError);
+            }
+        }
+
+        return Promise.reject(error);
+    }
+)
 
 export default axiosInstance

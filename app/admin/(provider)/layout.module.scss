@@ -13,16 +13,23 @@
             padding-top: 70px;
             color: $text-color-black;
 
-            .container {
+            .mainContainer {
                 display: flex;
                 flex-direction: row;
                 gap: 64px;
+                height: 100%;
                 padding: 93px 24px;
 
                 .empty {
                     max-width: 240px;
                     width: 100%;
                     color: transparent;
+                }
+
+                .children {
+                    max-width: 1088px;
+                    width: 100%;
+                    margin: auto;
                 }
 
                 .not_logged_in {
