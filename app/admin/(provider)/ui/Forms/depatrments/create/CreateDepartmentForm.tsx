@@ -11,11 +11,7 @@ import { createDepartment as createDepartmentAction } from "@/app/utils/redux/de
 import { fullfilled } from "@/app/services/response";
 
 
-export default function CreateDepartmentForm({
-    children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default function CreateDepartmentForm() {
     const { error } = useAppSelector((state: RootState) => state.departments)
     const {
         register,
@@ -27,7 +23,6 @@ export default function CreateDepartmentForm({
 
     const createDepartment: SubmitHandler<DepartmentsFormData> = async (data) => {
         const response = await dispatch(createDepartmentAction(data))
-        console.log(response)
         const isFulfilled = fullfilled(response.meta.requestStatus)
         if (isFulfilled) router.push('/admin/departments')
     }
@@ -138,8 +133,15 @@ export default function CreateDepartmentForm({
                 />
                 {errors.googleMapReviewsUrl && <p className="error">{errors.googleMapReviewsUrl.message}</p>}
             </div>
-            {error.create && <p className="error">{error.create.message}</p>}
-            {children}
+            <div className={styles.formErrorWrap}>
+                {error.create && <p className={`error ${styles.formError}`}>{error.create.message}</p>}
+                <button
+                    className={`btn blue xl ${styles.submit}`}
+                    type='submit'
+                >
+                    Створити
+                </button>
+            </div>
         </form>
     )
 }

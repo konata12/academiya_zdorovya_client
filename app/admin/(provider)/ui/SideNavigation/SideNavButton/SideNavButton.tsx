@@ -1,6 +1,6 @@
-import Link from 'next/link'
 import styles from './SideNavButton.module.scss'
 import { usePathname } from 'next/navigation'
+import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 
 export default function SideNavButton({
     path,
@@ -15,13 +15,13 @@ export default function SideNavButton({
 
     return (
         <>
-            <Link
-                className={`${styles.link} ${isActive && styles.active}`}
+            <SafeLink
+                className={`${styles.link} ${isActive ? styles.active : ''}`}
                 href={path}
             >
                 {label}
                 <div className={`${styles.sideLine}`}></div>
-            </Link>
+            </SafeLink>
         </>
     )
 }

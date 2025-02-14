@@ -17,10 +17,12 @@ export default function Layout({
     children: React.ReactNode;
 }>) {
     const { accessToken } = useAppSelector((state: RootState) => state.auth)
+
     const dispatch = useAppDispatch()
     const router = useRouter()
     const pathname = usePathname()
-    const isLoginPage = !pathname || pathname.split('/')[2] === 'login'
+
+    const isLoginPage = pathname.split('/')[2] === 'login'
 
     const refreshTokensAndCheckIsLogin = async () => {
         const response = await dispatch(refreshTokens())
@@ -35,13 +37,13 @@ export default function Layout({
     return (
         <>
             <div className={styles.layout}>
-                <div className={`${styles.container} ${!isLoginPage && styles.loggedIn}`}>
+                <div className={`${styles.layoutContainer}`}>
                     <Header isLoginPage={isLoginPage} />
                     <div className={styles.main}>
                         <div className={`container ${styles.mainContainer}`}>
                             {(!isLoginPage && accessToken) && <>
                                 <SideNavigation />
-                                <div className={styles.empty}>0</div>
+                                <div className={styles.empty}></div>
                             </>}
                             {((isLoginPage || accessToken)
                                 && <div className={styles.children}>{children}</div>)

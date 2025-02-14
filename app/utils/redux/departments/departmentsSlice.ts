@@ -104,11 +104,26 @@ const departmentsSlice = createSlice({
 
         deleteDepartmentFromState(state, action: { payload: { id: number } }) {
             if (state.departments) {
-                console.log(current(state.error))
                 const index = state.departments.findIndex(department => {
-                    department.id === action.payload.id
+                    return department.id === action.payload.id
                 })
                 state.departments.splice(index, 1)
+            }
+        },
+        updateDepartmentInState(state, action: {
+            payload: {
+                data: DepartmentsFormData,
+                departmentId: number
+            }
+        }) {
+            console.log(action)
+            const index = state.departments.findIndex(department => {
+                return department.id === action.payload.departmentId
+            })
+            console.log(index)
+            state.departments[index] = {
+                id: action.payload.departmentId,
+                ...action.payload.data
             }
         },
         setUpdateError(state) {
@@ -116,7 +131,6 @@ const departmentsSlice = createSlice({
                 message: 'Дані ті самі, спочатку змініть значення',
                 statusCode: 0
             }
-            console.log(current(state.error))
         }
     },
     extraReducers(builder) {
@@ -155,7 +169,7 @@ const departmentsSlice = createSlice({
                 state.error.create = action.payload as ErrorResponse
             })
 
-            // CREATE DEPARTMENT
+            // UPDATE DEPARTMENT
             .addCase(updateDepartment.pending, (state) => {
                 state.status = "loading"
                 state.error.update = null
@@ -190,6 +204,7 @@ export const {
     closeModal,
     deleteDepartmentFromState,
     setUpdateError,
+    updateDepartmentInState,
 } = departmentsSlice.actions
 
 export default departmentsSlice.reducer

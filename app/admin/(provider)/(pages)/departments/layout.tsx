@@ -2,7 +2,6 @@
 
 import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable"
 import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine"
-import type { Department } from "@/app/types/departments"
 import { useEffect } from "react"
 import styles from './layout.module.scss'
 import Link from "next/link"
@@ -10,6 +9,8 @@ import ModalWindow from "@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks"
 import { closeModal, fetchDepartments, openModal, deleteDepartment as deleteDepartmentAction, deleteDepartmentFromState } from "@/app/utils/redux/departments/departmentsSlice"
 import { RootState } from "@/app/utils/redux/store"
+import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink"
+import { fullfilled } from "@/app/services/response"
 
 const titles = ['Місто', 'Адреса', 'Гаряча лінія', 'Опції']
 
@@ -18,20 +19,17 @@ export default function Departments({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const dispatch = useAppDispatch()
     const { departments, departmentsIsModalOpen, error } = useAppSelector((state: RootState) => state.departments)
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
-        getDepartments()
+        dispatch(fetchDepartments())
     }, [])
 
-    const getDepartments = async () => {
-        await dispatch(fetchDepartments())
-    }
-
     const deleteDepartment = async (id: number) => {
-        await dispatch(deleteDepartmentAction(id))
-        dispatch(deleteDepartmentFromState({ id }))
+        const response = await dispatch(deleteDepartmentAction(id))
+        const isFulfilled = fullfilled(response.meta.requestStatus)
+        if (isFulfilled) dispatch(deleteDepartmentFromState({ id }))
     }
 
     const openModalWindow = (i: number) => {
@@ -79,23 +77,23 @@ export default function Departments({
                         >
                             Видалити
                         </button>
-                        <Link href={`/admin/departments/update/${department.id}`}>
+                        <SafeLink href={`/admin/departments/update/${department.id}`}>
                             <button
                                 className={`btn blue sm`}
                             >
                                 Змінити
                             </button>
-                        </Link>
+                        </SafeLink>
                     </span>
                 </TableLine>))}
             </CommonTable>
-            <Link href={'/admin/departments/create'}>
+            <SafeLink href={'/admin/departments/create'}>
                 <button
                     className={`btn blue xl ${styles.addButton}`}
                 >
                     Додати відділення
                 </button>
-            </Link>
+            </SafeLink>
             {children}
         </>
     )

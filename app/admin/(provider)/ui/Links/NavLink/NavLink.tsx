@@ -1,13 +1,13 @@
-import Link from 'next/link'
 import styles from './NavLink.module.scss'
 import { usePathname } from 'next/navigation'
+import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 
 export default function NavLink({
     children,
     url,
     urlsForActive = []
 }: {
-    children: React.ReactNode,
+    children?: React.ReactNode,
     url: string,
     urlsForActive?: string[]
 }) {
@@ -23,13 +23,13 @@ export default function NavLink({
     }
 
     return (
-        <div className={`${styles.link} ${isActive && styles.active}`}>
-            <Link
-                className={`${styles.url} ${isActive && styles.active}`}
+        <div className={`${styles.link} ${isActive ? styles.active : ''}`}>
+            <SafeLink
+                className={`${styles.url} ${isActive ? styles.active : ''}`}
                 href={url}
             >
                 {children}
-            </Link>
+            </SafeLink>
             <div className={`${styles.bottom}`}></div>
         </div>
     )

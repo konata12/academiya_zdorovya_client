@@ -5,14 +5,7 @@ export default function CreateDepartment() {
     return (
         <div className={styles.container}>
             <p className={`title left lg ${styles.title}`}>Додати відділення</p>
-            <CreateDepartmentForm>
-                <button
-                    className={`btn blue xl`}
-                    type='submit'
-                >
-                    Створити
-                </button>
-            </CreateDepartmentForm>
+            <CreateDepartmentForm />
         </div>
     )
 }

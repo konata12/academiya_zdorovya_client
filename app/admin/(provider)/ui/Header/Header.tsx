@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import logo from '@/public/icons/logo_admin.png'
 import styles from './Header.module.scss'
-import NavLink from '@/app/common_ui/NavLink/NavLink'
+import NavLink from '@/app/admin/(provider)/ui/Links/NavLink/NavLink'
 import { routes } from '@/app/admin/(provider)/ui/SideNavigation/SideNavigation'
 
 export default function Header({
@@ -23,14 +23,16 @@ export default function Header({
 
                 <div className={styles.links}>
                     <NavLink
-                        text='Редактор сайту'
                         url='/admin/departments'
                         urlsForActive={urlsForRedactive}
-                    />
+                    >
+                        Редактор сайту
+                    </NavLink>
                     <NavLink
-                        text='Записи на прийом(число)'
                         url='/admin/bookings'
-                    /> {/* must load from database amount of appointments */}
+                    >
+                        Записи на прийом(число)
+                    </NavLink> {/* must load from database amount of appointments */}
                 </div>
             </div>
         </div>

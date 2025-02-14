@@ -1,25 +1,24 @@
 'use client'
 
 import styles from './UpdateDepartmentsForm.module.scss'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
-import { useParams, useRouter } from 'next/navigation';import { GOOGLE_MAPS_URL, PHONE_NUMBER } from '@/app/utils/regex';
+import { useParams, useRouter } from 'next/navigation'; import { GOOGLE_MAPS_URL, PHONE_NUMBER } from '@/app/utils/regex';
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { RootState } from '@/app/utils/redux/store';
-import { setUpdateError, updateDepartment as updateDepartmentAction } from "@/app/utils/redux/departments/departmentsSlice"
+import { setUpdateError, updateDepartment as updateDepartmentAction, updateDepartmentInState } from "@/app/utils/redux/departments/departmentsSlice"
+import { setFormDefaultValues as setFormDefaultValuesRedux } from '@/app/utils/redux/navigation/navigationSlice'
 import { Department, DepartmentsDefaultFormData, DepartmentsFormData } from '@/app/types/departments';
 import { isEqual } from 'lodash';
-import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow';
 
-export default function UpdateDepartmentForm({
-    children,
-}: Readonly<{
-    children: React.ReactNode
-}>) {
-    const [modalIsOpen, setModalIsOpen] = useState(false)
+export default function UpdateDepartmentForm() {
+    const [formDefaultValues, setFormDefaultValues] = useState(true)
+    const formDefaultValuesRef = useRef(formDefaultValues)
+
     const { departments, error } = useAppSelector((state: RootState) => state.departments)
+
     const dispatch = useAppDispatch()
-    const routerNav = useRouter()
+    const router = useRouter()
 
     const { id } = useParams() // get departments id from url
     const department = departments.find(department => {
@@ -50,21 +49,41 @@ export default function UpdateDepartmentForm({
         }
     }, [department, reset])
 
+    // CHECK IF FORM DATA IS DEFAULT
+    useEffect(() => {
+        if (department) {
+            const equal = checkIsEqual(formValues, department)
+            setFormDefaultValues(equal)
+        }
+    }, [formValues, department])
+
+    // Update the ref whenever formDefaultValues changes
+    useEffect(() => {
+        formDefaultValuesRef.current = formDefaultValues
+        // update defultVelues state in redux
+        dispatch(setFormDefaultValuesRedux(formDefaultValuesRef.current))
+
+        // after leaving page set formDefaultValues in redix to initial
+        return () => {
+            dispatch(setFormDefaultValuesRedux(true))
+        }
+    }, [formDefaultValues])
+
+    // CREATE QUIT PAGE LISTENERS
     useEffect(() => {
         const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            if (department) {
-                const equal = checkIsEqual(formValues, department)
-                if (equal) e.preventDefault()
+            if (!formDefaultValuesRef.current) {
+                e.preventDefault()
+                e.returnValue = ''
             }
-            e.returnValue = ''
         }
-    
+
         window.addEventListener('beforeunload', handleBeforeUnload)
-        window.addEventListener('hashchange', handleBeforeUnload)
-    
+        window.addEventListener('popstate', handleBeforeUnload)
+
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload)
-            window.removeEventListener('hashchange', handleBeforeUnload)
+            window.removeEventListener('popstate', handleBeforeUnload)
         }
     }, [])
 
@@ -75,16 +94,16 @@ export default function UpdateDepartmentForm({
 
         // CHECK IF DATA UPDATED
         if (department) {
-            const equal = checkIsEqual(data, department)
             //  IF NOT UPDATED NOT ALLOW REQUEST
-            if (equal) {
-                closeModal()
+            if (formDefaultValues) {
                 dispatch(setUpdateError())
                 return
             }
+
+            dispatch(updateDepartmentAction({ data, departmentId }))
+            dispatch(updateDepartmentInState({ data, departmentId }))
+            router.push('/admin/departments')
         }
-        dispatch(updateDepartmentAction({ data, departmentId }))
-        routerNav.push('/admin/departments')
     }
 
     const checkIsEqual = (
@@ -92,12 +111,7 @@ export default function UpdateDepartmentForm({
         department: Department
     ) => {
         const { id, ...departmentWithoutId } = department
-        // console.log(formData, departmentWithoutId)
         return isEqual(formData, departmentWithoutId);
-    }
-
-    const closeModal = () => {
-        setModalIsOpen(false)
     }
 
     return (
@@ -206,31 +220,16 @@ export default function UpdateDepartmentForm({
                 />
                 {errors.googleMapReviewsUrl && <p className="error">{errors.googleMapReviewsUrl.message}</p>}
             </div>
-            {error.update && <p className="error">{error.update.message}</p>}
-
-            {children}
-
-            {modalIsOpen && <ModalWindow
-                title='Ви дійсно бажаєте покинути сторінку?'
-            >
-                <p className={styles.text}>
-                    Зміни не буде збережено
-                </p>
+            
+            <div className={styles.formErrorWrap}>
+                {error.update && <p className={`error ${styles.formError}`}>{error.update.message}</p>}
                 <button
-                    onClick={() => { setModalIsOpen(false) }}
-                    type='button'
-                    className='btn cancel'
+                    className={`btn blue xl ${styles.submit}`}
+                    type='submit'
                 >
-                    Скасувати
+                    Підтвердити зміни
                 </button>
-                <button
-                    onClick={() => { }}
-                    type='button'
-                    className='btn blue xl'
-                >
-                    Підтвердити
-                </button>
-            </ModalWindow>}
+            </div>
         </form>
     )
 }
