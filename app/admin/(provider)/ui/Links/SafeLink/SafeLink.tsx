@@ -25,7 +25,7 @@ export default function SafeLink({
             const currentUrl = window.location.href
             if (linkUrl === currentUrl) return
 
-            const confirmed = window.confirm("Ви впевнені, що хочете покинути сторінку? Зміни не буде збережено");
+            const confirmed = window.confirm("Ви впевнені, що хочете покинути сторінку? Зміни не буде збережено.");
             if (!confirmed) {
                 e.preventDefault(); // Prevents navigation
                 return;

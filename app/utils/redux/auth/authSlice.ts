@@ -43,7 +43,6 @@ export const refreshTokens = createAsyncThunk("auth/refreshTokens", async (_, {
 }) => {
     try {
         const response = await axiosInstance.post('auth/refresh')
-        console.log(response)
         return response.data
     } catch (error) {
         console.log(error)

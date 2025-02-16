@@ -4,7 +4,7 @@ import styles from './page.module.scss'
 export default function CreateDepartment() {
     return (
         <div className={styles.container}>
-            <p className={`title left lg ${styles.title}`}>Додати відділення</p>
+            <p className={`title left md ${styles.title}`}>Додати відділення</p>
             <CreateDepartmentForm />
         </div>
     )

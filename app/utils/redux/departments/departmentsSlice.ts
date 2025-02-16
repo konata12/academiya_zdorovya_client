@@ -10,23 +10,29 @@ const initialState: DepartmentsInit = {
     departmentsIsModalOpen: [],
     status: null,
     error: {
-        get: null,
+        getAll: null,
+        getOne: null,
         create: null,
         delete: null,
         update: null,
     }
 }
 
-export const fetchDepartments = createAsyncThunk('departments/get', async (_, { rejectWithValue }) => {
+const baseUrl = 'departments'
+
+export const fetchDepartments = createAsyncThunk('departments/getAll', async (
+    _,
+    { rejectWithValue }
+) => {
     try {
-        const response = await axiosInstance.get<Department[]>('departments')
+        const response = await axiosInstance.get<Department[]>(`${baseUrl}`)
         console.log(response)
         return response.data
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.message || 'Unexpected server error',
+                message: error.response?.data.error || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -34,9 +40,32 @@ export const fetchDepartments = createAsyncThunk('departments/get', async (_, { 
     }
 })
 
-export const createDepartment = createAsyncThunk('departments/create', async (data: DepartmentsFormData, { rejectWithValue }) => {
+export const fetchOneDepartment = createAsyncThunk('departments/getOne', async (
+    id: string,
+    { rejectWithValue }
+) => {
     try {
-        const response = await axiosInstance.post<Department[]>(`departments/admin/create`, data)
+        const response = await axiosInstance.get<Department[]>(`${baseUrl}/admin/${id}`)
+        console.log(response)
+        return response.data
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            console.log(error)
+            const serializableError: ErrorResponse = {
+                message: error.response?.data.error || 'Unexpected server error',
+                statusCode: error.status || 500
+            }
+            return rejectWithValue(serializableError)
+        }
+    }
+})
+
+export const createDepartment = createAsyncThunk('departments/create', async (
+    data: DepartmentsFormData,
+    { rejectWithValue }
+) => {
+    try {
+        const response = await axiosInstance.post<Department[]>(`${baseUrl}/admin/create`, data)
         console.log(response)
         return response.data
     } catch (error) {
@@ -59,7 +88,7 @@ export const updateDepartment = createAsyncThunk('departments/update', async ({
     departmentId: number
 }, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.put<Department[]>(`departments/admin/${departmentId}`, data)
+        const response = await axiosInstance.put(`${baseUrl}/admin/${departmentId}`, data)
         console.log(response)
         return response.data
     } catch (error) {
@@ -74,16 +103,18 @@ export const updateDepartment = createAsyncThunk('departments/update', async ({
     }
 })
 
-export const deleteDepartment = createAsyncThunk('departments/delete', async (id: number, { rejectWithValue }) => {
+export const deleteDepartment = createAsyncThunk('departments/delete', async (
+    id: number,
+    { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.delete<Department[]>(`departments/admin/${id}`)
+        const response = await axiosInstance.delete(`${baseUrl}/admin/${id}`)
         console.log(response)
         return response.data
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.message || 'Unexpected server error',
+                message: error.response?.data.error || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -95,17 +126,17 @@ const departmentsSlice = createSlice({
     name: 'departments',
     initialState,
     reducers: {
-        openModal(state, action: { payload: { i: number } }) {
+        openDepartmentsModal(state, action: { payload: { i: number } }) {
             state.departmentsIsModalOpen[action.payload.i] = true
         },
-        closeModal(state, action: { payload: { i: number } }) {
+        closeDepartmentsModal(state, action: { payload: { i: number } }) {
             state.departmentsIsModalOpen[action.payload.i] = false
         },
 
-        deleteDepartmentFromState(state, action: { payload: { id: number } }) {
+        deleteDepartmentFromState(state, action: { payload: number }) {
             if (state.departments) {
                 const index = state.departments.findIndex(department => {
-                    return department.id === action.payload.id
+                    return department.id === action.payload
                 })
                 state.departments.splice(index, 1)
             }
@@ -135,10 +166,10 @@ const departmentsSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            // GET DEPARTMENTS
+            // GET ALL DEPARTMENTS
             .addCase(fetchDepartments.pending, (state) => {
                 state.status = "loading"
-                state.error.get = null
+                state.error.getAll = null
             })
             .addCase(fetchDepartments.fulfilled, (state, action: PayloadAction<Department[] | undefined>) => {
                 state.status = "succeeded"
@@ -149,7 +180,24 @@ const departmentsSlice = createSlice({
             })
             .addCase(fetchDepartments.rejected, (state, action) => {
                 state.status = "failed"
-                state.error.get = action.payload as ErrorResponse
+                state.error.getAll = action.payload as ErrorResponse
+            })
+
+            // GET ONE DEPARTMENTS
+            .addCase(fetchOneDepartment.pending, (state) => {
+                state.status = "loading"
+                state.error.getOne = null
+            })
+            .addCase(fetchOneDepartment.fulfilled, (state, action: PayloadAction<Department[] | undefined>) => {
+                state.status = "succeeded"
+                if (action.payload) {
+                    state.departments = action.payload
+                    state.departmentsIsModalOpen = new Array(state.departments.length).fill(false)
+                }
+            })
+            .addCase(fetchOneDepartment.rejected, (state, action) => {
+                state.status = "failed"
+                state.error.getOne = action.payload as ErrorResponse
             })
 
             // CREATE DEPARTMENT
@@ -200,8 +248,8 @@ const departmentsSlice = createSlice({
 })
 
 export const {
-    openModal,
-    closeModal,
+    openDepartmentsModal,
+    closeDepartmentsModal,
     deleteDepartmentFromState,
     setUpdateError,
     updateDepartmentInState,

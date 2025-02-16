@@ -4,13 +4,14 @@ import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable"
 import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine"
 import { useEffect } from "react"
 import styles from './layout.module.scss'
-import Link from "next/link"
 import ModalWindow from "@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow"
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks"
-import { closeModal, fetchDepartments, openModal, deleteDepartment as deleteDepartmentAction, deleteDepartmentFromState } from "@/app/utils/redux/departments/departmentsSlice"
+import { fetchDepartments, deleteDepartment as deleteDepartmentAction, deleteDepartmentFromState, openDepartmentsModal, closeDepartmentsModal } from "@/app/utils/redux/departments/departmentsSlice"
 import { RootState } from "@/app/utils/redux/store"
 import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink"
 import { fullfilled } from "@/app/services/response"
+import { usePathname } from "next/navigation"
+import { checkCreatePage, getUrlLastElement } from "@/app/services/navigation"
 
 const titles = ['Місто', 'Адреса', 'Гаряча лінія', 'Опції']
 
@@ -20,37 +21,44 @@ export default function Departments({
     children: React.ReactNode;
 }>) {
     const { departments, departmentsIsModalOpen, error } = useAppSelector((state: RootState) => state.departments)
+
     const dispatch = useAppDispatch()
+    const pathname = usePathname()
+    const isCreatePage = checkCreatePage(pathname)
 
     useEffect(() => {
         dispatch(fetchDepartments())
     }, [])
 
-    const deleteDepartment = async (id: number) => {
+    const deleteDepartment = async (id: number, i: number) => {
         const response = await dispatch(deleteDepartmentAction(id))
         const isFulfilled = fullfilled(response.meta.requestStatus)
-        if (isFulfilled) dispatch(deleteDepartmentFromState({ id }))
+
+        if (isFulfilled) {
+            dispatch(deleteDepartmentFromState(id))
+            closeModalWindow(i)
+        }
     }
 
     const openModalWindow = (i: number) => {
-        dispatch(openModal({ i }))
+        dispatch(openDepartmentsModal({ i }))
     }
 
     const closeModalWindow = (i: number) => {
-        dispatch(closeModal({ i }))
+        dispatch(closeDepartmentsModal({ i }))
     }
 
     return (
         <>
-            <p className={`title lg ${styles.title}`}>Відділення</p>
+            <p className={`title lg`}>Відділення</p>
             <CommonTable titles={titles}>
                 {!departments.length ? (
-                    <p className={styles.departmentsResponseError}>
-                        {error.get?.statusCode === 404 ?
+                    <p className='fetchError'>
+                        {error.getAll?.statusCode === 404 || !error.delete ?
                             'Немає відділень' :
                             'Виникла помилка'}
                     </p>
-                ) : (departments && departments.map((department, i) => <TableLine key={department.id}>
+                ) : (departments.map((department, i) => <TableLine key={department.id}>
                     <span>{department.city}</span>
                     <span>{department.address}</span>
                     <span>{department.hotline}</span>
@@ -64,35 +72,33 @@ export default function Departments({
                             Скасувати видалення
                         </button>
                         <button
-                            onClick={() => { deleteDepartment(department.id) }}
+                            onClick={() => { deleteDepartment(department.id, i) }}
                             className={`btn blue lg`}
                         >
                             Підтвердити
                         </button>
                     </ModalWindow>}
-                    <span className={styles.buttons}>
+                    <span>
                         <button
                             onClick={() => { openModalWindow(i) }}
                             className={`btn gray sm`}
                         >
                             Видалити
                         </button>
-                        <SafeLink href={`/admin/departments/update/${department.id}`}>
-                            <button
-                                className={`btn blue sm`}
-                            >
-                                Змінити
-                            </button>
+                        <SafeLink
+                            className={`btn blue sm ${(getUrlLastElement(pathname) === `${department.id}`) ? 'disabled' : ''}`}
+                            href={`/admin/departments/update/${department.id}`}
+                        >
+                            Змінити
                         </SafeLink>
                     </span>
                 </TableLine>))}
             </CommonTable>
-            <SafeLink href={'/admin/departments/create'}>
-                <button
-                    className={`btn blue xl ${styles.addButton}`}
-                >
-                    Додати відділення
-                </button>
+            <SafeLink
+                className={`btn blue xl ${styles.addButton} ${isCreatePage ? 'disabled' : ''}`}
+                href={'/admin/departments/create'}
+            >
+                Додати відділення
             </SafeLink>
             {children}
         </>

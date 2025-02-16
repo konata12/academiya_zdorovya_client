@@ -79,11 +79,9 @@ export default function UpdateDepartmentForm() {
         }
 
         window.addEventListener('beforeunload', handleBeforeUnload)
-        window.addEventListener('popstate', handleBeforeUnload)
 
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload)
-            window.removeEventListener('popstate', handleBeforeUnload)
         }
     }, [])
 

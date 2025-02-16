@@ -37,14 +37,20 @@ body {
 
 .title {
     text-align: center;
+    font-weight: $font-weight-med;
+    color: $text-color-black;
 
     &.left {
         text-align: left;
     }
+
     &.lg {
         font-size: $pc-h1-fz;
-        font-weight: $font-weight-med;
-        color: $text-color-black;
+        margin-bottom: 64px;
+    }
+
+    &.md {
+        font-size: $pc-h2-fz;
     }
 }
 
@@ -72,6 +78,7 @@ body {
         -webkit-text-fill-color: $text-color-black !important; // Match the text color
         transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s; // Prevent color change
     }
+
     // Override autofill styles for Firefox
     &:-moz-autofill,
     &:-moz-autofill:hover,
@@ -105,8 +112,11 @@ body {
     cursor: pointer;
     border: none;
     transition: all $anim-time $slow;
+    display: inline-block;
 
     font-weight: $font-weight-reg;
+    text-align: center;
+    text-decoration: none;
 
     &.blue {
 
@@ -125,6 +135,7 @@ body {
             font-weight: $font-weight-med;
             font-size: $pc-btn-fz-xl;
         }
+
         &.xl {
             border-radius: $pc-btn-border-rad-xl;
             padding: $pc-btn-padding-xl;
@@ -132,6 +143,7 @@ body {
             font-weight: $font-weight-med;
             font-size: $pc-btn-fz-xl;
         }
+
         &.lg {
             border-radius: $pc-btn-border-rad-lg;
             padding: $pc-btn-padding-lg;
@@ -139,18 +151,21 @@ body {
             font-weight: $font-weight-med;
             font-size: $pc-btn-fz-lg;
         }
+
         &.md {
             border-radius: $pc-btn-border-rad-md;
             padding: $pc-btn-padding-md;
 
             font-size: $pc-btn-fz-md-blue;
         }
+
         &.sm {
             border-radius: $pc-btn-border-rad-sm;
             padding: $pc-btn-padding-md;
 
             font-size: $pc-btn-fz-md-blue;
         }
+
         &.xs {
             border-radius: $pc-btn-border-rad-sm;
             padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
@@ -196,7 +211,6 @@ body {
     }
 
     &.gray {
-
         background-color: $disabled-color;
         @include rgba-text($text-color-black, 0.5);
 
@@ -244,8 +258,15 @@ body {
         font-size: $pc-h6-fz;
         font-weight: $font-weight-med;
     }
+
+    &.disabled {
+        background-color: $disabled-color;
+        @include rgba-text($text-color-black, 0.5);
+        pointer-events: none;
+    }
 }
 
+// for form input errors
 .error {
     margin-top: 12px;
     border-radius: $border-rad-5;
@@ -253,6 +274,15 @@ body {
     color: $error-color;
     text-align: center;
     font-size: $pc-h6-fz;
+}
+
+// for displaying in common table that
+// there are no more elemetns or error happened
+.fetchError {
+    text-align: center;
+    font-size: $pc-h5-fz;
+    font-weight: $font-weight-med;
+    color: $text-color-black;
 }
 
 // SERVICE CLASSES

@@ -1,6 +1,5 @@
 import { refreshTokens } from "@/app/utils/redux/auth/authSlice";
-import { useAppSelector } from "@/app/utils/redux/hooks";
-import store, { RootState } from "@/app/utils/redux/store";
+import store from "@/app/utils/redux/store";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -24,34 +23,34 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
-        const originalRequest = error.config;
+        const originalRequest = error.config
 
         // Check for 401 Unauthorized error
         if (error.response?.status === 401
             && originalRequest.url !== "auth/refresh"
             && !originalRequest._retry) {
-            originalRequest._retry = true; // Mark the request as retried
+            originalRequest._retry = true // Mark the request as retried
 
             try {
                 await store.dispatch(refreshTokens()); // Attempt to refresh the token
 
                 // Retry the original request with the new token
-                const state = store.getState();
-                const newAccessToken = state.auth.accessToken;
-                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                const state = store.getState()
+                const newAccessToken = state.auth.accessToken
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
                 return axiosInstance(originalRequest); // Retry the request
             } catch (refreshError) {
-                console.error("Token refresh failed:", refreshError);
+                console.error("Token refresh failed:", refreshError)
 
                 // Redirect to login page if token refresh fails
                 if (typeof window !== "undefined") {
-                    window.location.href = "/admin/login"; // Use window.location for redirection
+                    window.location.href = "/admin/login" // Use window.location for redirection
                 }
-                return Promise.reject(refreshError);
+                return Promise.reject(refreshError)
             }
         }
 
-        return Promise.reject(error);
+        return Promise.reject(error)
     }
 )
 

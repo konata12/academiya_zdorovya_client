@@ -35,7 +35,7 @@ export default function CreateDepartmentForm() {
             <div className={styles.line}>
                 <div className={styles.inputContainer}>
                     <label
-                        className={`inputLabel ${styles.label}`}
+                        className={`inputLabel`}
                         htmlFor="city"
                     >
                         Місто
@@ -52,7 +52,7 @@ export default function CreateDepartmentForm() {
                 </div>
                 <div className={styles.inputContainer}>
                     <label
-                        className={`inputLabel ${styles.label}`}
+                        className={`inputLabel`}
                         htmlFor="hotline"
                     >
                         Гаряча лінія
@@ -75,7 +75,7 @@ export default function CreateDepartmentForm() {
             <div className={styles.line}>
                 <div className={styles.inputContainer}>
                     <label
-                        className={`inputLabel ${styles.label}`}
+                        className={`inputLabel`}
                         htmlFor="address"
                     >
                         Адреса
@@ -92,7 +92,7 @@ export default function CreateDepartmentForm() {
                 </div>
                 <div className={styles.inputContainer}>
                     <label
-                        className={`inputLabel ${styles.label}`}
+                        className={`inputLabel`}
                         htmlFor="google-map-url"
                     >
                         Посилання на гугл карти
@@ -114,7 +114,7 @@ export default function CreateDepartmentForm() {
             </div>
             <div className={styles.inputContainer}>
                 <label
-                    className={`inputLabel ${styles.label}`}
+                    className={`inputLabel`}
                     htmlFor="google-map-reviews-url"
                 >
                     Посилання на відгуки гугл карт

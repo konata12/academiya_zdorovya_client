@@ -2,6 +2,8 @@
 import authSlice from "@/app/utils/redux/auth/authSlice";
 import departmentsSlice from "@/app/utils/redux/departments/departmentsSlice";
 import navigationSlice from "@/app/utils/redux/navigation/navigationSlice";
+import bookingServicesSlice from "@/app/utils/redux/booking_services/bookingServicesSlice";
+import pricesSlice from '@/app/utils/redux/prices/pricesSlice';
 import { configureStore } from "@reduxjs/toolkit";
 
 // Define the root state type
@@ -18,6 +20,8 @@ const store = configureStore({
         // API
         auth: authSlice,
         departments: departmentsSlice,
+        bookingServices: bookingServicesSlice,
+        prices: pricesSlice
     },
 });
 

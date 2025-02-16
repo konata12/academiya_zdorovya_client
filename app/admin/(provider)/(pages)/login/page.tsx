@@ -42,7 +42,7 @@ export default function Login() {
                 className={styles.form}
                 onSubmit={formSubmit}
             >
-                <p className={`title lg ${styles.title}`}>Вхід</p>
+                <p className={`title lg`}>Вхід</p>
                 <input
                     className={`input ${styles.login}`}
                     type="text"

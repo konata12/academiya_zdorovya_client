@@ -1,6 +1,6 @@
 import { ErrorResponse, Status } from "@/app/types/response"
 
-export type Department = {
+export interface Department {
     id: number
     city: string
     hotline: string
@@ -14,10 +14,11 @@ export interface DepartmentsInit {
     departmentsIsModalOpen: boolean[]
     status: Status
     error: {
-        get: ErrorResponse | null,
-        create: ErrorResponse | null,
-        delete: ErrorResponse | null,
-        update: ErrorResponse | null,
+        getAll: ErrorResponse | null
+        getOne: ErrorResponse | null
+        create: ErrorResponse | null
+        delete: ErrorResponse | null
+        update: ErrorResponse | null
     }
 }
 

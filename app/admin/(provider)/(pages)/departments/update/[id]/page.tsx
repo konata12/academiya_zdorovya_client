@@ -7,7 +7,7 @@ export default function UpdateDepartment() {
 
     return (
         <div className={styles.container}>
-            <p className={`title left lg ${styles.title}`}>Редагувати відділення</p>
+            <p className={`title left md ${styles.title}`}>Редагувати відділення</p>
             <UpdateDepartmentForm />
         </div>
     )
