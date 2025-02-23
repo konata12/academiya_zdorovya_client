@@ -46,7 +46,7 @@ export const fetchOneDepartment = createAsyncThunk('departments/getOne', async (
 ) => {
     try {
         const response = await axiosInstance.get<Department[]>(`${baseUrl}/admin/${id}`)
-        console.log(response)
+        // console.log(response)
         return response.data
     } catch (error) {
         if (error instanceof AxiosError) {

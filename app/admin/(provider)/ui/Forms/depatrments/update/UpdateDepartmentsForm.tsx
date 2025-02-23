@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { RootState } from '@/app/utils/redux/store';
 import { setUpdateError, updateDepartment as updateDepartmentAction, updateDepartmentInState } from "@/app/utils/redux/departments/departmentsSlice"
 import { setFormDefaultValues as setFormDefaultValuesRedux } from '@/app/utils/redux/navigation/navigationSlice'
-import { Department, DepartmentsDefaultFormData, DepartmentsFormData } from '@/app/types/departments';
+import { Department, DepartmentsDefaultFormData, DepartmentsFormData, DepartmentsFormDataEnum } from '@/app/types/departments';
 import { isEqual } from 'lodash';
 
 export default function UpdateDepartmentForm() {
@@ -127,7 +127,7 @@ export default function UpdateDepartmentForm() {
                     </label>
                     <input
                         className={`input ${errors.city && 'wrong'}`}
-                        {...register('city', {
+                        {...register(DepartmentsFormDataEnum.CITY, {
                             required: "Місто обов'язкове",
                         })}
                         type="text"
@@ -144,7 +144,7 @@ export default function UpdateDepartmentForm() {
                     </label>
                     <input
                         className={`input ${errors.hotline && 'wrong'}`}
-                        {...register('hotline', {
+                        {...register(DepartmentsFormDataEnum.HOTLINE, {
                             required: "Гаряча лінія обов'язкова",
                             pattern: {
                                 value: PHONE_NUMBER,
@@ -167,7 +167,7 @@ export default function UpdateDepartmentForm() {
                     </label>
                     <input
                         className={`input ${errors.address && 'wrong'}`}
-                        {...register('address', {
+                        {...register(DepartmentsFormDataEnum.ADDRESS, {
                             required: "Адреса обов'язкова",
                         })}
                         type="text"
@@ -184,7 +184,7 @@ export default function UpdateDepartmentForm() {
                     </label>
                     <input
                         className={`input ${errors.googleMapUrl && 'wrong'}`}
-                        {...register('googleMapUrl', {
+                        {...register(DepartmentsFormDataEnum.GOOGLEMAPURSL, {
                             required: "Посилання на відділення в гугл картах обов'язкове",
                             pattern: {
                                 value: GOOGLE_MAPS_URL,
@@ -206,7 +206,7 @@ export default function UpdateDepartmentForm() {
                 </label>
                 <input
                     className={`input ${errors.googleMapReviewsUrl && 'wrong'}`}
-                    {...register('googleMapReviewsUrl', {
+                    {...register(DepartmentsFormDataEnum.GOOGLEMAPREVIEWSURL, {
                         required: "Посилання на відгуки відділення в обов'язкове",
                         pattern: {
                             value: GOOGLE_MAPS_URL,

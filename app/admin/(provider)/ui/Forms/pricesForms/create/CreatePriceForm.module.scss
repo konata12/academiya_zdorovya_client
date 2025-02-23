@@ -1,0 +1,87 @@
+@use '../../../../../../styles/variables' as *;
+
+.form {
+
+    .addTitleBtn {
+        width: 100%;
+        margin-top: 32px;
+    }
+
+    .optionalService {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        flex-grow: 1;
+
+        margin-top: 64px;
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+        }
+        .input {
+            pointer-events: none;
+            opacity: 0;
+            // margin-bottom: -72px;
+
+            transition: all $anim-time $slow;
+
+            &.active {
+                pointer-events: auto;
+                opacity: 1;
+                margin-bottom: 0px;
+            }
+        }
+        .error {
+            width: 100%;
+            position: absolute;
+            bottom: -30px;
+
+            text-align: center;
+        }
+    }
+
+    .tableConfig {
+        padding: 128px 0;
+
+        p {
+            text-align: left;
+            margin-bottom: 64px;
+        }
+
+        .checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+
+            max-width: 324px;
+            width: 100%;
+
+            .checkbox {
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    }
+
+    .priceVariantsWrap {
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 64px;
+        }
+
+        .addPriceTitleBtn {
+            width: 100%;
+            margin-top: 48px;
+        }
+    }
+
+    .submit {
+        margin-top: 24px;
+        width: 100%;
+    }
+}

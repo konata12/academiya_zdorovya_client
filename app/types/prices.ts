@@ -1,23 +1,18 @@
 import { ErrorResponse, Status } from "@/app/types/response"
 
-export interface Price {
+// GENERAL TYPES
+export interface Price extends PriceFormData {
     id: number
-    title: string
-    titleDescription: string | null
-    meetingsCount: string | null
-    meetingsDuration: string | null
-    meetingsPrice: string | null
-    coursePrice: string | null
 }
-
+export interface Titles extends TitlesFormData {
+    id: number
+}
 export interface PriceSection {
     id: number
-    title: string
-    priceNearTitle: string | null
+    titles: Titles[]
     optionalService: string | null
     prices: Price[]
 }
-
 export interface PriceSectionInit {
     priceSections: PriceSection[]
     priceSectionsIsModalOpen: boolean[]
@@ -31,12 +26,53 @@ export interface PriceSectionInit {
     }
 }
 
-// export interface DepartmentsFormData {
-//     city: string
-//     hotline: string
-//     address: string
-//     googleMapUrl: string
-//     googleMapReviewsUrl: string
-// }
+// FORM DATA
+interface TitlesFormData {
+    text: string
+    priceNearTitle: string | null
+}
+interface PriceFormData {
+    title: string
+    titleDescription: string | null
+    meetingsCount: string | null
+    meetingsDuration: string | null
+    meetingPrice: string | null
+    coursePrice: string | null
+}
+export interface PriceSectionFormData {
+    titles: TitlesFormData[]
+    optionalService: string | null
+    prices: PriceFormData[]
+}
+
+// PRICE FORM UI TYPES
+export interface PriceSectionUI {
+    addTitlePriceCheckbox: boolean[]
+    optionalService: boolean
+
+    addPriceVariantCheckbox: boolean[]
+    priceVariantsCheckbox: boolean
+    meetingsCount: boolean
+    meetingDuration: boolean
+    meetingPrice: boolean
+    meetingsTotalPrice: boolean
+}
+
+// ENUMS
+export enum PriceTitleEnum {
+    TEXT = 'text',
+    PRICENEARTITLE = 'priceNearTitle',
+}
+export enum PriceVariantOptionsEnum {
+    TITLE = 'title',
+    TITLEDESCRIPTION = 'titleDescription',
+    COUNT = 'meetingsCount',
+    DURATION = 'meetingsDuration',
+    PRICE = 'meetingPrice',
+    TOTALPRICE = 'coursePrice',
+}
+export enum PriceSectionEnum {
+    OPTIONALSERVICE = 'optionalService'
+}
 
 // export type DepartmentsDefaultFormData = Partial<DepartmentsFormData>

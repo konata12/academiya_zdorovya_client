@@ -1,7 +1,7 @@
 'use client'
 
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
-import { checkCreatePage, getUrlLastElement, getUrlOrderElement } from '@/app/services/navigation'
+import { checkCreatePage, checkUpdatePage, getUrlLastElement, getUrlOrderElement } from '@/app/services/navigation'
 import { fetchOneDepartment } from '@/app/utils/redux/departments/departmentsSlice'
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
 import { RootState } from '@/app/utils/redux/store'
@@ -34,6 +34,7 @@ export default function page({
     const pathname = usePathname()
 
     const isCreatePage = checkCreatePage(pathname)
+    const isUpdatePage = checkUpdatePage(pathname)
     const departmentId = getUrlOrderElement(pathname, 3)
     const department = departments.find((department) => {
         return `${department.id}` === departmentId
@@ -101,7 +102,7 @@ export default function page({
                             'Виникла помилка'}
                     </p>
                 ) : (priceSections.map((priceSection, i) => <TableLine key={priceSection.id}>
-                    <span>{priceSection.title}</span>
+                    <span>{priceSection.titles[0].text}</span>
                     {priceSectionsIsModalOpen[i] && <ModalWindow
                         title="Ви дійсно бажаєте видалити цю послугу з розцінками?"
                     >
@@ -126,7 +127,7 @@ export default function page({
                             Видалити
                         </button>
                         <SafeLink
-                            className={`btn blue sm ${(getUrlLastElement(pathname) === `${priceSection.id}`) ? 'disabled' : ''}`}
+                            className={`btn blue sm ${((getUrlLastElement(pathname) === `${priceSection.id}`) && isUpdatePage) ? 'disabled' : ''}`}
                             href={`/admin/prices/${departmentId}/update`}
                         >
                             Змінити
@@ -138,7 +139,7 @@ export default function page({
                 className={`btn blue xl ${styles.addButton} ${isCreatePage ? 'disabled' : ''}`}
                 href={`/admin/prices/${departmentId}/create`}
             >
-                Додати відділення
+                Додати послугу з розцінками
             </SafeLink>
             {children}
         </>

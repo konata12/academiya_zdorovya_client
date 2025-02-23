@@ -52,6 +52,14 @@ body {
     &.md {
         font-size: $pc-h2-fz;
     }
+
+    &.sm {
+        font-size: $pc-h3-fz;
+    }
+
+    &.xs {
+        font-size: $pc-h5-fz;
+    }
 }
 
 .inputLabel {
@@ -64,7 +72,7 @@ body {
     background-color: $disabled-color;
     border: none;
     border-radius: $pc-input-border-rad;
-    padding: $pc-input-padding;
+    padding: $pc-input-padding-h $pc-input-padding-w;
 
     font-size: $pc-t1-fz;
     color: $text-color-black;
@@ -74,8 +82,8 @@ body {
     &:-webkit-autofill:hover,
     &:-webkit-autofill:focus,
     &:-webkit-autofill:active {
-        -webkit-box-shadow: 0 0 0 1000px $disabled-color inset !important; // Match the background color
-        -webkit-text-fill-color: $text-color-black !important; // Match the text color
+        -webkit-box-shadow: 0 0 0 1000px $disabled-color inset; // Match the background color
+        -webkit-text-fill-color: $text-color-black; // Match the text color
         transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s; // Prevent color change
     }
 

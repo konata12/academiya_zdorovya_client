@@ -30,4 +30,12 @@ export interface DepartmentsFormData {
     googleMapReviewsUrl: string
 }
 
+export enum DepartmentsFormDataEnum {
+    CITY = 'city',
+    HOTLINE = 'hotline',
+    ADDRESS ='address',
+    GOOGLEMAPURSL ='googleMapUrl',
+    GOOGLEMAPREVIEWSURL = 'googleMapReviewsUrl',
+}
+
 export type DepartmentsDefaultFormData = Partial<DepartmentsFormData>

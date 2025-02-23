@@ -1,0 +1,37 @@
+/**
+ * @sass-export-section="fonts"
+ */
+/**
+ * @sass-export-section="font-weight"
+ */
+/**
+ * @sass-export-section="pc-fonts"
+ */
+/**
+ * @sass-export-section="breakpoints"
+ */
+/**
+ * @sass-export-section="colors"
+ */
+/**
+ * @sass-export-section="border-radius"
+ */
+/**
+ * @sass-export-section="padding"
+ */
+/**
+ * @sass-export-section="animations"
+ */
+/**
+ * @sass-export-section="animation-time"
+ */
+/**
+ * @sass-export-section="box-shadow"
+ */
+.navbar {
+  background-color: #000;
+  color: white;
+}
+.navbar .container {
+  display: flex;
+}/*# sourceMappingURL=navbar.module.css.map */

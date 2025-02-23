@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import styles from './CreateDepartmentFrom.module.scss'
 import { GOOGLE_MAPS_URL, PHONE_NUMBER } from "@/app/utils/regex";
 import { useRouter } from "next/navigation";
-import { DepartmentsFormData } from "@/app/types/departments";
+import { DepartmentsFormData, DepartmentsFormDataEnum } from "@/app/types/departments";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
 import { createDepartment as createDepartmentAction } from "@/app/utils/redux/departments/departmentsSlice"
@@ -42,7 +42,7 @@ export default function CreateDepartmentForm() {
                     </label>
                     <input
                         className={`input ${errors.city && 'wrong'}`}
-                        {...register('city', {
+                        {...register(DepartmentsFormDataEnum.CITY, {
                             required: "Місто обов'язкове",
                         })}
                         type="text"
@@ -59,7 +59,7 @@ export default function CreateDepartmentForm() {
                     </label>
                     <input
                         className={`input ${errors.hotline && 'wrong'}`}
-                        {...register('hotline', {
+                        {...register(DepartmentsFormDataEnum.HOTLINE, {
                             required: "Гаряча лінія обов'язкова",
                             pattern: {
                                 value: PHONE_NUMBER,
@@ -82,7 +82,7 @@ export default function CreateDepartmentForm() {
                     </label>
                     <input
                         className={`input ${errors.address && 'wrong'}`}
-                        {...register('address', {
+                        {...register(DepartmentsFormDataEnum.ADDRESS, {
                             required: "Адреса обов'язкова",
                         })}
                         type="text"
@@ -99,7 +99,7 @@ export default function CreateDepartmentForm() {
                     </label>
                     <input
                         className={`input ${errors.googleMapUrl && 'wrong'}`}
-                        {...register('googleMapUrl', {
+                        {...register(DepartmentsFormDataEnum.GOOGLEMAPURSL, {
                             required: "Посилання на відділення в гугл картах обов'язкове",
                             pattern: {
                                 value: GOOGLE_MAPS_URL,
@@ -121,7 +121,7 @@ export default function CreateDepartmentForm() {
                 </label>
                 <input
                     className={`input ${errors.googleMapReviewsUrl && 'wrong'}`}
-                    {...register('googleMapReviewsUrl', {
+                    {...register(DepartmentsFormDataEnum.GOOGLEMAPREVIEWSURL, {
                         required: "Посилання на відгуки відділення в обов'язкове",
                         pattern: {
                             value: GOOGLE_MAPS_URL,
@@ -133,6 +133,7 @@ export default function CreateDepartmentForm() {
                 />
                 {errors.googleMapReviewsUrl && <p className="error">{errors.googleMapReviewsUrl.message}</p>}
             </div>
+            
             <div className={styles.formErrorWrap}>
                 {error.create && <p className={`error ${styles.formError}`}>{error.create.message}</p>}
                 <button

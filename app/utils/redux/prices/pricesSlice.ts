@@ -1,5 +1,4 @@
-import { BookingService, BookingServiceFormData } from "@/app/types/booking_services";
-import { PriceSection, PriceSectionInit } from "@/app/types/prices";
+import { PriceSection, PriceSectionFormData, PriceSectionInit } from "@/app/types/prices";
 import { ErrorResponse } from "@/app/types/response";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -44,12 +43,20 @@ export const fetchPriceSections = createAsyncThunk('prices/get', async (
     }
 })
 
-export const createBookingService = createAsyncThunk('prices/create', async (
-    data: BookingServiceFormData,
+export const createPriceSection = createAsyncThunk('prices/create', async ({
+    data,
+    departmentId
+}: {
+    data: PriceSectionFormData
+    departmentId: number
+},
     { rejectWithValue }
 ) => {
     try {
-        const response = await axiosInstance.post<BookingService[]>(`${baseUrl}/admin/create`, data)
+        const response = await axiosInstance.post<PriceSection[]>(`${baseUrl}/admin/create`, {
+            ...data,
+            departmentId
+        })
         console.log(response)
         return response.data
     } catch (error) {
@@ -122,23 +129,23 @@ const pricesSlice = createSlice({
                 state.error.getAll = action.payload as ErrorResponse
             })
 
-            // CREATE BOOKING SERVICES
-            // .addCase(createBookingService.pending, (state) => {
-            //     state.status = "loading"
-            //     state.error.create = null
-            // })
-            // .addCase(createBookingService.fulfilled, (state, action: PayloadAction<BookingService[] | undefined>) => {
-            //     state.status = "succeeded"
-            //     console.log(action.payload)
-            //     if (action.payload) {
-            //         state.bookingServices = action.payload
-            //         state.bookingServicesIsModalOpen = new Array(state.bookingServices.length).fill(false)
-            //     }
-            // })
-            // .addCase(createBookingService.rejected, (state, action) => {
-            //     state.status = "failed"
-            //     state.error.create = action.payload as ErrorResponse
-            // })
+            // CREATE PRICE SECTION
+            .addCase(createPriceSection.pending, (state) => {
+                state.status = "loading"
+                state.error.create = null
+            })
+            .addCase(createPriceSection.fulfilled, (state, action: PayloadAction<PriceSection[] | undefined>) => {
+                state.status = "succeeded"
+                console.log(action.payload)
+                if (action.payload) {
+                    state.priceSections = action.payload
+                    state.priceSectionsIsModalOpen = new Array(state.priceSections.length).fill(false)
+                }
+            })
+            .addCase(createPriceSection.rejected, (state, action) => {
+                state.status = "failed"
+                state.error.create = action.payload as ErrorResponse
+            })
 
             // DELETE BOOKING SERVICES
             .addCase(deletePriceSection.pending, (state) => {

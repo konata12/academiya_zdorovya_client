@@ -1,0 +1,48 @@
+@use '../../../../styles/variables' as *;
+
+.checkbox {
+    position: relative;
+    width: 42px;
+    height: 22px;
+    cursor: pointer;
+
+    input {
+        position: relative;
+        z-index: 1;
+        appearance: none;
+
+        &:checked~span {
+            background: $primary-color;
+
+            i {
+                background-color: $secondary-color;
+                left: 22px;
+                filter: drop-shadow(-2px 1px 2px rgba(0, 0, 0, 0.25));
+            }
+        }
+    }
+
+    span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        
+        background: $disabled-color;
+        border-radius: 14px;
+        transition: all $anim-time $slow;
+
+        i {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: $text-color-white;
+            filter: drop-shadow(2px 1px 2px rgba(0, 0, 0, 0.25));
+            border-radius: 50%;
+            transition: all $anim-time $slow;
+        }
+    }
+}

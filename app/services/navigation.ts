@@ -3,6 +3,10 @@ export function checkCreatePage(pathname: string) {
     return lastElement === 'create'
 }
 
+export function checkUpdatePage(pathname: string) {
+    return pathname.split('/').includes('update')
+}
+
 export function getUrlLastElement(pathname: string) {
     const arr = pathname.split('/')
     return arr[arr.length - 1]
