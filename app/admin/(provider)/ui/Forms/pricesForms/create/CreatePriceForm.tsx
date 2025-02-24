@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import styles from './CreatePriceForm.module.scss'
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
 import { RootState } from '@/app/utils/redux/store'
@@ -8,6 +8,8 @@ import PriceFormTitle from '@/app/admin/(provider)/ui/Forms/pricesForms/title/Pr
 import {
     createPriceSectionTitle,
     createPriceVariant,
+    setOptionalServiceCheckboxHeight,
+    setOptionalServiceInputHeight,
     triggerMeetingDurationCheckbox,
     triggerMeetingPriceCheckbox,
     triggerMeetingsCountCheckbox,
@@ -19,27 +21,44 @@ import { createPriceSection as createPriceSectionAction } from '@/app/utils/redu
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
 import PriceFormVariant from '@/app/admin/(provider)/ui/Forms/pricesForms/priceVariant/PriceFormVariant'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
+import { AnimatePresence, motion } from 'framer-motion';
 import { PriceSectionEnum, PriceSectionFormData } from '@/app/types/prices'
 import { usePathname } from 'next/navigation'
 import { getUrlOrderElement } from '@/app/services/navigation'
+import { basicAnimation } from '@/app/utils/animations/variables'
+import { optionalServiceVariants } from '@/app/utils/animations/animations'
 
 
 export default function CreatePriceForm() {
     const {
+        // TITLES
         addTitlePriceCheckbox,
-        optionalService,
 
+        // OPTIONAL SERVICE
+        optionalServiceCheckbox,
+        optionalServiceCheckboxHeight,
+        optionalServiceInputHeight,
+
+        // PRICE VARIANTS
         addPriceVariantCheckbox,
         priceVariantsCheckbox,
-        meetingsCount,
-        meetingDuration,
-        meetingPrice,
-        meetingsTotalPrice
+        meetingsCountCheckbox,
+        meetingDurationCheckbox,
+        meetingPriceCheckbox,
+        meetingsTotalPriceCheckbox
     } = useAppSelector((state: RootState) => state.pricesCreateFormUI)
     const dispatch = useAppDispatch()
     const pathname = usePathname()
     const titlesRef = useRef<(HTMLDivElement | null)[]>([])
-    const optionalServiceRef = useRef(null)
+    const optionalServiceRef = useRef<HTMLDivElement | null>(null)
+
+    const departmentId = +getUrlOrderElement(pathname, 3)
+    const priceVariantOptions = [
+        meetingsCountCheckbox,
+        meetingDurationCheckbox,
+        meetingPriceCheckbox,
+        meetingsTotalPriceCheckbox
+    ]
 
     // FORM LOGIC
     const {
@@ -73,15 +92,21 @@ export default function CreatePriceForm() {
         control,
         name: 'prices', // Name of the array in the form data
     });
-
     const AllFormFields = watch()
-    const priceVariantOptions = [
-        meetingsCount,
-        meetingDuration,
-        meetingPrice,
-        meetingsTotalPrice
-    ]
-    const departmentId = +getUrlOrderElement(pathname, 3)
+
+    // USE EFFECTS
+    // SET OPTIONAL SERVICE HEIGHT
+    useEffect(() => {
+        if (optionalServiceRef.current?.children) {
+            const optionalServiceHeight = optionalServiceRef.current?.children[0]?.scrollHeight
+            const optionalServiceInputHeight = optionalServiceCheckbox
+                ? optionalServiceRef.current?.children[2]?.scrollHeight
+                : 0
+
+            dispatch(setOptionalServiceCheckboxHeight(optionalServiceHeight))
+            dispatch(setOptionalServiceInputHeight(optionalServiceInputHeight))
+        }
+    }, [errors?.[PriceSectionEnum.OPTIONALSERVICE], optionalServiceCheckbox])
 
     const createPriceSection: SubmitHandler<PriceSectionFormData> = async (data) => {
         console.log('submit data:', data)
@@ -152,8 +177,6 @@ export default function CreatePriceForm() {
         titlesRef.current[index] = elem;
     }, []);
 
-    console.dir(optionalServiceRef.current)
-
     return (
         <form
             onSubmit={handleSubmit(createPriceSection)}
@@ -182,7 +205,7 @@ export default function CreatePriceForm() {
                 className={styles.optionalService}
                 ref={optionalServiceRef}
             >
-                <div className={styles.top}>
+                <div className={`${styles.top} ${optionalServiceCheckbox ? styles.active : ''}`}>
                     <label
                         className={`inputLabel`}
                         htmlFor="optionalService"
@@ -191,31 +214,48 @@ export default function CreatePriceForm() {
                     </label>
                     <Checkbox
                         handleFunction={handleOptionalServiceCheckbox}
-                        isChecked={optionalService}
+                        isChecked={optionalServiceCheckbox}
                         elemId='optionalService'
                     />
                 </div>
-                <input
-                    className={`input ${styles.input} ${optionalService ? styles.active : ''}`}
-                    type="text"
-                    {...register(PriceSectionEnum.OPTIONALSERVICE, {
-                        required: optionalService ? "Якщо вибрали, додатку послугу, то введіть її назву" : false,
-                        setValueAs: (value: string) => {
-                            console.log(value.length)
-                            if (!value.length) return null
-                            return value
-                        }
-                    })}
-                    disabled={!optionalService}
-                />
-                {errors?.[PriceSectionEnum.OPTIONALSERVICE]
-                    && optionalService
-                    && (
-                        <p className={`error ${styles.error}`}>{errors?.[PriceSectionEnum.OPTIONALSERVICE]?.message}</p>
-                    )}
+                <motion.div
+                    className={styles.bottomShape}
+                    animate={optionalServiceCheckbox
+                        ? { height: optionalServiceInputHeight }
+                        : { height: 0 }}
+                    transition={basicAnimation}
+                ></motion.div>
+                <AnimatePresence>
+                    {optionalServiceCheckbox && <motion.div
+                        className={styles.bottom}
+                        style={{ top: `${optionalServiceCheckboxHeight}px` }}
+                        variants={optionalServiceVariants}
+                        initial='initial'
+                        animate='animate'
+                        exit='exit'
+                        transition={basicAnimation}
+                    >
+                        <input
+                            className={`input ${styles.input}`}
+                            type="text"
+                            {...register(PriceSectionEnum.OPTIONALSERVICE, {
+                                required: optionalServiceCheckbox ? "Якщо вибрали, додаткову послугу, то введіть її назву" : false,
+                                setValueAs: (value: string) => {
+                                    if (value === null || !value.length) return null
+                                    return value
+                                }
+                            })}
+                            disabled={!optionalServiceCheckbox}
+                        />
+                        {errors?.[PriceSectionEnum.OPTIONALSERVICE]
+                            && (
+                                <p className={`error ${styles.error}`}>{errors?.[PriceSectionEnum.OPTIONALSERVICE]?.message}</p>
+                            )}
+                    </motion.div>}
+                </AnimatePresence>
             </div>
 
-            <div className={styles.tableConfig}>
+            <div className={`${styles.tableConfig} ${optionalServiceCheckbox ? styles.move : ''}`}>
                 <p className='title sm'>
                     Варіанти стовпців для опцій ціни послуги
                 </p>
@@ -229,7 +269,7 @@ export default function CreatePriceForm() {
                         </label>
                         <Checkbox
                             handleFunction={handlePriceCountOptionCheckbox}
-                            isChecked={meetingsCount}
+                            isChecked={meetingsCountCheckbox}
                             elemId='meetingsCountCheckbox'
                         />
                     </div>
@@ -242,7 +282,7 @@ export default function CreatePriceForm() {
                         </label>
                         <Checkbox
                             handleFunction={handlePriceDurationOptionCheckbox}
-                            isChecked={meetingDuration}
+                            isChecked={meetingDurationCheckbox}
                             elemId='durationCheckbox'
                         />
                     </div>
@@ -255,7 +295,7 @@ export default function CreatePriceForm() {
                         </label>
                         <Checkbox
                             handleFunction={handlePriceMeetingPriceOptionCheckbox}
-                            isChecked={meetingPrice}
+                            isChecked={meetingPriceCheckbox}
                             elemId='priceCheckbox'
                         />
                     </div>
@@ -268,7 +308,7 @@ export default function CreatePriceForm() {
                         </label>
                         <Checkbox
                             handleFunction={handlePriceTotalPriceOptionCheckbox}
-                            isChecked={meetingsTotalPrice}
+                            isChecked={meetingsTotalPriceCheckbox}
                             elemId='totalPriceCheckbox'
                         />
                     </div>

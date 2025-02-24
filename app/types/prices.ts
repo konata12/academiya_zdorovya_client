@@ -48,14 +48,17 @@ export interface PriceSectionFormData {
 // PRICE FORM UI TYPES
 export interface PriceSectionUI {
     addTitlePriceCheckbox: boolean[]
-    optionalService: boolean
+
+    optionalServiceCheckbox: boolean
+    optionalServiceCheckboxHeight: number
+    optionalServiceInputHeight: number
 
     addPriceVariantCheckbox: boolean[]
     priceVariantsCheckbox: boolean
-    meetingsCount: boolean
-    meetingDuration: boolean
-    meetingPrice: boolean
-    meetingsTotalPrice: boolean
+    meetingsCountCheckbox: boolean
+    meetingDurationCheckbox: boolean
+    meetingPriceCheckbox: boolean
+    meetingsTotalPriceCheckbox: boolean
 }
 
 // ENUMS

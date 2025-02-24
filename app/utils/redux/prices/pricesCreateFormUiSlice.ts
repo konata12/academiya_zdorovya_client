@@ -1,16 +1,19 @@
 import { PriceSectionUI } from "@/app/types/prices";
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: PriceSectionUI = {
     addTitlePriceCheckbox: [false],
-    optionalService: false,
+
+    optionalServiceCheckbox: false,
+    optionalServiceCheckboxHeight: 0,
+    optionalServiceInputHeight: 0,
 
     addPriceVariantCheckbox: [false],
     priceVariantsCheckbox: false,
-    meetingsCount: false,
-    meetingDuration: false,
-    meetingPrice: false,
-    meetingsTotalPrice: false,
+    meetingsCountCheckbox: false,
+    meetingDurationCheckbox: false,
+    meetingPriceCheckbox: false,
+    meetingsTotalPriceCheckbox: false,
 }
 
 const pricesCreateFormUiSlice = createSlice({
@@ -37,6 +40,17 @@ const pricesCreateFormUiSlice = createSlice({
             }
         },
 
+        // OPTIONAL SERVICE
+        triggerOptionalServiceCheckbox(state, action: { payload: boolean }) {
+            state.optionalServiceCheckbox = action.payload
+        },
+        setOptionalServiceCheckboxHeight(state, action: { payload: number }) {
+            state.optionalServiceCheckboxHeight = action.payload
+        },
+        setOptionalServiceInputHeight(state, action: { payload: number }) {
+            state.optionalServiceInputHeight = action.payload
+        },
+
         // PRICE VARIANTS
         triggerPriceVariantsDescriptionCheckbox(state, action: {
             payload: {
@@ -51,16 +65,16 @@ const pricesCreateFormUiSlice = createSlice({
             state.priceVariantsCheckbox = action.payload
         },
         triggerMeetingsCountCheckbox(state, action: { payload: boolean }) {
-            state.meetingsCount = action.payload
+            state.meetingsCountCheckbox = action.payload
         },
         triggerMeetingDurationCheckbox(state, action: { payload: boolean }) {
-            state.meetingDuration = action.payload
+            state.meetingDurationCheckbox = action.payload
         },
         triggerMeetingPriceCheckbox(state, action: { payload: boolean }) {
-            state.meetingPrice = action.payload
+            state.meetingPriceCheckbox = action.payload
         },
         triggerMeetingsTotalPriceCheckbox(state, action: { payload: boolean }) {
-            state.meetingsTotalPrice = action.payload
+            state.meetingsTotalPriceCheckbox = action.payload
         },
 
         createPriceVariant(state) {
@@ -72,11 +86,6 @@ const pricesCreateFormUiSlice = createSlice({
                 state.addPriceVariantCheckbox.splice(index, 1)
             }
         },
-
-        // OPTIONAL SERVICE
-        triggerOptionalServiceCheckbox(state, action: { payload: boolean }) {
-            state.optionalService = action.payload
-        },
     }
 })
 
@@ -87,6 +96,8 @@ export const {
     deletePriceSectionTitle,
     // OPTIONAL SERVICE
     triggerOptionalServiceCheckbox,
+    setOptionalServiceCheckboxHeight,
+    setOptionalServiceInputHeight,
     // PRICE VARIANTS
     triggerPriceVariantsCheckbox,
     triggerPriceVariantsDescriptionCheckbox,
