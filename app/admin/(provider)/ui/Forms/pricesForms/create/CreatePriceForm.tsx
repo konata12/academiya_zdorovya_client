@@ -8,8 +8,8 @@ import PriceFormTitle from '@/app/admin/(provider)/ui/Forms/pricesForms/title/Pr
 import {
     createPriceSectionTitle,
     createPriceVariant,
-    setOptionalServiceCheckboxHeight,
     setOptionalServiceInputHeight,
+    setPriceVariantsHeight,
     triggerMeetingDurationCheckbox,
     triggerMeetingPriceCheckbox,
     triggerMeetingsCountCheckbox,
@@ -26,7 +26,7 @@ import { PriceSectionEnum, PriceSectionFormData } from '@/app/types/prices'
 import { usePathname } from 'next/navigation'
 import { getUrlOrderElement } from '@/app/services/navigation'
 import { basicAnimation } from '@/app/utils/animations/variables'
-import { optionalServiceVariants } from '@/app/utils/animations/animations'
+import { optionalServiceVariants, priceFieldsVariants } from '@/app/utils/animations/animations'
 
 
 export default function CreatePriceForm() {
@@ -36,10 +36,10 @@ export default function CreatePriceForm() {
 
         // OPTIONAL SERVICE
         optionalServiceCheckbox,
-        optionalServiceCheckboxHeight,
         optionalServiceInputHeight,
 
         // PRICE VARIANTS
+        priceVariantsHeight,
         addPriceVariantCheckbox,
         priceVariantsCheckbox,
         meetingsCountCheckbox,
@@ -49,8 +49,8 @@ export default function CreatePriceForm() {
     } = useAppSelector((state: RootState) => state.pricesCreateFormUI)
     const dispatch = useAppDispatch()
     const pathname = usePathname()
-    const titlesRef = useRef<(HTMLDivElement | null)[]>([])
     const optionalServiceRef = useRef<HTMLDivElement | null>(null)
+    const priceVariantsWrapRef = useRef<HTMLDivElement | null>(null)
 
     const departmentId = +getUrlOrderElement(pathname, 3)
     const priceVariantOptions = [
@@ -59,6 +59,8 @@ export default function CreatePriceForm() {
         meetingPriceCheckbox,
         meetingsTotalPriceCheckbox
     ]
+
+    console.log('********************************')
 
     // FORM LOGIC
     const {
@@ -97,20 +99,19 @@ export default function CreatePriceForm() {
     // USE EFFECTS
     // SET OPTIONAL SERVICE HEIGHT
     useEffect(() => {
-        if (optionalServiceRef.current?.children) {
-            const optionalServiceHeight = optionalServiceRef.current?.children[0]?.scrollHeight
-            const optionalServiceInputHeight = optionalServiceCheckbox
-                ? optionalServiceRef.current?.children[2]?.scrollHeight
-                : 0
-
-            dispatch(setOptionalServiceCheckboxHeight(optionalServiceHeight))
-            dispatch(setOptionalServiceInputHeight(optionalServiceInputHeight))
+        if (optionalServiceRef.current) {
+            dispatch(setOptionalServiceInputHeight(optionalServiceRef.current.scrollHeight))
         }
-    }, [errors?.[PriceSectionEnum.OPTIONALSERVICE], optionalServiceCheckbox])
+    })
+    useEffect(() => {
+        if (priceVariantsWrapRef.current) {
+            dispatch(setPriceVariantsHeight(priceVariantsWrapRef.current.scrollHeight))
+        }
+    })
 
     const createPriceSection: SubmitHandler<PriceSectionFormData> = async (data) => {
         console.log('submit data:', data)
-        const response = await dispatch(createPriceSectionAction({ data, departmentId }))
+        // const response = await dispatch(createPriceSectionAction({ data, departmentId }))
     }
 
     // WORK WITH TITLES FORM UI
@@ -172,27 +173,25 @@ export default function CreatePriceForm() {
         dispatch(triggerMeetingsTotalPriceCheckbox(state))
     }
 
-    // REFERENCES
-    const setTitleRef = useCallback((elem: HTMLDivElement | null, index: number) => {
-        titlesRef.current[index] = elem;
-    }, []);
+    console.dir(priceVariantsHeight)
 
     return (
         <form
             onSubmit={handleSubmit(createPriceSection)}
             className={styles.form}
         >
-            {titleFields.map((titleField, i) => {
-                return <PriceFormTitle
-                    // ref={titlesRef.current[i] } // Store ref for each child
-                    titleWithPrice={addTitlePriceCheckbox[i]}
-                    index={i}
-                    register={register}
-                    errors={errors}
-                    removeTitleFromForm={removeTitle}
-                    key={titleField.id}
-                />
-            })}
+            <AnimatePresence>
+                {titleFields.map((titleField, i) => {
+                    return <PriceFormTitle
+                        titleWithPrice={addTitlePriceCheckbox[i]}
+                        index={i}
+                        register={register}
+                        errors={errors}
+                        removeTitleFromForm={removeTitle}
+                        key={titleField.id}
+                    />
+                })}
+            </AnimatePresence>
             <button
                 onClick={addTitle}
                 className={`btn blue xl ${styles.addTitleBtn}`}
@@ -203,7 +202,6 @@ export default function CreatePriceForm() {
 
             <div
                 className={styles.optionalService}
-                ref={optionalServiceRef}
             >
                 <div className={`${styles.top} ${optionalServiceCheckbox ? styles.active : ''}`}>
                     <label
@@ -224,35 +222,36 @@ export default function CreatePriceForm() {
                         ? { height: optionalServiceInputHeight }
                         : { height: 0 }}
                     transition={basicAnimation}
-                ></motion.div>
-                <AnimatePresence>
-                    {optionalServiceCheckbox && <motion.div
-                        className={styles.bottom}
-                        style={{ top: `${optionalServiceCheckboxHeight}px` }}
-                        variants={optionalServiceVariants}
-                        initial='initial'
-                        animate='animate'
-                        exit='exit'
-                        transition={basicAnimation}
-                    >
-                        <input
-                            className={`input ${styles.input}`}
-                            type="text"
-                            {...register(PriceSectionEnum.OPTIONALSERVICE, {
-                                required: optionalServiceCheckbox ? "Якщо вибрали, додаткову послугу, то введіть її назву" : false,
-                                setValueAs: (value: string) => {
-                                    if (value === null || !value.length) return null
-                                    return value
-                                }
-                            })}
-                            disabled={!optionalServiceCheckbox}
-                        />
-                        {errors?.[PriceSectionEnum.OPTIONALSERVICE]
-                            && (
-                                <p className={`error ${styles.error}`}>{errors?.[PriceSectionEnum.OPTIONALSERVICE]?.message}</p>
-                            )}
-                    </motion.div>}
-                </AnimatePresence>
+                >
+                    <AnimatePresence>
+                        {optionalServiceCheckbox && <motion.div
+                            className={styles.bottom}
+                            ref={optionalServiceRef}
+                            variants={optionalServiceVariants}
+                            initial='initial'
+                            animate='animate'
+                            exit='exit'
+                            transition={basicAnimation}
+                        >
+                            <input
+                                className={`input ${styles.input}`}
+                                type="text"
+                                {...register(PriceSectionEnum.OPTIONALSERVICE, {
+                                    required: optionalServiceCheckbox ? "Якщо вибрали, додаткову послугу, то введіть її назву" : false,
+                                    setValueAs: (value: string) => {
+                                        if (value === null || !value.length) return null
+                                        return value
+                                    }
+                                })}
+                                disabled={!optionalServiceCheckbox}
+                            />
+                            {errors?.[PriceSectionEnum.OPTIONALSERVICE]
+                                && (
+                                    <p className={`error ${styles.error}`}>{errors?.[PriceSectionEnum.OPTIONALSERVICE]?.message}</p>
+                                )}
+                        </motion.div>}
+                    </AnimatePresence>
+                </motion.div>
             </div>
 
             <div className={`${styles.tableConfig} ${optionalServiceCheckbox ? styles.move : ''}`}>
@@ -315,6 +314,7 @@ export default function CreatePriceForm() {
                 </div>
             </div>
 
+
             <div className={styles.priceVariantsWrap}>
                 <div className={styles.top}>
                     <label
@@ -330,27 +330,41 @@ export default function CreatePriceForm() {
                         elemId='priceVariants'
                     />
                 </div>
-                {priceVariantsCheckbox ? <div>
-                    {priceFields.map((priceField, i) => {
-                        return <PriceFormVariant
-                            showOptions={priceVariantOptions}
-                            includePriceVariants={priceVariantsCheckbox}
-                            priceVariantDescription={addPriceVariantCheckbox[i]}
-                            index={i}
-                            register={register}
-                            errors={errors}
-                            removePriceVariantFromForm={removePrice}
-                            key={priceField.id}
-                        />
-                    })}
-                    <button
-                        onClick={addPriceVariant}
-                        className={`btn blue xl ${styles.addPriceTitleBtn}`}
-                        type='button'
+                <AnimatePresence>
+                    {priceVariantsCheckbox && <motion.div
+                        className={styles.priceVariants}
+                        variants={priceFieldsVariants(priceVariantsHeight)}
+                        initial='hidden'
+                        animate='visible'
+                        exit='exit'
+                        transition={basicAnimation}
                     >
-                        Додати рядок
-                    </button>
-                </div> : null}
+                        <motion.div
+                            className={styles.priceVariantsShape}
+                            ref={priceVariantsWrapRef}
+                        >
+                            {priceFields.map((priceField, i) => {
+                                return <PriceFormVariant
+                                    showOptions={priceVariantOptions}
+                                    includePriceVariants={priceVariantsCheckbox}
+                                    priceVariantDescription={addPriceVariantCheckbox[i]}
+                                    index={i}
+                                    register={register}
+                                    errors={errors}
+                                    removePriceVariantFromForm={removePrice}
+                                    key={priceField.id}
+                                />
+                            })}
+                            <button
+                                onClick={addPriceVariant}
+                                className={`btn blue xl ${styles.addPriceVariantBtn}`}
+                                type='button'
+                            >
+                                Додати рядок
+                            </button>
+                        </motion.div>
+                    </motion.div>}
+                </AnimatePresence>
             </div>
 
             <div>

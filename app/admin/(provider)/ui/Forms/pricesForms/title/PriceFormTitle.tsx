@@ -1,33 +1,39 @@
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './PriceFormTitle.module.scss'
 import { useAppDispatch } from '@/app/utils/redux/hooks'
 import { deletePriceSectionTitle, triggerTitleCheckbox } from '@/app/utils/redux/prices/pricesCreateFormUiSlice'
 import { FieldErrors, UseFieldArrayRemove, UseFormRegister } from 'react-hook-form'
 import { PriceSectionFormData, PriceTitleEnum } from '@/app/types/prices'
 import { AnimatePresence, motion } from 'framer-motion';
-import { componentVisibleAnimationVariants, errorAnimationVariants } from '@/app/utils/animations/animations'
+import { componentVisibleAnimationVariants, errorAnimationVariants, priceSectionTitleVariants } from '@/app/utils/animations/animations'
 import { basicAnimation } from '@/app/utils/animations/variables'
 
-
-export default function PriceFormTitle({
-    titleWithPrice,
-    // ref,
-    index,
-    register,
-    errors,
-    removeTitleFromForm
-}: {
+interface propsTypes {
     titleWithPrice: boolean
-    // ref: React.RefObject<HTMLDivElement>
     index: number
     register: UseFormRegister<PriceSectionFormData>
     errors: FieldErrors<PriceSectionFormData>
     removeTitleFromForm: UseFieldArrayRemove
-}) {
-    const dispatch = useAppDispatch()
+}
 
-    const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+export default function PriceFormTitle({
+    titleWithPrice,
+    index,
+    register,
+    errors,
+    removeTitleFromForm
+}: propsTypes) {
+    const [height, setHeight] = useState(0)
+    const dispatch = useAppDispatch()
+    const titleRef = useRef<HTMLDivElement | null>(null)
+    const titlePadding = 32
+
+    useEffect(() => {
+        setHeight(titleRef.current?.scrollHeight || 0)
+    })
+
+    const handlePriceNearTitleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
         const state = e.target.checked
         dispatch(triggerTitleCheckbox({ index, state }))
     }
@@ -38,10 +44,17 @@ export default function PriceFormTitle({
     }
 
     return (
-        <AnimatePresence>
+        <motion.div
+            className={styles.titleShape}
+            variants={priceSectionTitleVariants(height)}
+            initial='hidden'
+            animate='visible'
+            exit='exit'
+            transition={basicAnimation}
+        >
             <motion.div
                 className={`${styles.titleWrap} ${index ? styles.additional : ''}`}
-                // ref={ref}
+                ref={titleRef}
                 variants={componentVisibleAnimationVariants}
                 initial="hidden"
                 animate="visible"
@@ -62,8 +75,8 @@ export default function PriceFormTitle({
 
                 <div className={styles.title}>
                     <label
-                        className={`inputLabel`}
-                        htmlFor={`name_${index}`}
+                        className={`inputLabel ${styles.label}`}
+                        htmlFor={`price_title_${index}`}
                     >
                         {index ?
                             'Назва послуги' :
@@ -72,41 +85,39 @@ export default function PriceFormTitle({
                     <input
                         className={`input`}
                         type="text"
-                        id={`name_${index}`}
+                        id={`price_title_${index}`}
                         {...register(`titles.${index}.${PriceTitleEnum.TEXT}`, {
                             required: "Якщо вибрали, додатку послугу, то введіть її назву",
                         })}
                     />
-                    <AnimatePresence>
-                        {errors.titles?.[index]?.[PriceTitleEnum.TEXT]
-                            && (
-                                <motion.p
-                                    className={`error ${styles.error}`}
-                                    variants={errorAnimationVariants}
-                                    initial="hidden"
-                                    animate="visible"
-                                    exit='exit'
-                                    transition={basicAnimation}
-                                >
-                                    {errors.titles[index]?.[PriceTitleEnum.TEXT]?.message}
-                                </motion.p>
-                            )
-                        }
-                    </AnimatePresence>
+                    {errors.titles?.[index]?.[PriceTitleEnum.TEXT]
+                        && (
+                            <motion.p
+                                className={`error ${styles.error}`}
+                                variants={errorAnimationVariants}
+                                initial="hidden"
+                                animate="visible"
+                                exit='exit'
+                                transition={basicAnimation}
+                            >
+                                {errors.titles[index]?.[PriceTitleEnum.TEXT]?.message}
+                            </motion.p>
+                        )
+                    }
                 </div>
 
                 <div className={styles.priceNearTitle}>
                     <div className={styles.top}>
                         <label
                             className={`inputLabel`}
-                            htmlFor={`price_${index}`}
+                            htmlFor={`price_near_title_${index}`}
                         >
                             {`Ціна біля назви (опціонально*)`}
                         </label>
                         <Checkbox
-                            handleFunction={handleCheckbox}
+                            handleFunction={handlePriceNearTitleCheckbox}
                             isChecked={titleWithPrice}
-                            elemId={`price_${index}`}
+                            elemId={`price_near_title_${index}`}
                         />
                     </div>
                     <input
@@ -116,25 +127,23 @@ export default function PriceFormTitle({
                             required: titleWithPrice ? "Введіть ціну біля назви або відключіть її" : false,
                         })}
                     />
-                    <AnimatePresence>
-                        {errors.titles?.[index]?.[PriceTitleEnum.PRICENEARTITLE]
-                            && titleWithPrice
-                            && (
-                                <motion.p
-                                    className={`error ${styles.error} ${titleWithPrice ? styles.active : ''}`}
-                                    variants={errorAnimationVariants}
-                                    initial="hidden"
-                                    animate="visible"
-                                    exit='exit'
-                                    transition={basicAnimation}
-                                >
-                                    {errors.titles[index]?.[PriceTitleEnum.PRICENEARTITLE]?.message}
-                                </motion.p>
-                            )
-                        }
-                    </AnimatePresence>
+                    {errors.titles?.[index]?.[PriceTitleEnum.PRICENEARTITLE]
+                        && titleWithPrice
+                        && (
+                            <motion.p
+                                className={`error ${styles.error}`}
+                                variants={errorAnimationVariants}
+                                initial="hidden"
+                                animate="visible"
+                                exit='exit'
+                                transition={basicAnimation}
+                            >
+                                {errors.titles[index]?.[PriceTitleEnum.PRICENEARTITLE]?.message}
+                            </motion.p>
+                        )
+                    }
                 </div>
             </motion.div>
-        </AnimatePresence>
+        </motion.div>
     )
 }

@@ -50,9 +50,9 @@ export interface PriceSectionUI {
     addTitlePriceCheckbox: boolean[]
 
     optionalServiceCheckbox: boolean
-    optionalServiceCheckboxHeight: number
     optionalServiceInputHeight: number
 
+    priceVariantsHeight: number
     addPriceVariantCheckbox: boolean[]
     priceVariantsCheckbox: boolean
     meetingsCountCheckbox: boolean

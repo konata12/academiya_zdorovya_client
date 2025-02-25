@@ -53,7 +53,7 @@ export default function PriceFormVariant({
                 <div className={styles.title}>
                     <label
                         className={`inputLabel`}
-                        htmlFor={`optionName${index}`}
+                        htmlFor={`optionName_${index}`}
                     >
                         Назва опції
                     </label>
@@ -76,14 +76,14 @@ export default function PriceFormVariant({
                     <div className={styles.top}>
                         <label
                             className={`inputLabel`}
-                            htmlFor={`price${index}`}
+                            htmlFor={`optional_description_${index}`}
                         >
                             {`Опис, пишіть в душках (опціонально*)`}
                         </label>
                         <Checkbox
                             handleFunction={handleCheckbox}
                             isChecked={priceVariantDescription}
-                            elemId={`price${index}`}
+                            elemId={`optional_description_${index}`}
                         />
                     </div>
                     <input
@@ -106,14 +106,14 @@ export default function PriceFormVariant({
                 {showOptions[0] && <div className={styles.variant}>
                     <label
                         className={`inputLabel`}
-                        htmlFor={PriceVariantOptionsEnum.COUNT}
+                        htmlFor={`${PriceVariantOptionsEnum.COUNT}_${index}`}
                     >
                         Кількість занять
                     </label>
                     <input
                         className={`input ${styles.input}`}
                         type="text"
-                        id={PriceVariantOptionsEnum.COUNT}
+                        id={`${PriceVariantOptionsEnum.COUNT}_${index}`}
                         {...register(`prices.${index}.${PriceVariantOptionsEnum.COUNT}`, {
                             required: "Введіть кількість занять",
                         })}
@@ -127,14 +127,14 @@ export default function PriceFormVariant({
                 {showOptions[1] && <div className={styles.variant}>
                     <label
                         className={`inputLabel`}
-                        htmlFor={PriceVariantOptionsEnum.DURATION}
+                        htmlFor={`${PriceVariantOptionsEnum.DURATION}_${index}`}
                     >
                         Тривалість заняття
                     </label>
                     <input
                         className={`input ${styles.input}`}
                         type="text"
-                        id={PriceVariantOptionsEnum.DURATION}
+                        id={`${PriceVariantOptionsEnum.DURATION}_${index}`}
                         {...register(`prices.${index}.${PriceVariantOptionsEnum.DURATION}`, {
                             required: "Введіть тривалість заняття",
                         })}
@@ -148,14 +148,14 @@ export default function PriceFormVariant({
                 {showOptions[2] && <div className={styles.variant}>
                     <label
                         className={`inputLabel`}
-                        htmlFor={PriceVariantOptionsEnum.PRICE}
+                        htmlFor={`${PriceVariantOptionsEnum.PRICE}_${index}`}
                     >
                         Ціна за 1 заняття
                     </label>
                     <input
                         className={`input ${styles.input}`}
                         type="text"
-                        id={PriceVariantOptionsEnum.PRICE}
+                        id={`${PriceVariantOptionsEnum.PRICE}_${index}`}
                         {...register(`prices.${index}.${PriceVariantOptionsEnum.PRICE}`, {
                             required: "Введіть ціну за заняття",
                         })}
@@ -169,14 +169,14 @@ export default function PriceFormVariant({
                 {showOptions[3] && <div className={styles.variant}>
                     <label
                         className={`inputLabel`}
-                        htmlFor={PriceVariantOptionsEnum.TOTALPRICE}
+                        htmlFor={`${PriceVariantOptionsEnum.TOTALPRICE}_${index}`}
                     >
                         Кількість занять
                     </label>
                     <input
                         className={`input ${styles.input}`}
                         type="text"
-                        id={PriceVariantOptionsEnum.TOTALPRICE}
+                        id={`${PriceVariantOptionsEnum.TOTALPRICE}_${index}`}
                         {...register(`prices.${index}.${PriceVariantOptionsEnum.TOTALPRICE}`, {
                             required: "Введіть ціну за за весь курс",
                         })}

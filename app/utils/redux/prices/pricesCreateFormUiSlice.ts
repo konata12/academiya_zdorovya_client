@@ -5,9 +5,9 @@ const initialState: PriceSectionUI = {
     addTitlePriceCheckbox: [false],
 
     optionalServiceCheckbox: false,
-    optionalServiceCheckboxHeight: 0,
     optionalServiceInputHeight: 0,
 
+    priceVariantsHeight: 0,
     addPriceVariantCheckbox: [false],
     priceVariantsCheckbox: false,
     meetingsCountCheckbox: false,
@@ -44,14 +44,14 @@ const pricesCreateFormUiSlice = createSlice({
         triggerOptionalServiceCheckbox(state, action: { payload: boolean }) {
             state.optionalServiceCheckbox = action.payload
         },
-        setOptionalServiceCheckboxHeight(state, action: { payload: number }) {
-            state.optionalServiceCheckboxHeight = action.payload
-        },
         setOptionalServiceInputHeight(state, action: { payload: number }) {
             state.optionalServiceInputHeight = action.payload
         },
 
         // PRICE VARIANTS
+        setPriceVariantsHeight(state, action: { payload: number }) {
+            state.priceVariantsHeight = action.payload
+        },
         triggerPriceVariantsDescriptionCheckbox(state, action: {
             payload: {
                 index: number
@@ -96,9 +96,9 @@ export const {
     deletePriceSectionTitle,
     // OPTIONAL SERVICE
     triggerOptionalServiceCheckbox,
-    setOptionalServiceCheckboxHeight,
     setOptionalServiceInputHeight,
     // PRICE VARIANTS
+    setPriceVariantsHeight,
     triggerPriceVariantsCheckbox,
     triggerPriceVariantsDescriptionCheckbox,
     triggerMeetingsCountCheckbox,
