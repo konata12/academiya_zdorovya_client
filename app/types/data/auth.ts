@@ -1,4 +1,4 @@
-import { ErrorResponse, Status } from "@/app/types/response"
+import { ErrorResponse, Status } from "@/app/types/data/response"
 
 export type AccessToken = {
     access_token: string

@@ -5,7 +5,7 @@ export const routes = [
     { label: 'Відділення', path: '/admin/departments' },
     { label: 'Наповнення відділення', path: '/admin/fill_departments' },
     { label: 'Юридична інформація', path: '/admin/law_info' },
-    { label: 'Що лікуємо', path: '/admin/what_treat' },
+    { label: 'Що лікуємо', path: '/admin/about_treatment' },
     { label: 'Лікарі', path: '/admin/employees' },
     { label: 'Послуги для запису', path: '/admin/booking_services' },
     { label: 'Послуги', path: '/admin/services' },

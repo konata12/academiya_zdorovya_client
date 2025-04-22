@@ -1,5 +1,5 @@
-import { Department, DepartmentsFormData, DepartmentsInit } from "@/app/types/departments";
-import { ErrorResponse } from "@/app/types/response";
+import { Department, DepartmentsFormData, DepartmentsInit } from "@/app/types/data/departments";
+import { ErrorResponse } from "@/app/types/data/response";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, current, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
@@ -32,7 +32,7 @@ export const fetchDepartments = createAsyncThunk('departments/getAll', async (
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -52,7 +52,7 @@ export const fetchOneDepartment = createAsyncThunk('departments/getOne', async (
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -72,7 +72,7 @@ export const createDepartment = createAsyncThunk('departments/create', async (
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -82,20 +82,20 @@ export const createDepartment = createAsyncThunk('departments/create', async (
 
 export const updateDepartment = createAsyncThunk('departments/update', async ({
     data,
-    departmentId
+    id
 }: {
     data: DepartmentsFormData
-    departmentId: number
+    id: string
 }, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.put(`${baseUrl}/admin/${departmentId}`, data)
+        const response = await axiosInstance.put(`${baseUrl}/admin/${id}`, data)
         console.log(response)
         return response.data
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -114,7 +114,7 @@ export const deleteDepartment = createAsyncThunk('departments/delete', async (
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -144,16 +144,16 @@ const departmentsSlice = createSlice({
         updateDepartmentInState(state, action: {
             payload: {
                 data: DepartmentsFormData,
-                departmentId: number
+                id: string
             }
         }) {
             console.log(action)
             const index = state.departments.findIndex(department => {
-                return department.id === action.payload.departmentId
+                return department.id === +action.payload.id
             })
             console.log(index)
             state.departments[index] = {
-                id: action.payload.departmentId,
+                id: +action.payload.id,
                 ...action.payload.data
             }
         },
@@ -221,7 +221,6 @@ const departmentsSlice = createSlice({
             .addCase(updateDepartment.pending, (state) => {
                 state.status = "loading"
                 state.error.update = null
-                console.log('started')
             })
             .addCase(updateDepartment.fulfilled, (state) => {
                 state.status = "succeeded"
@@ -229,7 +228,6 @@ const departmentsSlice = createSlice({
             .addCase(updateDepartment.rejected, (state, action) => {
                 state.status = "failed"
                 state.error.update = action.payload as ErrorResponse
-                console.log(state.error)
             })
 
             // DELETE DEPARTMENTS

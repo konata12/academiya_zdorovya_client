@@ -1,4 +1,4 @@
-import { ErrorResponse, Status } from "@/app/types/response"
+import { ErrorResponse, ErrorsResponses, Status } from "@/app/types/data/response"
 
 export interface Department {
     id: number
@@ -13,13 +13,7 @@ export interface DepartmentsInit {
     departments: Department[]
     departmentsIsModalOpen: boolean[]
     status: Status
-    error: {
-        getAll: ErrorResponse | null
-        getOne: ErrorResponse | null
-        create: ErrorResponse | null
-        delete: ErrorResponse | null
-        update: ErrorResponse | null
-    }
+    error: ErrorsResponses
 }
 
 export interface DepartmentsFormData {

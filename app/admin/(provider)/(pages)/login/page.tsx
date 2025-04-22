@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import styles from './Login.module.scss'
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { login } from "@/app/utils/redux/auth/authSlice";
-import type { Login } from "@/app/types/auth";
+import type { Login } from "@/app/types/data/auth";
 import { RootState } from "@/app/utils/redux/store";
 import { fullfilled } from "@/app/services/response";
 

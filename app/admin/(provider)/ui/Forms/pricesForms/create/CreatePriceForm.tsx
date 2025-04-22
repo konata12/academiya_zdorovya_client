@@ -22,11 +22,13 @@ import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
 import PriceFormVariant from '@/app/admin/(provider)/ui/Forms/pricesForms/priceVariant/PriceFormVariant'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { AnimatePresence, motion } from 'framer-motion';
-import { PriceSectionEnum, PriceSectionFormData } from '@/app/types/prices'
-import { usePathname } from 'next/navigation'
+import { PriceSectionEnum, PriceSectionFormData } from '@/app/types/data/prices'
+import { usePathname, useRouter } from 'next/navigation'
 import { getUrlOrderElement } from '@/app/services/navigation'
 import { basicAnimation } from '@/app/utils/animations/variables'
 import { optionalServiceVariants, priceFieldsVariants } from '@/app/utils/animations/animations'
+import PricesTable from '@/app/admin/(provider)/ui/Tables/PricesTable/PricesTable'
+import { fullfilled } from '@/app/services/response'
 
 
 export default function CreatePriceForm() {
@@ -47,8 +49,11 @@ export default function CreatePriceForm() {
         meetingPriceCheckbox,
         meetingsTotalPriceCheckbox
     } = useAppSelector((state: RootState) => state.pricesCreateFormUI)
+    const { error } = useAppSelector((state: RootState) => state.prices)
+
     const dispatch = useAppDispatch()
     const pathname = usePathname()
+    const router = useRouter()
     const optionalServiceRef = useRef<HTMLDivElement | null>(null)
     const priceVariantsWrapRef = useRef<HTMLDivElement | null>(null)
 
@@ -59,8 +64,6 @@ export default function CreatePriceForm() {
         meetingPriceCheckbox,
         meetingsTotalPriceCheckbox
     ]
-
-    console.log('********************************')
 
     // FORM LOGIC
     const {
@@ -73,7 +76,7 @@ export default function CreatePriceForm() {
         defaultValues: {
             titles: [{
                 text: '',
-                priceNearTitle: null
+                priceNearTitle: undefined
             }],
             prices: []
         }
@@ -95,6 +98,9 @@ export default function CreatePriceForm() {
         name: 'prices', // Name of the array in the form data
     });
     const AllFormFields = watch()
+    const titleFieldsId = titleFields.map((titleField) => {
+        return titleField.id
+    })
 
     // USE EFFECTS
     // SET OPTIONAL SERVICE HEIGHT
@@ -103,32 +109,85 @@ export default function CreatePriceForm() {
             dispatch(setOptionalServiceInputHeight(optionalServiceRef.current.scrollHeight))
         }
     })
+    // SET PRICE VARIANTS HEIGHT
     useEffect(() => {
         if (priceVariantsWrapRef.current) {
             dispatch(setPriceVariantsHeight(priceVariantsWrapRef.current.scrollHeight))
         }
     })
 
+    // FORM SUBMIT
     const createPriceSection: SubmitHandler<PriceSectionFormData> = async (data) => {
+        // VALIDATE DATA BEFORE CREATING PRICE SECTION
+        data.titles = data.titles.map((title, i) => {
+            let priceNearTitle = title.priceNearTitle
+            if (title.priceNearTitle === '' || !addTitlePriceCheckbox[i]) {
+                priceNearTitle = undefined
+            }
+            return {
+                text: title.text,
+                priceNearTitle
+            }
+        })
+        if (!optionalServiceCheckbox) data.optionalService = undefined
+        if (!priceVariantsCheckbox) data.prices = undefined
+        if (data.prices) {
+            data.prices = data.prices.map((price, i) => {
+                let titleDescription = price.titleDescription
+                let meetingsCount = price.meetingsCount
+                let meetingsDuration = price.meetingsDuration
+                let meetingPrice = price.meetingPrice
+                let coursePrice = price.coursePrice
+                if (price.titleDescription === '' || !addPriceVariantCheckbox[i]) {
+                    titleDescription = undefined
+                }
+                if (price.meetingsCount === '') {
+                    meetingsCount = undefined
+                }
+                if (price.meetingsDuration === '') {
+                    meetingsDuration = undefined
+                }
+                if (price.meetingPrice === '') {
+                    meetingPrice = undefined
+                }
+                if (price.coursePrice === '') {
+                    coursePrice = undefined
+                }
+
+                return {
+                    title: price.title,
+                    titleDescription,
+                    meetingsCount,
+                    meetingsDuration,
+                    meetingPrice,
+                    coursePrice
+                }
+            })
+        }
         console.log('submit data:', data)
-        // const response = await dispatch(createPriceSectionAction({ data, departmentId }))
+
+        const response = await dispatch(createPriceSectionAction({ data, departmentId }))
+        const isFulfilled = fullfilled(response.meta.requestStatus)
+        const pathArr = pathname.split('/')
+        const path = pathArr.slice(0, pathArr.length - 1).join('/')
+        if (isFulfilled) router.push(path)
     }
 
     // WORK WITH TITLES FORM UI
     const addTitle = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
-        appendTitle({ text: '', priceNearTitle: null }); // Append a new title object
+        appendTitle({ text: '', priceNearTitle: undefined }); // Append a new title object
         dispatch(createPriceSectionTitle())
     }
     const addPriceVariant = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         appendPrice({
             title: '',
-            titleDescription: null,
-            meetingsCount: null,
-            meetingsDuration: null,
-            meetingPrice: null,
-            coursePrice: null,
+            titleDescription: undefined,
+            meetingsCount: undefined,
+            meetingsDuration: undefined,
+            meetingPrice: undefined,
+            coursePrice: undefined,
         })
         dispatch(createPriceVariant())
     }
@@ -145,11 +204,11 @@ export default function CreatePriceForm() {
         if (!priceVariantsCheckbox && !priceFields.length) {
             appendPrice({
                 title: '',
-                titleDescription: null,
-                meetingsCount: null,
-                meetingsDuration: null,
-                meetingPrice: null,
-                coursePrice: null,
+                titleDescription: undefined,
+                meetingsCount: undefined,
+                meetingsDuration: undefined,
+                meetingPrice: undefined,
+                coursePrice: undefined,
             })
         } else if (priceFields.length === 1) {
             removePrice(0)
@@ -173,8 +232,8 @@ export default function CreatePriceForm() {
         dispatch(triggerMeetingsTotalPriceCheckbox(state))
     }
 
-    console.dir(priceVariantsHeight)
-
+    console.log(priceVariantsHeight)
+    console.dir(priceVariantsWrapRef.current)
     return (
         <form
             onSubmit={handleSubmit(createPriceSection)}
@@ -238,10 +297,6 @@ export default function CreatePriceForm() {
                                 type="text"
                                 {...register(PriceSectionEnum.OPTIONALSERVICE, {
                                     required: optionalServiceCheckbox ? "Якщо вибрали, додаткову послугу, то введіть її назву" : false,
-                                    setValueAs: (value: string) => {
-                                        if (value === null || !value.length) return null
-                                        return value
-                                    }
                                 })}
                                 disabled={!optionalServiceCheckbox}
                             />
@@ -314,11 +369,10 @@ export default function CreatePriceForm() {
                 </div>
             </div>
 
-
             <div className={styles.priceVariantsWrap}>
                 <div className={styles.top}>
                     <label
-                        className='title md'
+                        className={`title md`}
                         htmlFor="priceVariants"
                     >
                         Варіації послуги
@@ -330,18 +384,24 @@ export default function CreatePriceForm() {
                         elemId='priceVariants'
                     />
                 </div>
-                <AnimatePresence>
-                    {priceVariantsCheckbox && <motion.div
-                        className={styles.priceVariants}
-                        variants={priceFieldsVariants(priceVariantsHeight)}
-                        initial='hidden'
-                        animate='visible'
-                        exit='exit'
-                        transition={basicAnimation}
-                    >
-                        <motion.div
+
+                <motion.div
+                    className={styles.priceVariants}
+                    animate={priceVariantsCheckbox
+                        ? { height: priceVariantsHeight }
+                        : { height: 0 }
+                    }
+                    transition={basicAnimation}
+                >
+                    <AnimatePresence>
+                        {priceVariantsCheckbox && <motion.div
                             className={styles.priceVariantsShape}
                             ref={priceVariantsWrapRef}
+                            variants={priceFieldsVariants}
+                            initial='hidden'
+                            animate='visible'
+                            exit='exit'
+                            transition={basicAnimation}
                         >
                             {priceFields.map((priceField, i) => {
                                 return <PriceFormVariant
@@ -362,12 +422,27 @@ export default function CreatePriceForm() {
                             >
                                 Додати рядок
                             </button>
-                        </motion.div>
-                    </motion.div>}
-                </AnimatePresence>
+                        </motion.div>}
+                    </AnimatePresence>
+                </motion.div>
             </div>
 
-            <div>
+            <div className={styles.resultLayout}>
+                <p className={`title md left`}>
+                    Попередній перегляд
+                </p>
+                <PricesTable
+                    data={AllFormFields}
+                    includePrices={priceVariantsCheckbox}
+                    includesPricesDescription={addPriceVariantCheckbox}
+                    priceVariantOptions={priceVariantOptions}
+                    titleFieldsId={titleFieldsId}
+                    className={styles.priceTable}
+                />
+            </div>
+
+            <div className={styles.formErrorWrap}>
+                {error.create && <p className={`error ${styles.formError}`}>{error.create.message}</p>}
                 <button
                     className={`btn blue xl ${styles.submit}`}
                     type='submit'

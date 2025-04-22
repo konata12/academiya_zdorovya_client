@@ -14,7 +14,7 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-
+        background-color: $background-color-primary;
         margin-top: 64px;
 
         .top {
@@ -85,7 +85,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 64px;
         }
 
         .priceVariants {
@@ -94,8 +93,10 @@
 
             .priceVariantsShape {
                 position: absolute;
+                top: 0;
                 z-index: 0;
                 width: 100%;
+                padding-top: 64px;
 
                 .addPriceVariantBtn {
                     width: 100%;
@@ -105,8 +106,34 @@
         }
     }
 
-    .submit {
-        margin-top: 24px;
+    .resultLayout {
+        position: relative;
+        background-color: $background-color-primary;
+        margin-top: 128px;
+
+        .priceTable {
+            position: relative;
+            margin-top: 64px;
+        }
+    }
+
+    .formErrorWrap {
+        position: relative;
         width: 100%;
+        margin-top: 24px;
+
+        .formError {
+            position: absolute;
+            width: 100%;
+            top: -12px;
+            margin: 0;
+
+            text-align: center;
+        }
+
+        .submit {
+            margin-top: 24px;
+            width: 100%;
+        }
     }
 }

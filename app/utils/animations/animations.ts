@@ -1,15 +1,3 @@
-export const errorAnimationVariants = {
-    hidden: {
-        opacity: 0,
-    }, // Initial state (hidden)
-    visible: {
-        opacity: 1,
-    }, // Animate to (visible)
-    exit: {
-        opacity: 0,
-    }, // Exit state (hidden)
-}
-
 export const componentVisibleAnimationVariants = {
     hidden: {
         opacity: 0,
@@ -21,9 +9,7 @@ export const componentVisibleAnimationVariants = {
         opacity: 0,
     }, // Exit state (hidden)
 }
-
-// PRICE SECTION CREATE FORM
-export const priceSectionTitleVariants = (height: number) => {
+export const componentHeightAnimationVariants = (height: number) => {
     return {
         hidden: {
             height: 0,
@@ -36,18 +22,7 @@ export const priceSectionTitleVariants = (height: number) => {
         }, // Exit state (hidden)
     }
 }
-export const optionalServiceVariants = {
-    hidden: {
-        opacity: 0,
-    }, // Initial state (hidden)
-    visible: {
-        opacity: 1,
-    }, // Animate to (visible)
-    exit: {
-        opacity: 0,
-    }, // Exit state (hidden)}
-}
-export const priceFieldsVariants = (height: number) => {
+export const componentVisibilityAndHeightAnimationVariants = (height: number) => {
     return {
         hidden: {
             height: 0,
@@ -63,3 +38,13 @@ export const priceFieldsVariants = (height: number) => {
         }, // Exit state (hidden)
     }
 }
+export const errorAnimationVariants = componentVisibleAnimationVariants
+
+// ABOUT TREATMENT CREATE FORM
+export const aboutTreatmentTitleVariants = componentVisibilityAndHeightAnimationVariants
+
+// PRICE SECTION CREATE FORM
+export const priceSectionTitleVariants = componentHeightAnimationVariants
+export const priceSectionPriceVariantVariants = componentHeightAnimationVariants
+export const optionalServiceVariants = componentVisibleAnimationVariants
+export const priceFieldsVariants = componentVisibleAnimationVariants

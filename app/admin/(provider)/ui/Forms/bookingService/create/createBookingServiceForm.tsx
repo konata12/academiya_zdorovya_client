@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import styles from './createBookingServiceForm.module.scss'
 import { RootState } from '@/app/utils/redux/store'
+import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
 
 export default function CreateBookingServiceForm() {
     const [bookingServiceName, setBookingServiceName] = useState('')
@@ -32,26 +33,24 @@ export default function CreateBookingServiceForm() {
         >
             <label
                 className={`inputLabel `}
-                htmlFor="city"
+                htmlFor="booking-service"
             >
                 Повна назва послуги
             </label>
             <input
                 className={`input `}
                 type="text"
+                id='booking-service'
                 value={bookingServiceName}
                 onChange={(e) => setBookingServiceName(e.target.value)}
                 required
             />
-            <div className={styles.formErrorWrap}>
-                {error.create && <p className={`error ${styles.formError}`}>{error.create.message}</p>}
-                <button
-                    className={`btn blue xl ${styles.submit}`}
-                    type='submit'
-                >
-                    Створити
-                </button>
-            </div>
+            <SubmitButton
+                error={error.create}
+                className={{
+                    button: styles.submitBtn
+                }}
+            />
         </form>
     )
 }

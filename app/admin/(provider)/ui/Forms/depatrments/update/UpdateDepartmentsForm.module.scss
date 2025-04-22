@@ -11,32 +11,7 @@
         gap: 32px;
     }
 
-    .inputContainer {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-
-        .label {
-            margin-bottom: $padding-4;
-        }
-    }
-
-    .formErrorWrap {
-        position: relative;
-        width: 100%;
-
-        .formError {
-            position: absolute;
-            width: 100%;
-            top: -24px;
-            margin: 0;
-
-            text-align: center;
-        }
-
-        .submit {
-            margin-top: 24px;
-            width: 100%;
-        }
+    .submitBtn.submitBtn {
+        margin-top: 0;
     }
 }

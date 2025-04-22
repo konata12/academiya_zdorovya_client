@@ -1,4 +1,4 @@
-import { PriceSectionUI } from "@/app/types/prices";
+import { PriceSectionUI } from "@/app/types/data/prices";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: PriceSectionUI = {

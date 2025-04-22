@@ -1,0 +1,48 @@
+@use '../../../../../styles/variables' as *;
+
+.pricesTable {
+    width: 100%;
+    padding: $prices-table-container-padding;
+    background-color: $disabled-color;
+    border-radius: $prices-table-container-border-rad;
+
+    .titles {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        padding: 40px 20px;
+
+        .priceTableTitle {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            gap: 16px;
+            color: $primary-color;
+    
+            .title, .priceNearTitle {
+                display: flex;
+                align-items: center;
+    
+                font-weight: $font-weight-med;
+                font-size: $price-table-title-fz;
+                text-wrap: wrap;
+            }
+        }
+        .optionalService {
+            width: 100%;
+    
+            text-align: center;
+            font-size: $price-table-optionalService-fz;
+            color: $text-color-black;
+        }
+    }
+
+    .table {
+        display: flex;
+        flex-direction: column;
+        padding: $prices-table-padding;
+        border-radius: $prices-table-border-rad;
+
+        background-color: $background-color-secondary;
+    }
+}

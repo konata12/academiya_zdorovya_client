@@ -1,0 +1,119 @@
+@use '../../../../../../styles/variables' as *;
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .titleInputContainer {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        // gap: 32px;
+
+        .title {
+            margin-top: 32px;
+        }
+    }
+
+    .treatmentTypes {
+        margin-top: 128px;
+
+        .treatmentType {
+            display: flex;
+            flex-direction: column;
+            margin-top: 64px;
+
+            .top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .treatmentTypeInput {
+                width: 100%;
+                margin-top: 48px;
+            }
+        }
+
+        .addType {
+            margin-top: 32px;
+            width: 100%;
+        }
+    }
+
+    .addPhoto {
+        margin-top: 128px;
+
+        .imageInputZone {
+            margin-top: 64px;
+
+            label {
+                margin-top: 32px;
+            }
+
+            .imagePreview {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+
+                .errorMessage {
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+
+                .imageContainer {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    width: 100%;
+                    max-width: 638px;
+                    aspect-ratio: 638 / 460;
+                    border-radius: $background-pattern-border-rad;
+                    clip-path: inset(-500px 0 0 0 round $background-pattern-border-rad);
+                    overflow: visible;
+                    background-image: url('/images/bg_blue.jpg');
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+
+                    &.error {
+                        box-shadow: inset 0 0 0 3px $error-color;
+                        /* 2px inner red border */
+                    }
+
+                    .image {
+                        width: 100%;
+                    }
+                }
+
+                .caption {
+                    margin-top: 32px;
+                }
+            }
+        }
+    }
+
+    .formErrorWrap {
+        position: relative;
+        width: 100%;
+
+        .formError {
+            position: absolute;
+            width: 100%;
+            top: -24px;
+            margin: 0;
+
+            text-align: center;
+        }
+
+        .submit {
+            margin-top: 48px;
+            width: 100%;
+        }
+    }
+}

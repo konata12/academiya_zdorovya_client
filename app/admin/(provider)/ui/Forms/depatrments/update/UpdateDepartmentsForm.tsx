@@ -8,8 +8,10 @@ import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { RootState } from '@/app/utils/redux/store';
 import { setUpdateError, updateDepartment as updateDepartmentAction, updateDepartmentInState } from "@/app/utils/redux/departments/departmentsSlice"
 import { setFormDefaultValues as setFormDefaultValuesRedux } from '@/app/utils/redux/navigation/navigationSlice'
-import { Department, DepartmentsDefaultFormData, DepartmentsFormData, DepartmentsFormDataEnum } from '@/app/types/departments';
+import { Department, DepartmentsDefaultFormData, DepartmentsFormData, DepartmentsFormDataEnum } from '@/app/types/data/departments';
 import { isEqual } from 'lodash';
+import InputContainer from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainer/InputContainer';
+import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton';
 
 export default function UpdateDepartmentForm() {
     const [formDefaultValues, setFormDefaultValues] = useState(true)
@@ -86,10 +88,7 @@ export default function UpdateDepartmentForm() {
     }, [])
 
     const updateDepartment: SubmitHandler<DepartmentsFormData> = async (data) => {
-        // SET ID
-        let departmentId: number = 0
-        if (id) departmentId = +id
-
+        const id = `${department?.id}`
         // CHECK IF DATA UPDATED
         if (department) {
             //  IF NOT UPDATED NOT ALLOW REQUEST
@@ -98,8 +97,8 @@ export default function UpdateDepartmentForm() {
                 return
             }
 
-            dispatch(updateDepartmentAction({ data, departmentId }))
-            dispatch(updateDepartmentInState({ data, departmentId }))
+            dispatch(updateDepartmentAction({ data, id }))
+            dispatch(updateDepartmentInState({ data, id }))
             router.push('/admin/departments')
         }
     }
@@ -118,116 +117,73 @@ export default function UpdateDepartmentForm() {
             onSubmit={handleSubmit(updateDepartment)}
         >
             <div className={styles.line}>
-                <div className={styles.inputContainer}>
-                    <label
-                        className={`inputLabel ${styles.label}`}
-                        htmlFor="city"
-                    >
-                        Місто
-                    </label>
-                    <input
-                        className={`input ${errors.city && 'wrong'}`}
-                        {...register(DepartmentsFormDataEnum.CITY, {
-                            required: "Місто обов'язкове",
-                        })}
-                        type="text"
-                        id='city'
-                    />
-                    {errors.city && <p className="error">{errors.city.message}</p>}
-                </div>
-                <div className={styles.inputContainer}>
-                    <label
-                        className={`inputLabel ${styles.label}`}
-                        htmlFor="hotline"
-                    >
-                        Гаряча лінія
-                    </label>
-                    <input
-                        className={`input ${errors.hotline && 'wrong'}`}
-                        {...register(DepartmentsFormDataEnum.HOTLINE, {
-                            required: "Гаряча лінія обов'язкова",
-                            pattern: {
-                                value: PHONE_NUMBER,
-                                message: 'Повинен бути номер телефону'
-                            }
-                        })}
-                        type="text"
-                        id='hotline'
-                    />
-                    {errors.hotline && <p className="error">{errors.hotline.message}</p>}
-                </div>
+                <InputContainer<DepartmentsFormData>
+                    label="Місто"
+                    name={DepartmentsFormDataEnum.CITY}
+                    register={register}
+                    errors={errors}
+                    registerOptions={{
+                        required: "Місто обов'язкове"
+                    }}
+                />
+                <InputContainer<DepartmentsFormData>
+                    label="Гаряча лінія"
+                    name={DepartmentsFormDataEnum.HOTLINE}
+                    register={register}
+                    errors={errors}
+                    registerOptions={{
+                        required: "Гаряча лінія обов'язкова",
+                        pattern: {
+                            value: PHONE_NUMBER,
+                            message: 'Повинен бути номер телефону'
+                        }
+                    }}
+                />
             </div>
             <div className={styles.line}>
-                <div className={styles.inputContainer}>
-                    <label
-                        className={`inputLabel ${styles.label}`}
-                        htmlFor="address"
-                    >
-                        Адреса
-                    </label>
-                    <input
-                        className={`input ${errors.address && 'wrong'}`}
-                        {...register(DepartmentsFormDataEnum.ADDRESS, {
-                            required: "Адреса обов'язкова",
-                        })}
-                        type="text"
-                        id='address'
-                    />
-                    {errors.address && <p className="error">{errors.address.message}</p>}
-                </div>
-                <div className={styles.inputContainer}>
-                    <label
-                        className={`inputLabel ${styles.label}`}
-                        htmlFor="google-map-url"
-                    >
-                        Посилання на гугл карти
-                    </label>
-                    <input
-                        className={`input ${errors.googleMapUrl && 'wrong'}`}
-                        {...register(DepartmentsFormDataEnum.GOOGLEMAPURSL, {
-                            required: "Посилання на відділення в гугл картах обов'язкове",
-                            pattern: {
-                                value: GOOGLE_MAPS_URL,
-                                message: 'Повинно бути посилання на відділення в гугл картах'
-                            }
-                        })}
-                        type="text"
-                        id='google-map-url'
-                    />
-                    {errors.googleMapUrl && <p className="error">{errors.googleMapUrl.message}</p>}
-                </div>
-            </div>
-            <div className={styles.inputContainer}>
-                <label
-                    className={`inputLabel ${styles.label}`}
-                    htmlFor="google-map-reviews-url"
-                >
-                    Посилання на відгуки гугл карт
-                </label>
-                <input
-                    className={`input ${errors.googleMapReviewsUrl && 'wrong'}`}
-                    {...register(DepartmentsFormDataEnum.GOOGLEMAPREVIEWSURL, {
-                        required: "Посилання на відгуки відділення в обов'язкове",
+                <InputContainer<DepartmentsFormData>
+                    label="Адреса"
+                    name={DepartmentsFormDataEnum.ADDRESS}
+                    register={register}
+                    errors={errors}
+                    registerOptions={{
+                        required: "Адреса обов'язкова",
+                    }}
+                />
+                <InputContainer<DepartmentsFormData>
+                    label="Посилання на гугл карти"
+                    name={DepartmentsFormDataEnum.GOOGLEMAPURSL}
+                    register={register}
+                    errors={errors}
+                    registerOptions={{
+                        required: "Посилання на відділення в гугл картах обов'язкове",
                         pattern: {
                             value: GOOGLE_MAPS_URL,
-                            message: 'Повинно бути посилання відгуки гугл карт'
+                            message: 'Повинно бути посилання на відділення в гугл картах'
                         }
-                    })}
-                    type="text"
-                    id='google-map-reviews-url'
+                    }}
                 />
-                {errors.googleMapReviewsUrl && <p className="error">{errors.googleMapReviewsUrl.message}</p>}
             </div>
+            <InputContainer<DepartmentsFormData>
+                label="Посилання на відгуки гугл карт"
+                name={DepartmentsFormDataEnum.GOOGLEMAPREVIEWSURL}
+                register={register}
+                errors={errors}
+                registerOptions={{
+                    required: "Посилання на відгуки відділення в обов'язкове",
+                    pattern: {
+                        value: GOOGLE_MAPS_URL,
+                        message: 'Повинно бути посилання відгуки гугл карт'
+                    }
+                }}
+            />
             
-            <div className={styles.formErrorWrap}>
-                {error.update && <p className={`error ${styles.formError}`}>{error.update.message}</p>}
-                <button
-                    className={`btn blue xl ${styles.submit}`}
-                    type='submit'
-                >
-                    Підтвердити зміни
-                </button>
-            </div>
+            <SubmitButton
+                error={error.create}
+                className={{
+                    button: styles.submitBtn
+                }}
+            />
         </form>
     )
 }

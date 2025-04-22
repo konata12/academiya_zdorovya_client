@@ -1,0 +1,11 @@
+
+.mainInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+
+    .fullName {
+        display: flex;
+        gap: 32px;
+    }
+}

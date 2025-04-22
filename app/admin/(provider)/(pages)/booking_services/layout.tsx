@@ -12,6 +12,7 @@ import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow
 import { fullfilled } from '@/app/services/response'
 import { usePathname } from 'next/navigation'
 import { checkCreatePage } from '@/app/services/navigation'
+import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404'
 
 const titles = ['Послуга', 'Опції']
 
@@ -52,11 +53,10 @@ export default function BookingServices({
             <p className={`title lg `}>Послуги для запису</p>
             <CommonTable titles={titles}>
                 {!bookingServices.length ? (
-                    <p className='fetchError'>
-                        {error.get?.statusCode === 404 || !error.delete ?
-                            'Немає послуг' :
-                            'Виникла помилка'}
-                    </p>
+                    <CommonTable404
+                        error={error}
+                        notFoundMessage='Немає послуг'
+                    />
                 ) : (bookingServices.map((service, i) => <TableLine key={service.id}>
                     <span>{service.name}</span>
                     {bookingServicesIsModalOpen[i] && <ModalWindow

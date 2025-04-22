@@ -3,22 +3,7 @@
     flex-direction: column;
     gap: 32px;
 
-    .formErrorWrap {
-        position: relative;
-        width: 100%;
-
-        .formError {
-            position: absolute;
-            width: 100%;
-            top: -18px;
-            margin: 0;
-
-            text-align: center;
-        }
-
-        .submit {
-            margin-top: 24px;
-            width: 100%;
-        }
+    .submitBtn.submitBtn {
+        margin-top: 0;
     }
 }

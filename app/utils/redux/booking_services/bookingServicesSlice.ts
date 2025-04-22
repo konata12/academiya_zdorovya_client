@@ -1,5 +1,5 @@
-import { BookingService, BookingServiceFormData, BookingServiceInit } from "@/app/types/booking_services";
-import { ErrorResponse } from "@/app/types/response";
+import { BookingService, BookingServiceFormData, BookingServiceInit } from "@/app/types/data/booking_services";
+import { ErrorResponse } from "@/app/types/data/response";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
@@ -9,7 +9,7 @@ const initialState: BookingServiceInit = {
     bookingServicesIsModalOpen: [],
     status: null,
     error: {
-        get: null,
+        getAll: null,
         create: null,
         delete: null,
     }
@@ -29,7 +29,7 @@ export const fetchBookingServices = createAsyncThunk('bookingServices/get', asyn
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -49,7 +49,7 @@ export const createBookingService = createAsyncThunk('bookingServices/create', a
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -68,7 +68,7 @@ export const deleteBookingService = createAsyncThunk('bookingServices/delete', a
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -101,7 +101,7 @@ const bookingServicesSlice = createSlice({
             // GET BOOKING SERVICES
             .addCase(fetchBookingServices.pending, (state) => {
                 state.status = "loading"
-                state.error.get = null
+                state.error.getAll = null
             })
             .addCase(fetchBookingServices.fulfilled, (state, action: PayloadAction<BookingService[] | undefined>) => {
                 state.status = "succeeded"
@@ -112,7 +112,7 @@ const bookingServicesSlice = createSlice({
             })
             .addCase(fetchBookingServices.rejected, (state, action) => {
                 state.status = "failed"
-                state.error.get = action.payload as ErrorResponse
+                state.error.getAll = action.payload as ErrorResponse
             })
 
             // CREATE BOOKING SERVICES

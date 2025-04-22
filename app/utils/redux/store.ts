@@ -5,6 +5,9 @@ import navigationSlice from "@/app/utils/redux/navigation/navigationSlice";
 import bookingServicesSlice from "@/app/utils/redux/booking_services/bookingServicesSlice";
 import pricesSlice from '@/app/utils/redux/prices/pricesSlice';
 import pricesCreateFormUiSlice from '@/app/utils/redux/prices/pricesCreateFormUiSlice';
+import aboutTreatment from '@/app/utils/redux/about_treatment/aboutTreatmentSlice'
+import employeesSlice from '@/app/utils/redux/employees/employeesSlice'
+import aboutTreatmentsFormUISlice from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice'
 import { configureStore } from "@reduxjs/toolkit";
 
 // Define the root state type
@@ -17,14 +20,17 @@ export type AppDispatch = typeof store.dispatch;
 const store = configureStore({
     reducer: {
         navigation: navigationSlice,
-        // PRICES UI
+        // UI
+        aboutTreatmentsFormUI: aboutTreatmentsFormUISlice,
         pricesCreateFormUI: pricesCreateFormUiSlice,
         
         // API
         auth: authSlice,
-        departments: departmentsSlice,
+        aboutTreatment: aboutTreatment,
         bookingServices: bookingServicesSlice,
-        prices: pricesSlice
+        departments: departmentsSlice,
+        employees: employeesSlice,
+        prices: pricesSlice,
     },
 });
 

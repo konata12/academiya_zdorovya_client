@@ -1,5 +1,5 @@
-import { AccessToken, Auth, Login } from "@/app/types/auth";
-import { ErrorResponse } from "@/app/types/response";
+import { AccessToken, Auth, Login } from "@/app/types/data/auth";
+import { ErrorResponse } from "@/app/types/data/response";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
@@ -43,6 +43,7 @@ export const refreshTokens = createAsyncThunk("auth/refreshTokens", async (_, {
 }) => {
     try {
         const response = await axiosInstance.post('auth/refresh')
+        console.log(response.data)
         return response.data
     } catch (error) {
         console.log(error)

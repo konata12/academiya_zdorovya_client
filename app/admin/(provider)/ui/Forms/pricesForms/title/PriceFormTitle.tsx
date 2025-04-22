@@ -4,8 +4,8 @@ import styles from './PriceFormTitle.module.scss'
 import { useAppDispatch } from '@/app/utils/redux/hooks'
 import { deletePriceSectionTitle, triggerTitleCheckbox } from '@/app/utils/redux/prices/pricesCreateFormUiSlice'
 import { FieldErrors, UseFieldArrayRemove, UseFormRegister } from 'react-hook-form'
-import { PriceSectionFormData, PriceTitleEnum } from '@/app/types/prices'
-import { AnimatePresence, motion } from 'framer-motion';
+import { PriceSectionFormData, PriceTitleEnum } from '@/app/types/data/prices'
+import { motion } from 'framer-motion';
 import { componentVisibleAnimationVariants, errorAnimationVariants, priceSectionTitleVariants } from '@/app/utils/animations/animations'
 import { basicAnimation } from '@/app/utils/animations/variables'
 
@@ -27,7 +27,6 @@ export default function PriceFormTitle({
     const [height, setHeight] = useState(0)
     const dispatch = useAppDispatch()
     const titleRef = useRef<HTMLDivElement | null>(null)
-    const titlePadding = 32
 
     useEffect(() => {
         setHeight(titleRef.current?.scrollHeight || 0)
@@ -42,6 +41,7 @@ export default function PriceFormTitle({
         removeTitleFromForm(index)
         dispatch(deletePriceSectionTitle(index))
     }
+    console.dir(titleRef.current)
 
     return (
         <motion.div
@@ -63,7 +63,7 @@ export default function PriceFormTitle({
             >
                 {index ? <div className={styles.additionalTitle}>
                     <span className='title xs'>
-                        Додаткова назва послуги
+                        Додаткова назва послуги {index}
                     </span>
                     <button
                         onClick={deleteTitle}
@@ -127,7 +127,7 @@ export default function PriceFormTitle({
                             required: titleWithPrice ? "Введіть ціну біля назви або відключіть її" : false,
                         })}
                     />
-                    {errors.titles?.[index]?.[PriceTitleEnum.PRICENEARTITLE]
+                    {errors.titles?.[index]?.[PriceTitleEnum.PRICENEARTITLE] 
                         && titleWithPrice
                         && (
                             <motion.p

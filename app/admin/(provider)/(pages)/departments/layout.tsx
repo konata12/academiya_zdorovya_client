@@ -12,6 +12,7 @@ import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink"
 import { fullfilled } from "@/app/services/response"
 import { usePathname } from "next/navigation"
 import { checkCreatePage, getUrlLastElement } from "@/app/services/navigation"
+import CommonTable404 from "@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404"
 
 const titles = ['Місто', 'Адреса', 'Гаряча лінія', 'Опції']
 
@@ -20,7 +21,11 @@ export default function Departments({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const { departments, departmentsIsModalOpen, error } = useAppSelector((state: RootState) => state.departments)
+    const {
+        departments,
+        departmentsIsModalOpen,
+        error
+    } = useAppSelector((state: RootState) => state.departments)
 
     const dispatch = useAppDispatch()
     const pathname = usePathname()
@@ -53,11 +58,10 @@ export default function Departments({
             <p className={`title lg`}>Відділення</p>
             <CommonTable titles={titles}>
                 {!departments.length ? (
-                    <p className='fetchError'>
-                        {error.getAll?.statusCode === 404 || !error.delete ?
-                            'Немає відділень' :
-                            'Виникла помилка'}
-                    </p>
+                    <CommonTable404
+                        error={error}
+                        notFoundMessage="Немає відділень"
+                    />
                 ) : (departments.map((department, i) => <TableLine key={department.id}>
                     <span>{department.city}</span>
                     <span>{department.address}</span>

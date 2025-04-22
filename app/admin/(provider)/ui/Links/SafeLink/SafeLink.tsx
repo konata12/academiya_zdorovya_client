@@ -1,4 +1,5 @@
-import { useAppSelector } from '@/app/utils/redux/hooks'
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
+import { setFormDefaultValues } from '@/app/utils/redux/navigation/navigationSlice'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -12,6 +13,7 @@ export default function SafeLink({
     className?: string
 }) {
     const router = useRouter()
+    const dispatch = useAppDispatch()
     const formDefaultValues = useAppSelector(state => state.navigation.formDefaultValues)
 
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -31,6 +33,7 @@ export default function SafeLink({
                 return;
             }
         }
+        dispatch(setFormDefaultValues(true)) // after leaving page set formDefaultValues in redux to initial
         router.push(href); // Navigate manually
     };
 

@@ -1,4 +1,4 @@
-import { ErrorResponse, Status } from "@/app/types/response"
+import { ErrorsResponses, Status } from "@/app/types/data/response"
 
 // GENERAL TYPES
 export interface Price extends PriceFormData {
@@ -17,32 +17,26 @@ export interface PriceSectionInit {
     priceSections: PriceSection[]
     priceSectionsIsModalOpen: boolean[]
     status: Status
-    error: {
-        getAll: ErrorResponse | null
-        getOne: ErrorResponse | null
-        create: ErrorResponse | null
-        delete: ErrorResponse | null
-        update: ErrorResponse | null
-    }
+    error: ErrorsResponses
 }
 
 // FORM DATA
 interface TitlesFormData {
     text: string
-    priceNearTitle: string | null
+    priceNearTitle?: string
 }
-interface PriceFormData {
+export interface PriceFormData {
     title: string
-    titleDescription: string | null
-    meetingsCount: string | null
-    meetingsDuration: string | null
-    meetingPrice: string | null
-    coursePrice: string | null
+    titleDescription?: string
+    meetingsCount?: string
+    meetingsDuration?: string
+    meetingPrice?: string
+    coursePrice?: string
 }
 export interface PriceSectionFormData {
     titles: TitlesFormData[]
-    optionalService: string | null
-    prices: PriceFormData[]
+    optionalService?: string
+    prices?: PriceFormData[]
 }
 
 // PRICE FORM UI TYPES
@@ -59,6 +53,18 @@ export interface PriceSectionUI {
     meetingDurationCheckbox: boolean
     meetingPriceCheckbox: boolean
     meetingsTotalPriceCheckbox: boolean
+}
+// PRICE TABLE UI TYPES
+export type PriceTableColumnData = string | undefined
+export interface PriceTableData {
+    [PriceVariantOptionsEnum.COUNT]: PriceTableColumnData[]
+    [PriceVariantOptionsEnum.DURATION]: PriceTableColumnData[]
+    [PriceVariantOptionsEnum.PRICE]: PriceTableColumnData[]
+    [PriceVariantOptionsEnum.TOTALPRICE]: PriceTableColumnData[]
+}
+export interface PriceTableColumnsData {
+    columnsData: PriceTableData
+    columnsNumber: number
 }
 
 // ENUMS

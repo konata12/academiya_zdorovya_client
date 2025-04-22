@@ -46,7 +46,9 @@ export default function Layout({
                                 <div className={styles.empty}></div>
                             </>}
                             {((isLoginPage || accessToken)
-                                && <div className={styles.children}>{children}</div>)
+                                && <div className={styles.children}>
+                                    {children}
+                                </div>)
                                 || <div className={styles.not_logged_in}>
                                     Ввійдіть в адмін панель
                                 </div>}
