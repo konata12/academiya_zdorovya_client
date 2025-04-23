@@ -7,6 +7,7 @@ import pricesSlice from '@/app/utils/redux/prices/pricesSlice';
 import pricesCreateFormUiSlice from '@/app/utils/redux/prices/pricesCreateFormUiSlice';
 import aboutTreatment from '@/app/utils/redux/about_treatment/aboutTreatmentSlice'
 import employeesSlice from '@/app/utils/redux/employees/employeesSlice'
+import employeesFormUISlice from '@/app/utils/redux/employees/employeesFormUISlice'
 import aboutTreatmentsFormUISlice from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice'
 import { configureStore } from "@reduxjs/toolkit";
 
@@ -23,6 +24,7 @@ const store = configureStore({
         // UI
         aboutTreatmentsFormUI: aboutTreatmentsFormUISlice,
         pricesCreateFormUI: pricesCreateFormUiSlice,
+        employeesFormUI: employeesFormUISlice,
         
         // API
         auth: authSlice,

@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './BasicInputContainer.module.scss'
-import { InputContainerBasicProps } from '@/app/types/ui/form_components/inputs';
+import { InputContainerBasicProps } from '@/app/types/ui/form_components/inputContainers';
 
 export default function BasicInputContainer<T extends Record<string, any>>({
     label,

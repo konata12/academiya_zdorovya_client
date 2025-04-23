@@ -1,3 +1,4 @@
+import { CheckboxProps } from "@/app/types/ui/form_components/form_basic";
 import { FieldErrors, Path, RegisterOptions, UseFormRegister } from "react-hook-form";
 
 // CONTAINER PROPS
@@ -14,7 +15,7 @@ export interface InputContainerProps<T extends Record<string, any>>
     extends InputContainerBasicProps<T> {
     register: UseFormRegister<T>;
     registerOptions?: RegisterOptions<T>;
-    
+
     className?: InputContainerStyles;
     type?: React.HTMLInputTypeAttribute;
 }
@@ -28,6 +29,11 @@ export interface TextareaContainerProps<T extends Record<string, any>>
     minRows?: number;
     maxRows?: number;
 }
+export interface InputContainerWithCheckboxProps<T extends Record<string, any>>
+    extends InputContainerProps<T>, CheckboxProps {
+    className: InputContainerWithCheckboxStyles;
+}
+// export type InputContainerWithCheckboxProps<T extends Record<string, any>> = InputContainerProps<T> & Partial<CheckboxProps>
 
 // STYLES
 export interface Styles {
@@ -42,4 +48,7 @@ interface InputContainerStyles extends Styles {
 }
 interface TextareaContainerStyles extends Styles {
     textarea?: string;
+}
+interface InputContainerWithCheckboxStyles extends InputContainerStyles {
+    checkboxContainer?: string;
 }

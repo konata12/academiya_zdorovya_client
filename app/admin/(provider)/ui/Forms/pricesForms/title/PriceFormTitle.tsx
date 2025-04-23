@@ -41,7 +41,6 @@ export default function PriceFormTitle({
         removeTitleFromForm(index)
         dispatch(deletePriceSectionTitle(index))
     }
-    console.dir(titleRef.current)
 
     return (
         <motion.div

@@ -1,5 +1,5 @@
 import BasicInputContainer from '@/app/common_ui/form_components/BasicInputContainer/BasicInputContainer'
-import { TextareaContainerProps } from '@/app/types/ui/form_components/inputs'
+import { TextareaContainerProps } from '@/app/types/ui/form_components/inputContainers'
 import styles from './TextareaContainer.module.scss'
 import React from 'react'
 import AutoResizingTextareaHookForm from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/HookForm/AutoResizingTextareaHookForm'

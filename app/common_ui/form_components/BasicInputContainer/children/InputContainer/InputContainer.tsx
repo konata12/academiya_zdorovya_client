@@ -1,5 +1,5 @@
 import BasicInputContainer from '@/app/common_ui/form_components/BasicInputContainer/BasicInputContainer'
-import { InputContainerProps } from '@/app/types/ui/form_components/inputs'
+import { InputContainerProps } from '@/app/types/ui/form_components/inputContainers'
 import styles from './InputContainer.module.scss'
 import React from 'react'
 

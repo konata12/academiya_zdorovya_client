@@ -1,11 +1,27 @@
+.createEmployeeForm {
 
-.mainInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 48px;
-
-    .fullName {
+    .inputs {
         display: flex;
-        gap: 32px;
+        flex-direction: column;
+        gap: 128px;
+
+        .mainInfo {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+
+            .fullName {
+                display: flex;
+                gap: 32px;
+            }
+        }
+
+        .socialMedia {
+
+            .socialMediaCheckboxes {
+                width: 100%;
+                max-width: 498px;
+            }
+        }
     }
 }

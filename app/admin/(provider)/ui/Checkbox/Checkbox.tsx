@@ -1,15 +1,12 @@
-import React, { ChangeEvent } from 'react'
+import React from 'react'
 import styles from './Checkbox.module.scss'
+import { CheckboxProps } from '@/app/types/ui/form_components/form_basic'
 
 export default function Checkbox({
     handleFunction,
     isChecked,
     elemId
-}: {
-    handleFunction: (event: ChangeEvent<HTMLInputElement>) => void
-        isChecked: boolean
-        elemId?: string
-}) {
+}: CheckboxProps) {
     return (
         <label className={styles.checkbox}>
             <input

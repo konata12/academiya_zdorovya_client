@@ -42,6 +42,16 @@ export interface EmployeesFormData {
     imgName: string
 }
 
+// UI FORM DATA
+export interface EmployeesFormDataUICheckboxes {
+    instagramCheckbox: boolean
+    facebookCheckbox: boolean
+    XCheckbox: boolean
+    youtubeCheckbox: boolean
+}
+export interface EmployeesFormDataUI extends EmployeesFormDataUICheckboxes {}
+export type EmployeesCheckboxesType = `${EmployeesFormDataUICheckboxesEnum}`
+
 // ENUMS
 export enum EmployeesFormDataEnum {
     NAME = 'name',
@@ -57,4 +67,10 @@ export enum EmployeesFormDataEnum {
     ACHIVEMENT = 'achivement',
     BACKGROUNDIMGCOLOR = 'backgroundImgColor',
     IMGNAME = 'imgName'
+}
+export enum EmployeesFormDataUICheckboxesEnum {
+    INSTAGRAMCHECKBOX = 'instagramCheckbox',
+    FACEBOOKCHECKBOX = 'facebookCheckbox',
+    XCHECKBOX = 'XCheckbox',
+    YOUTUBECHECKBOX = 'youtubeCheckbox',
 }
