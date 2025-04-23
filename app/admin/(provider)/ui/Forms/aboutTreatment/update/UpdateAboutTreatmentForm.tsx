@@ -111,9 +111,12 @@ export default function UpdateAboutTreatmentForm() {
             const aboutTreatmentId = id.toString()
             const response = await dispatch(updateAboutTreatmentAction({ data, aboutTreatmentId }))
             const isFulfilled = fullfilled(response.meta.requestStatus)
-            data.image = null
-            dispatch(updateAboutTreatmentInState({ data, aboutTreatmentId }))
-            if (isFulfilled) router.push('/admin/about_treatment')
+
+            if (isFulfilled) {
+                data.image = null
+                dispatch(updateAboutTreatmentInState({ data, aboutTreatmentId }))
+                router.push('/admin/about_treatment')
+            }
         }
     }
 
@@ -262,7 +265,7 @@ export default function UpdateAboutTreatmentForm() {
             </div>
 
             <SubmitButton
-                error={error.create}
+                error={error.update}
                 label='Підтвердити зміни'
             />
         </form>

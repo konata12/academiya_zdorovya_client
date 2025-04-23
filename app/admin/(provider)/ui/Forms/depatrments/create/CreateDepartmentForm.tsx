@@ -99,7 +99,8 @@ export default function CreateDepartmentForm() {
             <SubmitButton
                 error={error.create}
                 className={{
-                    button: styles.submitBtn
+                    button: styles.submitBtn,
+                    error: styles.submitError
                 }}
             />
         </form>

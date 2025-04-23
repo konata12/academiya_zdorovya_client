@@ -12,6 +12,7 @@ import { Department, DepartmentsDefaultFormData, DepartmentsFormData, Department
 import { isEqual } from 'lodash';
 import InputContainer from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainer/InputContainer';
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton';
+import { fullfilled } from '@/app/services/response';
 
 export default function UpdateDepartmentForm() {
     const [formDefaultValues, setFormDefaultValues] = useState(true)
@@ -97,9 +98,12 @@ export default function UpdateDepartmentForm() {
                 return
             }
 
-            dispatch(updateDepartmentAction({ data, id }))
-            dispatch(updateDepartmentInState({ data, id }))
-            router.push('/admin/departments')
+            const response = await dispatch(updateDepartmentAction({ data, id }))
+            const isFulfilled = fullfilled(response.meta.requestStatus)
+            if (isFulfilled) {
+                dispatch(updateDepartmentInState({ data, id }))
+                router.push('/admin/departments')
+            }
         }
     }
 
@@ -177,11 +181,13 @@ export default function UpdateDepartmentForm() {
                     }
                 }}
             />
-            
+
             <SubmitButton
-                error={error.create}
+                error={error.update}
+                label='Підтвердити зміни'
                 className={{
-                    button: styles.submitBtn
+                    button: styles.submitBtn,
+                    error: styles.submitError
                 }}
             />
         </form>

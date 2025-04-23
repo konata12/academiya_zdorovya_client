@@ -48,7 +48,8 @@ export default function CreateBookingServiceForm() {
             <SubmitButton
                 error={error.create}
                 className={{
-                    button: styles.submitBtn
+                    button: styles.submitBtn,
+                    error: styles.submitError
                 }}
             />
         </form>

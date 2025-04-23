@@ -53,6 +53,8 @@ export default function Departments({
         dispatch(closeDepartmentsModal({ i }))
     }
 
+    console.log(error)
+
     return (
         <>
             <p className={`title lg`}>Відділення</p>

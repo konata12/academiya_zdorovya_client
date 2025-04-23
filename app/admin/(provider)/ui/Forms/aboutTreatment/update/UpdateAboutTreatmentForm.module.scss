@@ -97,23 +97,4 @@
             }
         }
     }
-
-    .formErrorWrap {
-        position: relative;
-        width: 100%;
-
-        .formError {
-            position: absolute;
-            width: 100%;
-            top: -24px;
-            margin: 0;
-
-            text-align: center;
-        }
-
-        .submit {
-            margin-top: 48px;
-            width: 100%;
-        }
-    }
 }
