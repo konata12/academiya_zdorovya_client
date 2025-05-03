@@ -5,7 +5,7 @@ import CreateEmployeeFrom from '@/app/admin/(provider)/ui/Forms/employees/create
 export default function page() {
     return (
         <div className={styles.container}>
-            <p className={`title left md ${styles.title}`}>Додати працівника</p>
+            <p className={`title left md ${styles.title}`}>Додати лікаря</p>
             <CreateEmployeeFrom />
         </div>
     )

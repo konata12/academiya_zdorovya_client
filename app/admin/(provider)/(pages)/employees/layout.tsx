@@ -56,7 +56,7 @@ export default function layout({
 
     return (
         <>
-            <p className={`title lg`}>Працівники</p>
+            <p className={`title lg`}>Лікарі</p>
             <CommonTable titles={titles}>
                 {!employees.length ? (
                     <CommonTable404

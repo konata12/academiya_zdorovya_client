@@ -1,7 +1,8 @@
+import { createEmployeeFormData, parseEmployeeFormDataToUpdate } from "@/app/services/employee";
 import { Employee, EmployeesFormData, EmployeesInit } from "@/app/types/data/employees";
 import { ErrorResponse } from "@/app/types/data/response";
 import axiosInstance from "@/app/utils/axios";
-import { createAsyncThunk, createSlice, current, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 
 const initialState: EmployeesInit = {
@@ -65,7 +66,8 @@ export const createEmployee = createAsyncThunk('employees/create', async (
     { rejectWithValue }
 ) => {
     try {
-        const response = await axiosInstance.post<Employee[]>(`${baseUrl}/admin/create`, data)
+        const formData = createEmployeeFormData(data)
+        const response = await axiosInstance.post<Employee[]>(`${baseUrl}/admin/create`, formData)
         console.log(response)
         return response.data
     } catch (error) {
@@ -88,7 +90,9 @@ export const updateEmployee = createAsyncThunk('employees/update', async ({
     id: string
 }, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.put(`${baseUrl}/admin/${id}`, data)
+        console.log('redux', data)
+        const formData = createEmployeeFormData(data)
+        const response = await axiosInstance.put(`${baseUrl}/admin/update/${id}`, formData)
         console.log(response)
         return response.data
     } catch (error) {
@@ -147,19 +151,14 @@ const employeesSlice = createSlice({
                 id: string
             }
         }) {
-            console.log(action)
             const index = state.employees.findIndex(employee => {
                 return employee.id === +action.payload.id
             })
-            console.log(index)
-            state.employees[index] = {
-                id: +action.payload.id,
-                ...action.payload.data
-            }
+            state.employees[index] = parseEmployeeFormDataToUpdate(action.payload.data, action.payload.id)
         },
-        setUpdateError(state) {
+        setEmployeeUpdateError(state) {
             state.error.update = {
-                message: 'Дані ті самі, спочатку змініть значення',
+                message: 'Дані ті самі, окрім картинки, спочатку змініть значення',
                 statusCode: 0
             }
         }
@@ -249,7 +248,7 @@ export const {
     openEmployeesModal,
     closeEmployeesModal,
     deleteEmployeeFromState,
-    setUpdateError,
+    setEmployeeUpdateError,
     updateEmployeeInState,
 } = employeesSlice.actions
 

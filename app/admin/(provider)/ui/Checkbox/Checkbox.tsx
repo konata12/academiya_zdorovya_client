@@ -5,18 +5,22 @@ import { CheckboxProps } from '@/app/types/ui/form_components/form_basic'
 export default function Checkbox({
     handleFunction,
     isChecked,
-    elemId
+    elemId,
+    className,
+    ...props
 }: CheckboxProps) {
     return (
-        <label className={styles.checkbox}>
+        <label className={`${styles.checkbox} ${className?.label || ''}`}>
             <input
+                className={className?.input || ''}
                 checked={isChecked}
                 onChange={handleFunction}
                 type="checkbox"
                 id={elemId}
+                {...props}
             />
-            <span>
-                <i></i>
+            <span className={className?.span || ''}>
+                <i className={className?.i || ''}></i>
             </span>
         </label>
     )

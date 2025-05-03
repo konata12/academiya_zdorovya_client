@@ -16,6 +16,12 @@ import { setFormDefaultValues } from '@/app/utils/redux/navigation/navigationSli
 import InputContainer from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainer/InputContainer'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
 
+const formDefaultValues: AboutTreatmentFormData = {
+    title: '',
+    treatmentTypes: [{ value: '' }],
+    image: null
+}
+
 export default function UpdateAboutTreatmentForm() {
     const [imageContainerHeight, setImageContainerHeight] = useState<number>(0)
     const [imageHeight, setImageHeight] = useState<number>(0)
@@ -30,12 +36,7 @@ export default function UpdateAboutTreatmentForm() {
     const router = useRouter()
     const dispatch = useAppDispatch()
 
-    const { id } = useParams() // get departments id from url
-    const formDefaultValues: AboutTreatmentFormData = {
-        title: '',
-        treatmentTypes: [{ value: '' }],
-        image: null
-    }
+    const { id } = useParams() // get id from url
 
     const {
         register,

@@ -194,9 +194,12 @@ export default function CreateAboutTreatmentForm() {
                         {errors[AboutTreatmentEnum.IMG] && <p className={`error ${styles.errorMessage}`}>
                             {errors[AboutTreatmentEnum.IMG].message}
                         </p>}
-                        
+
                         <div
-                            className={`${styles.imageContainer} ${errors[AboutTreatmentEnum.IMG] && styles.error}`}
+                            className={`
+                                ${styles.imageContainer} 
+                                ${errors[AboutTreatmentEnum.IMG] ? styles.error : ''}
+                            `}
                             ref={imageContainerRef}
                             style={{
                                 marginTop: imageMarginTop

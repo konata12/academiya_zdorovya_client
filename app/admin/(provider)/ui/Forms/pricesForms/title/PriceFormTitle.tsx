@@ -7,7 +7,7 @@ import { FieldErrors, UseFieldArrayRemove, UseFormRegister } from 'react-hook-fo
 import { PriceSectionFormData, PriceTitleEnum } from '@/app/types/data/prices'
 import { motion } from 'framer-motion';
 import { componentVisibleAnimationVariants, errorAnimationVariants, priceSectionTitleVariants } from '@/app/utils/animations/animations'
-import { basicAnimation } from '@/app/utils/animations/variables'
+import { basicAnimationTransition } from '@/app/utils/animations/variables'
 
 interface propsTypes {
     titleWithPrice: boolean
@@ -49,7 +49,7 @@ export default function PriceFormTitle({
             initial='hidden'
             animate='visible'
             exit='exit'
-            transition={basicAnimation}
+            transition={basicAnimationTransition}
         >
             <motion.div
                 className={`${styles.titleWrap} ${index ? styles.additional : ''}`}
@@ -58,7 +58,7 @@ export default function PriceFormTitle({
                 initial="hidden"
                 animate="visible"
                 exit='exit'
-                transition={basicAnimation}
+                transition={basicAnimationTransition}
             >
                 {index ? <div className={styles.additionalTitle}>
                     <span className='title xs'>
@@ -97,7 +97,7 @@ export default function PriceFormTitle({
                                 initial="hidden"
                                 animate="visible"
                                 exit='exit'
-                                transition={basicAnimation}
+                                transition={basicAnimationTransition}
                             >
                                 {errors.titles[index]?.[PriceTitleEnum.TEXT]?.message}
                             </motion.p>
@@ -135,7 +135,7 @@ export default function PriceFormTitle({
                                 initial="hidden"
                                 animate="visible"
                                 exit='exit'
-                                transition={basicAnimation}
+                                transition={basicAnimationTransition}
                             >
                                 {errors.titles[index]?.[PriceTitleEnum.PRICENEARTITLE]?.message}
                             </motion.p>

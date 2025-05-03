@@ -2,25 +2,27 @@
 
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
 import { RootState } from '@/app/utils/redux/store'
-import React, { useCallback, useEffect } from 'react'
-import styles from './CreateEmployeeForm.module.scss'
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
-import { AhivementsFormDataEnum, EmployeesBackgroundImgColorEnum, EmployeesCheckboxesType, EmployeesFormData, EmployeesFormDataEnum, EmployeesFormDataUICheckboxesEnum, EmployeesFormDataUIModalsStatesEnum, EmployeesModalsStatesType, WorkSpecialitysFormDataEnum } from '@/app/types/data/employees'
+import React, { useCallback, useEffect, useRef } from 'react'
+import styles from './UpdateEmployeeForm.module.scss'
+import { SubmitHandler, useFieldArray, useForm, useWatch } from 'react-hook-form'
+import { Employee, AhivementsFormDataEnum, EmployeesBackgroundImgColorEnum, EmployeesCheckboxesType, EmployeesFormData, EmployeesFormDataEnum, EmployeesFormDataUICheckboxesEnum, EmployeesFormDataUIModalsStatesEnum, EmployeesModalsStatesType, WorkSpecialitysFormDataEnum } from '@/app/types/data/employees'
 import InputContainer from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainer/InputContainer'
 import TextareaContainer from '@/app/common_ui/form_components/BasicInputContainer/children/TextareaContainer/TextareaContainer'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import { addModalState, deleteModalState, setEmployeeBackgroundImgColorCheckbox, setEmployeeUIInitialState, setModalState, setModalStateInitValue, triggerEmployeeUICheckbox } from '@/app/utils/redux/employees/employeesFormUISlice'
+import { addModalState, deleteModalState, setCheckboxesDefaultValuesForUpdateForm, setEmployeeBackgroundImgColorCheckbox, setEmployeeUIInitialState, setModalState, setModalStateInitValue, triggerEmployeeUICheckbox } from '@/app/utils/redux/employees/employeesFormUISlice'
 import InputContainerWithCheckbox from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainerWithCheckbox/InputContainerWithCheckbox'
 import InputContainerWithDeleteBtn from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtn'
 import FormElementContainerWithCheckbox from '@/app/common_ui/form_components/BasicInputContainer/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox'
 import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
 import { fullfilled } from '@/app/services/response'
-import { useRouter } from 'next/navigation'
-import { createEmployee as createEmployeeAction } from '@/app/utils/redux/employees/employeesSlice'
+import { useParams, useRouter } from 'next/navigation'
+import { updateEmployee as updateEmployeeAction, setEmployeeUpdateError, updateEmployeeInState } from '@/app/utils/redux/employees/employeesSlice'
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
+import { isEqual } from 'lodash'
+import { setFormDefaultValues } from '@/app/utils/redux/navigation/navigationSlice'
 
-export default function CreateEmployeeFrom() {
-    const { error } = useAppSelector((state: RootState) => state.employees)
+export default function UpdateEmployeeFrom() {
+    const { employees, error } = useAppSelector((state: RootState) => state.employees)
     const {
         instagramCheckbox,
         facebookCheckbox,
@@ -33,13 +35,23 @@ export default function CreateEmployeeFrom() {
         achivementsModalIsOpen,
     } = useAppSelector((state: RootState) => state.employeesFormUI)
 
+    const formDefaultValuesRef = useRef(true)
+
     const router = useRouter()
     const dispatch = useAppDispatch()
+
+    const { id } = useParams() // get id from url
+    const employee = employees.find(employee => {
+        if (id) return employee.id === +id
+    })
+    const formDefaultValues = createFromDefaultValues(employee)
+    console.log(formDefaultValues)
 
     const {
         register,
         handleSubmit,
         control,
+        reset,
         watch,
         formState: { errors },
     } = useForm<EmployeesFormData>({
@@ -52,6 +64,8 @@ export default function CreateEmployeeFrom() {
             }],
         }
     })
+
+    const formValues = useWatch({ control })
     const image = watch(EmployeesFormDataEnum.IMAGE)?.[0] // Watch the image input
 
     const {
@@ -71,32 +85,98 @@ export default function CreateEmployeeFrom() {
         name: EmployeesFormDataEnum.ACHIVEMENTS,
     });
 
+    // Reset form values when `employee` is available | just creates default values
+    useEffect(() => {
+        if (employee) {
+            reset(formDefaultValues);
+        }
+    }, [employee, reset])
     // UI Slice state reset 
     useEffect(() => {
-        dispatch(setModalStateInitValue({
-            length: workSpecialityFields.length,
-            modalName: EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN
-        }))
-        dispatch(setModalStateInitValue({
-            length: achivementFields.length,
-            modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN
-        }))
+        if (employee) {
+            dispatch(setModalStateInitValue({
+                length: workSpecialityFields.length,
+                modalName: EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN
+            }))
+            dispatch(setModalStateInitValue({
+                length: achivementFields.length,
+                modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN
+            }))
+            dispatch(setCheckboxesDefaultValuesForUpdateForm({
+                instagram: employee.instagram,
+                facebook: employee.facebook,
+                X: employee.X,
+                youtube: employee.youtube,
+                achivements: employee.achivements,
+                backgroundImgColor: employee.backgroundImgColor,
+            }))
+        }
 
         return () => {
             dispatch(setEmployeeUIInitialState())
         }
+    }, [employee])
+    // CHECK IF FORM DATA IS DEFAULT
+    useEffect(() => {
+        formValues.image = undefined
+        const equal = isEqual(formValues, formDefaultValues)
+        formDefaultValuesRef.current = equal
+        dispatch(setFormDefaultValues(equal))
+
+        // after leaving page set formDefaultValues in redix to initial
+        return () => {
+            dispatch(setFormDefaultValues(true))
+        }
+    }, [formValues])
+    // CREATE QUIT PAGE LISTENERS
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (!formDefaultValuesRef.current) {
+                e.preventDefault()
+                e.returnValue = ''
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        }
     }, [])
 
     // CREATE ABOUT TREATMENT FUNCTION
-    const createEmployee: SubmitHandler<EmployeesFormData> = async (data) => {
-        const achivements = data.achivements
-        if (achivements?.length === 1 && achivements[0].value === '') data.achivements = undefined
+    const updateEmployee: SubmitHandler<EmployeesFormData> = async (data) => {
+        if (employee) {
+            const id = `${employee.id}`
+            const checkboxesAreDefault = !!employee.instagram === instagramCheckbox &&
+                !!employee.facebook === facebookCheckbox &&
+                !!employee.X === XCheckbox &&
+                !!employee.youtube === youtubeCheckbox &&
+                !!employee.achivements.length === achivementsCheckbox
 
-        data.backgroundImgColor = backgroundImgColor
+            //  IF NOT UPDATED DON'T ALLOW REQUEST
+            if (formDefaultValuesRef.current && checkboxesAreDefault) {
+                dispatch(setEmployeeUpdateError())
+                return
+            }
 
-        const response = await dispatch(createEmployeeAction(data))
-        const isFulfilled = fullfilled(response.meta.requestStatus)
-        if (isFulfilled) router.push('/admin/employees')
+            // CORRECTLY SET ACHIVEMENTS AND BACKGROUND COLOR
+            const achivements = data.achivements
+            if ((achivements?.length === 1 && achivements[0].value === '') || !achivementsCheckbox) data.achivements = undefined
+            if (!instagramCheckbox) data.instagram = undefined
+            if (!facebookCheckbox) data.facebook = undefined
+            if (!XCheckbox) data.X = undefined
+            if (!youtubeCheckbox) data.youtube = undefined
+            data.backgroundImgColor = backgroundImgColor
+
+            const response = await dispatch(updateEmployeeAction({ data, id }))
+            const isFulfilled = fullfilled(response.meta.requestStatus)
+            if (isFulfilled) {
+                data.image = null
+                dispatch(updateEmployeeInState({ data, id }))
+                router.push('/admin/employees')
+            }
+        }
     }
 
     const conditionalRequired = useCallback((checkbox: boolean, requiredMessage: string) => {
@@ -148,7 +228,7 @@ export default function CreateEmployeeFrom() {
 
     return (
         <form
-            onSubmit={handleSubmit(createEmployee)}
+            onSubmit={handleSubmit(updateEmployee)}
             className={styles.createEmployeeForm}
         >
             <div className={styles.inputs}>
@@ -458,7 +538,7 @@ export default function CreateEmployeeFrom() {
                                     label: styles.checkbox
                                 }}
                             />
-                            
+
                             <div className={styles.checkboxLabels}>
                                 <span>
                                     Сірий
@@ -532,8 +612,49 @@ export default function CreateEmployeeFrom() {
             </div>
 
             <SubmitButton
-                error={error.create}
+                error={error.update}
+                label='Підтвердити зміни'
             />
         </form>
     )
+}
+
+function createFromDefaultValues(employee: Employee | undefined): EmployeesFormData {
+    if (employee) {
+        return {
+            name: employee.name,
+            surname: employee.surname,
+            position: employee.position,
+            description: employee.description,
+            degree: employee.degree,
+            instagram: employee.instagram !== null ? employee.instagram : undefined,
+            facebook: employee.facebook !== null ? employee.facebook : undefined,
+            X: employee.X !== null ? employee.X : undefined,
+            youtube: employee.youtube !== null ? employee.youtube : undefined,
+            workSpecialities: employee.workSpecialities.length ? employee.workSpecialities.map((item) => {
+                return { value: item }
+            }) : [{ value: '' }],
+            achivements: employee.achivements.length ? employee.achivements.map((item) => {
+                return { value: item }
+            }) : [{ value: '' }],
+            backgroundImgColor: employee.backgroundImgColor,
+            image: null,
+        }
+    } else {
+        return {
+            name: '',
+            surname: '',
+            position: '',
+            description: '',
+            degree: '',
+            instagram: undefined,
+            facebook: undefined,
+            X: undefined,
+            youtube: undefined,
+            workSpecialities: [{ value: '' }],
+            achivements: [{ value: '' }],
+            backgroundImgColor: EmployeesBackgroundImgColorEnum.BLUE,
+            image: null,
+        }
+    }
 }

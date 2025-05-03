@@ -1,22 +1,18 @@
 import React from 'react'
-import styles from './InputContainerWithCheckbox.module.scss'
+import styles from './FormElementContainerWithCheckbox.module.scss'
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
-import { InputContainerWithCheckboxProps } from '@/app/types/ui/form_components/inputContainers.type'
+import { FromElementContainerWithCheckboxProps } from '@/app/types/ui/form_components/inputContainers.type'
 import AnimatePresenseWithDynamicHeight from '@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenseWithDynamicHeight'
 
-export default function InputContainerWithCheckbox<T extends Record<string, any>>({
+export default function FormElementContainerWithCheckbox<T extends Record<string, any>>({
+    children,
     label,
     className = {},
     name,
-    register,
-    errors,
-    registerOptions,
-    type = 'text',
 
     handleFunction,
     isChecked,
-}: InputContainerWithCheckboxProps<T>) {
-    const error = errors[name]
+}: FromElementContainerWithCheckboxProps<T>) {
 
     return (
         <div className={`${styles.inputContainer} ${className?.inputContainer || ''}`}>
@@ -40,22 +36,7 @@ export default function InputContainerWithCheckbox<T extends Record<string, any>
                     absoluteContainer: styles.absoluteContainer
                 }}
             >
-                <input
-                    className={`input
-                    ${(error && 'wrong') || ''}
-                    ${styles.input}
-                    ${className?.input || ''}
-                    ${isChecked ? styles.active : ''}`}
-                    key={name}
-                    type={type}
-                    {...register(name, registerOptions)}
-                />
-
-                {error && (
-                    <p className={`${styles.error} ${className?.error || ''}`}>
-                        {error.message as string}
-                    </p>
-                )}
+                {children}
             </AnimatePresenseWithDynamicHeight>
         </div>
     )

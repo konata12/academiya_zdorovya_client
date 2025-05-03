@@ -1,4 +1,6 @@
-export const componentVisibleAnimationVariants = {
+import { Variants } from "framer-motion"
+
+export const componentVisibleAnimationVariants: Variants = {
     hidden: {
         opacity: 0,
     }, // Initial state (hidden)
@@ -9,7 +11,7 @@ export const componentVisibleAnimationVariants = {
         opacity: 0,
     }, // Exit state (hidden)
 }
-export const componentHeightAnimationVariants = (height: number) => {
+export const componentHeightAnimationVariants = (height: number): Variants => {
     return {
         hidden: {
             height: 0,
@@ -22,7 +24,7 @@ export const componentHeightAnimationVariants = (height: number) => {
         }, // Exit state (hidden)
     }
 }
-export const componentVisibilityAndHeightAnimationVariants = (height: number) => {
+export const componentVisibilityAndHeightAnimationVariants = (height: number): Variants => {
     return {
         hidden: {
             height: 0,
@@ -48,3 +50,7 @@ export const priceSectionTitleVariants = componentHeightAnimationVariants
 export const priceSectionPriceVariantVariants = componentHeightAnimationVariants
 export const optionalServiceVariants = componentVisibleAnimationVariants
 export const priceFieldsVariants = componentVisibleAnimationVariants
+
+// COMPONENTS
+// COMMON UI
+export const AnimatePresenseWithDynamicHeightVariants = componentHeightAnimationVariants

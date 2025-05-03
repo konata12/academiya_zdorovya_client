@@ -1,6 +1,7 @@
 import { CheckboxProps } from "@/app/types/ui/form_components/form_basic";
 import { FieldErrors, Path, RegisterOptions, UseFormRegister } from "react-hook-form";
 
+
 // CONTAINER PROPS
 export interface InputContainerBasicProps<T extends Record<string, any>> {
     children?: React.ReactNode;
@@ -9,6 +10,15 @@ export interface InputContainerBasicProps<T extends Record<string, any>> {
     name: Path<T>;  // This ensures the name is a key of T
     errors: FieldErrors<T>;
 }
+
+export interface FromElementContainerWithCheckboxProps<T extends Record<string, any>>
+    extends CheckboxProps {
+    children: React.ReactNode;
+    className?: FormElementWithCheckboxStyles;
+    label: string;
+    name: Path<T>;
+}
+
 
 // CHILDREN
 export interface InputContainerProps<T extends Record<string, any>>
@@ -31,9 +41,16 @@ export interface TextareaContainerProps<T extends Record<string, any>>
 }
 export interface InputContainerWithCheckboxProps<T extends Record<string, any>>
     extends InputContainerProps<T>, CheckboxProps {
-    className: InputContainerWithCheckboxStyles;
+    className?: FormElementWithCheckboxStyles;
 }
-// export type InputContainerWithCheckboxProps<T extends Record<string, any>> = InputContainerProps<T> & Partial<CheckboxProps>
+export interface InputContainerWithDeleteBtnProps<T extends Record<string, any>>
+    extends InputContainerProps<T> {
+    fieldKey?: string
+    index?: number
+    handleFunction: (e: React.MouseEvent<HTMLButtonElement>) => void
+    className?: InputContainerWithDeleteBtnStyles;
+}
+
 
 // STYLES
 export interface Styles {
@@ -42,6 +59,7 @@ export interface Styles {
     error?: string;
 }
 
+
 // STYLES CHILDREN
 interface InputContainerStyles extends Styles {
     input?: string;
@@ -49,6 +67,9 @@ interface InputContainerStyles extends Styles {
 interface TextareaContainerStyles extends Styles {
     textarea?: string;
 }
-interface InputContainerWithCheckboxStyles extends InputContainerStyles {
+interface FormElementWithCheckboxStyles extends InputContainerStyles {
     checkboxContainer?: string;
+}
+interface InputContainerWithDeleteBtnStyles extends InputContainerStyles {
+    buttonContainer?: string;
 }

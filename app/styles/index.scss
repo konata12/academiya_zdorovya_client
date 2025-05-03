@@ -278,6 +278,7 @@ body {
 .error {
     margin-top: 12px;
     border-radius: $border-rad-5;
+    transition: all $anim-time $slow;
 
     color: $error-color;
     text-align: center;

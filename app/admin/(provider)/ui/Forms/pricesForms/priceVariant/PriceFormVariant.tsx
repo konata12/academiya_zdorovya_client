@@ -6,7 +6,7 @@ import { deletePriceVariant as deletePriceVariantAction, triggerPriceVariantsDes
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
 import { PriceSectionFormData, PriceVariantOptionsEnum } from '@/app/types/data/prices'
 import { FieldErrors, UseFieldArrayRemove, UseFormRegister } from 'react-hook-form'
-import { basicAnimation } from '@/app/utils/animations/variables';
+import { basicAnimationTransition } from '@/app/utils/animations/variables';
 import { componentVisibleAnimationVariants, priceSectionPriceVariantVariants } from '@/app/utils/animations/animations';
 
 interface PriceFormVariant {

@@ -1,0 +1,12 @@
+@use '../../../../styles/variables' as *;
+
+.wrap {
+    position: relative;
+
+    .shape {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        transition: all $anim-time $slow;
+    }
+}

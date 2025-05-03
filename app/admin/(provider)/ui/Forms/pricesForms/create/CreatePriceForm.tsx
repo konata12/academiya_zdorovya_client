@@ -25,7 +25,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { PriceSectionEnum, PriceSectionFormData } from '@/app/types/data/prices'
 import { usePathname, useRouter } from 'next/navigation'
 import { getUrlOrderElement } from '@/app/services/navigation'
-import { basicAnimation } from '@/app/utils/animations/variables'
+import { basicAnimationTransition } from '@/app/utils/animations/variables'
 import { optionalServiceVariants, priceFieldsVariants } from '@/app/utils/animations/animations'
 import PricesTable from '@/app/admin/(provider)/ui/Tables/PricesTable/PricesTable'
 import { fullfilled } from '@/app/services/response'
@@ -280,7 +280,7 @@ export default function CreatePriceForm() {
                     animate={optionalServiceCheckbox
                         ? { height: optionalServiceInputHeight }
                         : { height: 0 }}
-                    transition={basicAnimation}
+                    transition={basicAnimationTransition}
                 >
                     <AnimatePresence>
                         {optionalServiceCheckbox && <motion.div
@@ -290,7 +290,7 @@ export default function CreatePriceForm() {
                             initial='initial'
                             animate='animate'
                             exit='exit'
-                            transition={basicAnimation}
+                            transition={basicAnimationTransition}
                         >
                             <input
                                 className={`input ${styles.input}`}
@@ -391,7 +391,7 @@ export default function CreatePriceForm() {
                         ? { height: priceVariantsHeight }
                         : { height: 0 }
                     }
-                    transition={basicAnimation}
+                    transition={basicAnimationTransition}
                 >
                     <AnimatePresence>
                         {priceVariantsCheckbox && <motion.div
@@ -401,7 +401,7 @@ export default function CreatePriceForm() {
                             initial='hidden'
                             animate='visible'
                             exit='exit'
-                            transition={basicAnimation}
+                            transition={basicAnimationTransition}
                         >
                             {priceFields.map((priceField, i) => {
                                 return <PriceFormVariant

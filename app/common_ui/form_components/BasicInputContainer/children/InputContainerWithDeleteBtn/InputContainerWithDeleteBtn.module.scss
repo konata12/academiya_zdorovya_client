@@ -1,0 +1,26 @@
+@use '../../../../../styles/variables' as *;
+
+.inputContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .buttonContainer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+    .input {
+        width: 100%;
+    }
+    .error {
+        width: 100%;
+        border-radius: $border-rad-5;
+
+        color: $error-color;
+        text-align: center;
+        font-size: $pc-h6-fz;
+    }
+}

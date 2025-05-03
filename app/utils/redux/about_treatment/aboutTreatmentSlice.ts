@@ -134,12 +134,10 @@ const aboutTreatmentSlice = createSlice({
                 aboutTreatmentId: string
             }
         }) {
-            console.log(action)
             const index = state.aboutTreatments.findIndex(aboutTreatment => {
                 return aboutTreatment.id === +action.payload.aboutTreatmentId
             })
             const parsedData: AboutTreatment = parseFormDataToUpdate(action.payload.data, action.payload.aboutTreatmentId)
-            console.log(index)
             state.aboutTreatments[index] = parsedData
         },
         setUpdateError(state) {
