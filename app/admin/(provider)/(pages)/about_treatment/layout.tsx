@@ -24,7 +24,8 @@ export default function WhatWeTreat({
     const {
         aboutTreatments,
         aboutTreatmentsIsModalOpen,
-        error
+        error,
+        status
     } = useAppSelector((state: RootState) => state.aboutTreatment)
 
     const dispatch = useAppDispatch()
@@ -61,6 +62,7 @@ export default function WhatWeTreat({
                 {!aboutTreatments.length ? (
                     <CommonTable404
                         error={error}
+                        status={status}
                     />
                 ) : (aboutTreatments.map((aboutTreatment, i) => <TableLine key={i}>
                     <span>{aboutTreatment.title}</span>

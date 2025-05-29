@@ -1,4 +1,4 @@
-import { AboutTreatmentFormUI } from "@/app/types/data/about_treatment";
+import { AboutTreatmentFormUI } from "@/app/types/data/about_treatment.type";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: AboutTreatmentFormUI = {

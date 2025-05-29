@@ -1,5 +1,5 @@
-import { PriceSection, PriceSectionFormData, PriceSectionInit } from "@/app/types/data/prices";
-import { ErrorResponse } from "@/app/types/data/response";
+import { PriceSection, PriceSectionFormData, PriceSectionInit } from "@/app/types/data/prices.type";
+import { ErrorResponse } from "@/app/types/data/response.type";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
@@ -147,7 +147,7 @@ const pricesSlice = createSlice({
                 state.error.create = action.payload as ErrorResponse
             })
 
-            // DELETE BOOKING SERVICES
+            // DELETE PRICE SECTIONS
             .addCase(deletePriceSection.pending, (state) => {
                 state.status = "loading"
                 state.error.delete = null

@@ -24,7 +24,8 @@ export default function Departments({
     const {
         departments,
         departmentsIsModalOpen,
-        error
+        error,
+        status
     } = useAppSelector((state: RootState) => state.departments)
 
     const dispatch = useAppDispatch()
@@ -53,8 +54,6 @@ export default function Departments({
         dispatch(closeDepartmentsModal({ i }))
     }
 
-    console.log(error)
-
     return (
         <>
             <p className={`title lg`}>Відділення</p>
@@ -62,6 +61,7 @@ export default function Departments({
                 {!departments.length ? (
                     <CommonTable404
                         error={error}
+                        status={status}
                         notFoundMessage="Немає відділень"
                     />
                 ) : (departments.map((department, i) => <TableLine key={department.id}>

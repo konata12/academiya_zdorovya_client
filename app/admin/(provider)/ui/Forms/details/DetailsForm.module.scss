@@ -1,0 +1,33 @@
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/functions' as *;
+
+.addInputsContainer {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    clip-path: inset(0);
+    padding: 0 24px;
+}
+
+.mainBody {
+    display: flex;
+    flex-direction: column;
+    padding: 48px;
+    border-radius: 0px 0px 22px 22px;
+    background: $background-color-primary;
+
+    box-shadow: 3px 7px 37px 0px rgba-color($black-bg-color, 0.12), 0px 0px 0px 0px rgba-color($black-bg-color, 0.08);
+
+    .orderedComponent {
+        width: 100%;
+        margin-top: 64px;
+        background-color: transparent;
+        border: none;
+        color: $text-color-black;
+
+        &:focus-visible {
+            border: none;
+            outline: none;
+        }
+    }
+}

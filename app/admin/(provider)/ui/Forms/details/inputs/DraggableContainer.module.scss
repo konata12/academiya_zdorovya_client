@@ -1,0 +1,30 @@
+@use '../../../../../../styles/variables' as *;
+@use '../../../../../../styles/functions' as *;
+
+.container {
+    position: relative;
+    display: flex;
+    border-radius: $border-rad-8;
+
+    .deleteBtn {
+        position: absolute;
+        display: block;
+        width: 24px;
+        height: 24px;
+        left: -30px;
+        // transform: translateY(calc((100% - 64px) / 2));
+        cursor: pointer;
+        border: none;
+        border-radius: $border-rad-8;
+        background-color: rgba-color( $black-bg-color, .15);
+        transition: all $anim-time $slow;
+
+        // color: $error-color;
+        color: $text-color-black;
+        font-size: $details-form-delete-btn-fz;
+
+        &:hover {
+            color: $error-color;
+        }
+    }
+}

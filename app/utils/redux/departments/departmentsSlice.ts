@@ -1,5 +1,5 @@
-import { Department, DepartmentsFormData, DepartmentsInit } from "@/app/types/data/departments";
-import { ErrorResponse } from "@/app/types/data/response";
+import { Department, DepartmentsFormData, DepartmentsInit } from "@/app/types/data/departments.type";
+import { ErrorResponse } from "@/app/types/data/response.type";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, current, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
@@ -8,7 +8,13 @@ const initialState: DepartmentsInit = {
     departments: [],
     // need for every department to have seperate state for ModalWindow of every department
     departmentsIsModalOpen: [],
-    status: null,
+    status: {
+        getAll: null,
+        getOne: null,
+        create: null,
+        delete: null,
+        update: null,
+    },
     error: {
         getAll: null,
         getOne: null,
@@ -168,78 +174,78 @@ const departmentsSlice = createSlice({
         builder
             // GET ALL DEPARTMENTS
             .addCase(fetchDepartments.pending, (state) => {
-                state.status = "loading"
+                state.status.getAll = "loading"
                 state.error.getAll = null
             })
             .addCase(fetchDepartments.fulfilled, (state, action: PayloadAction<Department[] | undefined>) => {
-                state.status = "succeeded"
+                state.status.getAll = "succeeded"
                 if (action.payload) {
                     state.departments = action.payload
                     state.departmentsIsModalOpen = new Array(state.departments.length).fill(false)
                 }
             })
             .addCase(fetchDepartments.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.getAll = "failed"
                 state.error.getAll = action.payload as ErrorResponse
             })
 
             // GET ONE DEPARTMENTS
             .addCase(fetchOneDepartment.pending, (state) => {
-                state.status = "loading"
+                state.status.getOne = "loading"
                 state.error.getOne = null
             })
             .addCase(fetchOneDepartment.fulfilled, (state, action: PayloadAction<Department[] | undefined>) => {
-                state.status = "succeeded"
+                state.status.getOne = "succeeded"
                 if (action.payload) {
                     state.departments = action.payload
                     state.departmentsIsModalOpen = new Array(state.departments.length).fill(false)
                 }
             })
             .addCase(fetchOneDepartment.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.getOne = "failed"
                 state.error.getOne = action.payload as ErrorResponse
             })
 
             // CREATE DEPARTMENT
             .addCase(createDepartment.pending, (state) => {
-                state.status = "loading"
+                state.status.create = "loading"
                 state.error.create = null
             })
             .addCase(createDepartment.fulfilled, (state, action: PayloadAction<Department[] | undefined>) => {
-                state.status = "succeeded"
+                state.status.create = "succeeded"
                 if (action.payload) {
                     state.departments = action.payload
                     state.departmentsIsModalOpen = new Array(state.departments.length).fill(false)
                 }
             })
             .addCase(createDepartment.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.create = "failed"
                 state.error.create = action.payload as ErrorResponse
             })
 
             // UPDATE DEPARTMENT
             .addCase(updateDepartment.pending, (state) => {
-                state.status = "loading"
+                state.status.update = "loading"
                 state.error.update = null
             })
             .addCase(updateDepartment.fulfilled, (state) => {
-                state.status = "succeeded"
+                state.status.update = "succeeded"
             })
             .addCase(updateDepartment.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.update = "failed"
                 state.error.update = action.payload as ErrorResponse
             })
 
             // DELETE DEPARTMENTS
             .addCase(deleteDepartment.pending, (state) => {
-                state.status = "loading"
+                state.status.delete = "loading"
                 state.error.delete = null
             })
             .addCase(deleteDepartment.fulfilled, (state) => {
-                state.status = "succeeded"
+                state.status.delete = "succeeded"
             })
             .addCase(deleteDepartment.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.delete = "failed"
                 state.error.delete = action.payload as ErrorResponse
             })
     }

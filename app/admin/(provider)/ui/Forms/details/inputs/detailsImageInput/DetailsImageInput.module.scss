@@ -1,0 +1,14 @@
+@use '../../../../../../../styles/variables' as *;
+@use '../../../../../../../styles/functions' as *;
+
+.container {
+    margin-top: 0;
+
+    .image {
+        margin-top: 0;
+    }
+
+    .description {
+        margin-top: 0;
+    }
+}

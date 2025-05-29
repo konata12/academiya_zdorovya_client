@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import styles from './CreateDepartmentFrom.module.scss'
 import { GOOGLE_MAPS_URL, PHONE_NUMBER } from "@/app/utils/regex";
 import { useRouter } from "next/navigation";
-import { DepartmentsFormData, DepartmentsFormDataEnum } from "@/app/types/data/departments";
+import { DepartmentsFormData, DepartmentsFormDataEnum } from "@/app/types/data/departments.type";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
 import { createDepartment as createDepartmentAction } from "@/app/utils/redux/departments/departmentsSlice"

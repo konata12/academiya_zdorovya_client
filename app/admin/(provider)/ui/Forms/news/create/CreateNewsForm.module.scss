@@ -1,0 +1,56 @@
+@use '../../../../../../styles/variables' as *;
+
+.titleInputContainer {
+    margin-bottom: 48px;
+}
+
+.descriptionInputContainer {
+    margin-bottom: 64px;
+}
+
+.imageSection {
+
+    .imagePreview {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+
+        .errorMessage {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .image {
+            width: 100%;
+            padding-top: 80px;
+
+            .imageContainer {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                width: 100%;
+                max-width: 1028px;
+                aspect-ratio: 1028 / 444;
+                border-radius: $background-pattern-border-rad;
+                background-image: url('/images/news_main_bg.jpg');
+                clip-path: inset(0 0 0 0 round $background-pattern-border-rad);
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                transition: all $anim-time $slow;
+
+                &.error {
+                    box-shadow: inset 0 0 0 3px $error-color;
+                }
+            }
+            .caption {
+                margin-top: 32px;
+                text-align: center;
+            }
+        }
+    }
+}

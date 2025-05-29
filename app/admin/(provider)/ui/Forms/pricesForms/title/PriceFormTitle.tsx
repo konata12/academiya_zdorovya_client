@@ -4,7 +4,7 @@ import styles from './PriceFormTitle.module.scss'
 import { useAppDispatch } from '@/app/utils/redux/hooks'
 import { deletePriceSectionTitle, triggerTitleCheckbox } from '@/app/utils/redux/prices/pricesCreateFormUiSlice'
 import { FieldErrors, UseFieldArrayRemove, UseFormRegister } from 'react-hook-form'
-import { PriceSectionFormData, PriceTitleEnum } from '@/app/types/data/prices'
+import { PriceSectionFormData, PriceTitleEnum } from '@/app/types/data/prices.type'
 import { motion } from 'framer-motion';
 import { componentVisibleAnimationVariants, errorAnimationVariants, priceSectionTitleVariants } from '@/app/utils/animations/animations'
 import { basicAnimationTransition } from '@/app/utils/animations/variables'

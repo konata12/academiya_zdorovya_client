@@ -21,7 +21,12 @@ export default function BookingServices({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const { bookingServices, bookingServicesIsModalOpen, error } = useAppSelector((state: RootState) => state.bookingServices)
+    const {
+        bookingServices,
+        bookingServicesIsModalOpen,
+        error,
+        status
+    } = useAppSelector((state: RootState) => state.bookingServices)
     const dispatch = useAppDispatch()
     const pathname = usePathname()
     const isCreatePage = checkCreatePage(pathname)
@@ -55,6 +60,7 @@ export default function BookingServices({
                 {!bookingServices.length ? (
                     <CommonTable404
                         error={error}
+                        status={status}
                         notFoundMessage='Немає послуг'
                     />
                 ) : (bookingServices.map((service, i) => <TableLine key={service.id}>

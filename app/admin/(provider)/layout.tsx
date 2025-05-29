@@ -3,26 +3,26 @@
 import Footer from "@/app/admin/(provider)/ui/Footer/Footer";
 import Header from "@/app/admin/(provider)/ui/Header/Header";
 import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import SideNavigation from "@/app/admin/(provider)/ui/SideNavigation/SideNavigation";
+import { useRouter } from "next/navigation";
 import styles from './layout.module.scss';
 import { refreshTokens } from "@/app/utils/redux/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
-import { RootState } from "@/app/utils/redux/store";
 import { fullfilled } from "@/app/services/response";
+import Main from "@/app/admin/(provider)/ui/Main/Main";
+import { RootState } from "@/app/utils/redux/store";
 
-export default function Layout({
+
+export default function Admin({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const { accessToken } = useAppSelector((state: RootState) => state.auth)
-
+    const {
+            accessToken,
+    } = useAppSelector((state: RootState) => state.auth)
+    
     const dispatch = useAppDispatch()
     const router = useRouter()
-    const pathname = usePathname()
-
-    const isLoginPage = pathname.split('/')[2] === 'login'
 
     const refreshTokensAndCheckIsLogin = async () => {
         const response = await dispatch(refreshTokens())
@@ -31,6 +31,7 @@ export default function Layout({
     }
 
     useEffect(() => {
+        if (accessToken) return
         refreshTokensAndCheckIsLogin()
     }, [])
 
@@ -38,22 +39,10 @@ export default function Layout({
         <>
             <div className={styles.layout}>
                 <div className={`${styles.layoutContainer}`}>
-                    <Header isLoginPage={isLoginPage} />
-                    <div className={styles.main}>
-                        <div className={`container ${styles.mainContainer}`}>
-                            {(!isLoginPage && accessToken) && <>
-                                <SideNavigation />
-                                <div className={styles.empty}></div>
-                            </>}
-                            {((isLoginPage || accessToken)
-                                && <div className={styles.children}>
-                                    {children}
-                                </div>)
-                                || <div className={styles.not_logged_in}>
-                                    Ввійдіть в адмін панель
-                                </div>}
-                        </div>
-                    </div>
+                    <Header />
+                    <Main>
+                        {children}
+                    </Main>
                     <Footer />
                 </div>
             </div>

@@ -25,7 +25,8 @@ export default function layout({
     const {
         employees,
         employeesIsModalOpen,
-        error
+        error,
+        status
     } = useAppSelector((state: RootState) => state.employees)
 
     const dispatch = useAppDispatch()
@@ -56,11 +57,14 @@ export default function layout({
 
     return (
         <>
-            <p className={`title lg`}>Лікарі</p>
+            <p className={`title lg`}>
+                Лікарі
+            </p>
             <CommonTable titles={titles}>
                 {!employees.length ? (
                     <CommonTable404
                         error={error}
+                        status={status}
                         notFoundMessage='Немає працівників'
                     />
                 ) : (employees.map((employee, i) => <TableLine key={employee.id}>

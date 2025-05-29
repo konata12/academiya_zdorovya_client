@@ -1,4 +1,4 @@
-import { ErrorsResponsesBasic, Status } from "@/app/types/data/response"
+import { ErrorsResponsesBasic, StatusBasic } from "@/app/types/data/response.type"
 
 export interface BookingService {
     id: number
@@ -8,7 +8,7 @@ export interface BookingService {
 export interface BookingServiceInit {
     bookingServices: BookingService[]
     bookingServicesIsModalOpen: boolean[]
-    status: Status
+    status: StatusBasic
     error: ErrorsResponsesBasic
 }
 

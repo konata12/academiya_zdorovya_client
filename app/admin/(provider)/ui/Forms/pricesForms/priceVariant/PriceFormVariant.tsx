@@ -4,7 +4,7 @@ import { useAppDispatch } from '@/app/utils/redux/hooks'
 import { motion } from 'framer-motion';
 import { deletePriceVariant as deletePriceVariantAction, triggerPriceVariantsDescriptionCheckbox } from '@/app/utils/redux/prices/pricesCreateFormUiSlice'
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
-import { PriceSectionFormData, PriceVariantOptionsEnum } from '@/app/types/data/prices'
+import { PriceSectionFormData, PriceVariantOptionsEnum } from '@/app/types/data/prices.type'
 import { FieldErrors, UseFieldArrayRemove, UseFormRegister } from 'react-hook-form'
 import { basicAnimationTransition } from '@/app/utils/animations/variables';
 import { componentVisibleAnimationVariants, priceSectionPriceVariantVariants } from '@/app/utils/animations/animations';

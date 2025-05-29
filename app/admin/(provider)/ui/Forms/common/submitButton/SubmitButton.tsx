@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './SubmitButton.module.scss'
-import { ErrorResponse } from '@/app/types/data/response'
+import { ErrorResponse } from '@/app/types/data/response.type'
 
 interface Styles {
     container?: string;

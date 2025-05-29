@@ -10,7 +10,6 @@ export default function TextareaContainer<T extends Record<string, any>>({
     name,
     register,
     errors,
-    value,
     registerOptions,
     minRows = 1,
     maxRows
@@ -30,7 +29,6 @@ export default function TextareaContainer<T extends Record<string, any>>({
                     {...register(name, registerOptions)}
                     className={`input ${(error && 'wrong') || ''} ${styles.textarea} ${className?.textarea || ''}`}
                     id={name}
-                    value={value}
                     minRows={minRows}
                     maxRows={maxRows}
                 />

@@ -1,3 +1,4 @@
+// ERROR RESPONSE TYPES
 export interface ErrorResponse {
     statusCode: number
     message: string
@@ -14,7 +15,19 @@ export interface ErrorsResponses extends ErrorsResponsesBasic {
     getOne?: ErrorResponse | null
 }
 
-export type Status = null
+// RESPONSE STATUS TYPES
+export type StatusType = null
     | 'loading'
     | 'succeeded'
     | 'failed'
+
+export interface StatusBasic {
+    getAll: StatusType
+    create: StatusType
+    delete: StatusType
+}
+
+export interface Status extends StatusBasic {
+    update: StatusType
+    getOne?: StatusType
+}

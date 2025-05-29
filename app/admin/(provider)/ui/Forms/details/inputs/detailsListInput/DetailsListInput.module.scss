@@ -1,0 +1,29 @@
+@use '../../../../../../../styles/variables' as *;
+@use '../../../../../../../styles/functions' as *;
+
+.list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .option {
+        width: 100%;
+        margin-left: 24px;
+        font-size: $details-from-list-fz;
+
+        &.numerable {
+            display: flex;
+            gap: 5px;
+            list-style-type: none;
+            margin-left: 0px;
+        }
+
+        .input {
+            display: block;
+            width: 100%;
+            margin-top: 0;
+            font-size: $details-from-list-fz;
+        }
+    }
+}

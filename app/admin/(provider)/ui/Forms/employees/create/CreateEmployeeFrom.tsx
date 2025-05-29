@@ -5,7 +5,7 @@ import { RootState } from '@/app/utils/redux/store'
 import React, { useCallback, useEffect } from 'react'
 import styles from './CreateEmployeeForm.module.scss'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
-import { AhivementsFormDataEnum, EmployeesBackgroundImgColorEnum, EmployeesCheckboxesType, EmployeesFormData, EmployeesFormDataEnum, EmployeesFormDataUICheckboxesEnum, EmployeesFormDataUIModalsStatesEnum, EmployeesModalsStatesType, WorkSpecialitysFormDataEnum } from '@/app/types/data/employees'
+import { AhivementsFormDataEnum, EmployeesBackgroundImgColorEnum, EmployeesCheckboxesType, EmployeesFormData, EmployeesFormDataEnum, EmployeesFormDataUICheckboxesEnum, EmployeesFormDataUIModalsStatesEnum, EmployeesModalsStatesType, WorkSpecialitysFormDataEnum } from '@/app/types/data/employees.type'
 import InputContainer from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainer/InputContainer'
 import TextareaContainer from '@/app/common_ui/form_components/BasicInputContainer/children/TextareaContainer/TextareaContainer'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
@@ -89,6 +89,7 @@ export default function CreateEmployeeFrom() {
 
     // CREATE ABOUT TREATMENT FUNCTION
     const createEmployee: SubmitHandler<EmployeesFormData> = async (data) => {
+        console.log(data)
         const achivements = data.achivements
         if (achivements?.length === 1 && achivements[0].value === '') data.achivements = undefined
 
@@ -198,7 +199,6 @@ export default function CreateEmployeeFrom() {
                         className={{
                             inputContainer: styles.surnameInputContainer
                         }}
-                        value={watch(EmployeesFormDataEnum.DESCRIPTION)}
                         name={EmployeesFormDataEnum.DESCRIPTION}
                         register={register}
                         errors={errors}
@@ -288,7 +288,6 @@ export default function CreateEmployeeFrom() {
                             inputLabel: styles.label,
                             textarea: styles.textarea
                         }}
-                        value={watch(EmployeesFormDataEnum.DEGREE)}
                         name={EmployeesFormDataEnum.DEGREE}
                         register={register}
                         errors={errors}

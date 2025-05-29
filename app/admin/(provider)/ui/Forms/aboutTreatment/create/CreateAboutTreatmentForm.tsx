@@ -1,7 +1,7 @@
 'use client'
 
 import { fullfilled } from '@/app/services/response'
-import { AboutTreatmentEnum, AboutTreatmentFormData } from '@/app/types/data/about_treatment'
+import { AboutTreatmentEnum, AboutTreatmentFormData } from '@/app/types/data/about_treatment.type'
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
 import { RootState } from '@/app/utils/redux/store'
 import { useRouter } from 'next/navigation'

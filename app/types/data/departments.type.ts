@@ -1,4 +1,4 @@
-import { ErrorResponse, ErrorsResponses, Status } from "@/app/types/data/response"
+import { ErrorResponse, ErrorsResponses, Status } from "@/app/types/data/response.type"
 
 export interface Department {
     id: number

@@ -1,4 +1,4 @@
-import { Employee, EmployeesFormData } from "@/app/types/data/employees"
+import { Employee, EmployeesFormData } from "@/app/types/data/employees.type"
 
 
 export const createEmployeeFormData = (data: EmployeesFormData) => {

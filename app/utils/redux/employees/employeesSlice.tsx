@@ -1,6 +1,6 @@
 import { createEmployeeFormData, parseEmployeeFormDataToUpdate } from "@/app/services/employee";
-import { Employee, EmployeesFormData, EmployeesInit } from "@/app/types/data/employees";
-import { ErrorResponse } from "@/app/types/data/response";
+import { Employee, EmployeesFormData, EmployeesInit } from "@/app/types/data/employees.type";
+import { ErrorResponse } from "@/app/types/data/response.type";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
@@ -9,7 +9,13 @@ const initialState: EmployeesInit = {
     employees: [],
     // need for every employee to have seperate state for ModalWindow of every employee
     employeesIsModalOpen: [],
-    status: null,
+    status: {
+        getAll: null,
+        getOne: null,
+        create: null,
+        delete: null,
+        update: null,
+    },
     error: {
         getAll: null,
         getOne: null,
@@ -165,80 +171,80 @@ const employeesSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            // GET ALL DEPARTMENTS
+            // GET ALL EMPLOYEES
             .addCase(fetchEmployees.pending, (state) => {
-                state.status = "loading"
+                state.status.getAll = "loading"
                 state.error.getAll = null
             })
             .addCase(fetchEmployees.fulfilled, (state, action: PayloadAction<Employee[] | undefined>) => {
-                state.status = "succeeded"
+                state.status.getAll = "succeeded"
                 if (action.payload) {
                     state.employees = action.payload
                     state.employeesIsModalOpen = new Array(state.employees.length).fill(false)
                 }
             })
             .addCase(fetchEmployees.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.getAll = "failed"
                 state.error.getAll = action.payload as ErrorResponse
             })
 
-            // GET ONE DEPARTMENTS
+            // GET ONE EMPLOYEES
             .addCase(fetchOneEmployee.pending, (state) => {
-                state.status = "loading"
+                state.status.getOne = "loading"
                 state.error.getOne = null
             })
             .addCase(fetchOneEmployee.fulfilled, (state, action: PayloadAction<Employee[] | undefined>) => {
-                state.status = "succeeded"
+                state.status.getOne = "succeeded"
                 if (action.payload) {
                     state.employees = action.payload
                     state.employeesIsModalOpen = new Array(state.employees.length).fill(false)
                 }
             })
             .addCase(fetchOneEmployee.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.getOne = "failed"
                 state.error.getOne = action.payload as ErrorResponse
             })
 
-            // CREATE DEPARTMENT
+            // CREATE EMPLOYEES
             .addCase(createEmployee.pending, (state) => {
-                state.status = "loading"
+                state.status.create = "loading"
                 state.error.create = null
             })
             .addCase(createEmployee.fulfilled, (state, action: PayloadAction<Employee[] | undefined>) => {
-                state.status = "succeeded"
+                state.status.create = "succeeded"
                 if (action.payload) {
                     state.employees = action.payload
                     state.employeesIsModalOpen = new Array(state.employees.length).fill(false)
                 }
             })
             .addCase(createEmployee.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.create = "failed"
                 state.error.create = action.payload as ErrorResponse
             })
 
-            // UPDATE DEPARTMENT
+            // UPDATE EMPLOYEES
             .addCase(updateEmployee.pending, (state) => {
-                state.status = "loading"
+                state.status.update = "loading"
                 state.error.update = null
             })
             .addCase(updateEmployee.fulfilled, (state) => {
-                state.status = "succeeded"
+                state.status.update = "succeeded"
             })
             .addCase(updateEmployee.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.update = "failed"
                 state.error.update = action.payload as ErrorResponse
             })
 
-            // DELETE DEPARTMENTS
+            // DELETE EMPLOYEES
             .addCase(deleteEmployee.pending, (state) => {
-                state.status = "loading"
+                state.status.delete = "loading"
                 state.error.delete = null
             })
             .addCase(deleteEmployee.fulfilled, (state) => {
-                state.status = "succeeded"
+                state.status.delete = "succeeded"
             })
             .addCase(deleteEmployee.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.delete = "failed"
                 state.error.delete = action.payload as ErrorResponse
             })
     }

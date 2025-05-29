@@ -1,5 +1,5 @@
-import { BookingService, BookingServiceFormData, BookingServiceInit } from "@/app/types/data/booking_services";
-import { ErrorResponse } from "@/app/types/data/response";
+import { BookingService, BookingServiceFormData, BookingServiceInit } from "@/app/types/data/booking_services.type";
+import { ErrorResponse } from "@/app/types/data/response.type";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
@@ -7,7 +7,11 @@ import { AxiosError } from "axios";
 const initialState: BookingServiceInit = {
     bookingServices: [],
     bookingServicesIsModalOpen: [],
-    status: null,
+    status: {
+        getAll: null,
+        create: null,
+        delete: null,
+    },
     error: {
         getAll: null,
         create: null,
@@ -100,28 +104,28 @@ const bookingServicesSlice = createSlice({
         builder
             // GET BOOKING SERVICES
             .addCase(fetchBookingServices.pending, (state) => {
-                state.status = "loading"
+                state.status.getAll = "loading"
                 state.error.getAll = null
             })
             .addCase(fetchBookingServices.fulfilled, (state, action: PayloadAction<BookingService[] | undefined>) => {
-                state.status = "succeeded"
+                state.status.getAll = "succeeded"
                 if (action.payload) {
                     state.bookingServices = action.payload
                     state.bookingServicesIsModalOpen = new Array(state.bookingServices.length).fill(false)
                 }
             })
             .addCase(fetchBookingServices.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.getAll = "failed"
                 state.error.getAll = action.payload as ErrorResponse
             })
 
             // CREATE BOOKING SERVICES
             .addCase(createBookingService.pending, (state) => {
-                state.status = "loading"
+                state.status.create = "loading"
                 state.error.create = null
             })
             .addCase(createBookingService.fulfilled, (state, action: PayloadAction<BookingService[] | undefined>) => {
-                state.status = "succeeded"
+                state.status.create = "succeeded"
                 console.log(action.payload)
                 if (action.payload) {
                     state.bookingServices = action.payload
@@ -129,20 +133,20 @@ const bookingServicesSlice = createSlice({
                 }
             })
             .addCase(createBookingService.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.create = "failed"
                 state.error.create = action.payload as ErrorResponse
             })
 
             // DELETE BOOKING SERVICES
             .addCase(deleteBookingService.pending, (state) => {
-                state.status = "loading"
+                state.status.delete = "loading"
                 state.error.delete = null
             })
             .addCase(deleteBookingService.fulfilled, (state) => {
-                state.status = "succeeded"
+                state.status.delete = "succeeded"
             })
             .addCase(deleteBookingService.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.delete = "failed"
                 state.error.delete = action.payload as ErrorResponse
             })
     }

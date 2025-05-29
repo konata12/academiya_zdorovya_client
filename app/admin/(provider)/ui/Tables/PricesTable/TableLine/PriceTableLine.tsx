@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './PriceTableLine.module.scss'
-import { PriceFormData, PriceTableData, PriceVariantOptionsEnum } from '@/app/types/data/prices'
+import { PriceFormData, PriceTableData, PriceVariantOptionsEnum } from '@/app/types/data/prices.type'
 
 export default function PriceTableLine({
     pricing,

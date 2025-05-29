@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { RootState } from '@/app/utils/redux/store';
 import { setUpdateError, updateDepartment as updateDepartmentAction, updateDepartmentInState } from "@/app/utils/redux/departments/departmentsSlice"
 import { setFormDefaultValues as setFormDefaultValuesRedux } from '@/app/utils/redux/navigation/navigationSlice'
-import { Department, DepartmentsDefaultFormData, DepartmentsFormData, DepartmentsFormDataEnum } from '@/app/types/data/departments';
+import { Department, DepartmentsDefaultFormData, DepartmentsFormData, DepartmentsFormDataEnum } from '@/app/types/data/departments.type';
 import { isEqual } from 'lodash';
 import InputContainer from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainer/InputContainer';
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton';

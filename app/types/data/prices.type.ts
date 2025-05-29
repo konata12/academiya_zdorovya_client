@@ -1,4 +1,4 @@
-import { ErrorsResponses, Status } from "@/app/types/data/response"
+import { ErrorsResponses, Status } from "@/app/types/data/response.type"
 
 // GENERAL TYPES
 export interface Price extends PriceFormData {

@@ -1,4 +1,4 @@
-import { AboutTreatment, AboutTreatmentFormData } from "@/app/types/data/about_treatment"
+import { AboutTreatment, AboutTreatmentFormData } from "@/app/types/data/about_treatment.type"
 
 export const createFormData = (data: AboutTreatmentFormData) => {
     const formData = new FormData()

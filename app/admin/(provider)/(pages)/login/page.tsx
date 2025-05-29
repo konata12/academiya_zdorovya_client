@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from './Login.module.scss'
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { login } from "@/app/utils/redux/auth/authSlice";
-import type { Login } from "@/app/types/data/auth";
+import type { Login } from "@/app/types/data/auth.type";
 import { RootState } from "@/app/utils/redux/store";
 import { fullfilled } from "@/app/services/response";
 
@@ -16,10 +16,6 @@ export default function Login() {
     const { accessToken, error } = useAppSelector((state: RootState) => state.auth)
     const dispatch = useAppDispatch()
     const router = useRouter()
-
-    useEffect(() => {
-        if (accessToken) router.push('/admin/departments')
-    }, [accessToken])
 
     const formSubmit = async (e: React.FormEvent) => {
         e.preventDefault()

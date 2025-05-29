@@ -1,5 +1,12 @@
 import { ChangeEvent } from "react"
+import { Path, RegisterOptions, UseFormRegister, UseFormSetValue } from "react-hook-form";
 
+export interface ReactHookFromComponent<T extends Record<string, any>> {
+    name: Path<T>
+    register: UseFormRegister<T>;
+    registerOptions?: RegisterOptions<T>;
+    setValue?: UseFormSetValue<T>
+}
 export interface CheckboxProps {
     handleFunction: (event: ChangeEvent<HTMLInputElement>) => void
     isChecked: boolean

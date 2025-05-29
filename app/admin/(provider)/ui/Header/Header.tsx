@@ -3,12 +3,12 @@ import logo from '@/public/icons/logo_admin.png'
 import styles from './Header.module.scss'
 import NavLink from '@/app/admin/(provider)/ui/Links/NavLink/NavLink'
 import { routes } from '@/app/admin/(provider)/ui/SideNavigation/SideNavigation'
+import { usePathname } from 'next/navigation'
 
-export default function Header({
-    isLoginPage
-}: {
-    isLoginPage: boolean
-    }) {
+export default function Header() {
+    const pathname = usePathname()
+
+    const isLoginPage = pathname.split('/')[2] === 'login'
     const urlsForRedactive = routes.map(route => route.path)
 
     return (

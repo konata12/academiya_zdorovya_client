@@ -34,7 +34,6 @@ export interface TextareaContainerProps<T extends Record<string, any>>
     register: UseFormRegister<T>;
     registerOptions?: RegisterOptions<T>;
 
-    value: string; // for autosizing textarea
     className?: TextareaContainerStyles;
     minRows?: number;
     maxRows?: number;

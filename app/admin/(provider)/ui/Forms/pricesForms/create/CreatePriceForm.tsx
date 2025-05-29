@@ -22,7 +22,7 @@ import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
 import PriceFormVariant from '@/app/admin/(provider)/ui/Forms/pricesForms/priceVariant/PriceFormVariant'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { AnimatePresence, motion } from 'framer-motion';
-import { PriceSectionEnum, PriceSectionFormData } from '@/app/types/data/prices'
+import { PriceSectionEnum, PriceSectionFormData } from '@/app/types/data/prices.type'
 import { usePathname, useRouter } from 'next/navigation'
 import { getUrlOrderElement } from '@/app/services/navigation'
 import { basicAnimationTransition } from '@/app/utils/animations/variables'

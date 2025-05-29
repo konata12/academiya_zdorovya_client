@@ -1,4 +1,4 @@
-import { EmployeesBackgroundImgColorType, EmployeesCheckboxesType, EmployeesFormDataUI, EmployeesModalsStatesType } from "@/app/types/data/employees";
+import { EmployeesBackgroundImgColorType, EmployeesCheckboxesType, EmployeesFormDataUI, EmployeesModalsStatesType } from "@/app/types/data/employees.type";
 import { createSlice } from "@reduxjs/toolkit";
 import { set } from "lodash";
 

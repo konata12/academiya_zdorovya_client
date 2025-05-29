@@ -1,12 +1,16 @@
-import { AccessToken, Auth, Login } from "@/app/types/data/auth";
-import { ErrorResponse } from "@/app/types/data/response";
+import { AccessToken, Auth, Login } from "@/app/types/data/auth.type";
+import { ErrorResponse } from "@/app/types/data/response.type";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 
+
 const initialState: Auth = {
     accessToken: null,
-    status: null,
+    status: {
+        login: null,
+        refresh: null,
+    },
     error: {
         login: null,
         refresh: null,
@@ -59,30 +63,31 @@ export const authSlice = createSlice({
         builder
             // LOGIN
             .addCase(login.pending, (state) => {
-                state.status = "loading"
+                state.status.login = "loading"
                 state.error.login = null
             })
             .addCase(login.fulfilled, (state, action: PayloadAction<AccessToken>) => {
-                state.status = "succeeded"
+                state.status.login = "succeeded"
                 state.accessToken = action.payload.access_token
             })
             .addCase(login.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.login = "failed"
+                state.accessToken = null
                 state.error.login = action.payload as ErrorResponse
             })
 
             // REFRESH
             .addCase(refreshTokens.pending, (state) => {
-                state.status = "loading"
-                state.accessToken = null
+                state.status.refresh = "loading"
                 state.error.refresh = null
             })
             .addCase(refreshTokens.fulfilled, (state, action: PayloadAction<AccessToken>) => {
-                state.status = "succeeded"
+                state.status.refresh = "succeeded"
                 state.accessToken = action.payload.access_token
             })
             .addCase(refreshTokens.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.refresh = "failed"
+                state.accessToken = null
                 state.error.refresh = action.payload as ErrorResponse
             })
     },

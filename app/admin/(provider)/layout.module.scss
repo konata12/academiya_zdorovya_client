@@ -7,42 +7,5 @@
         height: 100%;
         display: flex;
         flex-direction: column;
-
-        .main {
-            flex-grow: 1;
-            padding: 72px 0 78px;
-            color: $text-color-black;
-
-            .mainContainer {
-                display: flex;
-                flex-direction: row;
-                gap: 64px;
-                height: 100%;
-                padding: 93px 24px;
-
-                .empty {
-                    max-width: 300px;
-                    width: 100%;
-                    color: transparent;
-                }
-
-                .children {
-                    max-width: 1028px;
-                    height: 100%;
-                    width: 100%;
-                    margin: 0 auto;
-                }
-
-                .not_logged_in {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100%;
-                    width: 100%;
-    
-                    font-size: $pc-h1-fz;
-                }
-            }
-        }
     }
 }

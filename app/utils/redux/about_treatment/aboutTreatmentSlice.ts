@@ -1,15 +1,19 @@
 import { createFormData, parseFormDataToUpdate } from "@/app/services/about_treatment"
-import { AboutTreatment, AboutTreatmentFormData, AboutTreatmentInit } from "@/app/types/data/about_treatment"
-import { ErrorResponse } from "@/app/types/data/response"
+import { AboutTreatment, AboutTreatmentFormData, AboutTreatmentInit } from "@/app/types/data/about_treatment.type"
+import { ErrorResponse } from "@/app/types/data/response.type"
 import axiosInstance from "@/app/utils/axios"
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AxiosError } from "axios"
-import { image } from "framer-motion/client"
 
 const initialState: AboutTreatmentInit = {
     aboutTreatments: [],
     aboutTreatmentsIsModalOpen: [],
-    status: null,
+    status: {
+        getAll: null,
+        create: null,
+        delete: null,
+        update: null
+    },
     error: {
         getOne: null,
         getAll: null,
@@ -69,12 +73,11 @@ export const updateAboutTreatment = createAsyncThunk('aboutTreatment/update', as
     { rejectWithValue }
 ) => {
     try {
-        console.log(123)
         const formData = createFormData(data)
         for (const [key, value] of formData.entries()) {
             console.log(key, value);
         }
-        console.log('message')
+
         const response = await axiosInstance.put<AboutTreatment[]>(`${baseUrl}/admin/update/${id}`, formData)
         console.log(response)
         return response.data
@@ -149,30 +152,30 @@ const aboutTreatmentSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            // GET PRICE SECTIONS
+            // GET ABOUT TREATMENTS
             .addCase(fetchAboutTreatments.pending, (state) => {
-                state.status = "loading"
+                state.status.getAll = "loading"
                 state.error.getAll = null
             })
             .addCase(fetchAboutTreatments.fulfilled, (state, action: PayloadAction<AboutTreatment[] | undefined>) => {
-                state.status = "succeeded"
+                state.status.getAll = "succeeded"
                 if (action.payload) {
                     state.aboutTreatments = action.payload
                     state.aboutTreatmentsIsModalOpen = new Array(state.aboutTreatments.length).fill(false)
                 }
             })
             .addCase(fetchAboutTreatments.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.getAll = "failed"
                 state.error.getAll = action.payload as ErrorResponse
             })
 
-            // CREATE PRICE SECTION
+            // CREATE ABOUT TREATMENT
             .addCase(createAboutTreatment.pending, (state) => {
-                state.status = "loading"
+                state.status.create = "loading"
                 state.error.create = null
             })
             .addCase(createAboutTreatment.fulfilled, (state, action: PayloadAction<AboutTreatment[] | undefined>) => {
-                state.status = "succeeded"
+                state.status.create = "succeeded"
                 console.log(action.payload)
                 if (action.payload) {
                     state.aboutTreatments = action.payload
@@ -180,33 +183,33 @@ const aboutTreatmentSlice = createSlice({
                 }
             })
             .addCase(createAboutTreatment.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.create = "failed"
                 state.error.create = action.payload as ErrorResponse
             })
 
-            // UPDATE PRICE SECTION
+            // UPDATE ABOUT TREATMENT
             .addCase(updateAboutTreatment.pending, (state) => {
-                state.status = "loading"
+                state.status.update = "loading"
                 state.error.update = null
             })
             .addCase(updateAboutTreatment.fulfilled, (state) => {
-                state.status = "succeeded"
+                state.status.update = "succeeded"
             })
             .addCase(updateAboutTreatment.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.update = "failed"
                 state.error.update = action.payload as ErrorResponse
             })
 
-            // DELETE BOOKING SERVICES
+            // DELETE ABOUT TREATMENT
             .addCase(deleteAboutTreatment.pending, (state) => {
-                state.status = "loading"
+                state.status.delete = "loading"
                 state.error.delete = null
             })
             .addCase(deleteAboutTreatment.fulfilled, (state) => {
-                state.status = "succeeded"
+                state.status.delete = "succeeded"
             })
             .addCase(deleteAboutTreatment.rejected, (state, action) => {
-                state.status = "failed"
+                state.status.delete = "failed"
                 state.error.delete = action.payload as ErrorResponse
             })
     }
