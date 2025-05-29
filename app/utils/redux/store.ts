@@ -1,13 +1,13 @@
 // app/store.ts
 import authSlice from "@/app/utils/redux/auth/authSlice";
 import departmentsSlice from "@/app/utils/redux/departments/departmentsSlice";
+import navigationSlice from "@/app/utils/redux/navigation/navigationSlice";
 import bookingServicesSlice from "@/app/utils/redux/booking_services/bookingServicesSlice";
 import pricesSlice from '@/app/utils/redux/prices/pricesSlice';
 import pricesCreateFormUiSlice from '@/app/utils/redux/prices/pricesCreateFormUiSlice';
 import aboutTreatment from '@/app/utils/redux/about_treatment/aboutTreatmentSlice'
 import employeesSlice from '@/app/utils/redux/employees/employeesSlice'
 import employeesFormUISlice from '@/app/utils/redux/employees/employeesFormUISlice'
-import sideNavigationUISlice from '@/app/utils/redux/side_navigation/sideNavigationUISlice'
 import aboutTreatmentsFormUISlice from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice'
 import newsSlice from '@/app/utils/redux/news/newsSlice'
 import detailsOrderSlice from '@/app/utils/redux/details/detailsOrderSlice'
@@ -22,11 +22,11 @@ export type AppDispatch = typeof store.dispatch;
 // Create the store
 const store = configureStore({
     reducer: {
+        navigation: navigationSlice,
         // UI
         aboutTreatmentsFormUI: aboutTreatmentsFormUISlice,
         pricesCreateFormUI: pricesCreateFormUiSlice,
         employeesFormUI: employeesFormUISlice,
-        sideNavigationUI: sideNavigationUISlice,
 
         detailsOrderSlice: detailsOrderSlice,
         
