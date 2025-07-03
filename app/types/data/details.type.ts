@@ -8,37 +8,45 @@ export interface DetailsDataRenserElementBasicType {
 export type descriptionImageSize = 'big' | 'small'
 
 // RESPONSE DATA
-export interface Paragraph extends DetailsDataRenserElementBasicType {
+export interface DescriptionTitle extends DetailsDataRenserElementBasicType {
+    title: string
+}
+export interface DescriptionParagraph extends DetailsDataRenserElementBasicType {
     text: string
 }
-export interface Quoute extends DetailsDataRenserElementBasicType {
+export interface DescriptionQuoute extends DetailsDataRenserElementBasicType {
     text: string
     author: string
 }
-export interface Image extends DetailsDataRenserElementBasicType {
+export interface DescriptionList extends DetailsDataRenserElementBasicType {
+    numerable: boolean
+    options: string[]
+}
+export interface DescriptionImage extends DetailsDataRenserElementBasicType {
     description: string
     size: descriptionImageSize
     imgUrl: string
 }
-export interface Title extends DetailsDataRenserElementBasicType {
-    title: string
-}
-export interface List extends DetailsDataRenserElementBasicType {
-    numerable: boolean
-    options: string[]
+export interface DescriptionFormImage extends DetailsDataRenserElementBasicType {
+    description: string
+    size: descriptionImageSize
+    image: FileList | null
 }
 
-export type DetailsRedactorType = Paragraph
-    | Quoute
-    | Image
-    | Title
-    | List
+export type DetailsRedactorType = DescriptionParagraph
+    | DescriptionQuoute
+    | DescriptionImage
+    | DescriptionTitle
+    | DescriptionList
 
 // FORM DATA
 export interface DetailsFromElementBasicType {
     orderId: string
 }
 
+export interface TitleFormData extends DetailsFromElementBasicType {
+    title: string
+}
 export interface ParagraphFormData extends DetailsFromElementBasicType {
     text: string
 }
@@ -46,32 +54,28 @@ export interface QuouteFormData extends DetailsFromElementBasicType {
     text: string
     author: string
 }
+export interface ListFormData extends DetailsFromElementBasicType {
+    numerable: boolean
+    options: string[]
+}
 export interface ImageFormData extends DetailsFromElementBasicType {
     description: string
     size: descriptionImageSize
     image: FileList | null
 }
-export interface TitleFormData extends DetailsFromElementBasicType {
-    title: string
-}
-export interface ListFormData extends DetailsFromElementBasicType {
-    numerable: boolean
-    options: string[]
-}
 
 export interface DetailsFormData {
+    titles: TitleFormData[]
     paragraphs: ParagraphFormData[]
     quoutes: QuouteFormData[]
-    titles: TitleFormData[]
     lists: ListFormData[]
     images: ImageFormData[]
 }
-export type DetailsFormDataType = ParagraphFormData
+export type DetailsFormDataType = TitleFormData
+    | ParagraphFormData
     | QuouteFormData
-    | ImageFormData
-    | TitleFormData
     | ListFormData
-
+    | ImageFormData
 
 export type DetailsFormDataEnumType = `${DetailsFormDataEnum}`
 
@@ -80,16 +84,19 @@ interface StyledComponent<T extends Record<string, any>>
     extends ReactHookFromComponent<T> {
     className?: string
 }
-export interface TitleFormComponentProps<T extends Record<string, any>>
-    extends StyledComponent<T> {
+interface HandleChangeComponent {
     index: number
+    componentData: OrderComponent
 }
-
+export interface TitleFormComponentProps<T extends Record<string, any>>
+    extends StyledComponent<T>,
+    HandleChangeComponent { }
 export interface ParagraphFormComponentProps<T extends Record<string, any>>
-    extends StyledComponent<T> { }
-
+    extends StyledComponent<T>,
+    HandleChangeComponent { }
 export interface QuouteFormComponentProps<T extends Record<string, any>>
-    extends ReactHookFromComponent<T> {
+    extends ReactHookFromComponent<T>,
+    HandleChangeComponent {
     className?: {
         container?: string
         quoute?: string
@@ -99,16 +106,17 @@ export interface QuouteFormComponentProps<T extends Record<string, any>>
     authorRegisterOptions?: RegisterOptions<T>
 }
 export interface ListFormComponentProps<T extends Record<string, any>>
-    extends ReactHookFromComponent<T> {
+    extends ReactHookFromComponent<T>,
+    HandleChangeComponent {
     className?: {
         container?: string
         option?: string
     }
     list: ListFormData
 }
-
 export interface ImageFormComponentProps<T extends Record<string, any>>
-    extends ReactHookFromComponent<T> {
+    extends ReactHookFromComponent<T>,
+    HandleChangeComponent {
     className?: {
         container?: string
         image?: string
@@ -118,6 +126,7 @@ export interface ImageFormComponentProps<T extends Record<string, any>>
     imageName: Path<T>
     imageRegisterOptions?: RegisterOptions<T>
 }
+
 
 export interface DetailsFromProps {
     titles?: boolean
@@ -131,7 +140,7 @@ export interface DetailsFromProps {
 // REDUX ORDER SLICE
 export interface OrderComponent {
     componentType: DetailsFormDataEnumType
-    componentData: DetailsFromElementBasicType
+    componentData: DetailsFormDataType
 }
 
 export interface ComponentOrderState {
@@ -146,3 +155,35 @@ export enum DetailsFormDataEnum {
     LISTS = 'lists',
     IMAGES = 'images',
 }
+
+export enum TitleFormDataEnum {
+    TITLE = 'title',
+}
+export enum ParagraphFormDataEnum {
+    TEXT = 'text',
+}
+export enum QuouteFormDataEnum {
+    TEXT = 'text',
+    AUTHOR = 'author',
+}
+export enum ListFormDataEnum {
+    NUMERABLE = 'numerable',
+    OPTIONS = 'options',
+}
+export enum ImageFormDataEnum {
+    DESCRIPTION = 'description',
+    SIZE = 'size',
+    IMAGE = 'image',
+}
+
+export type TitleFormDataEnumType = `${TitleFormDataEnum}`
+export type ParagraphFormDataEnumType = `${ParagraphFormDataEnum}`
+export type QuouteFormDataEnumType = `${QuouteFormDataEnum}`
+export type ListFormDataEnumType = `${ListFormDataEnum}`
+export type ImageFormDataEnumType = `${ImageFormDataEnum}`
+
+export type ComponentsFormDataEnum = TitleFormDataEnumType
+    | ParagraphFormDataEnumType
+    | QuouteFormDataEnumType
+    | ListFormDataEnumType
+    | ImageFormDataEnumType

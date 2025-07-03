@@ -27,39 +27,42 @@ export default function Login() {
         }
     }
 
-    // If the user is already logged in, prevent rendering the login form
-    if (accessToken) return <div className={styles.isLogged}>
-        Ви вже увійшли, зараз вас перенесе на сторінку відділень
-    </div>
 
-    return (
-        <div className={styles.container}>
-            <form
-                className={styles.form}
-                onSubmit={formSubmit}
-            >
-                <p className={`title lg`}>Вхід</p>
-                <input
-                    className={`input ${styles.login}`}
-                    type="text"
-                    placeholder="Логін"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                    required
-                />
-                <input
-                    className={`input ${styles.password}`}
-                    type="password"
-                    placeholder="Пароль"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                {error.login && <p className='error'>{error.login.message}</p>}
-                <button className={`btn blue xl ${styles.btn}`}>
-                    Увійти
-                </button>
-            </form>
-        </div>
+    return (<>
+        {accessToken
+            ? (<div className={styles.isLogged}>
+                Ви вже увійшли, зараз вас перенесе на сторінку відділень
+            </div>)
+            : (
+                <div className={styles.container}>
+                    <form
+                        className={styles.form}
+                        onSubmit={formSubmit}
+                    >
+                        <p className={`title lg`}>Вхід</p>
+                        <input
+                            className={`input ${styles.login}`}
+                            type="text"
+                            placeholder="Логін"
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value)}
+                            required
+                        />
+                        <input
+                            className={`input ${styles.password}`}
+                            type="password"
+                            placeholder="Пароль"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        {error.login && <p className='error'>{error.login.message}</p>}
+                        <button className={`btn blue xl ${styles.btn}`}>
+                            Увійти
+                        </button>
+                    </form>
+                </div>
+            )}
+    </>
     );
 }

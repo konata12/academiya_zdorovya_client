@@ -16,7 +16,7 @@ export default function page() {
                     className='btn blue md'
                     href='/admin/news/create'
                 >
-                    Повернутись до новин
+                    Повернутись до створення
                 </SafeLink>
             </div>
 

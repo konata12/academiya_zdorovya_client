@@ -24,8 +24,6 @@
     }
 
     .text {
-        margin-top: 0;
-
         font-size: $details-from-quoute-fz;
         color: $primary-color;
 
@@ -36,7 +34,6 @@
 
     .author {
         width: 100%;
-        margin-top: 0;
 
         font-size: $details-from-quoute-fz;
         color: rgba-color($text-color-black, 0.5);

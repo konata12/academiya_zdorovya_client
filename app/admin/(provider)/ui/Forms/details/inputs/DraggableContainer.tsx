@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styles from './DraggableContainer.module.scss'
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { DetailsFormDataEnum, DetailsFormDataEnumType } from '@/app/types/data/details.type';
+import CloseButton from '@/app/common_ui/animated_components/CloseButton/CloseButton';
 
 
 export interface DraggableContainerProps {
@@ -10,6 +11,7 @@ export interface DraggableContainerProps {
     id: string
     elementType: DetailsFormDataEnumType
     index: number
+    handleDelete: () => void
 }
 
 export default function DraggableContainer({
@@ -17,40 +19,49 @@ export default function DraggableContainer({
     id,
     elementType,
     index,
+    handleDelete
 }: DraggableContainerProps) {
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition
+    } = useSortable({
         id
     });
+
+    const dafeultPadding = 64
+    const setBtnPositionAfterPadding = (padding: number) => {
+        buttonPosition.top = `calc((100% - ${padding}px) / 2 + ${padding}px)`
+        buttonPosition.transform = 'translateY(-50%)'
+    }
+
     const style: React.CSSProperties = {
         transform: CSS.Transform.toString(transform),
         transition,
-        outline: transform ? '1px solid #2F3035' : undefined,
     };
-
     const buttonPosition: React.CSSProperties = {}
 
-    switch (elementType) {
-        case DetailsFormDataEnum.TITLES:
-            index === 0
-                ? (
-                    buttonPosition.top = '50%',
-                    buttonPosition.transform = 'translateY(-50%)'
-                )
-                : buttonPosition.bottom = '6px'
-            break;
+    if (!index) {
+        buttonPosition.top = '50%'
+        buttonPosition.transform = 'translateY(-50%)'
+    } else {
+        switch (elementType) {
+            case DetailsFormDataEnum.TITLES:
+                setBtnPositionAfterPadding(128)
+                break;
 
-        case DetailsFormDataEnum.PARAGRAPHS:
-            buttonPosition.bottom = '0'
-            break;
+            case DetailsFormDataEnum.PARAGRAPHS:
+            case DetailsFormDataEnum.QUOUTES:
+            case DetailsFormDataEnum.LISTS:
+            case DetailsFormDataEnum.IMAGES:
+                setBtnPositionAfterPadding(dafeultPadding)
+                break;
 
-        case DetailsFormDataEnum.QUOUTES:
-        case DetailsFormDataEnum.LISTS:
-            buttonPosition.top = 'calc((100% - 64px) / 2)'
-            buttonPosition.transform = 'translateY(calc((100% + 64px) / 2))'
-            break;
-
-        default:
-            break;
+            default:
+                break;
+        }
     }
 
     return (
@@ -61,13 +72,12 @@ export default function DraggableContainer({
             {...attributes}
             {...listeners}
         >
-            <button
-                type='button'
-                className={styles.deleteBtn}
+            <CloseButton
+                handleClick={handleDelete}
+                hoverCrossColor='#FFF'
                 style={buttonPosition}
-            >
-                X
-            </button>
+                className={styles.deleteBtn}
+            />
             {children}
         </div>
     )

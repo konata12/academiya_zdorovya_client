@@ -1,4 +1,4 @@
-import { DetailsFormData, DetailsFormDataEnumType, OrderComponent } from "@/app/types/data/details.type"
+import { DetailsFormData, DetailsFormDataEnum, DetailsFormDataEnumType, DetailsFormDataType, ImageFormData, ListFormData, OrderComponent, ParagraphFormData, QuouteFormData, TitleFormData } from "@/app/types/data/details.type"
 import { setDetailsStateOrder } from "@/app/utils/redux/details/detailsOrderSlice"
 import { useAppDispatch } from "@/app/utils/redux/hooks"
 import { DragEndEvent } from "@dnd-kit/core"
@@ -8,6 +8,45 @@ import { FieldArrayWithId } from "react-hook-form"
 
 export function useOrderedForm() {
     const dispatch = useAppDispatch()
+
+    const renderOrderedComponents = useCallback((order: OrderComponent[]): DetailsFormData => {
+        const data: DetailsFormData = {
+            titles: [],
+            paragraphs: [],
+            quoutes: [],
+            lists: [],
+            images: [],
+        }
+
+        order.forEach((component) => {
+            switch (component.componentType) {
+                case DetailsFormDataEnum.TITLES:
+                    data.titles.push(component.componentData as TitleFormData)
+                    break;
+
+                case DetailsFormDataEnum.PARAGRAPHS:
+                    data.paragraphs.push(component.componentData as ParagraphFormData)
+                    break;
+
+                case DetailsFormDataEnum.QUOUTES:
+                    data.quoutes.push(component.componentData as QuouteFormData)
+                    break;
+
+                case DetailsFormDataEnum.LISTS:
+                    data.lists.push(component.componentData as ListFormData)
+                    break;
+
+                case DetailsFormDataEnum.IMAGES:
+                    data.images.push(component.componentData as ImageFormData)
+                    break;
+
+                default:
+                    throw Error('renderOrderedComponents error')
+            }
+        })
+
+        return data
+    }, [])
 
     // DRAG AND DROP HANDLER
     const handleDragEnd = useCallback((event: DragEndEvent, order: OrderComponent[]) => {
@@ -47,6 +86,8 @@ export function useOrderedForm() {
     }, [])
 
     return {
+        renderOrderedComponents,
+        
         handleDragEnd,
         getFieldArrayIdByOrderId,
         getFieldArrayIndexByOrderId

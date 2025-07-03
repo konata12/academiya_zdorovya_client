@@ -21,6 +21,16 @@ const detailsOrderSlice = createSlice({
                 return component.componentData.orderId !== action.payload
             });
         },
+        updateDetailsComponent(state, action: {
+            payload: {
+                detailsComponent: OrderComponent,
+                index: number,
+            }
+        }) {
+            const index = action.payload.index
+            
+            state.order[index] = action.payload.detailsComponent
+        },
         setDetailsStateOrder(state, action: {
             payload: OrderComponent[]
         }) {
@@ -35,6 +45,7 @@ const detailsOrderSlice = createSlice({
 export const {
     addDetailsComponent,
     removeDetailsComponent,
+    updateDetailsComponent,
     setDetailsStateOrder,
 
     resetDetailsComponentsOrder,

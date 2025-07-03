@@ -1,13 +1,13 @@
-import { descriptionImageSize, DetailsFormData, DetailsFormDataEnum, DetailsFromProps } from '@/app/types/data/details.type'
-import React from 'react'
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
+import { DescriptionFormImage, DescriptionImage, descriptionImageSize, DescriptionList, DescriptionParagraph, DescriptionQuoute, DescriptionTitle, DetailsFormData, DetailsFormDataEnum, DetailsFormDataEnumType, DetailsFormDataType, DetailsFromProps, ImageFormData, ListFormData, ParagraphFormData, QuouteFormData, TitleFormData } from '@/app/types/data/details.type'
+import React, { useCallback } from 'react'
+import { SubmitHandler, useFieldArray, UseFieldArrayRemove, useForm } from 'react-hook-form'
 import styles from './DetailsForm.module.scss'
 import { v4 as uuidv4 } from 'uuid';
 import DetailsTitleInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsTitleInput/DetailsTitleInput'
 import CreateDetailsInputBtn from '@/app/admin/(provider)/ui/Forms/details/createDetailsInputBtn/CreateDetailsInputBtn'
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import { addDetailsComponent } from '@/app/utils/redux/details/detailsOrderSlice'
+import { addDetailsComponent, removeDetailsComponent } from '@/app/utils/redux/details/detailsOrderSlice'
 import { RootState } from '@/app/utils/redux/store';
 import { DndContext, PointerSensor, useDroppable, useSensor, useSensors } from '@dnd-kit/core';
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
@@ -28,6 +28,14 @@ export default function DetailsForm({
     images,
 }: DetailsFromProps) {
     const order = useAppSelector((state: RootState) => state.detailsOrderSlice.order)
+
+    const {
+        renderOrderedComponents,
+
+        handleDragEnd,
+        getFieldArrayIdByOrderId,
+        getFieldArrayIndexByOrderId,
+    } = useOrderedForm()
     const { setNodeRef } = useDroppable({
         id: 'DetailsForm'
     })
@@ -38,11 +46,6 @@ export default function DetailsForm({
             },
         }),
     );
-    const {
-        handleDragEnd,
-        getFieldArrayIdByOrderId,
-        getFieldArrayIndexByOrderId,
-    } = useOrderedForm()
 
     const dispatch = useAppDispatch()
 
@@ -52,9 +55,20 @@ export default function DetailsForm({
         control,
         setValue,
         watch,
-        formState: { errors },
-    } = useForm<DetailsFormData>()
+    } = useForm<DetailsFormData>({
+        defaultValues: renderOrderedComponents(order)
+    })
+    const gg = watch()
 
+    // FIELD ARRAYS
+    const {
+        fields: titleFields,
+        append: appendTitle,
+        remove: removeTitle,
+    } = useFieldArray({ // needs array of objects to work properly
+        control,
+        name: DetailsFormDataEnum.TITLES,
+    });
     const {
         fields: paragraphFields,
         append: appendParagraph,
@@ -70,14 +84,6 @@ export default function DetailsForm({
     } = useFieldArray({ // needs array of objects to work properly
         control,
         name: DetailsFormDataEnum.QUOUTES,
-    });
-    const {
-        fields: titleFields,
-        append: appendTitle,
-        remove: removeTitle,
-    } = useFieldArray({ // needs array of objects to work properly
-        control,
-        name: DetailsFormDataEnum.TITLES,
     });
     const {
         fields: listFields,
@@ -98,10 +104,8 @@ export default function DetailsForm({
     });
     const watchImages = watch(DetailsFormDataEnum.IMAGES)
 
-
     // FORM SUBMIT
     const createDetailsFormData: SubmitHandler<DetailsFormData> = (data) => {
-        console.log('**********************************************************', data)
         const dataElements = [
             ...data.titles,
             ...data.paragraphs,
@@ -109,153 +113,229 @@ export default function DetailsForm({
             ...data.lists,
             ...data.images,
         ]
-        // const titles = []
+        const titles: DescriptionTitle[] = []
+        const paragraphs: DescriptionParagraph[] = []
+        const quoutes: DescriptionQuoute[] = []
+        const lists: DescriptionList[] = []
+        const images: DescriptionFormImage[] = []
 
-        // order.forEach((orderedElement, i) => {
-        //     if (orderedElement.id === dataElements[i].orderId) {
-        //         switch (orderedElement.type) {
-        //             case DetailsFormDataEnum.TITLES:
-        //                 titles.push({
-        //                     title: (dataElements[i] as TitleFormData).title,
-        //                     order: i
-        //                 })
-        //                 break;
 
-        //             default:
-        //                 break;
-        //         }
-        //     }
-        // })
+        order.forEach((orderedElement, i) => {
+            if (orderedElement.componentData.orderId === dataElements[i].orderId) {
 
-        // console.log(titles)
-    }
+                switch (orderedElement.componentType) {
+                    case DetailsFormDataEnum.TITLES:
+                        titles.push({
+                            title: (dataElements[i] as TitleFormData).title,
+                            order: i
+                        })
+                        break;
 
-    // CREATE INPUT METHODS
-    const createTitle = () => {
-        const orderId = uuidv4()
+                    case DetailsFormDataEnum.PARAGRAPHS:
+                        paragraphs.push({
+                            text: (dataElements[i] as ParagraphFormData).text,
+                            order: i
+                        })
+                        break;
 
-        // create title
-        appendTitle({
-            title: '',
-            orderId
-        });
+                    case DetailsFormDataEnum.QUOUTES:
+                        quoutes.push({
+                            text: (dataElements[i] as QuouteFormData).text,
+                            author: (dataElements[i] as QuouteFormData).author,
+                            order: i
+                        })
+                        break;
 
-        // make title ordered
-        dispatch(addDetailsComponent({
-            componentType: DetailsFormDataEnum.TITLES,
-            componentData: {
-                orderId,
+                    case DetailsFormDataEnum.LISTS:
+                        lists.push({
+                            options: (dataElements[i] as ListFormData).options,
+                            numerable: (dataElements[i] as ListFormData).numerable,
+                            order: i
+                        })
+                        break;
+
+                    case DetailsFormDataEnum.IMAGES:
+                        images.push({
+                            image: (dataElements[i] as ImageFormData).image,
+                            size: (dataElements[i] as ImageFormData).size,
+                            description: (dataElements[i] as ImageFormData).description,
+                            order: i
+                        })
+                        break;
+
+                    default:
+                        break;
+                }
             }
-        }))
+        })
+
+        const parsedFormData = {
+            titles,
+            paragraphs,
+            quoutes,
+            lists,
+            images
+        }
+
+        console.log(parsedFormData)
     }
 
-    const createParagraph = () => {
+    // INPUT METHODS
+    const createInput = useCallback(({
+        elementType,
+        listNumerable = false,
+        imageSize = 'big'
+    }: {
+        elementType: DetailsFormDataEnumType
+        listNumerable?: boolean
+        imageSize?: descriptionImageSize
+    }) => {
         const orderId = uuidv4()
+        let componentData: DetailsFormDataType
 
-        // create paragraphs
-        appendParagraph({
-            text: '',
-            orderId,
-        });
+        // create input
+        switch (elementType) {
+            case DetailsFormDataEnum.TITLES:
+                componentData = {
+                    orderId,
+                    title: ''
+                };
+                appendTitle(componentData);
+                break;
 
-        // make paragraphs ordered
+            case DetailsFormDataEnum.PARAGRAPHS:
+                componentData = {
+                    orderId,
+                    text: ''
+                };
+                appendParagraph(componentData);
+                break;
+
+            case DetailsFormDataEnum.QUOUTES:
+                componentData = {
+                    orderId,
+                    text: '',
+                    author: ''
+                };
+                appendQuoute(componentData);
+                break;
+
+            case DetailsFormDataEnum.LISTS:
+                componentData = {
+                    orderId,
+                    options: [''],
+                    numerable: listNumerable
+                };
+                appendList(componentData);
+                break;
+
+            case DetailsFormDataEnum.IMAGES:
+                componentData = {
+                    orderId,
+                    size: imageSize,
+                    image: null,
+                    description: ''
+                };
+                appendImage(componentData);
+                break;
+
+            default:
+                throw new Error(`Unknown element type: ${elementType}`);
+        }
+
+        // make input ordered
         dispatch(addDetailsComponent({
-            componentType: DetailsFormDataEnum.PARAGRAPHS,
-            componentData: {
-                orderId,
-            }
+            componentType: elementType,
+            componentData
         }))
-    }
+    }, [])
 
-    const createQuoute = () => {
-        const orderId = uuidv4()
+    const deleteInput = useCallback((
+        orderId: string,
+        elementType: DetailsFormDataEnumType
+    ) => {
+        let filedArrayIndex: number = -1
+        let fieldArrayRemove: UseFieldArrayRemove | undefined = undefined
 
-        // create quoute
-        appendQuoute({
-            text: '',
-            author: '',
-            orderId,
-        });
+        switch (elementType) {
+            case DetailsFormDataEnum.TITLES:
+                fieldArrayRemove = removeTitle
+                filedArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.TITLES>(orderId, titleFields)
+                break;
 
-        // make quoute ordered
-        dispatch(addDetailsComponent({
-            componentType: DetailsFormDataEnum.QUOUTES,
-            componentData: {
-                orderId,
-            }
-        }))
-    }
+            case DetailsFormDataEnum.PARAGRAPHS:
+                fieldArrayRemove = removeParagraph
+                filedArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.PARAGRAPHS>(orderId, paragraphFields)
+                break;
 
-    const createList = (numerable: boolean) => {
-        const orderId = uuidv4()
+            case DetailsFormDataEnum.QUOUTES:
+                fieldArrayRemove = removeQuoute
+                filedArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.QUOUTES>(orderId, quouteFields)
+                break;
 
-        // create list
-        appendList({
-            options: [''],
-            numerable,
-            orderId,
-        });
+            case DetailsFormDataEnum.LISTS:
+                fieldArrayRemove = removeList
+                filedArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.LISTS>(orderId, listFields)
+                break;
 
-        // make list ordered
-        dispatch(addDetailsComponent({
-            componentType: DetailsFormDataEnum.LISTS,
-            componentData: {
-                orderId,
-            }
-        }))
-    }
+            case DetailsFormDataEnum.IMAGES:
+                fieldArrayRemove = removeImage
+                filedArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.IMAGES>(orderId, imageFields)
+                break;
 
-    const createImage = (size: descriptionImageSize) => {
-        const orderId = uuidv4()
+            default:
+                break;
+        }
 
-        // create quoute
-        appendImage({
-            size,
-            image: null,
-            description: '',
-            orderId,
-        });
-
-        // make quoute ordered
-        dispatch(addDetailsComponent({
-            componentType: DetailsFormDataEnum.IMAGES,
-            componentData: {
-                orderId,
-            }
-        }))
-    }
+        if (filedArrayIndex === -1 || !fieldArrayRemove) return
+        fieldArrayRemove(filedArrayIndex)
+        dispatch(removeDetailsComponent(orderId))
+    }, [titleFields, paragraphFields, quouteFields, listFields, imageFields])
 
     const formInputsToRender = [
         titles && {
             label: 'Заголовок',
-            createInputHandler: createTitle
+            createInputHandler: () => createInput({ elementType: DetailsFormDataEnum.TITLES })
         },
         paragraphs && {
             label: 'Абзац',
-            createInputHandler: createParagraph
+            createInputHandler: () => createInput({ elementType: DetailsFormDataEnum.PARAGRAPHS })
         },
         quoutes && {
             label: 'Цитата',
-            createInputHandler: createQuoute
+            createInputHandler: () => createInput({ elementType: DetailsFormDataEnum.QUOUTES })
         },
         lists && {
             label: 'Нумерований список',
-            createInputHandler: () => createList(true)
+            createInputHandler: () => createInput({
+                elementType: DetailsFormDataEnum.LISTS,
+                listNumerable: true
+            })
         },
         lists && {
             label: 'Маркований список',
-            createInputHandler: () => createList(false)
+            createInputHandler: () => createInput({
+                elementType: DetailsFormDataEnum.LISTS,
+                listNumerable: false
+            })
         },
         images && {
             label: 'Велика картинка',
-            createInputHandler: () => createImage('big')
+            createInputHandler: () => createInput({
+                elementType: DetailsFormDataEnum.IMAGES,
+                imageSize: 'big'
+            })
         },
         images && {
             label: 'Мала картинка',
-            createInputHandler: () => createImage('small')
+            createInputHandler: () => createInput({
+                elementType: DetailsFormDataEnum.IMAGES,
+                imageSize: 'small'
+            })
         },
     ].filter((input) => !!input)
 
+    // console.log(order)
 
     return (
         <form onSubmit={handleSubmit(createDetailsFormData)}>
@@ -288,6 +368,7 @@ export default function DetailsForm({
                                 id={element.componentData.orderId}
                                 elementType={element.componentType}
                                 index={index}
+                                handleDelete={() => deleteInput(element.componentData.orderId, element.componentType)}
                                 key={index}
                             >
                                 {(() => {
@@ -299,6 +380,7 @@ export default function DetailsForm({
                                             return <DetailsTitleInput<DetailsFormData>
                                                 key={fieldTitleArrayId}
                                                 name={`${DetailsFormDataEnum.TITLES}.${fieldTitleArrayIndex}.title`}
+                                                componentData={element}
                                                 index={index}
                                                 register={register}
                                                 className={styles.orderedComponent}
@@ -308,10 +390,11 @@ export default function DetailsForm({
                                             const fieldParagraphArrayId = getFieldArrayIdByOrderId<DetailsFormDataEnum.PARAGRAPHS>(element.componentData.orderId, paragraphFields)
                                             const fieldParagraphArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.PARAGRAPHS>(element.componentData.orderId, paragraphFields)
 
-
                                             return <DetailsParagraphInput<DetailsFormData>
                                                 key={fieldParagraphArrayId}
                                                 name={`${DetailsFormDataEnum.PARAGRAPHS}.${fieldParagraphArrayIndex}.text`}
+                                                componentData={element}
+                                                index={index}
                                                 register={register}
                                                 className={styles.orderedComponent}
                                             />
@@ -320,12 +403,12 @@ export default function DetailsForm({
                                             const fieldQuouteArrayId = getFieldArrayIdByOrderId<DetailsFormDataEnum.QUOUTES>(element.componentData.orderId, quouteFields)
                                             const fieldQuouteArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.QUOUTES>(element.componentData.orderId, quouteFields)
 
-                                            // console.log(fieldQuouteArrayIndex)
-
                                             return <DetailsQuouteInput<DetailsFormData>
                                                 key={fieldQuouteArrayId}
                                                 name={`${DetailsFormDataEnum.QUOUTES}.${fieldQuouteArrayIndex}.text`}
                                                 authorName={`${DetailsFormDataEnum.QUOUTES}.${fieldQuouteArrayIndex}.author`}
+                                                componentData={element}
+                                                index={index}
                                                 register={register}
                                                 className={{
                                                     quoute: styles.orderedComponent,
@@ -342,6 +425,8 @@ export default function DetailsForm({
                                                 key={fieldListArrayId}
                                                 name={`${DetailsFormDataEnum.LISTS}.${fieldListArrayIndex}.options`}
                                                 list={watchLists[fieldListArrayIndex]}
+                                                componentData={element}
+                                                index={index}
                                                 register={register}
                                                 setValue={setValue}
                                                 className={{
@@ -357,8 +442,10 @@ export default function DetailsForm({
                                             return <DetailsImageInput<DetailsFormData>
                                                 key={fieldImageArrayId}
                                                 name={`${DetailsFormDataEnum.IMAGES}.${fieldImageArrayIndex}.description`}
+                                                componentData={element}
+                                                index={index}
                                                 imageName={`${DetailsFormDataEnum.IMAGES}.${fieldImageArrayIndex}.image`}
-                                                image={watchImages[fieldImageArrayIndex]}
+                                                image={watchImages?.[fieldImageArrayIndex]}
                                                 register={register}
                                                 className={{
                                                     image: styles.orderedComponent,

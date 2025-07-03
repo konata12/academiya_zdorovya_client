@@ -457,7 +457,7 @@ export default function CreateEmployeeFrom() {
                                     label: styles.checkbox
                                 }}
                             />
-                            
+
                             <div className={styles.checkboxLabels}>
                                 <span>
                                     Сірий
@@ -508,6 +508,7 @@ export default function CreateEmployeeFrom() {
                                     alt="Preview"
                                 />}
                             </div>
+
                             <div
                                 className={`
                                     ${styles.imageContainer} 

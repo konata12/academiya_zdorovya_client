@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './page.module.scss'
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink';
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable';
@@ -18,6 +18,8 @@ import { fetchNews } from '@/app/utils/redux/news/newsSlice';
 const titles = ['Назва', 'Дата публікування ', 'Опції']
 
 export default function page() {
+    const [stringData, setStringData] = useState<string | null>(null)
+
     const {
         news,
         newsIsModalOpen,
@@ -31,6 +33,9 @@ export default function page() {
 
     useEffect(() => {
         // dispatch(fetchNews())
+
+        
+
     }, [])
 
     const deleteNews = async (id: number, i: number) => {
@@ -46,10 +51,13 @@ export default function page() {
     const openModalWindow = (i: number) => {
         // dispatch(openNewsModal({ i }))
     }
-
     const closeModalWindow = (i: number) => {
         // dispatch(closeNewsModal({ i }))
     }
+
+    // const DBOpenRequest = indexedDB.open("news_description_images", 1);
+
+    // console.log(DBOpenRequest)
 
     return (
         <div>
