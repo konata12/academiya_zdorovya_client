@@ -2,7 +2,7 @@ import AutoResizingTextareaHookForm from '@/app/common_ui/form_components/basic_
 import { TitleFormComponentProps, TitleFormDataEnumType } from '@/app/types/data/details.type'
 import React from 'react'
 import styles from './DetailsTitleInput.module.scss'
-import { useOrderedFormInput } from '@/app/utils/hooks/admin/useOrderedFormInput'
+import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput'
 
 export default function DetailsTitleInput<T extends Record<string, any>>({
     name,
@@ -11,8 +11,9 @@ export default function DetailsTitleInput<T extends Record<string, any>>({
     register,
     registerOptions,
     className,
+    orderSliceName,
 }: TitleFormComponentProps<T>) {
-    const { handleChange } = useOrderedFormInput()
+    const { handleChange } = useOrderedFormInput(orderSliceName)
 
     const keyOfValueToChange: TitleFormDataEnumType = 'title'
     const handleChangeProps = {

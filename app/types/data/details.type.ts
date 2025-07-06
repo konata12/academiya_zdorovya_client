@@ -1,6 +1,9 @@
 import { ReactHookFromComponent } from "@/app/types/ui/form_components/form_basic"
 import { Path, RegisterOptions } from "react-hook-form"
 
+// MAIN
+export type OrderSliceNameType = 'newsDetailsOrderSlice'
+
 export interface DetailsDataRenserElementBasicType {
     order: number
 }
@@ -87,6 +90,7 @@ interface StyledComponent<T extends Record<string, any>>
 interface HandleChangeComponent {
     index: number
     componentData: OrderComponent
+    orderSliceName: OrderSliceNameType
 }
 export interface TitleFormComponentProps<T extends Record<string, any>>
     extends StyledComponent<T>,
@@ -128,12 +132,14 @@ export interface ImageFormComponentProps<T extends Record<string, any>>
 }
 
 
+
 export interface DetailsFromProps {
     titles?: boolean
     paragraphs?: boolean
     quoutes?: boolean
     lists?: boolean
     images?: boolean
+    orderSliceName?: OrderSliceNameType
 }
 
 

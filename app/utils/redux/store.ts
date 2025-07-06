@@ -1,4 +1,18 @@
-// app/store.ts
+import { combineReducers } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import {
+    persistStore,
+    persistReducer,
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER,
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
+// REDUCERS
 import authSlice from "@/app/utils/redux/auth/authSlice";
 import departmentsSlice from "@/app/utils/redux/departments/departmentsSlice";
 import navigationSlice from "@/app/utils/redux/navigation/navigationSlice";
@@ -10,8 +24,7 @@ import employeesSlice from '@/app/utils/redux/employees/employeesSlice'
 import employeesFormUISlice from '@/app/utils/redux/employees/employeesFormUISlice'
 import aboutTreatmentsFormUISlice from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice'
 import newsSlice from '@/app/utils/redux/news/newsSlice'
-import detailsOrderSlice from '@/app/utils/redux/details/detailsOrderSlice'
-import { configureStore } from "@reduxjs/toolkit";
+import newsDetailsOrderSlice from '@/app/utils/redux/details/newsDetailsOrderSlice'
 
 // Define the root state type
 export type RootState = ReturnType<typeof store.getState>;
@@ -19,26 +32,45 @@ export type RootState = ReturnType<typeof store.getState>;
 // Define the app dispatch type
 export type AppDispatch = typeof store.dispatch;
 
-// Create the store
-const store = configureStore({
-    reducer: {
-        navigation: navigationSlice,
-        // UI
-        aboutTreatmentsFormUI: aboutTreatmentsFormUISlice,
-        pricesCreateFormUI: pricesCreateFormUiSlice,
-        employeesFormUI: employeesFormUISlice,
+const rootReducer = combineReducers({
+    navigation: navigationSlice,
+    // UI
+    aboutTreatmentsFormUI: aboutTreatmentsFormUISlice,
+    pricesCreateFormUI: pricesCreateFormUiSlice,
+    employeesFormUI: employeesFormUISlice,
 
-        detailsOrderSlice: detailsOrderSlice,
-        
-        // API
-        auth: authSlice,
-        aboutTreatment: aboutTreatment,
-        bookingServices: bookingServicesSlice,
-        departments: departmentsSlice,
-        employees: employeesSlice,
-        prices: pricesSlice,
-        news: newsSlice,
-    },
+    newsDetailsOrderSlice: newsDetailsOrderSlice,
+
+    // API
+    auth: authSlice,
+    aboutTreatment: aboutTreatment,
+    bookingServices: bookingServicesSlice,
+    departments: departmentsSlice,
+    employees: employeesSlice,
+    prices: pricesSlice,
+    news: newsSlice,
 });
 
-export default store;
+const persistConfig = {
+    key: 'root',
+    version: 1,
+    storage,
+    whitelist: ['newsDetailsOrderSlice', 'news'],
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// Create the store
+const store = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+        }),
+});
+
+const persistor = persistStore(store)
+
+export { store, persistor };

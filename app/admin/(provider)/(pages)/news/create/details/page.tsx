@@ -26,6 +26,7 @@ export default function page() {
                 quoutes={true}
                 lists={true}
                 images={true}
+                orderSliceName='newsDetailsOrderSlice'
             />
         </div>
     )

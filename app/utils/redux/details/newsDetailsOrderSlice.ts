@@ -5,23 +5,23 @@ const initialState: ComponentOrderState = {
     order: []
 };
 
-const detailsOrderSlice = createSlice({
-    name: 'detailsOrderSlice',
+const newsDetailsOrderSlice = createSlice({
+    name: 'newsDetailsOrderSlice',
     initialState,
     reducers: {
-        addDetailsComponent(state, action: {
+        addNewsDetailsComponent(state, action: {
             payload: OrderComponent
         }) {
             state.order.push(action.payload)
         },
-        removeDetailsComponent(state, action: {
+        removeNewsDetailsComponent(state, action: {
             payload: string
         }) {
             state.order = state.order.filter(component => {
                 return component.componentData.orderId !== action.payload
             });
         },
-        updateDetailsComponent(state, action: {
+        updateNewsDetailsComponent(state, action: {
             payload: {
                 detailsComponent: OrderComponent,
                 index: number,
@@ -31,24 +31,24 @@ const detailsOrderSlice = createSlice({
             
             state.order[index] = action.payload.detailsComponent
         },
-        setDetailsStateOrder(state, action: {
+        setNewsDetailsStateOrder(state, action: {
             payload: OrderComponent[]
         }) {
             state.order = action.payload
         },
         
 
-        resetDetailsComponentsOrder: () => initialState,
+        resetNewsDetailsComponentsOrder: () => initialState,
     }
 })
 
 export const {
-    addDetailsComponent,
-    removeDetailsComponent,
-    updateDetailsComponent,
-    setDetailsStateOrder,
+    addNewsDetailsComponent,
+    removeNewsDetailsComponent,
+    updateNewsDetailsComponent,
+    setNewsDetailsStateOrder,
 
-    resetDetailsComponentsOrder,
-} = detailsOrderSlice.actions
+    resetNewsDetailsComponentsOrder,
+} = newsDetailsOrderSlice.actions
 
-export default detailsOrderSlice.reducer
+export default newsDetailsOrderSlice.reducer

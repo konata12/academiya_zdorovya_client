@@ -1,5 +1,5 @@
 import { refreshTokens } from "@/app/utils/redux/auth/authSlice";
-import store from "@/app/utils/redux/store";
+import { store } from "@/app/utils/redux/store";
 import axios from "axios";
 
 const axiosInstance = axios.create({

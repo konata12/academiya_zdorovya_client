@@ -3,7 +3,7 @@ import styles from './DetailsImageInput.module.scss'
 import AutoResizingTextareaHookForm from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/HookForm/AutoResizingTextareaHookForm'
 import { ImageFormComponentProps, ImageFormData } from '@/app/types/data/details.type'
 import { v4 as uuidv4 } from 'uuid';
-import { useOrderedFormInput } from '@/app/utils/hooks/admin/useOrderedFormInput';
+import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput';
 
 
 export default function DetailsImageInput<T extends Record<string, any>>({
@@ -16,8 +16,9 @@ export default function DetailsImageInput<T extends Record<string, any>>({
     imageName,
     imageRegisterOptions,
     className,
+    orderSliceName,
 }: ImageFormComponentProps<T>) {
-    const { handleChange } = useOrderedFormInput()
+    const { handleChange } = useOrderedFormInput(orderSliceName)
 
     const imageFile = (componentData.componentData as ImageFormData).image?.[0] || image?.image?.[0]
     const inputId = React.useMemo(() => `upload_image_${uuidv4()}`, [])

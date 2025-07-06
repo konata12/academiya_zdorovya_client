@@ -3,9 +3,10 @@ import { ListFormComponentProps, ListFormData } from '@/app/types/data/details.t
 import React, { useCallback } from 'react'
 import styles from './DetailsListInput.module.scss'
 import { Path, PathValue } from 'react-hook-form'
-import { useOrderedFormInput } from '@/app/utils/hooks/admin/useOrderedFormInput'
+import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput'
 import { useAppDispatch } from '@/app/utils/redux/hooks'
-import { updateDetailsComponent } from '@/app/utils/redux/details/detailsOrderSlice'
+import { updateNewsDetailsComponent } from '@/app/utils/redux/details/newsDetailsOrderSlice'
+import { useOrderedListHandleKeyDown } from '@/app/utils/hooks/admin/detailsForm/useOrderedListHandleKeyDown'
 
 export default function DetailsListInput<T extends Record<string, any>>({
     name,
@@ -16,54 +17,17 @@ export default function DetailsListInput<T extends Record<string, any>>({
     registerOptions,
     className,
     list,
+    orderSliceName,
 }: ListFormComponentProps<T>) {
-    const { handleChange } = useOrderedFormInput()
-    const dispatch = useAppDispatch()
-
-    const detailsComponent = structuredClone(componentData)
-    const listFormData = detailsComponent.componentData as ListFormData
-
-    const handleKeyDown = useCallback((e: React.KeyboardEvent, i: number) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-
-            if (setValue) {
-                // Create a new array reference to trigger React Hook Form's change detection
-                const newOptions = [...listFormData.options];
-                // Insert empty string at the next position
-                newOptions.splice(i + 1, 0, '');
-                (detailsComponent.componentData as ListFormData).options = newOptions
-                // console.log('newOptions', newOptions)
-                // console.log('detailsComponent', detailsComponent)
-
-                // Properly typed setValue call
-                setValue(name as Path<T>, newOptions as PathValue<T, Path<T>>);
-                dispatch(updateDetailsComponent({
-                    index,
-                    detailsComponent
-                }))
-            }
-        }
-
-        if (e.key === 'Backspace' && listFormData.options[i] === '' && i > 0) {
-            e.preventDefault();
-
-            if (setValue) {
-                // Create a new array reference to trigger React Hook Form's change detection
-                const newOptions = [...listFormData.options];
-                // Remove the current option
-                newOptions.splice(i, 1);
-                (detailsComponent.componentData as ListFormData).options = newOptions
-
-                // Properly typed setValue call
-                setValue(name as Path<T>, newOptions as PathValue<T, Path<T>>);
-                dispatch(updateDetailsComponent({
-                    index,
-                    detailsComponent
-                }))
-            }
-        }
-    }, [list, name, detailsComponent, listFormData])
+    const { handleChange } = useOrderedFormInput(orderSliceName)
+    const { handleKeyDown } = useOrderedListHandleKeyDown<T>({
+        name,
+        index,
+        componentData,
+        setValue,
+        list,
+        orderSliceName,
+    })
 
     return (
         <>

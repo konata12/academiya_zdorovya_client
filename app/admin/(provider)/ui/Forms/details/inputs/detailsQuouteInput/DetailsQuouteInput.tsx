@@ -2,7 +2,7 @@ import AutoResizingTextareaHookForm from '@/app/common_ui/form_components/basic_
 import { QuouteFormComponentProps, QuouteFormData, QuouteFormDataEnum } from '@/app/types/data/details.type'
 import React from 'react'
 import styles from './DetailsQuouteInput.module.scss'
-import { useOrderedFormInput } from '@/app/utils/hooks/admin/useOrderedFormInput'
+import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput'
 
 export default function DetailsQuouteInput<T extends Record<string, any>>({
     name,
@@ -13,8 +13,9 @@ export default function DetailsQuouteInput<T extends Record<string, any>>({
     authorName,
     authorRegisterOptions,
     className,
+    orderSliceName,
 }: QuouteFormComponentProps<T>) {
-    const { handleChange } = useOrderedFormInput()
+    const { handleChange } = useOrderedFormInput(orderSliceName)
 
     const handleChangeProps = {
         componentData,

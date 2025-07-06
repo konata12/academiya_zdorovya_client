@@ -1,7 +1,11 @@
-import { ComponentsFormDataEnum, DetailsFormDataEnum, DetailsFromElementBasicType, ImageFormData, ImageFormDataEnum, ImageFormDataEnumType, ListFormData, ListFormDataEnum, ListFormDataEnumType, OrderComponent, ParagraphFormData, ParagraphFormDataEnumType, QuouteFormData, QuouteFormDataEnum, QuouteFormDataEnumType, TitleFormData, TitleFormDataEnum, TitleFormDataEnumType } from "@/app/types/data/details.type";
-import { updateDetailsComponent } from "@/app/utils/redux/details/detailsOrderSlice";
+import { ComponentsFormDataEnum, DetailsFormDataEnum, DetailsFromElementBasicType, ImageFormData, ImageFormDataEnum, ImageFormDataEnumType, ListFormData, ListFormDataEnum, ListFormDataEnumType, OrderComponent, OrderSliceNameType, ParagraphFormData, ParagraphFormDataEnumType, QuouteFormData, QuouteFormDataEnum, QuouteFormDataEnumType, TitleFormData, TitleFormDataEnum, TitleFormDataEnumType } from "@/app/types/data/details.type";
+import { updateNewsDetailsComponent } from "@/app/utils/redux/details/newsDetailsOrderSlice";
 import { useAppDispatch } from "@/app/utils/redux/hooks";
 import { useCallback } from "react";
+
+interface OrderedListHandleKeyDownHookProps {
+    orderSliceName: OrderSliceNameType
+}
 
 interface HandleChangeProps<T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
     e: React.ChangeEvent<T>,
@@ -11,14 +15,16 @@ interface HandleChangeProps<T extends HTMLInputElement | HTMLTextAreaElement | H
     optionIndex?: number,
 }
 
-interface Pupa<T extends ComponentsFormDataEnum> {
-    componentData: OrderComponent
-    index: number
-    keyOfValueToChange: T
-}
-
-export function useOrderedFormInput() {
+export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
     const dispatch = useAppDispatch()
+
+    // select reducer based on the details order slice
+    let reducer
+    switch (orderSliceName) {
+        case 'newsDetailsOrderSlice':
+            reducer = updateNewsDetailsComponent
+            break;
+    }
 
     const handleChange = useCallback(
         <T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>({
@@ -73,7 +79,7 @@ export function useOrderedFormInput() {
                 componentData: newComponentData.componentData
             }
 
-            dispatch(updateDetailsComponent({
+            dispatch(reducer({
                 index,
                 detailsComponent
             }))

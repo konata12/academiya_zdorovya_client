@@ -7,7 +7,7 @@ import DetailsTitleInput from '@/app/admin/(provider)/ui/Forms/details/inputs/de
 import CreateDetailsInputBtn from '@/app/admin/(provider)/ui/Forms/details/createDetailsInputBtn/CreateDetailsInputBtn'
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import { addDetailsComponent, removeDetailsComponent } from '@/app/utils/redux/details/detailsOrderSlice'
+import { addNewsDetailsComponent, removeNewsDetailsComponent } from '@/app/utils/redux/details/newsDetailsOrderSlice'
 import { RootState } from '@/app/utils/redux/store';
 import { DndContext, PointerSensor, useDroppable, useSensor, useSensors } from '@dnd-kit/core';
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
@@ -16,7 +16,7 @@ import DetailsParagraphInput from '@/app/admin/(provider)/ui/Forms/details/input
 import DetailsQuouteInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsQuouteInput/DetailsQuouteInput';
 import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import DetailsListInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsListInput/DetailsListInput';
-import { useOrderedForm } from '@/app/utils/hooks/admin/useOrderedForm';
+import { useOrderedForm } from '@/app/utils/hooks/admin/detailsForm/useOrderedForm';
 import DetailsImageInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput';
 
 
@@ -26,8 +26,12 @@ export default function DetailsForm({
     quoutes,
     lists,
     images,
+
+    // need for determining which order slice to use
+    orderSliceName = 'newsDetailsOrderSlice',
 }: DetailsFromProps) {
-    const order = useAppSelector((state: RootState) => state.detailsOrderSlice.order)
+    const order = useAppSelector((state: RootState) => state[orderSliceName].order)
+    const dispatch = useAppDispatch()
 
     const {
         renderOrderedComponents,
@@ -35,7 +39,7 @@ export default function DetailsForm({
         handleDragEnd,
         getFieldArrayIdByOrderId,
         getFieldArrayIndexByOrderId,
-    } = useOrderedForm()
+    } = useOrderedForm(orderSliceName)
     const { setNodeRef } = useDroppable({
         id: 'DetailsForm'
     })
@@ -47,8 +51,6 @@ export default function DetailsForm({
         }),
     );
 
-    const dispatch = useAppDispatch()
-
     const {
         register,
         handleSubmit,
@@ -58,7 +60,6 @@ export default function DetailsForm({
     } = useForm<DetailsFormData>({
         defaultValues: renderOrderedComponents(order)
     })
-    const gg = watch()
 
     // FIELD ARRAYS
     const {
@@ -243,8 +244,16 @@ export default function DetailsForm({
                 throw new Error(`Unknown element type: ${elementType}`);
         }
 
+        // select reducer based on the details order slice
+        let reducer
+        switch (orderSliceName) {
+            case 'newsDetailsOrderSlice':
+                reducer = addNewsDetailsComponent
+                break;
+        }
+
         // make input ordered
-        dispatch(addDetailsComponent({
+        dispatch(reducer({
             componentType: elementType,
             componentData
         }))
@@ -289,7 +298,16 @@ export default function DetailsForm({
 
         if (filedArrayIndex === -1 || !fieldArrayRemove) return
         fieldArrayRemove(filedArrayIndex)
-        dispatch(removeDetailsComponent(orderId))
+        
+        // select reducer based on the details order slice
+        let reducer
+        switch (orderSliceName) {
+            case 'newsDetailsOrderSlice':
+                reducer = removeNewsDetailsComponent
+                break;
+        }
+        
+        dispatch(reducer(orderId))
     }, [titleFields, paragraphFields, quouteFields, listFields, imageFields])
 
     const formInputsToRender = [
@@ -335,8 +353,7 @@ export default function DetailsForm({
         },
     ].filter((input) => !!input)
 
-    // console.log(order)
-
+    
     return (
         <form onSubmit={handleSubmit(createDetailsFormData)}>
             <div className={styles.addInputsContainer}>
@@ -383,6 +400,7 @@ export default function DetailsForm({
                                                 componentData={element}
                                                 index={index}
                                                 register={register}
+                                                orderSliceName={orderSliceName}
                                                 className={styles.orderedComponent}
                                             />
 
@@ -396,6 +414,7 @@ export default function DetailsForm({
                                                 componentData={element}
                                                 index={index}
                                                 register={register}
+                                                orderSliceName={orderSliceName}
                                                 className={styles.orderedComponent}
                                             />
 
@@ -410,6 +429,7 @@ export default function DetailsForm({
                                                 componentData={element}
                                                 index={index}
                                                 register={register}
+                                                orderSliceName={orderSliceName}
                                                 className={{
                                                     quoute: styles.orderedComponent,
                                                     author: styles.orderedComponent,
@@ -429,6 +449,7 @@ export default function DetailsForm({
                                                 index={index}
                                                 register={register}
                                                 setValue={setValue}
+                                                orderSliceName={orderSliceName}
                                                 className={{
                                                     option: styles.orderedComponent,
                                                     container: styles.orderedComponent,
@@ -447,6 +468,7 @@ export default function DetailsForm({
                                                 imageName={`${DetailsFormDataEnum.IMAGES}.${fieldImageArrayIndex}.image`}
                                                 image={watchImages?.[fieldImageArrayIndex]}
                                                 register={register}
+                                                orderSliceName={orderSliceName}
                                                 className={{
                                                     image: styles.orderedComponent,
                                                     description: styles.orderedComponent,
