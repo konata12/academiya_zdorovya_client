@@ -1,11 +1,10 @@
-import { ComponentsFormDataEnum, DetailsFormDataEnum, DetailsFromElementBasicType, ImageFormData, ImageFormDataEnum, ImageFormDataEnumType, ListFormData, ListFormDataEnum, ListFormDataEnumType, OrderComponent, OrderSliceNameType, ParagraphFormData, ParagraphFormDataEnumType, QuouteFormData, QuouteFormDataEnum, QuouteFormDataEnumType, TitleFormData, TitleFormDataEnum, TitleFormDataEnumType } from "@/app/types/data/details.type";
-import { updateNewsDetailsComponent } from "@/app/utils/redux/details/newsDetailsOrderSlice";
+import { ComponentsFormDataEnum, DetailsFormDataEnum, ImageFormData, ImageFormDataEnum, ImageFormDataEnumType, ListFormData, ListFormDataEnum, ListFormDataEnumType, OrderComponent, OrderSliceNameType, ParagraphFormData, ParagraphFormDataEnumType, QuouteFormData, QuouteFormDataEnum, QuouteFormDataEnumType, TitleFormData, TitleFormDataEnum, TitleFormDataEnumType } from "@/app/types/data/details.type";
 import { useAppDispatch } from "@/app/utils/redux/hooks";
 import { useCallback } from "react";
+import { createStore, set, del } from 'idb-keyval';
+import { v4 as uuidv4 } from 'uuid';
+import { useDetailsFormSelectSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice";
 
-interface OrderedListHandleKeyDownHookProps {
-    orderSliceName: OrderSliceNameType
-}
 
 interface HandleChangeProps<T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
     e: React.ChangeEvent<T>,
@@ -16,15 +15,9 @@ interface HandleChangeProps<T extends HTMLInputElement | HTMLTextAreaElement | H
 }
 
 export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
-    const dispatch = useAppDispatch()
+    const { updateDetailsComponent } = useDetailsFormSelectSlice(orderSliceName)
 
-    // select reducer based on the details order slice
-    let reducer
-    switch (orderSliceName) {
-        case 'newsDetailsOrderSlice':
-            reducer = updateNewsDetailsComponent
-            break;
-    }
+    const dispatch = useAppDispatch()
 
     const handleChange = useCallback(
         <T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>({
@@ -35,8 +28,11 @@ export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
             optionIndex,
         }: HandleChangeProps<T>) => {
             const newValue = e.target.value
+            const imageName = uuidv4()
             const newFile = (e as React.ChangeEvent<HTMLInputElement>).target.files || null
             const newComponentData = structuredClone(componentData)
+
+            console.log(newFile)
 
             switch (componentData.componentType) {
                 case DetailsFormDataEnum.TITLES:
@@ -64,7 +60,15 @@ export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
                 case DetailsFormDataEnum.IMAGES:
                     keyOfValueToChange = keyOfValueToChange as ImageFormDataEnumType
                     if (keyOfValueToChange === ImageFormDataEnum.IMAGE) {
-                        (newComponentData.componentData as ImageFormData)[keyOfValueToChange] = newFile
+                        // save image name to redux
+                        (newComponentData.componentData as ImageFormData)[keyOfValueToChange] = imageName
+
+                        // save image to indexedDB using name as key
+                        const oldImageName = (componentData.componentData as ImageFormData)[keyOfValueToChange]
+                        if (oldImageName) {
+                            del(oldImageName, createStore('app_db', 'news_images'))
+                        }
+                        set(imageName, newFile?.[0] || null, createStore('app_db', 'news_images'))
                     } else if (keyOfValueToChange !== ImageFormDataEnum.SIZE) {
                         (newComponentData.componentData as ImageFormData)[keyOfValueToChange] = newValue
                     }
@@ -79,7 +83,9 @@ export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
                 componentData: newComponentData.componentData
             }
 
-            dispatch(reducer({
+            console.log(detailsComponent)
+
+            dispatch(updateDetailsComponent({
                 index,
                 detailsComponent
             }))

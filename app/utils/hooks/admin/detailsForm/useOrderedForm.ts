@@ -1,12 +1,15 @@
 import { DetailsFormData, DetailsFormDataEnum, DetailsFormDataEnumType, DetailsFormDataType, ImageFormData, ListFormData, OrderComponent, OrderSliceNameType, ParagraphFormData, QuouteFormData, TitleFormData } from "@/app/types/data/details.type"
-import { setNewsDetailsStateOrder } from "@/app/utils/redux/details/newsDetailsOrderSlice"
+import { useDetailsFormSelectSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice"
 import { useAppDispatch } from "@/app/utils/redux/hooks"
 import { DragEndEvent } from "@dnd-kit/core"
 import { arrayMove } from "@dnd-kit/sortable"
 import { useCallback } from "react"
 import { FieldArrayWithId } from "react-hook-form"
 
+
 export function useOrderedForm(orderSliceName: OrderSliceNameType) {
+    const { setDetailsStateOrder } = useDetailsFormSelectSlice(orderSliceName)
+
     const dispatch = useAppDispatch()
 
     const renderOrderedComponents = useCallback((order: OrderComponent[]): DetailsFormData => {
@@ -64,15 +67,8 @@ export function useOrderedForm(orderSliceName: OrderSliceNameType) {
         // Create the new ordered array
         const newOrder = arrayMove(order, activeItemIndex, overItemIndex)
 
-        // select reducer based on the details order slice
-        let reducer
-        switch (orderSliceName) {
-            case 'newsDetailsOrderSlice':
-                reducer = setNewsDetailsStateOrder
-                break;
-        }
         // Dispatch the update
-        dispatch(reducer(newOrder))
+        dispatch(setDetailsStateOrder(newOrder))
     }, [])
 
     // HELPER FUNCTIONS

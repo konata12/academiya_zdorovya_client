@@ -1,5 +1,5 @@
 import { ListFormData, OrderComponent, OrderSliceNameType } from "@/app/types/data/details.type";
-import { updateNewsDetailsComponent } from "@/app/utils/redux/details/newsDetailsOrderSlice";
+import { useDetailsFormSelectSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice";
 import { useAppDispatch } from "@/app/utils/redux/hooks";
 import { useCallback } from "react";
 import { Path, PathValue, UseFormSetValue } from "react-hook-form";
@@ -21,18 +21,12 @@ export function useOrderedListHandleKeyDown<T extends Record<string, any>>({
     list,
     orderSliceName,
 }: OrderedListHandleKeyDownHookProps<T>) {
+    const { updateDetailsComponent } = useDetailsFormSelectSlice(orderSliceName)
+
     const dispatch = useAppDispatch()
 
     const detailsComponent = structuredClone(componentData)
     const listFormData = detailsComponent.componentData as ListFormData
-
-    // select reducer based on the details order slice
-    let reducer
-    switch (orderSliceName) {
-        case 'newsDetailsOrderSlice':
-            reducer = updateNewsDetailsComponent
-            break;
-    }
 
     const handleKeyDown = useCallback((e: React.KeyboardEvent, i: number) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -47,7 +41,7 @@ export function useOrderedListHandleKeyDown<T extends Record<string, any>>({
 
                 // Properly typed setValue call
                 setValue(name as Path<T>, newOptions as PathValue<T, Path<T>>);
-                dispatch(reducer({
+                dispatch(updateDetailsComponent({
                     index,
                     detailsComponent
                 }))
@@ -66,7 +60,7 @@ export function useOrderedListHandleKeyDown<T extends Record<string, any>>({
 
                 // Properly typed setValue call
                 setValue(name as Path<T>, newOptions as PathValue<T, Path<T>>);
-                dispatch(reducer({
+                dispatch(updateDetailsComponent({
                     index,
                     detailsComponent
                 }))

@@ -5,7 +5,7 @@ import styles from './DetailsListInput.module.scss'
 import { Path, PathValue } from 'react-hook-form'
 import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput'
 import { useAppDispatch } from '@/app/utils/redux/hooks'
-import { updateNewsDetailsComponent } from '@/app/utils/redux/details/newsDetailsOrderSlice'
+import { updateDetailsComponent } from '@/app/utils/redux/details/newsDetailsOrderSlice'
 import { useOrderedListHandleKeyDown } from '@/app/utils/hooks/admin/detailsForm/useOrderedListHandleKeyDown'
 
 export default function DetailsListInput<T extends Record<string, any>>({

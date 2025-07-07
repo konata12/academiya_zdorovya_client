@@ -9,19 +9,19 @@ const newsDetailsOrderSlice = createSlice({
     name: 'newsDetailsOrderSlice',
     initialState,
     reducers: {
-        addNewsDetailsComponent(state, action: {
+        addDetailsComponent(state, action: {
             payload: OrderComponent
         }) {
             state.order.push(action.payload)
         },
-        removeNewsDetailsComponent(state, action: {
+        removeDetailsComponent(state, action: {
             payload: string
         }) {
             state.order = state.order.filter(component => {
                 return component.componentData.orderId !== action.payload
             });
         },
-        updateNewsDetailsComponent(state, action: {
+        updateDetailsComponent(state, action: {
             payload: {
                 detailsComponent: OrderComponent,
                 index: number,
@@ -31,24 +31,24 @@ const newsDetailsOrderSlice = createSlice({
             
             state.order[index] = action.payload.detailsComponent
         },
-        setNewsDetailsStateOrder(state, action: {
+        setDetailsStateOrder(state, action: {
             payload: OrderComponent[]
         }) {
             state.order = action.payload
         },
         
 
-        resetNewsDetailsComponentsOrder: () => initialState,
+        resetDetailsComponentsOrder: () => initialState,
     }
 })
 
 export const {
-    addNewsDetailsComponent,
-    removeNewsDetailsComponent,
-    updateNewsDetailsComponent,
-    setNewsDetailsStateOrder,
+    addDetailsComponent,
+    removeDetailsComponent,
+    updateDetailsComponent,
+    setDetailsStateOrder,
 
-    resetNewsDetailsComponentsOrder,
+    resetDetailsComponentsOrder,
 } = newsDetailsOrderSlice.actions
 
 export default newsDetailsOrderSlice.reducer

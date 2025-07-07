@@ -4,36 +4,36 @@ import { Path, RegisterOptions } from "react-hook-form"
 // MAIN
 export type OrderSliceNameType = 'newsDetailsOrderSlice'
 
-export interface DetailsDataRenserElementBasicType {
+export interface DetailsDataRenderElementBasicType {
     order: number
 }
 
 export type descriptionImageSize = 'big' | 'small'
 
 // RESPONSE DATA
-export interface DescriptionTitle extends DetailsDataRenserElementBasicType {
+export interface DescriptionTitle extends DetailsDataRenderElementBasicType {
     title: string
 }
-export interface DescriptionParagraph extends DetailsDataRenserElementBasicType {
+export interface DescriptionParagraph extends DetailsDataRenderElementBasicType {
     text: string
 }
-export interface DescriptionQuoute extends DetailsDataRenserElementBasicType {
+export interface DescriptionQuoute extends DetailsDataRenderElementBasicType {
     text: string
     author: string
 }
-export interface DescriptionList extends DetailsDataRenserElementBasicType {
+export interface DescriptionList extends DetailsDataRenderElementBasicType {
     numerable: boolean
     options: string[]
 }
-export interface DescriptionImage extends DetailsDataRenserElementBasicType {
+export interface DescriptionImage extends DetailsDataRenderElementBasicType {
     description: string
     size: descriptionImageSize
     imgUrl: string
 }
-export interface DescriptionFormImage extends DetailsDataRenserElementBasicType {
+export interface DescriptionFormImage extends DetailsDataRenderElementBasicType {
     description: string
     size: descriptionImageSize
-    image: FileList | null
+    image: string | null
 }
 
 export type DetailsRedactorType = DescriptionParagraph
@@ -64,7 +64,7 @@ export interface ListFormData extends DetailsFromElementBasicType {
 export interface ImageFormData extends DetailsFromElementBasicType {
     description: string
     size: descriptionImageSize
-    image: FileList | null
+    image: string | null
 }
 
 export interface DetailsFormData {

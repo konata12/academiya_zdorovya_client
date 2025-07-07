@@ -7,7 +7,6 @@ import DetailsTitleInput from '@/app/admin/(provider)/ui/Forms/details/inputs/de
 import CreateDetailsInputBtn from '@/app/admin/(provider)/ui/Forms/details/createDetailsInputBtn/CreateDetailsInputBtn'
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import { addNewsDetailsComponent, removeNewsDetailsComponent } from '@/app/utils/redux/details/newsDetailsOrderSlice'
 import { RootState } from '@/app/utils/redux/store';
 import { DndContext, PointerSensor, useDroppable, useSensor, useSensors } from '@dnd-kit/core';
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
@@ -18,6 +17,7 @@ import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifi
 import DetailsListInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsListInput/DetailsListInput';
 import { useOrderedForm } from '@/app/utils/hooks/admin/detailsForm/useOrderedForm';
 import DetailsImageInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput';
+import { useDetailsFormSelectSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice';
 
 
 export default function DetailsForm({
@@ -40,6 +40,12 @@ export default function DetailsForm({
         getFieldArrayIdByOrderId,
         getFieldArrayIndexByOrderId,
     } = useOrderedForm(orderSliceName)
+
+    const {
+        addDetailsComponent,
+        removeDetailsComponent,
+    } = useDetailsFormSelectSlice(orderSliceName)
+    
     const { setNodeRef } = useDroppable({
         id: 'DetailsForm'
     })
@@ -244,16 +250,8 @@ export default function DetailsForm({
                 throw new Error(`Unknown element type: ${elementType}`);
         }
 
-        // select reducer based on the details order slice
-        let reducer
-        switch (orderSliceName) {
-            case 'newsDetailsOrderSlice':
-                reducer = addNewsDetailsComponent
-                break;
-        }
-
         // make input ordered
-        dispatch(reducer({
+        dispatch(addDetailsComponent({
             componentType: elementType,
             componentData
         }))
@@ -299,15 +297,8 @@ export default function DetailsForm({
         if (filedArrayIndex === -1 || !fieldArrayRemove) return
         fieldArrayRemove(filedArrayIndex)
         
-        // select reducer based on the details order slice
-        let reducer
-        switch (orderSliceName) {
-            case 'newsDetailsOrderSlice':
-                reducer = removeNewsDetailsComponent
-                break;
-        }
-        
-        dispatch(reducer(orderId))
+        // remove ordered component from redux
+        dispatch(removeDetailsComponent(orderId))
     }, [titleFields, paragraphFields, quouteFields, listFields, imageFields])
 
     const formInputsToRender = [
