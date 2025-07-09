@@ -13,7 +13,6 @@ export default function DetailsImageInput<T extends Record<string, any>>({
     componentData,
     register,
     registerOptions,
-    image,
     imageName,
     imageRegisterOptions,
     className,
@@ -22,16 +21,17 @@ export default function DetailsImageInput<T extends Record<string, any>>({
     const { handleChange } = useOrderedFormInput(orderSliceName)
     const [imageUrl, setImageUrl] = useState<string | null>(null)
 
-    console.log(image)
+    const imageData = (componentData.componentData as ImageFormData)
+    const imageNameMega = imageData.image
 
     useEffect(() => {
         let isMounted = true;
 
         const fetchImage = async () => {
-            if (image?.image) {
+            if (imageNameMega) {
                 try {
-                    const imageFile = await get(image.image, createStore('app_db', 'news_images'));
-                    console.log(imageFile)
+                    const imageFile = await get(imageNameMega, createStore('app_db', 'news_images'));
+                    console.log('DetailsImageInput: ', imageFile)
                     if (isMounted && imageFile) {
                         const newUrl = URL.createObjectURL(imageFile);
                         setImageUrl(newUrl);
@@ -50,21 +50,20 @@ export default function DetailsImageInput<T extends Record<string, any>>({
                 URL.revokeObjectURL(imageUrl); // Clean up the object URL
             }
         };
-    }, [image?.image]); // Re-run if `image.image` changes
+    }, [imageNameMega]); // Re-run if `image.image` changes
 
-    const imageGG = get(image.image || '', createStore('app_db', 'news_images'))
-    const imageFile = (componentData.componentData as ImageFormData).image?.[0] || image?.image?.[0]
+
     const inputId = React.useMemo(() => `upload_image_${uuidv4()}`, [])
 
     return (
         <div className={`${styles.container} ${className?.container}`}>
-            <div className={`${styles.imageContainer} ${styles[image.size]}`}>
+            <div className={`${styles.imageContainer} ${styles[imageData.size]}`}>
                 <input
                     id={inputId}
                     type="file"
                     hidden
 
-                    {...register(imageName, imageRegisterOptions)}
+                    // {...register(imageName, imageRegisterOptions)}
                     onChange={(e) => {
                         handleChange<HTMLInputElement>({
                             e,
@@ -81,9 +80,9 @@ export default function DetailsImageInput<T extends Record<string, any>>({
                     Завантажити
                 </label>
 
-                {imageFile && <img
+                {imageUrl && <img
                     className={styles.image}
-                    src={imageUrl || undefined}
+                    src={imageUrl}
                 />}
             </div>
 

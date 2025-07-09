@@ -8,7 +8,7 @@ export interface DetailsDataRenderElementBasicType {
     order: number
 }
 
-export type descriptionImageSize = 'big' | 'small'
+export type DescriptionImageSize = 'big' | 'small'
 
 // RESPONSE DATA
 export interface DescriptionTitle extends DetailsDataRenderElementBasicType {
@@ -27,12 +27,12 @@ export interface DescriptionList extends DetailsDataRenderElementBasicType {
 }
 export interface DescriptionImage extends DetailsDataRenderElementBasicType {
     description: string
-    size: descriptionImageSize
+    size: DescriptionImageSize
     imgUrl: string
 }
 export interface DescriptionFormImage extends DetailsDataRenderElementBasicType {
     description: string
-    size: descriptionImageSize
+    size: DescriptionImageSize
     image: string | null
 }
 
@@ -63,7 +63,7 @@ export interface ListFormData extends DetailsFromElementBasicType {
 }
 export interface ImageFormData extends DetailsFromElementBasicType {
     description: string
-    size: descriptionImageSize
+    size: DescriptionImageSize
     image: string | null
 }
 
@@ -126,7 +126,6 @@ export interface ImageFormComponentProps<T extends Record<string, any>>
         image?: string
         description?: string
     }
-    image: ImageFormData
     imageName: Path<T>
     imageRegisterOptions?: RegisterOptions<T>
 }

@@ -1,4 +1,4 @@
-import { DescriptionFormImage, DescriptionImage, descriptionImageSize, DescriptionList, DescriptionParagraph, DescriptionQuoute, DescriptionTitle, DetailsFormData, DetailsFormDataEnum, DetailsFormDataEnumType, DetailsFormDataType, DetailsFromProps, ImageFormData, ListFormData, ParagraphFormData, QuouteFormData, TitleFormData } from '@/app/types/data/details.type'
+import { DescriptionFormImage, DescriptionImage, DescriptionImageSize, DescriptionList, DescriptionParagraph, DescriptionQuoute, DescriptionTitle, DetailsFormData, DetailsFormDataEnum, DetailsFormDataEnumType, DetailsFormDataType, DetailsFromProps, ImageFormData, ListFormData, OrderComponent, ParagraphFormData, QuouteFormData, TitleFormData } from '@/app/types/data/details.type'
 import React, { useCallback } from 'react'
 import { SubmitHandler, useFieldArray, UseFieldArrayRemove, useForm } from 'react-hook-form'
 import styles from './DetailsForm.module.scss'
@@ -18,6 +18,8 @@ import DetailsListInput from '@/app/admin/(provider)/ui/Forms/details/inputs/det
 import { useOrderedForm } from '@/app/utils/hooks/admin/detailsForm/useOrderedForm';
 import DetailsImageInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput';
 import { useDetailsFormSelectSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice';
+import { useIndexedDBStoreForDetailsImages } from '@/app/utils/hooks/admin/detailsForm/useIndexedDBStoreForDetailsImages';
+import { del } from 'idb-keyval';
 
 
 export default function DetailsForm({
@@ -31,6 +33,7 @@ export default function DetailsForm({
     orderSliceName = 'newsDetailsOrderSlice',
 }: DetailsFromProps) {
     const order = useAppSelector((state: RootState) => state[orderSliceName].order)
+    const store = useIndexedDBStoreForDetailsImages(orderSliceName)
     const dispatch = useAppDispatch()
 
     const {
@@ -45,7 +48,7 @@ export default function DetailsForm({
         addDetailsComponent,
         removeDetailsComponent,
     } = useDetailsFormSelectSlice(orderSliceName)
-    
+
     const { setNodeRef } = useDroppable({
         id: 'DetailsForm'
     })
@@ -109,7 +112,6 @@ export default function DetailsForm({
         control,
         name: DetailsFormDataEnum.IMAGES,
     });
-    const watchImages = watch(DetailsFormDataEnum.IMAGES)
 
     // FORM SUBMIT
     const createDetailsFormData: SubmitHandler<DetailsFormData> = (data) => {
@@ -195,7 +197,7 @@ export default function DetailsForm({
     }: {
         elementType: DetailsFormDataEnumType
         listNumerable?: boolean
-        imageSize?: descriptionImageSize
+        imageSize?: DescriptionImageSize
     }) => {
         const orderId = uuidv4()
         let componentData: DetailsFormDataType
@@ -258,9 +260,11 @@ export default function DetailsForm({
     }, [])
 
     const deleteInput = useCallback((
-        orderId: string,
-        elementType: DetailsFormDataEnumType
+        element: OrderComponent,
     ) => {
+        const elementType = element.componentType
+        const orderId = element.componentData.orderId
+
         let filedArrayIndex: number = -1
         let fieldArrayRemove: UseFieldArrayRemove | undefined = undefined
 
@@ -288,6 +292,10 @@ export default function DetailsForm({
             case DetailsFormDataEnum.IMAGES:
                 fieldArrayRemove = removeImage
                 filedArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.IMAGES>(orderId, imageFields)
+
+                // remove image from indexedDB
+                const imageName = (element.componentData as ImageFormData).image
+                if (imageName) del(imageName, store)
                 break;
 
             default:
@@ -296,7 +304,7 @@ export default function DetailsForm({
 
         if (filedArrayIndex === -1 || !fieldArrayRemove) return
         fieldArrayRemove(filedArrayIndex)
-        
+
         // remove ordered component from redux
         dispatch(removeDetailsComponent(orderId))
     }, [titleFields, paragraphFields, quouteFields, listFields, imageFields])
@@ -344,7 +352,7 @@ export default function DetailsForm({
         },
     ].filter((input) => !!input)
 
-    
+
     return (
         <form onSubmit={handleSubmit(createDetailsFormData)}>
             <div className={styles.addInputsContainer}>
@@ -376,7 +384,7 @@ export default function DetailsForm({
                                 id={element.componentData.orderId}
                                 elementType={element.componentType}
                                 index={index}
-                                handleDelete={() => deleteInput(element.componentData.orderId, element.componentType)}
+                                handleDelete={() => deleteInput(element)}
                                 key={index}
                             >
                                 {(() => {
@@ -457,7 +465,6 @@ export default function DetailsForm({
                                                 componentData={element}
                                                 index={index}
                                                 imageName={`${DetailsFormDataEnum.IMAGES}.${fieldImageArrayIndex}.image`}
-                                                image={watchImages?.[fieldImageArrayIndex]}
                                                 register={register}
                                                 orderSliceName={orderSliceName}
                                                 className={{

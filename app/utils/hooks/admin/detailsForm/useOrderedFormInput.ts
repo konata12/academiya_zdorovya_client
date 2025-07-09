@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { createStore, set, del } from 'idb-keyval';
 import { v4 as uuidv4 } from 'uuid';
 import { useDetailsFormSelectSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice";
+import { useIndexedDBStoreForDetailsImages } from "@/app/utils/hooks/admin/detailsForm/useIndexedDBStoreForDetailsImages";
 
 
 interface HandleChangeProps<T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
@@ -17,6 +18,7 @@ interface HandleChangeProps<T extends HTMLInputElement | HTMLTextAreaElement | H
 export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
     const { updateDetailsComponent } = useDetailsFormSelectSlice(orderSliceName)
 
+    const store = useIndexedDBStoreForDetailsImages(orderSliceName)
     const dispatch = useAppDispatch()
 
     const handleChange = useCallback(
@@ -28,11 +30,8 @@ export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
             optionIndex,
         }: HandleChangeProps<T>) => {
             const newValue = e.target.value
-            const imageName = uuidv4()
             const newFile = (e as React.ChangeEvent<HTMLInputElement>).target.files || null
             const newComponentData = structuredClone(componentData)
-
-            console.log(newFile)
 
             switch (componentData.componentType) {
                 case DetailsFormDataEnum.TITLES:
@@ -61,14 +60,16 @@ export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
                     keyOfValueToChange = keyOfValueToChange as ImageFormDataEnumType
                     if (keyOfValueToChange === ImageFormDataEnum.IMAGE) {
                         // save image name to redux
-                        (newComponentData.componentData as ImageFormData)[keyOfValueToChange] = imageName
+                        const imageName = uuidv4();
+
+                        (newComponentData.componentData as ImageFormData)[keyOfValueToChange] = imageName;
 
                         // save image to indexedDB using name as key
-                        const oldImageName = (componentData.componentData as ImageFormData)[keyOfValueToChange]
+                        const oldImageName = (componentData.componentData as ImageFormData)[keyOfValueToChange];
                         if (oldImageName) {
-                            del(oldImageName, createStore('app_db', 'news_images'))
-                        }
-                        set(imageName, newFile?.[0] || null, createStore('app_db', 'news_images'))
+                            del(oldImageName, store);
+                        };
+                        set(imageName, newFile?.[0] || null, store)
                     } else if (keyOfValueToChange !== ImageFormDataEnum.SIZE) {
                         (newComponentData.componentData as ImageFormData)[keyOfValueToChange] = newValue
                     }
@@ -82,8 +83,6 @@ export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
                 componentType: newComponentData.componentType,
                 componentData: newComponentData.componentData
             }
-
-            console.log(detailsComponent)
 
             dispatch(updateDetailsComponent({
                 index,
