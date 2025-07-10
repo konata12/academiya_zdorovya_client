@@ -7,7 +7,7 @@ export function useIndexedDBStoreForDetailsImages(orderSliceName: OrderSliceName
     let store: StoreName
 
     switch (orderSliceName) {
-        case 'newsDetailsOrderSlice':
+        case 'newsDetailsOrder':
             store = 'news_images';
             break;
 

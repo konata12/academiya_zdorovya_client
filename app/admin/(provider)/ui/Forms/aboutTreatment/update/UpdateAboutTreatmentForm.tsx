@@ -13,7 +13,7 @@ import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow
 import { addTreatmentTypeModal, closeTreatmentTypeModal, deleteTreatmentTypeModal, openTreatmentTypeModal } from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice'
 import { isEqual } from 'lodash'
 import { setFormDefaultValues } from '@/app/utils/redux/navigation/navigationSlice'
-import InputContainer from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainer/InputContainer'
+import HookFormInputContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
 
 const formDefaultValues: AboutTreatmentFormData = {
@@ -144,7 +144,7 @@ export default function UpdateAboutTreatmentForm() {
             className={styles.form}
             onSubmit={handleSubmit(updateAboutTreatment)}
         >
-            <InputContainer<AboutTreatmentFormData>
+            <HookFormInputContainer<AboutTreatmentFormData>
                 label='Повна назва послуги'
                 name={AboutTreatmentEnum.TITLE}
                 errors={errors}

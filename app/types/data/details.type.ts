@@ -2,7 +2,8 @@ import { ReactHookFromComponent } from "@/app/types/ui/form_components/form_basi
 import { Path, RegisterOptions } from "react-hook-form"
 
 // MAIN
-export type OrderSliceNameType = 'newsDetailsOrderSlice'
+export type OrderSliceNameType = 'newsDetailsOrder'
+
 
 export interface DetailsDataRenderElementBasicType {
     order: number
@@ -36,11 +37,11 @@ export interface DescriptionFormImage extends DetailsDataRenderElementBasicType 
     image: string | null
 }
 
-export type DetailsRedactorType = DescriptionParagraph
+export type DetailsRedactorType = DescriptionTitle 
+    | DescriptionParagraph 
     | DescriptionQuoute
-    | DescriptionImage
-    | DescriptionTitle
     | DescriptionList
+    | DescriptionImage
 
 // FORM DATA
 export interface DetailsFromElementBasicType {

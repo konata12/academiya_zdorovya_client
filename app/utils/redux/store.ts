@@ -24,6 +24,7 @@ import employeesSlice from '@/app/utils/redux/employees/employeesSlice'
 import employeesFormUISlice from '@/app/utils/redux/employees/employeesFormUISlice'
 import aboutTreatmentsFormUISlice from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice'
 import newsSlice from '@/app/utils/redux/news/newsSlice'
+import newsFormSlice from '@/app/utils/redux/news/newsFormSlice'
 import newsDetailsOrderSlice from '@/app/utils/redux/details/newsDetailsOrderSlice'
 
 // Define the root state type
@@ -39,7 +40,9 @@ const rootReducer = combineReducers({
     pricesCreateFormUI: pricesCreateFormUiSlice,
     employeesFormUI: employeesFormUISlice,
 
-    newsDetailsOrderSlice: newsDetailsOrderSlice,
+    // NEWS CREATION
+    newsForm: newsFormSlice,
+    newsDetailsOrder: newsDetailsOrderSlice,
 
     // API
     auth: authSlice,
@@ -55,7 +58,11 @@ const persistConfig = {
     key: 'root',
     version: 1,
     storage,
-    whitelist: ['newsDetailsOrderSlice', 'news'],
+    whitelist: [
+        'newsDetailsOrderSlice',
+        'newsForm',
+        'news',
+    ],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

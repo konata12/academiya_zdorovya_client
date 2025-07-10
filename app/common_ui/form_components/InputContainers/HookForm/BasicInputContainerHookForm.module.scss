@@ -1,4 +1,4 @@
-@use '../../../../../styles/variables' as *;
+@use '../../../../styles/variables' as *;
 
 .inputContainer {
     position: relative;
@@ -6,16 +6,9 @@
     flex-direction: column;
     width: 100%;
 
-    .buttonContainer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 32px;
-    }
-    .input {
-        width: 100%;
-    }
     .error {
+        position: absolute;
+        bottom: -28px;
         width: 100%;
         border-radius: $border-rad-5;
 

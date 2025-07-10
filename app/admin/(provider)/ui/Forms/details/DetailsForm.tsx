@@ -20,6 +20,7 @@ import DetailsImageInput from '@/app/admin/(provider)/ui/Forms/details/inputs/de
 import { useDetailsFormSelectSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice';
 import { useIndexedDBStoreForDetailsImages } from '@/app/utils/hooks/admin/detailsForm/useIndexedDBStoreForDetailsImages';
 import { del } from 'idb-keyval';
+import { useRouter } from 'next/navigation';
 
 
 export default function DetailsForm({
@@ -30,10 +31,11 @@ export default function DetailsForm({
     images,
 
     // need for determining which order slice to use
-    orderSliceName = 'newsDetailsOrderSlice',
+    orderSliceName = 'newsDetailsOrder',
 }: DetailsFromProps) {
     const order = useAppSelector((state: RootState) => state[orderSliceName].order)
     const store = useIndexedDBStoreForDetailsImages(orderSliceName)
+    const router = useRouter()
     const dispatch = useAppDispatch()
 
     const {
@@ -186,7 +188,8 @@ export default function DetailsForm({
             images
         }
 
-        console.log(parsedFormData)
+        console.log('parsedFormData:', parsedFormData)
+        router.push('./')
     }
 
     // INPUT METHODS

@@ -6,13 +6,13 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import styles from './UpdateEmployeeForm.module.scss'
 import { SubmitHandler, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { Employee, AhivementsFormDataEnum, EmployeesBackgroundImgColorEnum, EmployeesCheckboxesType, EmployeesFormData, EmployeesFormDataEnum, EmployeesFormDataUICheckboxesEnum, EmployeesFormDataUIModalsStatesEnum, EmployeesModalsStatesType, WorkSpecialitysFormDataEnum } from '@/app/types/data/employees.type'
-import InputContainer from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainer/InputContainer'
-import TextareaContainer from '@/app/common_ui/form_components/BasicInputContainer/children/TextareaContainer/TextareaContainer'
+import HookFormInputContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm'
+import HookFormTextareaContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/TextareaContainer/TextareaContainerHookForm'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
 import { addModalState, deleteModalState, setCheckboxesDefaultValuesForUpdateForm, setEmployeeBackgroundImgColorCheckbox, setEmployeeUIInitialState, setModalState, setModalStateInitValue, triggerEmployeeUICheckbox } from '@/app/utils/redux/employees/employeesFormUISlice'
-import InputContainerWithCheckbox from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainerWithCheckbox/InputContainerWithCheckbox'
-import InputContainerWithDeleteBtn from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtn'
-import FormElementContainerWithCheckbox from '@/app/common_ui/form_components/BasicInputContainer/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox'
+import HookFormInputContainerWithCheckbox from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithCheckbox/InputContainerWithCheckboxHookForm'
+import HookFormInputContainerWithDeleteBtn from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtnHookForm'
+import FormElementContainerWithCheckboxHookForm from '@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox'
 import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
 import { fullfilled } from '@/app/services/response'
 import { useParams, useRouter } from 'next/navigation'
@@ -234,7 +234,7 @@ export default function UpdateEmployeeFrom() {
             <div className={styles.inputs}>
                 <div className={styles.mainInfo}>
                     <div className={styles.fullName}>
-                        <InputContainer<EmployeesFormData>
+                        <HookFormInputContainer<EmployeesFormData>
                             label="Ім'я"
                             className={{
                                 inputContainer: styles.nameInputContainer
@@ -247,7 +247,7 @@ export default function UpdateEmployeeFrom() {
                             }}
                         />
 
-                        <InputContainer<EmployeesFormData>
+                        <HookFormInputContainer<EmployeesFormData>
                             label="Прізвище"
                             className={{
                                 inputContainer: styles.surnameInputContainer
@@ -261,7 +261,7 @@ export default function UpdateEmployeeFrom() {
                         />
                     </div>
 
-                    <InputContainer<EmployeesFormData>
+                    <HookFormInputContainer<EmployeesFormData>
                         label="Посада"
                         className={{
                             inputContainer: styles.surnameInputContainer
@@ -273,7 +273,7 @@ export default function UpdateEmployeeFrom() {
                             required: "Посада обов'язкова"
                         }}
                     />
-                    <TextareaContainer<EmployeesFormData>
+                    <HookFormTextareaContainer<EmployeesFormData>
                         label="Коротко про лікаря"
                         className={{
                             inputContainer: styles.surnameInputContainer
@@ -294,7 +294,7 @@ export default function UpdateEmployeeFrom() {
                     </p>
 
                     <div className={styles.socialMediaCheckboxes}>
-                        <InputContainerWithCheckbox<EmployeesFormData>
+                        <HookFormInputContainerWithCheckbox<EmployeesFormData>
                             label="Instagram"
                             name={EmployeesFormDataEnum.INSTAGRAM}
                             register={register}
@@ -309,7 +309,7 @@ export default function UpdateEmployeeFrom() {
                                 EmployeesFormDataUICheckboxesEnum.INSTAGRAMCHECKBOX
                             )}
                         />
-                        <InputContainerWithCheckbox<EmployeesFormData>
+                        <HookFormInputContainerWithCheckbox<EmployeesFormData>
                             label="Facebook"
                             name={EmployeesFormDataEnum.FACEBOOK}
                             register={register}
@@ -324,7 +324,7 @@ export default function UpdateEmployeeFrom() {
                                 EmployeesFormDataUICheckboxesEnum.FACEBOOKCHECKBOX
                             )}
                         />
-                        <InputContainerWithCheckbox<EmployeesFormData>
+                        <HookFormInputContainerWithCheckbox<EmployeesFormData>
                             label="X / Twitter"
                             name={EmployeesFormDataEnum.X}
                             register={register}
@@ -339,7 +339,7 @@ export default function UpdateEmployeeFrom() {
                                 EmployeesFormDataUICheckboxesEnum.XCHECKBOX
                             )}
                         />
-                        <InputContainerWithCheckbox<EmployeesFormData>
+                        <HookFormInputContainerWithCheckbox<EmployeesFormData>
                             label="Youtube"
                             name={EmployeesFormDataEnum.YOUTUBE}
                             register={register}
@@ -362,7 +362,7 @@ export default function UpdateEmployeeFrom() {
                         Освіта та практика
                     </p>
 
-                    <TextareaContainer<EmployeesFormData>
+                    <HookFormTextareaContainer<EmployeesFormData>
                         label="Освіта та практика"
                         className={{
                             inputLabel: styles.label,
@@ -388,7 +388,7 @@ export default function UpdateEmployeeFrom() {
                         {workSpecialityFields.map((field, index) => {
                             return (
                                 <div key={field.id}>
-                                    <InputContainerWithDeleteBtn<EmployeesFormData>
+                                    <HookFormInputContainerWithDeleteBtn<EmployeesFormData>
                                         label={`Напрямок ${index + 1}`}
                                         name={EmployeesFormDataEnum.WORKSPECIALITIES}
                                         register={register}
@@ -444,7 +444,7 @@ export default function UpdateEmployeeFrom() {
                 </div>
 
                 <div className={styles.achivements}>
-                    <FormElementContainerWithCheckbox<EmployeesFormData>
+                    <FormElementContainerWithCheckboxHookForm<EmployeesFormData>
                         label='Досягнення за час роботи (опціонально*)'
                         name={EmployeesFormDataEnum.ACHIVEMENTS}
                         isChecked={achivementsCheckbox}
@@ -460,7 +460,7 @@ export default function UpdateEmployeeFrom() {
                             {achivementFields.map((field, index) => {
                                 return (
                                     <div key={field.id}>
-                                        <InputContainerWithDeleteBtn<EmployeesFormData>
+                                        <HookFormInputContainerWithDeleteBtn<EmployeesFormData>
                                             label={`Досягнення ${index + 1}`}
                                             name={EmployeesFormDataEnum.ACHIVEMENTS}
                                             register={register}
@@ -513,7 +513,7 @@ export default function UpdateEmployeeFrom() {
                         >
                             Додати досягнення
                         </button>
-                    </FormElementContainerWithCheckbox>
+                    </FormElementContainerWithCheckboxHookForm>
                 </div>
 
                 <div className={styles.image}>

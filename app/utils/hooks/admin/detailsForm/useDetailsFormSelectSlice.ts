@@ -13,7 +13,7 @@ import {
 export function useDetailsFormSelectSlice(orderSliceName: OrderSliceNameType) {
     const actions = useMemo(() => {
         switch (orderSliceName) {
-            case "newsDetailsOrderSlice":
+            case "newsDetailsOrder":
                 return {
                     addDetailsComponent: addNewsDetailsComponent,
                     removeDetailsComponent: removeNewsDetailsComponent,

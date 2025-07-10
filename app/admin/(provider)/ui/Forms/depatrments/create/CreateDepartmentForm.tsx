@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
 import { createDepartment as createDepartmentAction } from "@/app/utils/redux/departments/departmentsSlice"
 import { fullfilled } from "@/app/services/response";
-import InputContainer from "@/app/common_ui/form_components/BasicInputContainer/children/InputContainer/InputContainer";
+import HookFormInputContainer from "@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm";
 import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
 
 
@@ -35,7 +35,7 @@ export default function CreateDepartmentForm() {
             onSubmit={handleSubmit(createDepartment)}
         >
             <div className={styles.line}>
-                <InputContainer<DepartmentsFormData>
+                <HookFormInputContainer<DepartmentsFormData>
                     label="Місто"
                     name={DepartmentsFormDataEnum.CITY}
                     register={register}
@@ -44,7 +44,7 @@ export default function CreateDepartmentForm() {
                         required: "Місто обов'язкове"
                     }}
                 />
-                <InputContainer<DepartmentsFormData>
+                <HookFormInputContainer<DepartmentsFormData>
                     label="Гаряча лінія"
                     name={DepartmentsFormDataEnum.HOTLINE}
                     register={register}
@@ -59,7 +59,7 @@ export default function CreateDepartmentForm() {
                 />
             </div>
             <div className={styles.line}>
-                <InputContainer<DepartmentsFormData>
+                <HookFormInputContainer<DepartmentsFormData>
                     label="Адреса"
                     name={DepartmentsFormDataEnum.ADDRESS}
                     register={register}
@@ -68,7 +68,7 @@ export default function CreateDepartmentForm() {
                         required: "Адреса обов'язкова",
                     }}
                 />
-                <InputContainer<DepartmentsFormData>
+                <HookFormInputContainer<DepartmentsFormData>
                     label="Посилання на гугл карти"
                     name={DepartmentsFormDataEnum.GOOGLEMAPURSL}
                     register={register}
@@ -82,7 +82,7 @@ export default function CreateDepartmentForm() {
                     }}
                 />
             </div>
-            <InputContainer<DepartmentsFormData>
+            <HookFormInputContainer<DepartmentsFormData>
                 label="Посилання на відгуки гугл карт"
                 name={DepartmentsFormDataEnum.GOOGLEMAPREVIEWSURL}
                 register={register}

@@ -1,9 +1,13 @@
+import { FormError } from "@/app/types/data/form.type";
 import { CheckboxProps } from "@/app/types/ui/form_components/form_basic";
+import { InputHTMLAttributes } from "react";
 import { FieldErrors, Path, RegisterOptions, UseFormRegister } from "react-hook-form";
 
+export type FormElements = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+export type ChangeEvent<T extends FormElements> = (e: React.ChangeEvent<T>) => void;
 
 // CONTAINER PROPS
-export interface InputContainerBasicProps<T extends Record<string, any>> {
+export interface HookFormInputContainerBasicProps<T extends Record<string, any>> {
     children?: React.ReactNode;
     className?: Styles;
     label: string;
@@ -20,17 +24,17 @@ export interface FromElementContainerWithCheckboxProps<T extends Record<string, 
 }
 
 
-// CHILDREN
-export interface InputContainerProps<T extends Record<string, any>>
-    extends InputContainerBasicProps<T> {
+// HOOK FORM CHILDREN 
+export interface HookFormInputContainerProps<T extends Record<string, any>>
+    extends HookFormInputContainerBasicProps<T> {
     register: UseFormRegister<T>;
     registerOptions?: RegisterOptions<T>;
 
     className?: InputContainerStyles;
     type?: React.HTMLInputTypeAttribute;
 }
-export interface TextareaContainerProps<T extends Record<string, any>>
-    extends InputContainerBasicProps<T> {
+export interface HookFormTextareaContainerProps<T extends Record<string, any>>
+    extends HookFormInputContainerBasicProps<T> {
     register: UseFormRegister<T>;
     registerOptions?: RegisterOptions<T>;
 
@@ -38,18 +42,63 @@ export interface TextareaContainerProps<T extends Record<string, any>>
     minRows?: number;
     maxRows?: number;
 }
-export interface InputContainerWithCheckboxProps<T extends Record<string, any>>
-    extends InputContainerProps<T>, CheckboxProps {
+export interface HookFormInputContainerWithCheckboxProps<T extends Record<string, any>>
+    extends HookFormInputContainerProps<T>, CheckboxProps {
     className?: FormElementWithCheckboxStyles;
 }
-export interface InputContainerWithDeleteBtnProps<T extends Record<string, any>>
-    extends InputContainerProps<T> {
+export interface HookFormInputContainerWithDeleteBtnProps<T extends Record<string, any>>
+    extends HookFormInputContainerProps<T> {
     fieldKey?: string
     index?: number
     handleFunction: (e: React.MouseEvent<HTMLButtonElement>) => void
     className?: InputContainerWithDeleteBtnStyles;
 }
 
+// DEFAULT
+export interface InputContainerWithChangeEventProps<T extends FormElements> {
+    changeEvent?: ChangeEvent<T>;
+}
+
+
+export interface InputContainerBasicProps {
+    label: string
+    inputId: string
+    error?: FormError
+    children?: React.ReactNode
+    className?: Styles
+}
+export interface InputContainer<T extends FormElements>
+    extends InputContainerBasicProps,
+    InputContainerWithChangeEventProps<T> {
+
+    value: InputHTMLAttributes<HTMLInputElement>['value']
+    type?: React.HTMLInputTypeAttribute;
+    className?: InputContainerStyles;
+}
+export interface TextareaContainer<T extends FormElements>
+    extends InputContainerBasicProps,
+    InputContainerWithChangeEventProps<T> {
+
+    value: string
+    minRows?: number;
+    maxRows?: number;
+    className?: TextareaContainerStyles;
+}
+
+// DEFAULT IMAGE 
+export interface ImageInputContainer
+    extends InputContainerWithChangeEventProps<HTMLInputElement> {
+
+    label?: string;
+    inputId: string;
+    children: React.ReactNode;
+}
+export interface ImageInputPreviewFromIndexedDBProps {
+    imageName: string | null
+    indexedDBStoreName: string
+    error?: FormError
+    className?: ImageInputPreviewFromIndexedDBStyles
+}
 
 // STYLES
 export interface Styles {
@@ -71,4 +120,14 @@ interface FormElementWithCheckboxStyles extends InputContainerStyles {
 }
 interface InputContainerWithDeleteBtnStyles extends InputContainerStyles {
     buttonContainer?: string;
+}
+
+// STYLES OF DEFAULT INPUT IMAGE CONTAINERS
+interface ImageInputPreviewFromIndexedDBStyles {
+    imagePreview?: string;
+    image?: string;
+    imageContainer?: string;
+    actuallyImage?: string;
+    errorMessage?: string;
+    caption?: string;
 }

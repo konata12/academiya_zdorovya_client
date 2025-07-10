@@ -1,14 +1,14 @@
 import React from 'react'
-import styles from './BasicInputContainer.module.scss'
-import { InputContainerBasicProps } from '@/app/types/ui/form_components/inputContainers.type';
+import styles from './BasicInputContainerHookForm.module.scss'
+import { HookFormInputContainerBasicProps } from '@/app/types/ui/form_components/inputContainers.type';
 
-export default function BasicInputContainer<T extends Record<string, any>>({
+export default function BasicInputContainerHookForm<T extends Record<string, any>>({
     label,
     className,
     name,
     errors,
     children,
-}: InputContainerBasicProps<T>) {
+}: HookFormInputContainerBasicProps<T>) {
     const error = errors[name];
     
     return (

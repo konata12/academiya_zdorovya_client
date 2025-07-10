@@ -8,7 +8,7 @@ import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 export default function page() {
 
     return (
-        <div>
+        <div className={styles.newsCreateFormPage}>
             <div className={styles.titleContainer}>
                 <p className={`title left md`}>
                     Додати новину

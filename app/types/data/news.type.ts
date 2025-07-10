@@ -1,5 +1,8 @@
 import { DetailsFormDataType, DetailsRedactorType } from "@/app/types/data/details.type"
+import { FormErrors } from "@/app/types/data/form.type"
 import { ErrorsResponses, Status } from "@/app/types/data/response.type"
+
+
 
 // GENERAL TYPES
 export interface News {
@@ -22,9 +25,9 @@ export interface NewsInit {
 export interface NewsFormData {
     title: string
     description: string
-    backgroundImg: FileList | null
-    createdAt: Date
+    backgroundImg: string | null
     details: DetailsFormDataType[]
+    errors: FormErrors
 }
 
 // ENUMS
@@ -35,3 +38,6 @@ export enum NewsFormDataEnum {
     CREATEDAT = 'createdAt',
     DETAILS = 'details',
 }
+
+// ENUM TYPES
+export type NewsFormDataEnumType = `${NewsFormDataEnum}`

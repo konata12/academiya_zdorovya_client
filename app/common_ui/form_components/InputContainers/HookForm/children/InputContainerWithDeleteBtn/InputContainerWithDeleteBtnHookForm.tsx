@@ -1,9 +1,9 @@
 import React from 'react'
-import styles from './InputContainerWithDeleteBtn.module.scss'
-import { InputContainerWithDeleteBtnProps } from '@/app/types/ui/form_components/inputContainers.type'
+import styles from './InputContainerWithDeleteBtnHookForm.module.scss'
+import { HookFormInputContainerWithDeleteBtnProps } from '@/app/types/ui/form_components/inputContainers.type'
 import { FieldError, FieldErrors, Path } from 'react-hook-form'
 
-export default function InputContainerWithDeleteBtn<T extends Record<string, any>>({
+export default function HookFormInputContainerWithDeleteBtn<T extends Record<string, any>>({
     label,
     className = {},
     name,
@@ -15,7 +15,7 @@ export default function InputContainerWithDeleteBtn<T extends Record<string, any
     fieldKey = 'value',
     index,
     handleFunction,
-}: InputContainerWithDeleteBtnProps<T>) {
+}: HookFormInputContainerWithDeleteBtnProps<T>) {
     const inputId = index !== undefined
         ? `${name}_${index}`
         : name

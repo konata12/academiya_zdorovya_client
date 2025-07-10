@@ -1,10 +1,10 @@
 import React from 'react'
-import styles from './InputContainerWithCheckbox.module.scss'
+import styles from './InputContainerWithCheckboxHookForm.module.scss'
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
-import { InputContainerWithCheckboxProps } from '@/app/types/ui/form_components/inputContainers.type'
+import { HookFormInputContainerWithCheckboxProps } from '@/app/types/ui/form_components/inputContainers.type'
 import AnimatePresenseWithDynamicHeight from '@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenseWithDynamicHeight'
 
-export default function InputContainerWithCheckbox<T extends Record<string, any>>({
+export default function HookFormInputContainerWithCheckbox<T extends Record<string, any>>({
     label,
     className = {},
     name,
@@ -15,7 +15,7 @@ export default function InputContainerWithCheckbox<T extends Record<string, any>
 
     handleFunction,
     isChecked,
-}: InputContainerWithCheckboxProps<T>) {
+}: HookFormInputContainerWithCheckboxProps<T>) {
     const error = errors[name]
 
     return (

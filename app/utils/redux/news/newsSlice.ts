@@ -5,16 +5,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 
 const initialState: NewsInit = {
-    news: [
-        // {
-        // id: 1,
-        // title: '123',
-        // description: '123',
-        // backgroundImgUrl: '123',
-        // createdAt: new Date(),
-        // details: []
-        // }
-    ],
+    news: [],
     // need for every new to have seperate state for ModalWindow of every new
     newsIsModalOpen: [],
     status: {

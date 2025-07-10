@@ -11,7 +11,7 @@ import styles from './CreateAboutTreatmentForm.module.scss'
 import { createAboutTreatment as createAboutTreatmentAction } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice'
 import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
 import { addTreatmentTypeModal, closeTreatmentTypeModal, deleteTreatmentTypeModal, openTreatmentTypeModal } from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice'
-import InputContainer from '@/app/common_ui/form_components/BasicInputContainer/children/InputContainer/InputContainer'
+import HookFormInputContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
 
 export default function CreateAboutTreatmentForm() {
@@ -95,7 +95,7 @@ export default function CreateAboutTreatmentForm() {
             className={styles.form}
             onSubmit={handleSubmit(createAboutTreatment)}
         >
-            <InputContainer<AboutTreatmentFormData>
+            <HookFormInputContainer<AboutTreatmentFormData>
                 label='Повна назва послуги'
                 name={AboutTreatmentEnum.TITLE}
                 errors={errors}
