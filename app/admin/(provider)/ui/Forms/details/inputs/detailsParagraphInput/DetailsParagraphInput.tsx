@@ -1,19 +1,19 @@
-import AutoResizingTextareaHookForm from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/HookForm/AutoResizingTextareaHookForm'
-import { ParagraphFormComponentProps, ParagraphFormDataEnumType } from '@/app/types/data/details.type'
-import React from 'react'
-import styles from './DetailsParagraphInput.module.scss'
-import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput'
+import AutoResizingTextarea from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/AutoResizingTextarea';
+import React from 'react';
+import styles from './DetailsParagraphInput.module.scss';
+import { DetailsFormDataEnum, ParagraphError, ParagraphFormComponentProps, ParagraphFormData, ParagraphFormDataEnumType } from '@/app/types/data/details.type';
+import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput';
+import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
 
-export default function DetailsParagraphInput<T extends Record<string, any>>({
-    name,
+export default function DetailsParagraphInput({
     index,
     componentData,
-    register,
-    registerOptions,
     className,
     orderSliceName,
-}: ParagraphFormComponentProps<T>) {
+}: ParagraphFormComponentProps) {
     const { handleChange } = useOrderedFormInput(orderSliceName)
+    const { text } = componentData.componentData as ParagraphFormData
+    const error = componentData.componentError as ParagraphError
 
     const keyOfValueToChange: ParagraphFormDataEnumType = 'text'
     const handleChangeProps = {
@@ -23,16 +23,21 @@ export default function DetailsParagraphInput<T extends Record<string, any>>({
     }
 
     return (
-        <>
-            <AutoResizingTextareaHookForm
+        <ErrorWrapper error={error.text.message}>
+            <AutoResizingTextarea
+                id={DetailsFormDataEnum.PARAGRAPHS + index}
                 padding={0}
                 minRows={1}
                 lineHeight={26}
-                {...register(name, registerOptions)}
-                onChange={(e) => { handleChange<HTMLTextAreaElement>({e, ...handleChangeProps}) }}
+                value={text}
+                onChange={(e) => {
+                    handleChange<HTMLTextAreaElement>({
+                        e, ...handleChangeProps
+                    })
+                }}
                 className={`${styles.text} ${className}`}
                 placeholder='Абзац'
             />
-        </>
+        </ErrorWrapper>
     )
 }

@@ -1,12 +1,12 @@
-import { ComponentOrderState, OrderComponent } from "@/app/types/data/details.type";
-import { createSlice } from "@reduxjs/toolkit";
+import { ComponentOrderState, DetailsFormDataErrorType, OrderComponent } from '@/app/types/data/details.type';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: ComponentOrderState = {
     order: []
 };
 
 const newsDetailsOrderSlice = createSlice({
-    name: 'newsDetailsOrderSlice',
+    name: 'newsDetailsOrder',
     initialState,
     reducers: {
         addDetailsComponent(state, action: {
@@ -28,7 +28,7 @@ const newsDetailsOrderSlice = createSlice({
             }
         }) {
             const index = action.payload.index
-            
+
             state.order[index] = action.payload.detailsComponent
         },
         setDetailsStateOrder(state, action: {
@@ -36,7 +36,17 @@ const newsDetailsOrderSlice = createSlice({
         }) {
             state.order = action.payload
         },
-        
+        setDetailsComponentError(state, action: {
+            payload: {
+                error: DetailsFormDataErrorType,
+                index: number,
+            }
+        }) {
+            const index = action.payload.index
+
+            state.order[index].componentError = action.payload.error
+        },
+
 
         resetDetailsComponentsOrder: () => initialState,
     }
@@ -47,6 +57,7 @@ export const {
     removeDetailsComponent,
     updateDetailsComponent,
     setDetailsStateOrder,
+    setDetailsComponentError,
 
     resetDetailsComponentsOrder,
 } = newsDetailsOrderSlice.actions

@@ -1,11 +1,12 @@
-import { NewsFormData, NewsFormDataEnum, NewsFormDataEnumType } from "@/app/types/data/news.type"
+import { DetailsRedactorType } from "@/app/types/data/details.type"
+import { NewsFormData, NewsFormDataEnumType } from "@/app/types/data/news.type"
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState: NewsFormData = {
     title: '',
     description: '',
     backgroundImg: null,
-    details: [],
+    details: null,
     errors: {
         title: { message: '' },
         description: { message: '' },
@@ -28,15 +29,16 @@ const newsFormSlice = createSlice({
         setNewsFormBackgroundImage(state, action: { payload: string }) {
             state.backgroundImg = action.payload
         },
+        setNewsFormDetails(state, action: { payload: DetailsRedactorType }) {
+            state.details = action.payload
+        },
         setNewsFormError(state, action: {
             payload: {
                 field: NewsFormDataEnumType,
                 message: string
             }
         }) {
-            console.log(123)
             const field = action.payload.field
-
             state.errors[field] = { message: action.payload.message }
         },
 
@@ -51,6 +53,7 @@ export const {
     setNewsFormTitle,
     setNewsFormDescription,
     setNewsFormBackgroundImage,
+    setNewsFormDetails,
     setNewsFormError,
 
     resetNewsFromData,

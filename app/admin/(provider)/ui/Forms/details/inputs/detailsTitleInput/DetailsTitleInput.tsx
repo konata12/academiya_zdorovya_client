@@ -1,19 +1,25 @@
-import AutoResizingTextareaHookForm from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/HookForm/AutoResizingTextareaHookForm'
-import { TitleFormComponentProps, TitleFormDataEnumType } from '@/app/types/data/details.type'
-import React from 'react'
-import styles from './DetailsTitleInput.module.scss'
-import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput'
+import AutoResizingTextarea from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/AutoResizingTextarea';
+import React from 'react';
+import styles from './DetailsTitleInput.module.scss';
+import {
+    DetailsFormDataEnum,
+    DetailsTitleFormComponentProps,
+    TitleError,
+    TitleFormData,
+    TitleFormDataEnumType
+    } from '@/app/types/data/details.type';
+import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
+import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput';
 
-export default function DetailsTitleInput<T extends Record<string, any>>({
-    name,
+export default function DetailsTitleInput({
     index,
     componentData,
-    register,
-    registerOptions,
     className,
     orderSliceName,
-}: TitleFormComponentProps<T>) {
+}: DetailsTitleFormComponentProps) {
     const { handleChange } = useOrderedFormInput(orderSliceName)
+    const { title } = componentData.componentData as TitleFormData
+    const error = componentData.componentError as TitleError
 
     const keyOfValueToChange: TitleFormDataEnumType = 'title'
     const handleChangeProps = {
@@ -22,23 +28,23 @@ export default function DetailsTitleInput<T extends Record<string, any>>({
         keyOfValueToChange
     }
 
-    const style: React.CSSProperties = {
-        marginTop: index && '64px',
-    }
-
     return (
-        <>
-            <AutoResizingTextareaHookForm
+        <ErrorWrapper error={error.title.message}>
+            <AutoResizingTextarea
+                id={DetailsFormDataEnum.TITLES + index}
                 padding={0}
                 minRows={1}
                 lineHeight={37}
                 placeholder='Заголовок'
                 className={`${styles.title} ${className}`}
-                style={style}
+                value={title}
 
-                {...register(name, registerOptions)}
-                onChange={(e) => { handleChange<HTMLTextAreaElement>({ e, ...handleChangeProps }) }}
+                onChange={(e) => {
+                    handleChange<HTMLTextAreaElement>({
+                        e, ...handleChangeProps
+                    })
+                }}
             />
-        </>
+        </ErrorWrapper>
     )
 }

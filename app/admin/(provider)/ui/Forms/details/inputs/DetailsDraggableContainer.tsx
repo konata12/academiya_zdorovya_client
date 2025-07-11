@@ -1,12 +1,12 @@
-import React, { useCallback } from 'react'
-import styles from './DraggableContainer.module.scss'
+import React from 'react'
+import styles from './DetailsDraggableContainer.module.scss'
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { DetailsFormDataEnum, DetailsFormDataEnumType } from '@/app/types/data/details.type';
 import CloseButton from '@/app/common_ui/animated_components/CloseButton/CloseButton';
 
 
-export interface DraggableContainerProps {
+export interface DetailsDraggableContainerProps {
     children: React.ReactNode
     id: string
     elementType: DetailsFormDataEnumType
@@ -14,13 +14,13 @@ export interface DraggableContainerProps {
     handleDelete: () => void
 }
 
-export default function DraggableContainer({
+export default function DetailsDraggableContainer({
     children,
     id,
     elementType,
     index,
     handleDelete
-}: DraggableContainerProps) {
+}: DetailsDraggableContainerProps) {
     const {
         attributes,
         listeners,
@@ -31,6 +31,7 @@ export default function DraggableContainer({
         id
     });
 
+    const componentIsTitleNotForstInOrder = elementType === DetailsFormDataEnum.TITLES && index > 0
     const dafeultPadding = 64
     const setBtnPositionAfterPadding = (padding: number) => {
         buttonPosition.top = `calc((100% - ${padding}px) / 2 + ${padding}px)`
@@ -66,7 +67,7 @@ export default function DraggableContainer({
 
     return (
         <div
-            className={styles.container}
+            className={`${styles.container} ${(componentIsTitleNotForstInOrder && styles.titleNotForstInOrder) || ''}`}
             ref={setNodeRef}
             style={style}
             {...attributes}

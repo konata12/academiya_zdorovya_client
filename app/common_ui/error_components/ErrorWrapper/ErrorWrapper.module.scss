@@ -1,0 +1,22 @@
+@use '../../../styles/variables' as *;
+
+.errorWrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 3px;
+
+    .error {
+        position: absolute;
+        display: inline-block;
+        width: 100%;
+        top: -28px;
+
+        color: $error-color;
+        text-align: center;
+        font-size: $pc-h6-fz;
+    }
+}
+
+.wrong {
+    outline: 2px solid $error-color;
+}

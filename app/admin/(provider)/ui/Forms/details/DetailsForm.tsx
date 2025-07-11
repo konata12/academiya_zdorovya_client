@@ -1,26 +1,57 @@
-import { DescriptionFormImage, DescriptionImage, DescriptionImageSize, DescriptionList, DescriptionParagraph, DescriptionQuoute, DescriptionTitle, DetailsFormData, DetailsFormDataEnum, DetailsFormDataEnumType, DetailsFormDataType, DetailsFromProps, ImageFormData, ListFormData, OrderComponent, ParagraphFormData, QuouteFormData, TitleFormData } from '@/app/types/data/details.type'
-import React, { useCallback } from 'react'
-import { SubmitHandler, useFieldArray, UseFieldArrayRemove, useForm } from 'react-hook-form'
-import styles from './DetailsForm.module.scss'
+import React, { useCallback, useState } from 'react';
+import styles from './DetailsForm.module.scss';
+import {
+    DescriptionImage,
+    DescriptionImageSize,
+    DescriptionList,
+    DescriptionParagraph,
+    DescriptionQuoute,
+    DescriptionTitle,
+    DetailsFormDataEnum,
+    DetailsFormDataEnumType,
+    DetailsFormDataErrorType,
+    DetailsFormDataType,
+    DetailsFromProps,
+    DetailsRedactorType,
+    ImageError,
+    ImageFormData,
+    ListError,
+    ListFormData,
+    OrderComponent,
+    ParagraphError,
+    ParagraphFormData,
+    ParagraphFormDataEnum,
+    QuouteError,
+    QuouteFormData,
+    TitleError,
+    TitleFormData,
+    TitleFormDataEnum,
+} from '@/app/types/data/details.type';
+import {
+    DndContext,
+    PointerSensor,
+    useDroppable,
+    useSensor,
+    useSensors
+} from '@dnd-kit/core';
+import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
+import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { RootState } from '@/app/utils/redux/store';
+
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useDetailsFormSelectSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice';
+import { useOrderedForm } from '@/app/utils/hooks/admin/detailsForm/useOrderedForm';
+import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import DetailsTitleInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsTitleInput/DetailsTitleInput'
 import CreateDetailsInputBtn from '@/app/admin/(provider)/ui/Forms/details/createDetailsInputBtn/CreateDetailsInputBtn'
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import { RootState } from '@/app/utils/redux/store';
-import { DndContext, PointerSensor, useDroppable, useSensor, useSensors } from '@dnd-kit/core';
-import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
-import DraggableContainer from '@/app/admin/(provider)/ui/Forms/details/inputs/DraggableContainer';
+import DetailsDraggableContainer from '@/app/admin/(provider)/ui/Forms/details/inputs/DetailsDraggableContainer';
 import DetailsParagraphInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsParagraphInput/DetailsParagraphInput';
 import DetailsQuouteInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsQuouteInput/DetailsQuouteInput';
-import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import DetailsListInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsListInput/DetailsListInput';
-import { useOrderedForm } from '@/app/utils/hooks/admin/detailsForm/useOrderedForm';
 import DetailsImageInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput';
-import { useDetailsFormSelectSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice';
-import { useIndexedDBStoreForDetailsImages } from '@/app/utils/hooks/admin/detailsForm/useIndexedDBStoreForDetailsImages';
-import { del } from 'idb-keyval';
-import { useRouter } from 'next/navigation';
+import { getIndexedDBStoreForDetailsImages } from '@/app/services/details.service';
 
 
 export default function DetailsForm({
@@ -33,24 +64,23 @@ export default function DetailsForm({
     // need for determining which order slice to use
     orderSliceName = 'newsDetailsOrder',
 }: DetailsFromProps) {
-    const order = useAppSelector((state: RootState) => state[orderSliceName].order)
-    const store = useIndexedDBStoreForDetailsImages(orderSliceName)
+    const order = useAppSelector((state: RootState) => state.newsDetailsOrder.order)
+
     const router = useRouter()
     const dispatch = useAppDispatch()
 
+    console.log('order: ', order)
+
     const {
-        renderOrderedComponents,
-
         handleDragEnd,
-        getFieldArrayIdByOrderId,
-        getFieldArrayIndexByOrderId,
     } = useOrderedForm(orderSliceName)
-
     const {
         addDetailsComponent,
         removeDetailsComponent,
-    } = useDetailsFormSelectSlice(orderSliceName)
+        setDetailsComponentError,
 
+        submitForm,
+    } = useDetailsFormSelectSlice(orderSliceName)
     const { setNodeRef } = useDroppable({
         id: 'DetailsForm'
     })
@@ -62,125 +92,168 @@ export default function DetailsForm({
         }),
     );
 
-    const {
-        register,
-        handleSubmit,
-        control,
-        setValue,
-        watch,
-    } = useForm<DetailsFormData>({
-        defaultValues: renderOrderedComponents(order)
-    })
-
-    // FIELD ARRAYS
-    const {
-        fields: titleFields,
-        append: appendTitle,
-        remove: removeTitle,
-    } = useFieldArray({ // needs array of objects to work properly
-        control,
-        name: DetailsFormDataEnum.TITLES,
-    });
-    const {
-        fields: paragraphFields,
-        append: appendParagraph,
-        remove: removeParagraph
-    } = useFieldArray({ // needs array of objects to work properly
-        control,
-        name: DetailsFormDataEnum.PARAGRAPHS,
-    });
-    const {
-        fields: quouteFields,
-        append: appendQuoute,
-        remove: removeQuoute
-    } = useFieldArray({ // needs array of objects to work properly
-        control,
-        name: DetailsFormDataEnum.QUOUTES,
-    });
-    const {
-        fields: listFields,
-        append: appendList,
-        remove: removeList
-    } = useFieldArray({ // needs array of objects to work properly
-        control,
-        name: DetailsFormDataEnum.LISTS,
-    });
-    const watchLists = watch(DetailsFormDataEnum.LISTS)
-    const {
-        fields: imageFields,
-        append: appendImage,
-        remove: removeImage
-    } = useFieldArray({ // needs array of objects to work properly
-        control,
-        name: DetailsFormDataEnum.IMAGES,
-    });
+    const imageStoreName = getIndexedDBStoreForDetailsImages(orderSliceName)
 
     // FORM SUBMIT
-    const createDetailsFormData: SubmitHandler<DetailsFormData> = (data) => {
-        const dataElements = [
-            ...data.titles,
-            ...data.paragraphs,
-            ...data.quoutes,
-            ...data.lists,
-            ...data.images,
-        ]
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const errorsData: {
+            error: DetailsFormDataErrorType,
+            id: string
+        }[] = []
+
         const titles: DescriptionTitle[] = []
         const paragraphs: DescriptionParagraph[] = []
         const quoutes: DescriptionQuoute[] = []
         const lists: DescriptionList[] = []
-        const images: DescriptionFormImage[] = []
+        const images: DescriptionImage[] = []
 
+        order.forEach((orderedComponent, index) => {
+            const componentData = orderedComponent.componentData
 
-        order.forEach((orderedElement, i) => {
-            if (orderedElement.componentData.orderId === dataElements[i].orderId) {
+            switch (orderedComponent.componentType) {
+                case DetailsFormDataEnum.TITLES: {
+                    const title = (componentData as TitleFormData).title
 
-                switch (orderedElement.componentType) {
-                    case DetailsFormDataEnum.TITLES:
-                        titles.push({
-                            title: (dataElements[i] as TitleFormData).title,
-                            order: i
-                        })
-                        break;
+                    // VALIDATE
+                    if (!title.length) {
+                        const error = { title: { message: 'Заповніть заголовок' } }
+                        const id = DetailsFormDataEnum.TITLES + index
 
-                    case DetailsFormDataEnum.PARAGRAPHS:
-                        paragraphs.push({
-                            text: (dataElements[i] as ParagraphFormData).text,
-                            order: i
-                        })
-                        break;
+                        dispatch(setDetailsComponentError({
+                            index,
+                            error,
+                        }))
 
-                    case DetailsFormDataEnum.QUOUTES:
-                        quoutes.push({
-                            text: (dataElements[i] as QuouteFormData).text,
-                            author: (dataElements[i] as QuouteFormData).author,
-                            order: i
-                        })
-                        break;
+                        errorsData.push({ error, id })
+                    }
 
-                    case DetailsFormDataEnum.LISTS:
-                        lists.push({
-                            options: (dataElements[i] as ListFormData).options,
-                            numerable: (dataElements[i] as ListFormData).numerable,
-                            order: i
-                        })
-                        break;
-
-                    case DetailsFormDataEnum.IMAGES:
-                        images.push({
-                            image: (dataElements[i] as ImageFormData).image,
-                            size: (dataElements[i] as ImageFormData).size,
-                            description: (dataElements[i] as ImageFormData).description,
-                            order: i
-                        })
-                        break;
-
-                    default:
-                        break;
+                    // PASS DATA
+                    titles.push({
+                        title,
+                        order: index
+                    })
+                    break;
                 }
+                case DetailsFormDataEnum.PARAGRAPHS: {
+                    const text = (componentData as ParagraphFormData).text
+
+                    if (!text.length) {
+                        const error = { text: { message: 'Заповніть абзац' } }
+                        const id = DetailsFormDataEnum.PARAGRAPHS + index
+
+                        dispatch(setDetailsComponentError({
+                            index,
+                            error,
+                        }))
+                        errorsData.push({ error, id })
+                    }
+
+                    paragraphs.push({
+                        text,
+                        order: index
+                    })
+                    break;
+                }
+                case DetailsFormDataEnum.QUOUTES: {
+                    const { text, author } = (componentData as QuouteFormData)
+
+                    // Check if there are any errors
+                    if (!text.length || !author.length) {
+                        const error: QuouteError = {
+                            text: { message: !text.length ? 'Заповніть цитату' : '' },
+                            author: { message: !author.length ? 'Введіть автора' : '' },
+                        };
+                        const id = DetailsFormDataEnum.QUOUTES + index
+
+
+                        dispatch(setDetailsComponentError({
+                            index,
+                            error,
+                        }));
+                        errorsData.push({ error, id })
+                    }
+
+                    quoutes.push({
+                        text,
+                        author,
+                        order: index
+                    })
+                    break;
+                }
+                case DetailsFormDataEnum.LISTS: {
+                    const { options, numerable } = (componentData as ListFormData);
+                    const listErrors: ListError = {
+                        options: []
+                    };
+
+                    // Check if there are any errors
+                    listErrors.options = (componentData as ListFormData).options.map((option, i) => {
+                        return option.length
+                            ? { message: '' }
+                            : { message: 'Введіть пункт списку' }
+                    })
+                    const containsError = !!(listErrors.options.filter(optionMessage => optionMessage.message.length > 0).length)
+                    if (containsError) {
+                        dispatch(setDetailsComponentError({
+                            index,
+                            error: listErrors,
+                        }));
+                        errorsData.push({
+                            error: listErrors,
+                            id: DetailsFormDataEnum.LISTS + index
+                        })
+                    }
+
+                    lists.push({
+                        options,
+                        numerable,
+                        order: index
+                    })
+                    break;
+                }
+                case DetailsFormDataEnum.IMAGES:
+                    const { image, description } = (componentData as ImageFormData)
+
+                    // Check if there are any errors
+                    if ((!image || !image?.length) || !description.length) {
+                        const error: ImageError = {
+                            image: { message: (!image || !image?.length) ? 'Завантажте зображення' : '' },
+                            description: { message: !description.length ? 'Введіть опис' : '' },
+                        };
+                        const id = DetailsFormDataEnum.IMAGES + index
+
+                        dispatch(setDetailsComponentError({
+                            index,
+                            error,
+                        }));
+                        errorsData.push({ error, id })
+                    }
+
+                    images.push({
+                        image: image || '', //if image is empty or is null, there will be return of function after switch
+                        size: (componentData as ImageFormData).size,
+                        description: (componentData as ImageFormData).description,
+                        order: index
+                    })
+                    break;
+
+                default:
+                    break;
             }
         })
 
-        const parsedFormData = {
+        // FORM VALIDATION
+        if (errorsData.length) {
+            // SCROLL TO INPUT
+            (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            })
+            return
+        }
+
+        const parsedFormData: DetailsRedactorType = {
             titles,
             paragraphs,
             quoutes,
@@ -188,7 +261,7 @@ export default function DetailsForm({
             images
         }
 
-        console.log('parsedFormData:', parsedFormData)
+        dispatch(submitForm(parsedFormData))
         router.push('./')
     }
 
@@ -204,6 +277,7 @@ export default function DetailsForm({
     }) => {
         const orderId = uuidv4()
         let componentData: DetailsFormDataType
+        let componentError: DetailsFormDataErrorType
 
         // create input
         switch (elementType) {
@@ -212,24 +286,31 @@ export default function DetailsForm({
                     orderId,
                     title: ''
                 };
-                appendTitle(componentData);
+                componentError = {
+                    title: { message: '' }
+                }
                 break;
 
             case DetailsFormDataEnum.PARAGRAPHS:
                 componentData = {
                     orderId,
-                    text: ''
+                    text: '',
                 };
-                appendParagraph(componentData);
+                componentError = {
+                    text: { message: '' }
+                }
                 break;
 
             case DetailsFormDataEnum.QUOUTES:
                 componentData = {
                     orderId,
                     text: '',
-                    author: ''
+                    author: '',
                 };
-                appendQuoute(componentData);
+                componentError = {
+                    text: { message: '' },
+                    author: { message: '' },
+                }
                 break;
 
             case DetailsFormDataEnum.LISTS:
@@ -238,7 +319,9 @@ export default function DetailsForm({
                     options: [''],
                     numerable: listNumerable
                 };
-                appendList(componentData);
+                componentError = {
+                    options: [{ message: '' }]
+                }
                 break;
 
             case DetailsFormDataEnum.IMAGES:
@@ -248,7 +331,10 @@ export default function DetailsForm({
                     image: null,
                     description: ''
                 };
-                appendImage(componentData);
+                componentError = {
+                    image: { message: '' },
+                    description: { message: '' },
+                }
                 break;
 
             default:
@@ -258,59 +344,17 @@ export default function DetailsForm({
         // make input ordered
         dispatch(addDetailsComponent({
             componentType: elementType,
-            componentData
+            componentData,
+            componentError
         }))
     }, [])
 
     const deleteInput = useCallback((
         element: OrderComponent,
     ) => {
-        const elementType = element.componentType
-        const orderId = element.componentData.orderId
-
-        let filedArrayIndex: number = -1
-        let fieldArrayRemove: UseFieldArrayRemove | undefined = undefined
-
-        switch (elementType) {
-            case DetailsFormDataEnum.TITLES:
-                fieldArrayRemove = removeTitle
-                filedArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.TITLES>(orderId, titleFields)
-                break;
-
-            case DetailsFormDataEnum.PARAGRAPHS:
-                fieldArrayRemove = removeParagraph
-                filedArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.PARAGRAPHS>(orderId, paragraphFields)
-                break;
-
-            case DetailsFormDataEnum.QUOUTES:
-                fieldArrayRemove = removeQuoute
-                filedArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.QUOUTES>(orderId, quouteFields)
-                break;
-
-            case DetailsFormDataEnum.LISTS:
-                fieldArrayRemove = removeList
-                filedArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.LISTS>(orderId, listFields)
-                break;
-
-            case DetailsFormDataEnum.IMAGES:
-                fieldArrayRemove = removeImage
-                filedArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.IMAGES>(orderId, imageFields)
-
-                // remove image from indexedDB
-                const imageName = (element.componentData as ImageFormData).image
-                if (imageName) del(imageName, store)
-                break;
-
-            default:
-                break;
-        }
-
-        if (filedArrayIndex === -1 || !fieldArrayRemove) return
-        fieldArrayRemove(filedArrayIndex)
-
         // remove ordered component from redux
-        dispatch(removeDetailsComponent(orderId))
-    }, [titleFields, paragraphFields, quouteFields, listFields, imageFields])
+        dispatch(removeDetailsComponent(element.componentData.orderId))
+    }, [])
 
     const formInputsToRender = [
         titles && {
@@ -357,7 +401,7 @@ export default function DetailsForm({
 
 
     return (
-        <form onSubmit={handleSubmit(createDetailsFormData)}>
+        <form onSubmit={handleSubmit}>
             <div className={styles.addInputsContainer}>
                 {formInputsToRender.length && formInputsToRender.map((input, i) => {
                     return <CreateDetailsInputBtn
@@ -371,6 +415,7 @@ export default function DetailsForm({
             <DndContext
                 sensors={sensors}
                 onDragEnd={(e) => handleDragEnd(e, order)}
+
                 modifiers={[restrictToVerticalAxis, restrictToParentElement]}
             >
                 <SortableContext
@@ -383,7 +428,7 @@ export default function DetailsForm({
                         className={styles.mainBody}
                     >
                         {order.map((element, index) => {
-                            return <DraggableContainer
+                            return <DetailsDraggableContainer
                                 id={element.componentData.orderId}
                                 elementType={element.componentType}
                                 index={index}
@@ -391,46 +436,33 @@ export default function DetailsForm({
                                 key={index}
                             >
                                 {(() => {
+                                    const componentData = element.componentData
+                                    const key = componentData.orderId
+
                                     switch (element.componentType) {
                                         case DetailsFormDataEnum.TITLES:
-                                            const fieldTitleArrayId = getFieldArrayIdByOrderId<DetailsFormDataEnum.TITLES>(element.componentData.orderId, titleFields)
-                                            const fieldTitleArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.TITLES>(element.componentData.orderId, titleFields)
-
-                                            return <DetailsTitleInput<DetailsFormData>
-                                                key={fieldTitleArrayId}
-                                                name={`${DetailsFormDataEnum.TITLES}.${fieldTitleArrayIndex}.title`}
+                                            return <DetailsTitleInput
+                                                key={key}
                                                 componentData={element}
                                                 index={index}
-                                                register={register}
                                                 orderSliceName={orderSliceName}
                                                 className={styles.orderedComponent}
                                             />
 
                                         case DetailsFormDataEnum.PARAGRAPHS:
-                                            const fieldParagraphArrayId = getFieldArrayIdByOrderId<DetailsFormDataEnum.PARAGRAPHS>(element.componentData.orderId, paragraphFields)
-                                            const fieldParagraphArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.PARAGRAPHS>(element.componentData.orderId, paragraphFields)
-
-                                            return <DetailsParagraphInput<DetailsFormData>
-                                                key={fieldParagraphArrayId}
-                                                name={`${DetailsFormDataEnum.PARAGRAPHS}.${fieldParagraphArrayIndex}.text`}
+                                            return <DetailsParagraphInput
+                                                key={key}
                                                 componentData={element}
                                                 index={index}
-                                                register={register}
                                                 orderSliceName={orderSliceName}
                                                 className={styles.orderedComponent}
                                             />
 
                                         case DetailsFormDataEnum.QUOUTES:
-                                            const fieldQuouteArrayId = getFieldArrayIdByOrderId<DetailsFormDataEnum.QUOUTES>(element.componentData.orderId, quouteFields)
-                                            const fieldQuouteArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.QUOUTES>(element.componentData.orderId, quouteFields)
-
-                                            return <DetailsQuouteInput<DetailsFormData>
-                                                key={fieldQuouteArrayId}
-                                                name={`${DetailsFormDataEnum.QUOUTES}.${fieldQuouteArrayIndex}.text`}
-                                                authorName={`${DetailsFormDataEnum.QUOUTES}.${fieldQuouteArrayIndex}.author`}
+                                            return <DetailsQuouteInput
+                                                key={key}
                                                 componentData={element}
                                                 index={index}
-                                                register={register}
                                                 orderSliceName={orderSliceName}
                                                 className={{
                                                     quoute: styles.orderedComponent,
@@ -440,17 +472,10 @@ export default function DetailsForm({
                                             />
 
                                         case DetailsFormDataEnum.LISTS:
-                                            const fieldListArrayId = getFieldArrayIdByOrderId<DetailsFormDataEnum.LISTS>(element.componentData.orderId, listFields)
-                                            const fieldListArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.LISTS>(element.componentData.orderId, listFields)
-
-                                            return <DetailsListInput<DetailsFormData>
-                                                key={fieldListArrayId}
-                                                name={`${DetailsFormDataEnum.LISTS}.${fieldListArrayIndex}.options`}
-                                                list={watchLists[fieldListArrayIndex]}
+                                            return <DetailsListInput
+                                                key={key}
                                                 componentData={element}
                                                 index={index}
-                                                register={register}
-                                                setValue={setValue}
                                                 orderSliceName={orderSliceName}
                                                 className={{
                                                     option: styles.orderedComponent,
@@ -459,17 +484,12 @@ export default function DetailsForm({
                                             />
 
                                         case DetailsFormDataEnum.IMAGES:
-                                            const fieldImageArrayId = getFieldArrayIdByOrderId<DetailsFormDataEnum.IMAGES>(element.componentData.orderId, imageFields)
-                                            const fieldImageArrayIndex = getFieldArrayIndexByOrderId<DetailsFormDataEnum.IMAGES>(element.componentData.orderId, imageFields)
-
-                                            return <DetailsImageInput<DetailsFormData>
-                                                key={fieldImageArrayId}
-                                                name={`${DetailsFormDataEnum.IMAGES}.${fieldImageArrayIndex}.description`}
+                                            return <DetailsImageInput
+                                                key={key}
                                                 componentData={element}
                                                 index={index}
-                                                imageName={`${DetailsFormDataEnum.IMAGES}.${fieldImageArrayIndex}.image`}
-                                                register={register}
                                                 orderSliceName={orderSliceName}
+                                                indexedDBStoreName={imageStoreName}
                                                 className={{
                                                     image: styles.orderedComponent,
                                                     description: styles.orderedComponent,
@@ -481,7 +501,7 @@ export default function DetailsForm({
                                             break;
                                     }
                                 })()}
-                            </DraggableContainer>
+                            </DetailsDraggableContainer>
                         })}
                     </div>
                 </SortableContext>

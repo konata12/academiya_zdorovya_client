@@ -1,61 +1,72 @@
-import AutoResizingTextareaHookForm from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/HookForm/AutoResizingTextareaHookForm'
-import { QuouteFormComponentProps, QuouteFormData, QuouteFormDataEnum } from '@/app/types/data/details.type'
+import { DetailsFormDataEnum, QuouteError, QuouteFormComponentProps, QuouteFormData } from '@/app/types/data/details.type'
 import React from 'react'
 import styles from './DetailsQuouteInput.module.scss'
 import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput'
+import AutoResizingTextarea from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/AutoResizingTextarea'
+import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper'
 
-export default function DetailsQuouteInput<T extends Record<string, any>>({
-    name,
+export default function DetailsQuouteInput({
     index,
     componentData,
-    register,
-    registerOptions,
-    authorName,
-    authorRegisterOptions,
     className,
     orderSliceName,
-}: QuouteFormComponentProps<T>) {
+}: QuouteFormComponentProps) {
     const { handleChange } = useOrderedFormInput(orderSliceName)
+    const { text, author } = componentData.componentData as QuouteFormData
+    const quouteErrors = componentData.componentError as QuouteError
 
     const handleChangeProps = {
         componentData,
         index,
     }
 
-
     return (
-        <div className={`${styles.container} ${className?.container}`}>
+        <div
+            id={DetailsFormDataEnum.QUOUTES + index}
+            className={`${styles.container} ${className?.container}`}
+        >
             <div className={`${styles.sideLine}`}></div>
-            <AutoResizingTextareaHookForm
-                className={`${styles.text} ${className?.quoute}`}
-                placeholder='Текст цитати'
-                padding={0}
-                minRows={1}
-                lineHeight={26}
-            
-                {...register(name, registerOptions)}
-                onChange={(e) => {
-                    handleChange<HTMLTextAreaElement>({
-                        e,
-                        keyOfValueToChange: 'text',
-                        ...handleChangeProps
-                    })
-                }}
-            />
-            <input
-                type="text"
-                className={`${styles.author} ${className?.author}`}
-                placeholder='Автор цитати'
-            
-                {...register(authorName, authorRegisterOptions)}
-                onChange={(e) => {
-                    handleChange<HTMLInputElement>({
-                        e,
-                        keyOfValueToChange: 'author',
-                        ...handleChangeProps
-                    })
-                }}
-            />
+            <ErrorWrapper
+                error={quouteErrors.text.message}
+                className={{ errorWrapper: styles.textErrorWrapper }}
+            >
+                <AutoResizingTextarea
+                    className={`${styles.text} ${className?.quoute}`}
+                    placeholder='Текст цитати'
+                    padding={0}
+                    minRows={1}
+                    lineHeight={26}
+                    value={text}
+
+                    onChange={(e) => {
+                        handleChange<HTMLTextAreaElement>({
+                            e,
+                            keyOfValueToChange: 'text',
+                            ...handleChangeProps
+                        })
+                    }}
+                />
+            </ErrorWrapper>
+
+            <ErrorWrapper
+                error={quouteErrors.author.message}
+                className={{ error: styles.authorError }}
+            >
+                <input
+                    type="text"
+                    className={`${styles.author} ${className?.author}`}
+                    placeholder='Автор цитати'
+                    value={author}
+
+                    onChange={(e) => {
+                        handleChange<HTMLInputElement>({
+                            e,
+                            keyOfValueToChange: 'author',
+                            ...handleChangeProps
+                        })
+                    }}
+                />
+            </ErrorWrapper>
         </div>
     )
 }

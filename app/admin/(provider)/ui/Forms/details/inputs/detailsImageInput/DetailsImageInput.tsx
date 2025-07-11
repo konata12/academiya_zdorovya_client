@@ -1,70 +1,44 @@
 import React, { useEffect, useState } from 'react'
 import styles from './DetailsImageInput.module.scss'
-import AutoResizingTextareaHookForm from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/HookForm/AutoResizingTextareaHookForm'
-import { ImageFormComponentProps, ImageFormData } from '@/app/types/data/details.type'
+import { DetailsFormDataEnum, ImageError, ImageFormComponentProps, ImageFormData } from '@/app/types/data/details.type'
 import { v4 as uuidv4 } from 'uuid';
 import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput';
 import { createStore, get } from 'idb-keyval';
+import AutoResizingTextarea from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/AutoResizingTextarea';
+import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
+import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
+import { useGetImageUrlFromIndexedDBImage } from '@/app/utils/hooks/admin/indexedDB/useGetImageUrlFromIndexedDBImage';
 
 
-export default function DetailsImageInput<T extends Record<string, any>>({
-    name,
+export default function DetailsImageInput({
     index,
     componentData,
-    register,
-    registerOptions,
-    imageName,
-    imageRegisterOptions,
     className,
     orderSliceName,
-}: ImageFormComponentProps<T>) {
+    indexedDBStoreName,
+}: ImageFormComponentProps) {
     const { handleChange } = useOrderedFormInput(orderSliceName)
-    const [imageUrl, setImageUrl] = useState<string | null>(null)
 
     const imageData = (componentData.componentData as ImageFormData)
-    const imageNameMega = imageData.image
-
-    useEffect(() => {
-        let isMounted = true;
-
-        const fetchImage = async () => {
-            if (imageNameMega) {
-                try {
-                    const imageFile = await get(imageNameMega, createStore('app_db', 'news_images'));
-                    console.log('DetailsImageInput: ', imageFile)
-                    if (isMounted && imageFile) {
-                        const newUrl = URL.createObjectURL(imageFile);
-                        setImageUrl(newUrl);
-                    }
-                } catch (error) {
-                    console.error('Error loading image from IndexedDB:', error);
-                }
-            }
-        };
-
-        fetchImage();
-
-        return () => {
-            isMounted = false;
-            if (imageUrl) {
-                URL.revokeObjectURL(imageUrl); // Clean up the object URL
-            }
-        };
-    }, [imageNameMega]); // Re-run if `image.image` changes
+    const imageUrl = useGetImageUrlFromIndexedDBImage(imageData.image, indexedDBStoreName)
 
 
     const inputId = React.useMemo(() => `upload_image_${uuidv4()}`, [])
+    const descriptionValue = imageData.description
+    const imageErrors = componentData.componentError as ImageError
 
     return (
-        <div className={`${styles.container} ${className?.container}`}>
+        <div
+            id={DetailsFormDataEnum.IMAGES + index}
+            className={`${styles.container} ${className?.container}`}
+        >
             <div className={`${styles.imageContainer} ${styles[imageData.size]}`}>
-                <input
-                    id={inputId}
-                    type="file"
-                    hidden
-
-                    // {...register(imageName, imageRegisterOptions)}
-                    onChange={(e) => {
+                <ImageInputContainer
+                    inputId={inputId}
+                    className={{
+                        label: styles.imageInput
+                    }}
+                    changeEvent={(e) => {
                         handleChange<HTMLInputElement>({
                             e,
                             componentData,
@@ -72,37 +46,41 @@ export default function DetailsImageInput<T extends Record<string, any>>({
                             keyOfValueToChange: 'image',
                         })
                     }}
-                />
-                <label
-                    className={`btn blue sm ${styles.imageInput}`}
-                    htmlFor={inputId}
                 >
-                    Завантажити
-                </label>
-
-                {imageUrl && <img
-                    className={styles.image}
-                    src={imageUrl}
-                />}
+                    <ErrorWrapper
+                        error={imageErrors.image.message}
+                        className={{
+                            errorWrapper: styles.imageErrorWrap,
+                            error: `${styles.imageError} ${imageData.size === 'big' ? styles.big : ''}`,
+                        }}
+                    >
+                        {imageUrl && <img
+                            className={styles.image}
+                            src={imageUrl}
+                        />}
+                    </ErrorWrapper>
+                </ImageInputContainer>
             </div>
 
-            <AutoResizingTextareaHookForm
-                padding={0}
-                minRows={1}
-                lineHeight={19}
-                className={`${styles.description} ${className?.description}`}
-                placeholder='Назва зображення або опис'
+            <ErrorWrapper error={imageErrors.description.message}>
+                <AutoResizingTextarea
+                    padding={0}
+                    minRows={1}
+                    lineHeight={19}
+                    className={`${styles.description} ${className?.description}`}
+                    placeholder='Назва зображення або опис'
+                    value={descriptionValue}
 
-                {...register(name, registerOptions)}
-                onChange={(e) => {
-                    handleChange<HTMLTextAreaElement>({
-                        e,
-                        componentData,
-                        index,
-                        keyOfValueToChange: 'description',
-                    })
-                }}
-            />
+                    onChange={(e) => {
+                        handleChange<HTMLTextAreaElement>({
+                            e,
+                            componentData,
+                            index,
+                            keyOfValueToChange: 'description',
+                        })
+                    }}
+                />
+            </ErrorWrapper>
         </div>
     )
 }

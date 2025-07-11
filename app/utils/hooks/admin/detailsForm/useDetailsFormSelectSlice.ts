@@ -1,13 +1,15 @@
-import { OrderSliceNameType } from "@/app/types/data/details.type";
-import { useMemo } from "react";
-
 import {
     addDetailsComponent as addNewsDetailsComponent,
     removeDetailsComponent as removeNewsDetailsComponent,
-    updateDetailsComponent as updateNewsDetailsComponent,
-    setDetailsStateOrder as setNewsDetailsStateOrder,
     resetDetailsComponentsOrder as resetNewsDetailsComponentsOrder,
-} from "@/app/utils/redux/details/newsDetailsOrderSlice";
+    setDetailsComponentError as setNewsDetailsComponentError,
+    setDetailsStateOrder as setNewsDetailsStateOrder,
+    updateDetailsComponent as updateNewsDetailsComponent
+    } from '@/app/utils/redux/details/newsDetailsOrderSlice';
+import { OrderSliceNameType } from '@/app/types/data/details.type';
+import { setNewsFormDetails } from '@/app/utils/redux/news/newsFormSlice';
+import { useMemo } from 'react';
+
 
 
 export function useDetailsFormSelectSlice(orderSliceName: OrderSliceNameType) {
@@ -15,11 +17,16 @@ export function useDetailsFormSelectSlice(orderSliceName: OrderSliceNameType) {
         switch (orderSliceName) {
             case "newsDetailsOrder":
                 return {
+                    // DETAILS ORDER SLICE
                     addDetailsComponent: addNewsDetailsComponent,
                     removeDetailsComponent: removeNewsDetailsComponent,
                     updateDetailsComponent: updateNewsDetailsComponent,
                     setDetailsStateOrder: setNewsDetailsStateOrder,
                     resetDetailsComponentsOrder: resetNewsDetailsComponentsOrder,
+                    setDetailsComponentError: setNewsDetailsComponentError,
+
+                    // FORM SLICE
+                    submitForm: setNewsFormDetails,
                 }
         }
     }, [orderSliceName])

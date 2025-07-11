@@ -1,62 +1,63 @@
-import AutoResizingTextareaHookForm from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/HookForm/AutoResizingTextareaHookForm'
-import { ListFormComponentProps, ListFormData } from '@/app/types/data/details.type'
-import React, { useCallback } from 'react'
+import { DetailsFormDataEnum, ListError, ListFormComponentProps, ListFormData } from '@/app/types/data/details.type'
+import React from 'react'
 import styles from './DetailsListInput.module.scss'
-import { Path, PathValue } from 'react-hook-form'
 import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput'
-import { useAppDispatch } from '@/app/utils/redux/hooks'
-import { updateDetailsComponent } from '@/app/utils/redux/details/newsDetailsOrderSlice'
 import { useOrderedListHandleKeyDown } from '@/app/utils/hooks/admin/detailsForm/useOrderedListHandleKeyDown'
+import AutoResizingTextarea from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/AutoResizingTextarea'
+import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper'
 
-export default function DetailsListInput<T extends Record<string, any>>({
-    name,
+export default function DetailsListInput({
     index,
     componentData,
-    register,
-    setValue,
-    registerOptions,
     className,
-    list,
     orderSliceName,
-}: ListFormComponentProps<T>) {
+}: ListFormComponentProps) {
     const { handleChange } = useOrderedFormInput(orderSliceName)
-    const { handleKeyDown } = useOrderedListHandleKeyDown<T>({
-        name,
+    const { handleKeyDown } = useOrderedListHandleKeyDown({
         index,
         componentData,
-        setValue,
-        list,
         orderSliceName,
     })
 
+    const listErrors = componentData.componentError as ListError
+    const list = (componentData.componentData as ListFormData)
+
     return (
         <>
-            {<ul className={`${styles.list} ${className?.container || ''}`}>
-                {list.options.map((_, optionIndex) => (
+            {<ul
+                id={DetailsFormDataEnum.LISTS + index}
+                className={`${styles.list} ${className?.container || ''}`}
+            >
+                {list.options.map((option, optionIndex) => (
                     <li
                         key={list.orderId + optionIndex}
                         className={`${styles.option} ${list.numerable ? styles.numerable : ''}`}
                     >
                         {list.numerable && <span>{optionIndex + 1 + '.'}</span>}
 
-                        <AutoResizingTextareaHookForm
-                            lineHeight={26}
-                            padding={0}
-                            className={`${styles.input} ${className?.option}`}
-                            placeholder={`Опція ${optionIndex + 1}`}
+                        <ErrorWrapper
+                            error={listErrors.options[optionIndex].message}
+                            className={{ error: styles.error }}
+                        >
+                            <AutoResizingTextarea
+                                lineHeight={26}
+                                padding={0}
+                                className={`${styles.input} ${className?.option}`}
+                                placeholder={`Опція ${optionIndex + 1}`}
+                                value={option}
 
-                            {...register((name + `.${optionIndex}` as Path<T>), registerOptions)}
-                            onKeyDown={(e: React.KeyboardEvent) => { handleKeyDown(e, optionIndex) }}
-                            onChange={(e) => {
-                                handleChange<HTMLTextAreaElement>({
-                                    e,
-                                    componentData,
-                                    index,
-                                    keyOfValueToChange: 'options',
-                                    optionIndex,
-                                })
-                            }}
-                        />
+                                onKeyDown={(e: React.KeyboardEvent) => { handleKeyDown(e, optionIndex) }}
+                                onChange={(e) => {
+                                    handleChange<HTMLTextAreaElement>({
+                                        e,
+                                        componentData,
+                                        index,
+                                        keyOfValueToChange: 'options',
+                                        optionIndex,
+                                    })
+                                }}
+                            />
+                        </ErrorWrapper>
                     </li>
                 ))}
             </ul>}

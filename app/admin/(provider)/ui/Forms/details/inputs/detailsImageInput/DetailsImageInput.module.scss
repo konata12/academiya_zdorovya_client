@@ -2,6 +2,9 @@
 @use '../../../../../../../styles/functions' as *;
 
 .container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
 
     .imageContainer {
         position: relative;
@@ -38,9 +41,20 @@
     }
 
     .description {
-        margin-top: 32px;
-
         font-size: $details-from-image-fz;
         text-align: center;
+    }
+}
+
+.imageErrorWrap.imageErrorWrap {
+    position: initial;
+    outline: none;
+}
+.imageError.imageError {
+    top: 20px;
+    font-size: $pc-h3-fz;
+
+    &.big {
+        top: 250px
     }
 }

@@ -2,13 +2,18 @@ import styles from './CommonTable.module.scss'
 
 export default function CommonTable({
     children,
-    titles
+    titles,
+    tableId
 }: Readonly<{
     children: React.ReactNode;
     titles: string[]
+    tableId?: string
 }>) {
     return (
-        <div className={styles.table}>
+        <div
+            className={styles.table}
+            id={tableId}
+        >
             <div className={styles.titles}>
                 {titles.map(title => (<span
                     className={styles.title}

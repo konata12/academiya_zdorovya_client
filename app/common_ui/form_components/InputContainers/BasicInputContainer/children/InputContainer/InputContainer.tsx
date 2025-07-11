@@ -11,7 +11,7 @@ export default function InputContainer({
     className,
     type = 'text',
     changeEvent,
-}: InputContainer<HTMLInputElement>) {
+}: InputContainer) {
     const errorForStyle = error && error.message
 
     return (

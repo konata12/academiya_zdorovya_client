@@ -1,9 +1,8 @@
-import { ReactHookFromComponent } from "@/app/types/ui/form_components/form_basic"
-import { Path, RegisterOptions } from "react-hook-form"
+import { StoreName } from "@/app/services/details.service"
+import { FormInputError } from "@/app/types/data/form.type"
 
 // MAIN
 export type OrderSliceNameType = 'newsDetailsOrder'
-
 
 export interface DetailsDataRenderElementBasicType {
     order: number
@@ -11,153 +10,11 @@ export interface DetailsDataRenderElementBasicType {
 
 export type DescriptionImageSize = 'big' | 'small'
 
-// RESPONSE DATA
-export interface DescriptionTitle extends DetailsDataRenderElementBasicType {
-    title: string
-}
-export interface DescriptionParagraph extends DetailsDataRenderElementBasicType {
-    text: string
-}
-export interface DescriptionQuoute extends DetailsDataRenderElementBasicType {
-    text: string
-    author: string
-}
-export interface DescriptionList extends DetailsDataRenderElementBasicType {
-    numerable: boolean
-    options: string[]
-}
-export interface DescriptionImage extends DetailsDataRenderElementBasicType {
-    description: string
-    size: DescriptionImageSize
-    imgUrl: string
-}
-export interface DescriptionFormImage extends DetailsDataRenderElementBasicType {
-    description: string
-    size: DescriptionImageSize
-    image: string | null
-}
-
-export type DetailsRedactorType = DescriptionTitle 
-    | DescriptionParagraph 
-    | DescriptionQuoute
-    | DescriptionList
-    | DescriptionImage
-
-// FORM DATA
-export interface DetailsFromElementBasicType {
-    orderId: string
-}
-
-export interface TitleFormData extends DetailsFromElementBasicType {
-    title: string
-}
-export interface ParagraphFormData extends DetailsFromElementBasicType {
-    text: string
-}
-export interface QuouteFormData extends DetailsFromElementBasicType {
-    text: string
-    author: string
-}
-export interface ListFormData extends DetailsFromElementBasicType {
-    numerable: boolean
-    options: string[]
-}
-export interface ImageFormData extends DetailsFromElementBasicType {
-    description: string
-    size: DescriptionImageSize
-    image: string | null
-}
-
-export interface DetailsFormData {
-    titles: TitleFormData[]
-    paragraphs: ParagraphFormData[]
-    quoutes: QuouteFormData[]
-    lists: ListFormData[]
-    images: ImageFormData[]
-}
-export type DetailsFormDataType = TitleFormData
-    | ParagraphFormData
-    | QuouteFormData
-    | ListFormData
-    | ImageFormData
-
-export type DetailsFormDataEnumType = `${DetailsFormDataEnum}`
-
-// COMPONENT
-interface StyledComponent<T extends Record<string, any>>
-    extends ReactHookFromComponent<T> {
-    className?: string
-}
-interface HandleChangeComponent {
-    index: number
-    componentData: OrderComponent
-    orderSliceName: OrderSliceNameType
-}
-export interface TitleFormComponentProps<T extends Record<string, any>>
-    extends StyledComponent<T>,
-    HandleChangeComponent { }
-export interface ParagraphFormComponentProps<T extends Record<string, any>>
-    extends StyledComponent<T>,
-    HandleChangeComponent { }
-export interface QuouteFormComponentProps<T extends Record<string, any>>
-    extends ReactHookFromComponent<T>,
-    HandleChangeComponent {
-    className?: {
-        container?: string
-        quoute?: string
-        author?: string
-    }
-    authorName: Path<T>
-    authorRegisterOptions?: RegisterOptions<T>
-}
-export interface ListFormComponentProps<T extends Record<string, any>>
-    extends ReactHookFromComponent<T>,
-    HandleChangeComponent {
-    className?: {
-        container?: string
-        option?: string
-    }
-    list: ListFormData
-}
-export interface ImageFormComponentProps<T extends Record<string, any>>
-    extends ReactHookFromComponent<T>,
-    HandleChangeComponent {
-    className?: {
-        container?: string
-        image?: string
-        description?: string
-    }
-    imageName: Path<T>
-    imageRegisterOptions?: RegisterOptions<T>
-}
-
-
-
-export interface DetailsFromProps {
-    titles?: boolean
-    paragraphs?: boolean
-    quoutes?: boolean
-    lists?: boolean
-    images?: boolean
-    orderSliceName?: OrderSliceNameType
-}
-
-
-// REDUX ORDER SLICE
-export interface OrderComponent {
-    componentType: DetailsFormDataEnumType
-    componentData: DetailsFormDataType
-}
-
-export interface ComponentOrderState {
-    order: OrderComponent[]
-}
-
 // ENUMS
 export enum DetailsFormDataEnum {
+    TITLES = 'titles',
     PARAGRAPHS = 'paragraphs',
     QUOUTES = 'quoutes',
-    TITLES = 'titles',
     LISTS = 'lists',
     IMAGES = 'images',
 }
@@ -193,3 +50,163 @@ export type ComponentsFormDataEnum = TitleFormDataEnumType
     | QuouteFormDataEnumType
     | ListFormDataEnumType
     | ImageFormDataEnumType
+
+
+// FORM DATA
+export interface DetailsFromElementBasicType {
+    orderId: string
+}
+
+export interface TitleFormData extends DetailsFromElementBasicType {
+    [TitleFormDataEnum.TITLE]: string
+}
+export interface ParagraphFormData extends DetailsFromElementBasicType {
+    [ParagraphFormDataEnum.TEXT]: string
+}
+export interface QuouteFormData extends DetailsFromElementBasicType {
+    [QuouteFormDataEnum.TEXT]: string
+    [QuouteFormDataEnum.AUTHOR]: string
+}
+export interface ListFormData extends DetailsFromElementBasicType {
+    [ListFormDataEnum.NUMERABLE]: boolean
+    [ListFormDataEnum.OPTIONS]: string[]
+}
+export interface ImageFormData extends DetailsFromElementBasicType {
+    [ImageFormDataEnum.SIZE]: DescriptionImageSize
+    [ImageFormDataEnum.DESCRIPTION]: string
+    [ImageFormDataEnum.IMAGE]: string | null
+}
+
+export interface DetailsFormData {
+    [DetailsFormDataEnum.TITLES]: TitleFormData[]
+    [DetailsFormDataEnum.PARAGRAPHS]: ParagraphFormData[]
+    [DetailsFormDataEnum.QUOUTES]: QuouteFormData[]
+    [DetailsFormDataEnum.LISTS]: ListFormData[]
+    [DetailsFormDataEnum.IMAGES]: ImageFormData[]
+}
+export type DetailsFormDataType = TitleFormData
+    | ParagraphFormData
+    | QuouteFormData
+    | ListFormData
+    | ImageFormData
+
+export type DetailsFormDataEnumType = `${DetailsFormDataEnum}`
+
+// ERROR TYPES
+export interface TitleError {
+    [TitleFormDataEnum.TITLE]: FormInputError
+}
+export interface ParagraphError {
+    [ParagraphFormDataEnum.TEXT]: FormInputError
+}
+export interface QuouteError {
+    [QuouteFormDataEnum.TEXT]: FormInputError
+    [QuouteFormDataEnum.AUTHOR]: FormInputError
+}
+export interface ListError {
+    [ListFormDataEnum.OPTIONS]: FormInputError[]
+}
+export interface ImageError {
+    [ImageFormDataEnum.DESCRIPTION]: FormInputError
+    [ImageFormDataEnum.IMAGE]: FormInputError
+}
+
+export type DetailsFormDataErrorType = TitleError
+    | ParagraphError
+    | QuouteError
+    | ListError
+    | ImageError
+
+// COMPONENT
+interface StyledComponent {
+    className?: string
+}
+interface HandleChangeComponent {
+    index: number
+    componentData: OrderComponent
+    orderSliceName: OrderSliceNameType
+}
+
+
+export interface DetailsTitleFormComponentProps
+    extends StyledComponent, HandleChangeComponent { }
+
+export interface ParagraphFormComponentProps
+    extends StyledComponent, HandleChangeComponent { }
+
+export interface QuouteFormComponentProps
+    extends HandleChangeComponent {
+    className?: {
+        container?: string
+        quoute?: string
+        author?: string
+    }
+}
+
+export interface ListFormComponentProps
+    extends HandleChangeComponent {
+    className?: {
+        container?: string
+        option?: string
+    }
+}
+
+export interface ImageFormComponentProps
+    extends HandleChangeComponent {
+    indexedDBStoreName: StoreName
+    className?: {
+        container?: string
+        image?: string
+        description?: string
+    }
+}
+
+export interface DetailsFromProps {
+    titles?: boolean
+    paragraphs?: boolean
+    quoutes?: boolean
+    lists?: boolean
+    images?: boolean
+    orderSliceName?: OrderSliceNameType
+}
+
+// REDUX ORDER SLICE
+export interface OrderComponent {
+    componentType: DetailsFormDataEnumType
+    componentData: DetailsFormDataType
+    componentError: DetailsFormDataErrorType
+}
+
+export interface ComponentOrderState {
+    order: OrderComponent[]
+}
+
+
+// RESPONSE DATA
+export interface DescriptionTitle extends DetailsDataRenderElementBasicType {
+    [TitleFormDataEnum.TITLE]: string
+}
+export interface DescriptionParagraph extends DetailsDataRenderElementBasicType {
+    [ParagraphFormDataEnum.TEXT]: string
+}
+export interface DescriptionQuoute extends DetailsDataRenderElementBasicType {
+    [QuouteFormDataEnum.TEXT]: string
+    [QuouteFormDataEnum.AUTHOR]: string
+}
+export interface DescriptionList extends DetailsDataRenderElementBasicType {
+    [ListFormDataEnum.NUMERABLE]: boolean
+    [ListFormDataEnum.OPTIONS]: string[]
+}
+export interface DescriptionImage extends DetailsDataRenderElementBasicType {
+    [ImageFormDataEnum.SIZE]: DescriptionImageSize
+    [ImageFormDataEnum.DESCRIPTION]: string
+    [ImageFormDataEnum.IMAGE]: string
+}
+
+export type DetailsRedactorType = {
+    titles: DescriptionTitle[]
+    paragraphs: DescriptionParagraph[]
+    quoutes: DescriptionQuoute[]
+    lists: DescriptionList[]
+    images: DescriptionImage[]
+}

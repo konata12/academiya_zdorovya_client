@@ -1,7 +1,12 @@
-import { FormError } from "@/app/types/data/form.type";
-import { CheckboxProps } from "@/app/types/ui/form_components/form_basic";
-import { InputHTMLAttributes } from "react";
-import { FieldErrors, Path, RegisterOptions, UseFormRegister } from "react-hook-form";
+import { CheckboxProps } from '@/app/types/ui/form_components/form_basic';
+import {
+    FieldErrors,
+    Path,
+    RegisterOptions,
+    UseFormRegister
+    } from 'react-hook-form';
+import { FormInputError } from '@/app/types/data/form.type';
+import { InputHTMLAttributes } from 'react';
 
 export type FormElements = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 export type ChangeEvent<T extends FormElements> = (e: React.ChangeEvent<T>) => void;
@@ -63,13 +68,13 @@ export interface InputContainerWithChangeEventProps<T extends FormElements> {
 export interface InputContainerBasicProps {
     label: string
     inputId: string
-    error?: FormError
+    error?: FormInputError
     children?: React.ReactNode
     className?: Styles
 }
-export interface InputContainer<T extends FormElements>
+export interface InputContainer
     extends InputContainerBasicProps,
-    InputContainerWithChangeEventProps<T> {
+    InputContainerWithChangeEventProps<HTMLInputElement> {
 
     value: InputHTMLAttributes<HTMLInputElement>['value']
     type?: React.HTMLInputTypeAttribute;
@@ -92,11 +97,12 @@ export interface ImageInputContainer
     label?: string;
     inputId: string;
     children: React.ReactNode;
+    className?: ImageInputContainerStyles
 }
 export interface ImageInputPreviewFromIndexedDBProps {
     imageName: string | null
     indexedDBStoreName: string
-    error?: FormError
+    error?: FormInputError
     className?: ImageInputPreviewFromIndexedDBStyles
 }
 
@@ -123,6 +129,11 @@ interface InputContainerWithDeleteBtnStyles extends InputContainerStyles {
 }
 
 // STYLES OF DEFAULT INPUT IMAGE CONTAINERS
+interface ImageInputContainerStyles {
+    input?: string
+    label?: string
+}
+
 interface ImageInputPreviewFromIndexedDBStyles {
     imagePreview?: string;
     image?: string;

@@ -1,6 +1,6 @@
-import { DetailsFormDataType, DetailsRedactorType } from "@/app/types/data/details.type"
-import { FormErrors } from "@/app/types/data/form.type"
-import { ErrorsResponses, Status } from "@/app/types/data/response.type"
+import { DetailsFormDataType, DetailsRedactorType } from '@/app/types/data/details.type';
+import { ErrorsResponses, Status } from '@/app/types/data/response.type';
+import { FormErrors } from '@/app/types/data/form.type';
 
 
 
@@ -26,7 +26,7 @@ export interface NewsFormData {
     title: string
     description: string
     backgroundImg: string | null
-    details: DetailsFormDataType[]
+    details: DetailsRedactorType | null
     errors: FormErrors
 }
 

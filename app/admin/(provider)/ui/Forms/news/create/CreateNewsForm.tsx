@@ -1,28 +1,28 @@
 'use client'
 
-import { NewsFormDataEnum } from '@/app/types/data/news.type'
-import React, { useEffect, useState } from 'react'
+import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
+import React from 'react';
+import styles from './CreateNewsForm.module.scss';
+import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
+import { ImageInputPreviewFromIndexedDB } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB';
+import { NewsFormDataEnum } from '@/app/types/data/news.type';
+import { RootState } from '@/app/utils/redux/store';
+import { setNewsFormError } from '@/app/utils/redux/news/newsFormSlice';
+import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useNewsFormHandleChange } from '@/app/utils/hooks/admin/newsForm/useNewsFormHandleChange';
 
-import styles from './CreateNewsForm.module.scss'
+
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
-import { RootState } from '@/app/utils/redux/store'
-import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer'
-import { setNewsFormError } from '@/app/utils/redux/news/newsFormSlice'
-import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer'
-import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer'
-import { ImageInputPreviewFromIndexedDB } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import { useNewsFormHandleChange } from '@/app/utils/hooks/admin/newsForm/useNewsFormHandleChange';
 
 
 const titles = ['Стан вмісту', 'Опції']
 const indexedDBStoreName = 'news_images'
 
 export default function CreateNewsForm() {
-    const [triggerUseEffect, setTriggerUseEffect] = useState(false)
     const {
         title,
         description,
@@ -33,55 +33,64 @@ export default function CreateNewsForm() {
     const { error } = useAppSelector((state: RootState) => state.news)
     const handleChange = useNewsFormHandleChange(indexedDBStoreName)
 
+    console.log(useAppSelector((state: RootState) => state.newsForm))
+
     const dispatch = useAppDispatch()
-
-    useEffect(() => {
-        const invalidInputId = Object.entries(errors).find((error) => {
-            return !!error[1].message.length
-        })
-
-        if (!invalidInputId) return
-        const invalidInput = invalidInputId[0] === NewsFormDataEnum.BACKGROUNDIMG
-            ? (document.querySelector(`#${invalidInputId[0]}`) as HTMLInputElement)?.labels?.[0]
-            : document.querySelector(`#${invalidInputId[0]}`) as HTMLInputElement
-
-        invalidInput?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-        })
-    }, [triggerUseEffect])
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setTriggerUseEffect(!triggerUseEffect)
 
         // FORM VALIDATION
-        if (title.length === 0) {
+        if (!title.length) {
             dispatch(setNewsFormError({
                 field: NewsFormDataEnum.TITLE,
                 message: 'Введіть повну назву'
-            }))
+            }));
+
+            // SCROLL TO INPUT
+            (document.querySelector(`#${NewsFormDataEnum.TITLE}`) as HTMLInputElement).scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            })
             return
         }
-        if (description.length === 0) {
+        if (!description.length) {
             dispatch(setNewsFormError({
                 field: NewsFormDataEnum.DESCRIPTION,
                 message: 'Введіть опис'
-            }))
+            }));
+
+            // SCROLL TO INPUT
+            (document.querySelector(`#${NewsFormDataEnum.DESCRIPTION}`) as HTMLInputElement).scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            })
             return
         }
         if (!backgroundImg) {
             dispatch(setNewsFormError({
                 field: NewsFormDataEnum.BACKGROUNDIMG,
                 message: 'Добавте зображення'
-            }))
+            }));
+
+            // SCROLL TO INPUT
+            (document.querySelector(`#${NewsFormDataEnum.BACKGROUNDIMG}`) as HTMLInputElement).labels?.[0].scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            })
             return
         }
-        if (details.length === 0) {
+        if (!details) {
             dispatch(setNewsFormError({
                 field: NewsFormDataEnum.DETAILS,
                 message: 'Створіть вміст новини'
-            }))
+            }));
+
+            // SCROLL TO INPUT
+            (document.querySelector(`#${NewsFormDataEnum.DETAILS}`) as HTMLInputElement).scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            })
             return
         }
 
@@ -151,6 +160,7 @@ export default function CreateNewsForm() {
 
                 <CommonTable
                     titles={titles}
+                    tableId={NewsFormDataEnum.DETAILS}
                 >
                     <TableLine>
                         <span>

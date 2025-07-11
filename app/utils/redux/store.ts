@@ -59,7 +59,7 @@ const persistConfig = {
     version: 1,
     storage,
     whitelist: [
-        'newsDetailsOrderSlice',
+        'newsDetailsOrder',
         'newsForm',
         'news',
     ],
