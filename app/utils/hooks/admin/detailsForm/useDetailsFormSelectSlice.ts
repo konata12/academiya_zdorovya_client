@@ -7,7 +7,7 @@ import {
     updateDetailsComponent as updateNewsDetailsComponent
     } from '@/app/utils/redux/details/newsDetailsOrderSlice';
 import { OrderSliceNameType } from '@/app/types/data/details.type';
-import { setNewsFormDetails } from '@/app/utils/redux/news/newsFormSlice';
+import { setNewsFormDetails, setNewsFormError } from '@/app/utils/redux/news/newsFormSlice';
 import { useMemo } from 'react';
 
 
@@ -27,6 +27,7 @@ export function useDetailsFormSelectSlice(orderSliceName: OrderSliceNameType) {
 
                     // FORM SLICE
                     submitForm: setNewsFormDetails,
+                    setFormError: setNewsFormError,
                 }
         }
     }, [orderSliceName])

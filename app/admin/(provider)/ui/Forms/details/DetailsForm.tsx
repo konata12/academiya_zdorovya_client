@@ -75,6 +75,7 @@ export default function DetailsForm({
         setDetailsComponentError,
 
         submitForm,
+        setFormError,
     } = useDetailsFormSelectSlice(orderSliceName)
     const { setNodeRef } = useDroppable({
         id: 'DetailsForm'
@@ -255,6 +256,10 @@ export default function DetailsForm({
         }
 
         dispatch(submitForm(parsedFormData))
+        dispatch(setFormError({
+            field: 'details',
+            message: ''
+        }))
         router.push('./')
     }
 

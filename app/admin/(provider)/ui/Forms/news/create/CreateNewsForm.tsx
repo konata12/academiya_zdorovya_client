@@ -35,8 +35,6 @@ export default function CreateNewsForm() {
     const { error } = useAppSelector((state: RootState) => state.news)
     const handleChange = useNewsFormHandleChange(indexedDBStoreName)
 
-    console.log(useAppSelector((state: RootState) => state.newsForm))
-
     const router = useRouter()
     const dispatch = useAppDispatch()
 
@@ -122,7 +120,7 @@ export default function CreateNewsForm() {
 
         const response = await dispatch(createNews(data))
         const isFulfilled = fullfilled(response.meta.requestStatus)
-        if (isFulfilled) router.push('/admin/departments')
+        if (isFulfilled) router.push('./')
     }
 
     return (
@@ -186,7 +184,7 @@ export default function CreateNewsForm() {
                 </p>
 
                 <ErrorWrapper
-                    error={errors.details.message}
+                    error={errors.details.message.length ? errors.details.message : undefined}
                     className={{
                         errorWrapper: styles.detailsErrorWrap
                     }}
