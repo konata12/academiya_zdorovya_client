@@ -11,7 +11,6 @@ const initialState: NewsFormData = {
         title: { message: '' },
         description: { message: '' },
         backgroundImg: { message: '' },
-        createdAt: { message: '' },
         details: { message: '' },
     }
 }

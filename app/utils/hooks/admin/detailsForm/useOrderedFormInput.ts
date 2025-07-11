@@ -1,7 +1,6 @@
 import {
     ComponentsFormDataEnum,
     DetailsFormDataEnum,
-    DetailsFormDataErrorType,
     ImageError,
     ImageFormData,
     ImageFormDataEnum,
@@ -19,7 +18,6 @@ import {
     QuouteFormData,
     QuouteFormDataEnumType,
     TitleError,
-    TitleFormData,
     TitleFormDataEnumType
 } from '@/app/types/data/details.type';
 import { del, set } from 'idb-keyval';
@@ -125,10 +123,6 @@ export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
             }))
         }, []
     )
-
-    // function updateOrderComponent(component: OrderComponent): OrderComponent {
-
-    // }
 
     return {
         handleChange,

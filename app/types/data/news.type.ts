@@ -1,7 +1,6 @@
-import { DetailsFormDataType, DetailsRedactorType } from '@/app/types/data/details.type';
+import { DetailsRedactorType } from '@/app/types/data/details.type';
 import { ErrorsResponses, Status } from '@/app/types/data/response.type';
-import { FormErrors } from '@/app/types/data/form.type';
-
+import { FormInputError } from '@/app/types/data/form.type';
 
 
 // GENERAL TYPES
@@ -27,7 +26,20 @@ export interface NewsFormData {
     description: string
     backgroundImg: string | null
     details: DetailsRedactorType | null
-    errors: FormErrors
+    errors: {
+        title: FormInputError
+        description: FormInputError
+        backgroundImg: FormInputError
+        details: FormInputError
+    }
+}
+
+// CREATE/UPDATE FORM DATA
+export interface CreateNewsFormData {
+    title: string
+    description: string
+    backgroundImg: string
+    details: DetailsRedactorType
 }
 
 // ENUMS
@@ -35,7 +47,6 @@ export enum NewsFormDataEnum {
     TITLE = 'title',
     DESCRIPTION = 'description',
     BACKGROUNDIMG = 'backgroundImg',
-    CREATEDAT = 'createdAt',
     DETAILS = 'details',
 }
 

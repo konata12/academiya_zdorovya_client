@@ -61,6 +61,7 @@ export default function DetailsForm({
     orderSliceName = 'newsDetailsOrder',
 }: DetailsFromProps) {
     const order = useAppSelector((state: RootState) => state.newsDetailsOrder.order)
+    console.log('order: ', order)
 
     const router = useRouter()
     const dispatch = useAppDispatch()

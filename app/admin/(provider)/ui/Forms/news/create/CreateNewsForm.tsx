@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './CreateNewsForm.module.scss';
 import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
 import { ImageInputPreviewFromIndexedDB } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB';
-import { NewsFormDataEnum } from '@/app/types/data/news.type';
+import { CreateNewsFormData, NewsFormDataEnum, NewsFormDataEnumType } from '@/app/types/data/news.type';
 import { RootState } from '@/app/utils/redux/store';
 import { setNewsFormError } from '@/app/utils/redux/news/newsFormSlice';
 import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer';
@@ -14,6 +14,11 @@ import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
+import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
+import { FormInputError } from '@/app/types/data/form.type';
+import { createNews } from '@/app/utils/redux/news/newsSlice';
+import { fullfilled } from '@/app/services/response';
+import { useRouter } from 'next/navigation';
 
 
 const titles = ['Стан вмісту', 'Опції']
@@ -32,10 +37,15 @@ export default function CreateNewsForm() {
 
     console.log(useAppSelector((state: RootState) => state.newsForm))
 
+    const router = useRouter()
     const dispatch = useAppDispatch()
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        const errorsData: {
+            error: FormInputError,
+            id: NewsFormDataEnumType
+        }[] = []
 
         // FORM VALIDATION
         if (!title.length) {
@@ -44,12 +54,10 @@ export default function CreateNewsForm() {
                 message: 'Введіть повну назву'
             }));
 
-            // SCROLL TO INPUT
-            (document.querySelector(`#${NewsFormDataEnum.TITLE}`) as HTMLInputElement).scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            })
-            return
+            errorsData.push({
+                id: NewsFormDataEnum.TITLE,
+                error: { message: 'Введіть повну назву' }
+            });
         }
         if (!description.length) {
             dispatch(setNewsFormError({
@@ -57,12 +65,10 @@ export default function CreateNewsForm() {
                 message: 'Введіть опис'
             }));
 
-            // SCROLL TO INPUT
-            (document.querySelector(`#${NewsFormDataEnum.DESCRIPTION}`) as HTMLInputElement).scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            })
-            return
+            errorsData.push({
+                id: NewsFormDataEnum.DESCRIPTION,
+                error: { message: 'Введіть опис' }
+            });
         }
         if (!backgroundImg) {
             dispatch(setNewsFormError({
@@ -71,11 +77,10 @@ export default function CreateNewsForm() {
             }));
 
             // SCROLL TO INPUT
-            (document.querySelector(`#${NewsFormDataEnum.BACKGROUNDIMG}`) as HTMLInputElement).labels?.[0].scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            })
-            return
+            errorsData.push({
+                id: NewsFormDataEnum.BACKGROUNDIMG,
+                error: { message: 'Добавте зображення' }
+            });
         }
         if (!details) {
             dispatch(setNewsFormError({
@@ -83,16 +88,41 @@ export default function CreateNewsForm() {
                 message: 'Створіть вміст новини'
             }));
 
-            // SCROLL TO INPUT
-            (document.querySelector(`#${NewsFormDataEnum.DETAILS}`) as HTMLInputElement).scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            })
-            return
+            errorsData.push({
+                id: NewsFormDataEnum.DETAILS,
+                error: { message: 'Створіть вміст новини' }
+            });
         }
 
+        // FORM VALIDATION
+        if (errorsData.length) {
+            console.log(errorsData)
+            // SCROLL TO INPUT
+            if (errorsData[0].id === NewsFormDataEnum.BACKGROUNDIMG) {
+                (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).labels?.[0].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                })
+            } else {
+                (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                })
+            }
+            return
+        }
+        if (!details || !backgroundImg) return
 
-        console.log('kurwa')
+        const data: CreateNewsFormData = {
+            title,
+            description,
+            backgroundImg,
+            details,
+        }
+
+        const response = await dispatch(createNews(data))
+        const isFulfilled = fullfilled(response.meta.requestStatus)
+        if (isFulfilled) router.push('/admin/departments')
     }
 
     return (
@@ -155,23 +185,30 @@ export default function CreateNewsForm() {
                     Вміст новини
                 </p>
 
-                <CommonTable
-                    titles={titles}
-                    tableId={NewsFormDataEnum.DETAILS}
+                <ErrorWrapper
+                    error={errors.details.message}
+                    className={{
+                        errorWrapper: styles.detailsErrorWrap
+                    }}
                 >
-                    <TableLine>
-                        <span>
-                            Не створений
-                        </span>
+                    <CommonTable
+                        titles={titles}
+                        tableId={NewsFormDataEnum.DETAILS}
+                    >
+                        <TableLine>
+                            <span>
+                                Не створений
+                            </span>
 
-                        <SafeLink
-                            className={`btn blue sm`}
-                            href={`/admin/news/create/details`}
-                        >
-                            Створити вміст
-                        </SafeLink>
-                    </TableLine>
-                </CommonTable>
+                            <SafeLink
+                                className={`btn blue sm`}
+                                href={`/admin/news/create/details`}
+                            >
+                                Створити вміст
+                            </SafeLink>
+                        </TableLine>
+                    </CommonTable>
+                </ErrorWrapper>
             </div>
 
             <div className={styles.preview}>

@@ -1,4 +1,4 @@
-import { News, NewsFormData, NewsInit } from "@/app/types/data/news.type";
+import { CreateNewsFormData, News, NewsFormData, NewsInit } from "@/app/types/data/news.type";
 import { ErrorResponse } from "@/app/types/data/response.type";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -46,8 +46,7 @@ export const fetchNews = createAsyncThunk('news/getAll', async (
         }
     }
 })
-
-export const fetchOneNew = createAsyncThunk('news/getOne', async (
+export const fetchOneNews = createAsyncThunk('news/getOne', async (
     id: string,
     { rejectWithValue }
 ) => {
@@ -66,9 +65,8 @@ export const fetchOneNew = createAsyncThunk('news/getOne', async (
         }
     }
 })
-
-export const createNew = createAsyncThunk('news/create', async (
-    data: NewsFormData,
+export const createNews = createAsyncThunk('news/create', async (
+    data: CreateNewsFormData,
     { rejectWithValue }
 ) => {
     try {
@@ -87,8 +85,7 @@ export const createNew = createAsyncThunk('news/create', async (
         }
     }
 })
-
-export const updateNew = createAsyncThunk('news/update', async ({
+export const updateNews = createAsyncThunk('news/update', async ({
     data,
     id
 }: {
@@ -112,8 +109,7 @@ export const updateNew = createAsyncThunk('news/update', async ({
         }
     }
 })
-
-export const deleteNew = createAsyncThunk('news/delete', async (
+export const deleteNews = createAsyncThunk('news/delete', async (
     id: number,
     { rejectWithValue }) => {
     try {
@@ -189,61 +185,61 @@ const newsSlice = createSlice({
             })
 
             // GET ONE NEWS
-            .addCase(fetchOneNew.pending, (state) => {
+            .addCase(fetchOneNews.pending, (state) => {
                 state.status.getOne = "loading"
                 state.error.getOne = null
             })
-            .addCase(fetchOneNew.fulfilled, (state, action: PayloadAction<News[] | undefined>) => {
+            .addCase(fetchOneNews.fulfilled, (state, action: PayloadAction<News[] | undefined>) => {
                 state.status.getOne = "succeeded"
                 if (action.payload) {
                     state.news = action.payload
                     state.newsIsModalOpen = new Array(state.news.length).fill(false)
                 }
             })
-            .addCase(fetchOneNew.rejected, (state, action) => {
+            .addCase(fetchOneNews.rejected, (state, action) => {
                 state.status.getOne = "failed"
                 state.error.getOne = action.payload as ErrorResponse
             })
 
             // CREATE NEW
-            .addCase(createNew.pending, (state) => {
+            .addCase(createNews.pending, (state) => {
                 state.status.create = "loading"
                 state.error.create = null
             })
-            .addCase(createNew.fulfilled, (state, action: PayloadAction<News[] | undefined>) => {
+            .addCase(createNews.fulfilled, (state, action: PayloadAction<News[] | undefined>) => {
                 state.status.create = "succeeded"
                 if (action.payload) {
                     state.news = action.payload
                     state.newsIsModalOpen = new Array(state.news.length).fill(false)
                 }
             })
-            .addCase(createNew.rejected, (state, action) => {
+            .addCase(createNews.rejected, (state, action) => {
                 state.status.create = "failed"
                 state.error.create = action.payload as ErrorResponse
             })
 
             // UPDATE NEW
-            .addCase(updateNew.pending, (state) => {
+            .addCase(updateNews.pending, (state) => {
                 state.status.update = "loading"
                 state.error.update = null
             })
-            .addCase(updateNew.fulfilled, (state) => {
+            .addCase(updateNews.fulfilled, (state) => {
                 state.status.update = "succeeded"
             })
-            .addCase(updateNew.rejected, (state, action) => {
+            .addCase(updateNews.rejected, (state, action) => {
                 state.status.update = "failed"
                 state.error.update = action.payload as ErrorResponse
             })
 
             // DELETE NEWS
-            .addCase(deleteNew.pending, (state) => {
+            .addCase(deleteNews.pending, (state) => {
                 state.status.delete = "loading"
                 state.error.delete = null
             })
-            .addCase(deleteNew.fulfilled, (state) => {
+            .addCase(deleteNews.fulfilled, (state) => {
                 state.status.delete = "succeeded"
             })
-            .addCase(deleteNew.rejected, (state, action) => {
+            .addCase(deleteNews.rejected, (state, action) => {
                 state.status.delete = "failed"
                 state.error.delete = action.payload as ErrorResponse
             })
