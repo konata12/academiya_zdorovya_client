@@ -18,7 +18,7 @@ const newsDetailsOrderSlice = createSlice({
             payload: string
         }) {
             state.order = state.order.filter(component => {
-                return component.componentData.orderId !== action.payload
+                return component.data.orderId !== action.payload
             });
         },
         updateDetailsComponent(state, action: {
@@ -44,7 +44,7 @@ const newsDetailsOrderSlice = createSlice({
         }) {
             const index = action.payload.index
 
-            state.order[index].componentError = action.payload.error
+            state.order[index].error = action.payload.error
         },
 
 

@@ -19,20 +19,18 @@ export default function DetailsImageInput({
 }: ImageFormComponentProps) {
     const { handleChange } = useOrderedFormInput(orderSliceName)
 
-    const imageData = (componentData.componentData as ImageFormData)
-    const imageUrl = useGetImageUrlFromIndexedDBImage(imageData.image, indexedDBStoreName)
-
+    const { data, error } = componentData
+    const imageUrl = useGetImageUrlFromIndexedDBImage(data.image, indexedDBStoreName)
 
     const inputId = React.useMemo(() => `upload_image_${uuidv4()}`, [])
-    const descriptionValue = imageData.description
-    const imageErrors = componentData.componentError as ImageError
+    const descriptionValue = data.description
 
     return (
         <div
             id={DetailsFormDataEnum.IMAGES + index}
             className={`${styles.container} ${className?.container}`}
         >
-            <div className={`${styles.imageContainer} ${styles[imageData.size]}`}>
+            <div className={`${styles.imageContainer} ${styles[data.size]}`}>
                 <ImageInputContainer
                     inputId={inputId}
                     className={{
@@ -48,10 +46,10 @@ export default function DetailsImageInput({
                     }}
                 >
                     <ErrorWrapper
-                        error={imageErrors.image.message}
+                        error={error.image.message}
                         className={{
                             errorWrapper: styles.imageErrorWrap,
-                            error: `${styles.imageError} ${imageData.size === 'big' ? styles.big : ''}`,
+                            error: `${styles.imageError} ${data.size === 'big' ? styles.big : ''}`,
                         }}
                     >
                         {imageUrl && <img
@@ -62,7 +60,7 @@ export default function DetailsImageInput({
                 </ImageInputContainer>
             </div>
 
-            <ErrorWrapper error={imageErrors.description.message}>
+            <ErrorWrapper error={error.description.message}>
                 <AutoResizingTextarea
                     padding={0}
                     minRows={1}

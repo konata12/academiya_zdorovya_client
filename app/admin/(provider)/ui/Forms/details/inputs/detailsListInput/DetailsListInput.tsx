@@ -18,9 +18,8 @@ export default function DetailsListInput({
         componentData,
         orderSliceName,
     })
-
-    const listErrors = componentData.componentError as ListError
-    const list = (componentData.componentData as ListFormData)
+    
+    const { data: list, error } = componentData
 
     return (
         <>
@@ -36,7 +35,7 @@ export default function DetailsListInput({
                         {list.numerable && <span>{optionIndex + 1 + '.'}</span>}
 
                         <ErrorWrapper
-                            error={listErrors.options[optionIndex].message}
+                            error={error.options[optionIndex].message}
                             className={{ error: styles.error }}
                         >
                             <AutoResizingTextarea

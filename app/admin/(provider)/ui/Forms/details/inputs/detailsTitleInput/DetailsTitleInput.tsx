@@ -4,8 +4,6 @@ import styles from './DetailsTitleInput.module.scss';
 import {
     DetailsFormDataEnum,
     DetailsTitleFormComponentProps,
-    TitleError,
-    TitleFormData,
     TitleFormDataEnumType
     } from '@/app/types/data/details.type';
 import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
@@ -18,8 +16,8 @@ export default function DetailsTitleInput({
     orderSliceName,
 }: DetailsTitleFormComponentProps) {
     const { handleChange } = useOrderedFormInput(orderSliceName)
-    const { title } = componentData.componentData as TitleFormData
-    const error = componentData.componentError as TitleError
+    const { title } = componentData.data
+    const error = componentData.error
 
     const keyOfValueToChange: TitleFormDataEnumType = 'title'
     const handleChangeProps = {

@@ -56,86 +56,79 @@ export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
             const newFile = (e as React.ChangeEvent<HTMLInputElement>).target.files || null
             const newComponentData = structuredClone(componentData)
 
-
-            switch (componentData.componentType) {
+            switch (newComponentData.type) {
                 case DetailsFormDataEnum.TITLES:
                     keyOfValueToChange = keyOfValueToChange as TitleFormDataEnumType;
-                    (newComponentData.componentData as TitleFormData)[keyOfValueToChange] = newValue;
+                    newComponentData.data[keyOfValueToChange] = newValue;
 
                     // HANDLE ERROR
                     if (newValue.length) {
-                        (newComponentData.componentError as TitleError)[keyOfValueToChange].message = ''
+                        (newComponentData.error as TitleError)[keyOfValueToChange].message = ''
                     }
                     break;
-
                 case DetailsFormDataEnum.PARAGRAPHS:
                     keyOfValueToChange = keyOfValueToChange as ParagraphFormDataEnumType
-                    (newComponentData.componentData as ParagraphFormData)[keyOfValueToChange] = newValue
+                    (newComponentData.data as ParagraphFormData)[keyOfValueToChange] = newValue
 
                     // HANDLE ERROR
                     if (newValue.length) {
-                        (newComponentData.componentError as ParagraphError)[keyOfValueToChange].message = '';
+                        (newComponentData.error as ParagraphError)[keyOfValueToChange].message = '';
                     }
                     break;
-
                 case DetailsFormDataEnum.QUOUTES:
                     keyOfValueToChange = keyOfValueToChange as QuouteFormDataEnumType
-                    (newComponentData.componentData as QuouteFormData)[keyOfValueToChange] = newValue
+                    (newComponentData.data as QuouteFormData)[keyOfValueToChange] = newValue
 
                     // HANDLE ERROR
                     if (newValue.length) {
-                        (newComponentData.componentError as QuouteError)[keyOfValueToChange].message = '';
+                        (newComponentData.error as QuouteError)[keyOfValueToChange].message = '';
                     }
                     break;
-
                 case DetailsFormDataEnum.LISTS:
                     keyOfValueToChange = keyOfValueToChange as ListFormDataEnumType
                     if (optionIndex !== undefined && keyOfValueToChange === ListFormDataEnum.OPTIONS) {
-                        (newComponentData.componentData as ListFormData)[keyOfValueToChange][optionIndex] = newValue
+                        (newComponentData.data as ListFormData)[keyOfValueToChange][optionIndex] = newValue
 
                         // HANDLE ERROR
                         if (newValue.length) {
-                            (newComponentData.componentError as ListError)[keyOfValueToChange][optionIndex].message = '';
+                            (newComponentData.error as ListError)[keyOfValueToChange][optionIndex].message = '';
                         }
                     }
                     break;
-
                 case DetailsFormDataEnum.IMAGES:
                     keyOfValueToChange = keyOfValueToChange as ImageFormDataEnumType
                     if (keyOfValueToChange === ImageFormDataEnum.IMAGE) {
                         // save image name to redux
                         const imageName = uuidv4();
-                        (newComponentData.componentData as ImageFormData)[keyOfValueToChange] = imageName;
+                        (newComponentData.data as ImageFormData)[keyOfValueToChange] = imageName;
 
                         // save image to indexedDB using name as key
-                        const oldImageName = (componentData.componentData as ImageFormData)[keyOfValueToChange];
+                        const oldImageName = (componentData.data as ImageFormData)[keyOfValueToChange];
                         if (oldImageName) {
                             del(oldImageName, store);
                         };
                         set(imageName, newFile?.[0] || null, store)
                     } else if (keyOfValueToChange !== ImageFormDataEnum.SIZE) {
-                        (newComponentData.componentData as ImageFormData)[keyOfValueToChange] = newValue
+                        (newComponentData.data as ImageFormData)[keyOfValueToChange] = newValue
                     }
 
                     // HANDLE ERROR
                     if (newValue.length && keyOfValueToChange !== ImageFormDataEnum.SIZE) {
-                        (newComponentData.componentError as ImageError)[keyOfValueToChange].message = '';
+                        (newComponentData.error as ImageError)[keyOfValueToChange].message = '';
                     }
                     break;
             }
 
-            const detailsComponent = {
-                componentType: newComponentData.componentType,
-                componentData: newComponentData.componentData,
-                componentError: newComponentData.componentError,
-            }
-
             dispatch(updateDetailsComponent({
                 index,
-                detailsComponent
+                detailsComponent: newComponentData
             }))
         }, []
     )
+
+    // function updateOrderComponent(component: OrderComponent): OrderComponent {
+
+    // }
 
     return {
         handleChange,

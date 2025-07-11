@@ -123,19 +123,23 @@ interface StyledComponent {
 }
 interface HandleChangeComponent {
     index: number
-    componentData: OrderComponent
     orderSliceName: OrderSliceNameType
 }
 
 
 export interface DetailsTitleFormComponentProps
-    extends StyledComponent, HandleChangeComponent { }
+    extends StyledComponent, HandleChangeComponent {
+    componentData: TitleOrderComponent
+}
 
 export interface ParagraphFormComponentProps
-    extends StyledComponent, HandleChangeComponent { }
+    extends StyledComponent, HandleChangeComponent {
+    componentData: ParagraphOrderComponent
+}
 
 export interface QuouteFormComponentProps
     extends HandleChangeComponent {
+    componentData: QuouteOrderComponent
     className?: {
         container?: string
         quoute?: string
@@ -145,6 +149,7 @@ export interface QuouteFormComponentProps
 
 export interface ListFormComponentProps
     extends HandleChangeComponent {
+    componentData: ListOrderComponent
     className?: {
         container?: string
         option?: string
@@ -154,6 +159,7 @@ export interface ListFormComponentProps
 export interface ImageFormComponentProps
     extends HandleChangeComponent {
     indexedDBStoreName: StoreName
+    componentData: ImageOrderComponent
     className?: {
         container?: string
         image?: string
@@ -171,11 +177,37 @@ export interface DetailsFromProps {
 }
 
 // REDUX ORDER SLICE
-export interface OrderComponent {
-    componentType: DetailsFormDataEnumType
-    componentData: DetailsFormDataType
-    componentError: DetailsFormDataErrorType
+export interface TitleOrderComponent {
+    type: 'titles'
+    data: TitleFormData
+    error: TitleError
 }
+export interface ParagraphOrderComponent {
+    type: 'paragraphs'
+    data: ParagraphFormData
+    error: ParagraphError
+}
+export interface QuouteOrderComponent {
+    type: 'quoutes'
+    data: QuouteFormData
+    error: QuouteError
+}
+export interface ListOrderComponent {
+    type: 'lists'
+    data: ListFormData
+    error: ListError
+}
+export interface ImageOrderComponent {
+    type: 'images'
+    data: ImageFormData
+    error: ImageError
+}
+
+export type OrderComponent = TitleOrderComponent
+    | ParagraphOrderComponent
+    | QuouteOrderComponent
+    | ListOrderComponent
+    | ImageOrderComponent
 
 export interface ComponentOrderState {
     order: OrderComponent[]

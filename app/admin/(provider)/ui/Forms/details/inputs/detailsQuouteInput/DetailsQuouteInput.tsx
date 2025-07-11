@@ -12,8 +12,8 @@ export default function DetailsQuouteInput({
     orderSliceName,
 }: QuouteFormComponentProps) {
     const { handleChange } = useOrderedFormInput(orderSliceName)
-    const { text, author } = componentData.componentData as QuouteFormData
-    const quouteErrors = componentData.componentError as QuouteError
+    const { text, author } = componentData.data
+    const quouteErrors = componentData.error
 
     const handleChangeProps = {
         componentData,

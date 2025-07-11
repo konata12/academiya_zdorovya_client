@@ -1,5 +1,3 @@
-'use client'
-
 import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
 import React from 'react';
 import styles from './CreateNewsForm.module.scss';
@@ -11,7 +9,6 @@ import { setNewsFormError } from '@/app/utils/redux/news/newsFormSlice';
 import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer';
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { useNewsFormHandleChange } from '@/app/utils/hooks/admin/newsForm/useNewsFormHandleChange';
-
 
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'

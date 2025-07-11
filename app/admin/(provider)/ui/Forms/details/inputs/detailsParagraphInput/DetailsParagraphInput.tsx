@@ -12,8 +12,8 @@ export default function DetailsParagraphInput({
     orderSliceName,
 }: ParagraphFormComponentProps) {
     const { handleChange } = useOrderedFormInput(orderSliceName)
-    const { text } = componentData.componentData as ParagraphFormData
-    const error = componentData.componentError as ParagraphError
+    const { text } = componentData.data
+    const error = componentData.error
 
     const keyOfValueToChange: ParagraphFormDataEnumType = 'text'
     const handleChangeProps = {

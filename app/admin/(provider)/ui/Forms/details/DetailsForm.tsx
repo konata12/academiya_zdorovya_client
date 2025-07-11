@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import styles from './DetailsForm.module.scss';
 import {
     DescriptionImage,
@@ -18,14 +18,10 @@ import {
     ListError,
     ListFormData,
     OrderComponent,
-    ParagraphError,
     ParagraphFormData,
-    ParagraphFormDataEnum,
     QuouteError,
     QuouteFormData,
-    TitleError,
     TitleFormData,
-    TitleFormDataEnum,
 } from '@/app/types/data/details.type';
 import {
     DndContext,
@@ -69,8 +65,6 @@ export default function DetailsForm({
     const router = useRouter()
     const dispatch = useAppDispatch()
 
-    console.log('order: ', order)
-
     const {
         handleDragEnd,
     } = useOrderedForm(orderSliceName)
@@ -108,12 +102,10 @@ export default function DetailsForm({
         const lists: DescriptionList[] = []
         const images: DescriptionImage[] = []
 
-        order.forEach((orderedComponent, index) => {
-            const componentData = orderedComponent.componentData
-
-            switch (orderedComponent.componentType) {
+        order.forEach((orderComponent, index) => {
+            switch (orderComponent.type) {
                 case DetailsFormDataEnum.TITLES: {
-                    const title = (componentData as TitleFormData).title
+                    const title = orderComponent.data.title
 
                     // VALIDATE
                     if (!title.length) {
@@ -136,7 +128,7 @@ export default function DetailsForm({
                     break;
                 }
                 case DetailsFormDataEnum.PARAGRAPHS: {
-                    const text = (componentData as ParagraphFormData).text
+                    const text = orderComponent.data.text
 
                     if (!text.length) {
                         const error = { text: { message: 'Заповніть абзац' } }
@@ -156,7 +148,7 @@ export default function DetailsForm({
                     break;
                 }
                 case DetailsFormDataEnum.QUOUTES: {
-                    const { text, author } = (componentData as QuouteFormData)
+                    const { text, author } = orderComponent.data
 
                     // Check if there are any errors
                     if (!text.length || !author.length) {
@@ -182,13 +174,13 @@ export default function DetailsForm({
                     break;
                 }
                 case DetailsFormDataEnum.LISTS: {
-                    const { options, numerable } = (componentData as ListFormData);
+                    const { options, numerable } = orderComponent.data;
                     const listErrors: ListError = {
                         options: []
                     };
 
                     // Check if there are any errors
-                    listErrors.options = (componentData as ListFormData).options.map((option, i) => {
+                    listErrors.options = orderComponent.data.options.map((option, i) => {
                         return option.length
                             ? { message: '' }
                             : { message: 'Введіть пункт списку' }
@@ -213,7 +205,7 @@ export default function DetailsForm({
                     break;
                 }
                 case DetailsFormDataEnum.IMAGES:
-                    const { image, description } = (componentData as ImageFormData)
+                    const { image, description } = orderComponent.data
 
                     // Check if there are any errors
                     if ((!image || !image?.length) || !description.length) {
@@ -232,8 +224,8 @@ export default function DetailsForm({
 
                     images.push({
                         image: image || '', //if image is empty or is null, there will be return of function after switch
-                        size: (componentData as ImageFormData).size,
-                        description: (componentData as ImageFormData).description,
+                        size: orderComponent.data.size,
+                        description: orderComponent.data.description,
                         order: index
                     })
                     break;
@@ -276,64 +268,78 @@ export default function DetailsForm({
         imageSize?: DescriptionImageSize
     }) => {
         const orderId = uuidv4()
-        let componentData: DetailsFormDataType
-        let componentError: DetailsFormDataErrorType
+        let newComponent: OrderComponent
 
         // create input
         switch (elementType) {
             case DetailsFormDataEnum.TITLES:
-                componentData = {
-                    orderId,
-                    title: ''
-                };
-                componentError = {
-                    title: { message: '' }
+                newComponent = {
+                    type: DetailsFormDataEnum.TITLES,
+                    data: {
+                        orderId,
+                        title: ''
+                    },
+                    error: {
+                        title: { message: '' }
+                    }
                 }
                 break;
 
             case DetailsFormDataEnum.PARAGRAPHS:
-                componentData = {
-                    orderId,
-                    text: '',
-                };
-                componentError = {
-                    text: { message: '' }
+                newComponent = {
+                    type: DetailsFormDataEnum.PARAGRAPHS,
+                    data: {
+                        orderId,
+                        text: '',
+                    },
+                    error: {
+                        text: { message: '' }
+                    }
                 }
                 break;
 
             case DetailsFormDataEnum.QUOUTES:
-                componentData = {
-                    orderId,
-                    text: '',
-                    author: '',
-                };
-                componentError = {
-                    text: { message: '' },
-                    author: { message: '' },
+                newComponent = {
+                    type: DetailsFormDataEnum.QUOUTES,
+                    data: {
+                        orderId,
+                        text: '',
+                        author: '',
+                    },
+                    error: {
+                        text: { message: '' },
+                        author: { message: '' },
+                    }
                 }
                 break;
 
             case DetailsFormDataEnum.LISTS:
-                componentData = {
-                    orderId,
-                    options: [''],
-                    numerable: listNumerable
-                };
-                componentError = {
-                    options: [{ message: '' }]
+                newComponent = {
+                    type: DetailsFormDataEnum.LISTS,
+                    data: {
+                        orderId,
+                        options: [''],
+                        numerable: listNumerable
+                    },
+                    error: {
+                        options: [{ message: '' }]
+                    }
                 }
                 break;
 
             case DetailsFormDataEnum.IMAGES:
-                componentData = {
-                    orderId,
-                    size: imageSize,
-                    image: null,
-                    description: ''
-                };
-                componentError = {
-                    image: { message: '' },
-                    description: { message: '' },
+                newComponent = {
+                    type: DetailsFormDataEnum.IMAGES,
+                    data: {
+                        orderId,
+                        size: imageSize,
+                        image: null,
+                        description: ''
+                    },
+                    error: {
+                        image: { message: '' },
+                        description: { message: '' },
+                    }
                 }
                 break;
 
@@ -342,18 +348,14 @@ export default function DetailsForm({
         }
 
         // make input ordered
-        dispatch(addDetailsComponent({
-            componentType: elementType,
-            componentData,
-            componentError
-        }))
+        dispatch(addDetailsComponent(newComponent))
     }, [])
 
     const deleteInput = useCallback((
         element: OrderComponent,
     ) => {
         // remove ordered component from redux
-        dispatch(removeDetailsComponent(element.componentData.orderId))
+        dispatch(removeDetailsComponent(element.data.orderId))
     }, [])
 
     const formInputsToRender = [
@@ -399,7 +401,6 @@ export default function DetailsForm({
         },
     ].filter((input) => !!input)
 
-
     return (
         <form onSubmit={handleSubmit}>
             <div className={styles.addInputsContainer}>
@@ -419,7 +420,7 @@ export default function DetailsForm({
                 modifiers={[restrictToVerticalAxis, restrictToParentElement]}
             >
                 <SortableContext
-                    items={order.map((element) => element.componentData.orderId)}
+                    items={order.map((element) => element.data.orderId)}
                     strategy={horizontalListSortingStrategy}
                 >
                     {/* DROPPABLE AREA */}
@@ -429,17 +430,17 @@ export default function DetailsForm({
                     >
                         {order.map((element, index) => {
                             return <DetailsDraggableContainer
-                                id={element.componentData.orderId}
-                                elementType={element.componentType}
+                                id={element.data.orderId}
+                                elementType={element.type}
                                 index={index}
                                 handleDelete={() => deleteInput(element)}
                                 key={index}
                             >
                                 {(() => {
-                                    const componentData = element.componentData
+                                    const componentData = element.data
                                     const key = componentData.orderId
 
-                                    switch (element.componentType) {
+                                    switch (element.type) {
                                         case DetailsFormDataEnum.TITLES:
                                             return <DetailsTitleInput
                                                 key={key}
