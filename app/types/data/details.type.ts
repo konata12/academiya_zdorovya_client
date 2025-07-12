@@ -1,8 +1,8 @@
-import { StoreName } from "@/app/services/details.service"
 import { FormInputError } from "@/app/types/data/form.type"
 
 // MAIN
-export type OrderSliceNameType = 'newsDetailsOrder'
+export type DetailsOrderSliceNameType = 'newsDetailsOrder'
+export type DetailsOrderIndexedDBStoreNameType = 'news_images'
 
 export interface DetailsDataRenderElementBasicType {
     order: number
@@ -123,7 +123,7 @@ interface StyledComponent {
 }
 interface HandleChangeComponent {
     index: number
-    orderSliceName: OrderSliceNameType
+    orderSliceName: DetailsOrderSliceNameType
 }
 
 
@@ -158,7 +158,7 @@ export interface ListFormComponentProps
 
 export interface ImageFormComponentProps
     extends HandleChangeComponent {
-    indexedDBStoreName: StoreName
+    indexedDBStoreName: DetailsOrderIndexedDBStoreNameType
     componentData: ImageOrderComponent
     className?: {
         container?: string
@@ -173,7 +173,7 @@ export interface DetailsFromProps {
     quoutes?: boolean
     lists?: boolean
     images?: boolean
-    orderSliceName?: OrderSliceNameType
+    orderSliceName?: DetailsOrderSliceNameType
 }
 
 // REDUX ORDER SLICE

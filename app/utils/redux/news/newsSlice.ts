@@ -6,7 +6,7 @@ import {
     News,
     NewsFormData,
     NewsInit
-    } from '@/app/types/data/news.type';
+} from '@/app/types/data/news.type';
 import { ErrorResponse } from '@/app/types/data/response.type';
 import { createNewsFormData } from '@/app/services/news.service';
 
@@ -76,11 +76,15 @@ export const createNews = createAsyncThunk('news/create', async (
     { rejectWithValue }
 ) => {
     try {
-        const formData = createNewsFormData(data)
-        const response = await axiosInstance.post<News[]>(`${baseUrl}/admin/create`, data)
+        console.log('createNews')
+        const formData = await createNewsFormData(data)
+        console.log('formData: ', Array.from(formData))
+
+        const response = await axiosInstance.post<News[]>(`${baseUrl}/admin/create`, formData)
         console.log(response)
         return response.data
     } catch (error) {
+        console.error(error)
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {

@@ -1,4 +1,4 @@
-import { ListFormData, ListOrderComponent, OrderComponent, OrderSliceNameType } from "@/app/types/data/details.type";
+import { ListFormData, ListOrderComponent, OrderComponent, DetailsOrderSliceNameType } from "@/app/types/data/details.type";
 import { useDetailsFormSelectSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice";
 import { useAppDispatch } from "@/app/utils/redux/hooks";
 import { useCallback } from "react";
@@ -6,7 +6,7 @@ import { useCallback } from "react";
 interface OrderedListHandleKeyDownHookProps {
     index: number
     componentData: ListOrderComponent
-    orderSliceName: OrderSliceNameType
+    orderSliceName: DetailsOrderSliceNameType
 }
 
 export function useOrderedListHandleKeyDown({

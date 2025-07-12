@@ -19,10 +19,14 @@ import { FormInputError } from '@/app/types/data/form.type';
 import { createNews } from '@/app/utils/redux/news/newsSlice';
 import { fullfilled } from '@/app/services/response.service';
 import { useRouter } from 'next/navigation';
+import { useDetailsFormSelectSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice';
+import { clear } from 'idb-keyval';
+import { useIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
 
 
 const titles = ['Стан вмісту', 'Опції']
 const indexedDBStoreName = 'news_images'
+const detailsOrderSliceName = 'newsDetailsOrder'
 
 export default function CreateNewsForm() {
     const {
@@ -33,10 +37,16 @@ export default function CreateNewsForm() {
         errors,
     } = useAppSelector((state: RootState) => state.newsForm)
     const { error } = useAppSelector((state: RootState) => state.news)
-    const handleChange = useNewsFormHandleChange(indexedDBStoreName)
 
     const router = useRouter()
     const dispatch = useAppDispatch()
+    const handleChange = useNewsFormHandleChange(indexedDBStoreName)
+    const store = useIndexedDBStoreForImages(indexedDBStoreName)
+    const {
+        resetDetailsComponentsOrder,
+        resetFromData,
+    } = useDetailsFormSelectSlice(detailsOrderSliceName)
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -120,7 +130,13 @@ export default function CreateNewsForm() {
 
         const response = await dispatch(createNews(data))
         const isFulfilled = fullfilled(response.meta.requestStatus)
-        if (isFulfilled) router.push('./')
+        if (isFulfilled) {
+            // CLEAR DATA
+            dispatch(resetDetailsComponentsOrder())
+            dispatch(resetFromData())
+            clear(store)
+            router.push('./')
+        }
     }
 
     return (

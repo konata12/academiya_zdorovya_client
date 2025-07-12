@@ -3,7 +3,7 @@ import {
     DetailsFormData,
     DetailsFormDataEnum,
     OrderComponent,
-    OrderSliceNameType,
+    DetailsOrderSliceNameType,
     } from '@/app/types/data/details.type';
 import { DragEndEvent } from '@dnd-kit/core';
 import { useAppDispatch } from '@/app/utils/redux/hooks';
@@ -11,7 +11,7 @@ import { useCallback } from 'react';
 import { useDetailsFormSelectSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice';
 
 
-export function useOrderedForm(orderSliceName: OrderSliceNameType) {
+export function useOrderedForm(orderSliceName: DetailsOrderSliceNameType) {
     const { setDetailsStateOrder } = useDetailsFormSelectSlice(orderSliceName)
 
     const dispatch = useAppDispatch()

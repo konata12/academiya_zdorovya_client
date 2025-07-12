@@ -6,13 +6,12 @@ import {
     setDetailsStateOrder as setNewsDetailsStateOrder,
     updateDetailsComponent as updateNewsDetailsComponent
     } from '@/app/utils/redux/details/newsDetailsOrderSlice';
-import { OrderSliceNameType } from '@/app/types/data/details.type';
-import { setNewsFormDetails, setNewsFormError } from '@/app/utils/redux/news/newsFormSlice';
+import { DetailsOrderSliceNameType } from '@/app/types/data/details.type';
+import { resetNewsFromData, setNewsFormDetails, setNewsFormError } from '@/app/utils/redux/news/newsFormSlice';
 import { useMemo } from 'react';
 
 
-
-export function useDetailsFormSelectSlice(orderSliceName: OrderSliceNameType) {
+export function useDetailsFormSelectSlice(orderSliceName: DetailsOrderSliceNameType) {
     const actions = useMemo(() => {
         switch (orderSliceName) {
             case "newsDetailsOrder":
@@ -22,12 +21,15 @@ export function useDetailsFormSelectSlice(orderSliceName: OrderSliceNameType) {
                     removeDetailsComponent: removeNewsDetailsComponent,
                     updateDetailsComponent: updateNewsDetailsComponent,
                     setDetailsStateOrder: setNewsDetailsStateOrder,
-                    resetDetailsComponentsOrder: resetNewsDetailsComponentsOrder,
                     setDetailsComponentError: setNewsDetailsComponentError,
 
                     // FORM SLICE
                     submitForm: setNewsFormDetails,
                     setFormError: setNewsFormError,
+
+                    // RESET DATA
+                    resetDetailsComponentsOrder: resetNewsDetailsComponentsOrder,
+                    resetFromData: resetNewsFromData,
                 }
         }
     }, [orderSliceName])

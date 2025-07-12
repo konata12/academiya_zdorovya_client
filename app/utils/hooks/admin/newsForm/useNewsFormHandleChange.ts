@@ -56,7 +56,6 @@ export function useNewsFormHandleChange(indexedDBStoreName: string) {
                 }))
 
                 if (oldValue) {
-                    console.log(oldValue)
                     del(oldValue, store)
                 } // Delete old image from IndexedDB if it exists
                 if (newFile && newFile[0]) set(imageName, newFile[0], store)

@@ -10,7 +10,7 @@ import {
     ListFormDataEnum,
     ListFormDataEnumType,
     OrderComponent,
-    OrderSliceNameType,
+    DetailsOrderSliceNameType,
     ParagraphError,
     ParagraphFormData,
     ParagraphFormDataEnumType,
@@ -36,7 +36,7 @@ interface HandleChangeProps<T extends HTMLInputElement | HTMLTextAreaElement | H
     optionIndex?: number,
 }
 
-export function useOrderedFormInput(orderSliceName: OrderSliceNameType) {
+export function useOrderedFormInput(orderSliceName: DetailsOrderSliceNameType) {
     const { updateDetailsComponent } = useDetailsFormSelectSlice(orderSliceName)
 
     const store = useIndexedDBStoreForDetailsImages(orderSliceName)
