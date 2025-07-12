@@ -14,7 +14,7 @@ import HookFormInputContainerWithCheckbox from '@/app/common_ui/form_components/
 import HookFormInputContainerWithDeleteBtn from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtnHookForm'
 import FormElementContainerWithCheckboxHookForm from '@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox'
 import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
-import { fullfilled } from '@/app/services/response'
+import { fullfilled } from '@/app/services/response.service'
 import { useParams, useRouter } from 'next/navigation'
 import { updateEmployee as updateEmployeeAction, setEmployeeUpdateError, updateEmployeeInState } from '@/app/utils/redux/employees/employeesSlice'
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
@@ -278,7 +278,6 @@ export default function UpdateEmployeeFrom() {
                         className={{
                             inputContainer: styles.surnameInputContainer
                         }}
-                        value={watch(EmployeesFormDataEnum.DESCRIPTION)}
                         name={EmployeesFormDataEnum.DESCRIPTION}
                         register={register}
                         errors={errors}
@@ -368,7 +367,6 @@ export default function UpdateEmployeeFrom() {
                             inputLabel: styles.label,
                             textarea: styles.textarea
                         }}
-                        value={watch(EmployeesFormDataEnum.DEGREE)}
                         name={EmployeesFormDataEnum.DEGREE}
                         register={register}
                         errors={errors}

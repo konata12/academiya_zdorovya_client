@@ -9,8 +9,8 @@ import styles from './layout.module.scss'
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { RootState } from "@/app/utils/redux/store"
 import { usePathname } from 'next/navigation';
-import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation';
-import { fullfilled } from '@/app/services/response';
+import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation.service';
+import { fullfilled } from '@/app/services/response.service';
 import { closeEmployeesModal, deleteEmployeeFromState, fetchEmployees, openEmployeesModal, deleteEmployee as deleteEmployeeAction } from '@/app/utils/redux/employees/employeesSlice';
 import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404';
 

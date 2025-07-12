@@ -8,7 +8,7 @@ import { DepartmentsFormData, DepartmentsFormDataEnum } from "@/app/types/data/d
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
 import { createDepartment as createDepartmentAction } from "@/app/utils/redux/departments/departmentsSlice"
-import { fullfilled } from "@/app/services/response";
+import { fullfilled } from "@/app/services/response.service";
 import HookFormInputContainer from "@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm";
 import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
 

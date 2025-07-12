@@ -2,14 +2,14 @@
 
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
-import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation'
+import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation.service'
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
 import { RootState } from '@/app/utils/redux/store'
 import { usePathname } from 'next/navigation'
 import React, { useEffect } from 'react'
 import TableLine from './../../ui/Tables/ListOption/TableLine';
 import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
-import { fullfilled } from '@/app/services/response'
+import { fullfilled } from '@/app/services/response.service'
 import { deleteAboutTreatment as deleteAboutTreatmentAction, closeAboutTreatmentsModal, deleteAboutTreatmentsFromState, openAboutTreatmentsModal, fetchAboutTreatments, deleteAboutTreatment } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice'
 import styles from './layout.module.scss'
 import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404'

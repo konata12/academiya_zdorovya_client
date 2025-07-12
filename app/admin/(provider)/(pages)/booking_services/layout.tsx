@@ -9,9 +9,9 @@ import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 import { closeModalBookingServices, deleteBookingServiceFromState, fetchBookingServices, openModalBookingServices, deleteBookingService as deleteBookingServiceAction } from '@/app/utils/redux/booking_services/bookingServicesSlice'
 import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
-import { fullfilled } from '@/app/services/response'
+import { fullfilled } from '@/app/services/response.service'
 import { usePathname } from 'next/navigation'
-import { checkCreatePage } from '@/app/services/navigation'
+import { checkCreatePage } from '@/app/services/navigation.service'
 import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404'
 
 const titles = ['Послуга', 'Опції']

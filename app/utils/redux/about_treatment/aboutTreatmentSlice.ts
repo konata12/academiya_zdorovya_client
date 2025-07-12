@@ -1,4 +1,4 @@
-import { createFormData, parseFormDataToUpdate } from "@/app/services/about_treatment"
+import { createFormData, parseFormDataToUpdate } from "@/app/services/about_treatment.service"
 import { AboutTreatment, AboutTreatmentFormData, AboutTreatmentInit } from "@/app/types/data/about_treatment.type"
 import { ErrorResponse } from "@/app/types/data/response.type"
 import axiosInstance from "@/app/utils/axios"

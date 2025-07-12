@@ -17,7 +17,7 @@ import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/Su
 import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
 import { FormInputError } from '@/app/types/data/form.type';
 import { createNews } from '@/app/utils/redux/news/newsSlice';
-import { fullfilled } from '@/app/services/response';
+import { fullfilled } from '@/app/services/response.service';
 import { useRouter } from 'next/navigation';
 
 

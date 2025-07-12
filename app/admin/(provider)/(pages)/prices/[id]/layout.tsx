@@ -1,7 +1,7 @@
 'use client'
 
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
-import { checkCreatePage, checkUpdatePage, getUrlLastElement, getUrlOrderElement } from '@/app/services/navigation'
+import { checkCreatePage, checkUpdatePage, getUrlLastElement, getUrlOrderElement } from '@/app/services/navigation.service'
 import { fetchOneDepartment } from '@/app/utils/redux/departments/departmentsSlice'
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
 import { RootState } from '@/app/utils/redux/store'
@@ -18,7 +18,7 @@ import {
 } from '@/app/utils/redux/prices/pricesSlice'
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'
 import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
-import { fullfilled } from '@/app/services/response'
+import { fullfilled } from '@/app/services/response.service'
 
 const titles = ['Послуга', 'Опції']
 

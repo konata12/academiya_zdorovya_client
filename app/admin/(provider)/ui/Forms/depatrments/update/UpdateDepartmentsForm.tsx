@@ -12,7 +12,7 @@ import { Department, DepartmentsDefaultFormData, DepartmentsFormData, Department
 import { isEqual } from 'lodash';
 import HookFormInputContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm';
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton';
-import { fullfilled } from '@/app/services/response';
+import { fullfilled } from '@/app/services/response.service';
 
 export default function UpdateDepartmentForm() {
     const [formDefaultValues, setFormDefaultValues] = useState(true)

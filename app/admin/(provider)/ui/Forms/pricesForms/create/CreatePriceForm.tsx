@@ -24,11 +24,11 @@ import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { AnimatePresence, motion } from 'framer-motion';
 import { PriceSectionEnum, PriceSectionFormData } from '@/app/types/data/prices.type'
 import { usePathname, useRouter } from 'next/navigation'
-import { getUrlOrderElement } from '@/app/services/navigation'
+import { getUrlOrderElement } from '@/app/services/navigation.service'
 import { basicAnimationTransition } from '@/app/utils/animations/variables'
 import { optionalServiceVariants, priceFieldsVariants } from '@/app/utils/animations/animations'
 import PricesTable from '@/app/admin/(provider)/ui/Tables/PricesTable/PricesTable'
-import { fullfilled } from '@/app/services/response'
+import { fullfilled } from '@/app/services/response.service'
 
 
 export default function CreatePriceForm() {

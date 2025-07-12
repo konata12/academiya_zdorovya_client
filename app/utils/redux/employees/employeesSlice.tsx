@@ -1,4 +1,4 @@
-import { createEmployeeFormData, parseEmployeeFormDataToUpdate } from "@/app/services/employee";
+import { createEmployeeFormData, parseEmployeeFormDataToUpdate } from "@/app/services/employee.service";
 import { Employee, EmployeesFormData, EmployeesInit } from "@/app/types/data/employees.type";
 import { ErrorResponse } from "@/app/types/data/response.type";
 import axiosInstance from "@/app/utils/axios";

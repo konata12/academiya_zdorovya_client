@@ -1,6 +1,6 @@
 'use client'
 
-import { fullfilled } from '@/app/services/response'
+import { fullfilled } from '@/app/services/response.service'
 import { createBookingService } from '@/app/utils/redux/booking_services/bookingServicesSlice'
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
 import { useRouter } from 'next/navigation'

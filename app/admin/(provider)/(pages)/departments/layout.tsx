@@ -9,9 +9,9 @@ import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks"
 import { fetchDepartments, deleteDepartment as deleteDepartmentAction, deleteDepartmentFromState, openDepartmentsModal, closeDepartmentsModal } from "@/app/utils/redux/departments/departmentsSlice"
 import { RootState } from "@/app/utils/redux/store"
 import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink"
-import { fullfilled } from "@/app/services/response"
+import { fullfilled } from "@/app/services/response.service"
 import { usePathname } from "next/navigation"
-import { checkCreatePage, getUrlLastElement } from "@/app/services/navigation"
+import { checkCreatePage, getUrlLastElement } from "@/app/services/navigation.service"
 import CommonTable404 from "@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404"
 
 const titles = ['Місто', 'Адреса', 'Гаряча лінія', 'Опції']

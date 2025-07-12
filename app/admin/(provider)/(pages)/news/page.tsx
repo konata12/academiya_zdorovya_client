@@ -9,8 +9,8 @@ import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine';
 import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow';
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { usePathname } from 'next/navigation';
-import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation';
-import { fullfilled } from '@/app/services/response';
+import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation.service';
+import { fullfilled } from '@/app/services/response.service';
 import { RootState } from "@/app/utils/redux/store"
 import { fetchNews } from '@/app/utils/redux/news/newsSlice';
 

@@ -14,7 +14,7 @@ import HookFormInputContainerWithCheckbox from '@/app/common_ui/form_components/
 import HookFormInputContainerWithDeleteBtn from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtnHookForm'
 import FormElementContainerWithCheckboxHookForm from '@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox'
 import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
-import { fullfilled } from '@/app/services/response'
+import { fullfilled } from '@/app/services/response.service'
 import { useRouter } from 'next/navigation'
 import { createEmployee as createEmployeeAction } from '@/app/utils/redux/employees/employeesSlice'
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'

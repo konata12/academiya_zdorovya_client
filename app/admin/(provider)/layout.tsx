@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import styles from './layout.module.scss';
 import { refreshTokens } from "@/app/utils/redux/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
-import { fullfilled } from "@/app/services/response";
+import { fullfilled } from "@/app/services/response.service";
 import Main from "@/app/admin/(provider)/ui/Main/Main";
 import { RootState } from "@/app/utils/redux/store";
 

@@ -1,8 +1,14 @@
-import { CreateNewsFormData, News, NewsFormData, NewsInit } from "@/app/types/data/news.type";
-import { ErrorResponse } from "@/app/types/data/response.type";
-import axiosInstance from "@/app/utils/axios";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AxiosError } from "axios";
+import axiosInstance from '@/app/utils/axios';
+import { AxiosError } from 'axios';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+    CreateNewsFormData,
+    News,
+    NewsFormData,
+    NewsInit
+    } from '@/app/types/data/news.type';
+import { ErrorResponse } from '@/app/types/data/response.type';
+import { createNewsFormData } from '@/app/services/news.service';
 
 const initialState: NewsInit = {
     news: [],
@@ -70,7 +76,7 @@ export const createNews = createAsyncThunk('news/create', async (
     { rejectWithValue }
 ) => {
     try {
-        // const formData = createNewsFormData(data)
+        const formData = createNewsFormData(data)
         const response = await axiosInstance.post<News[]>(`${baseUrl}/admin/create`, data)
         console.log(response)
         return response.data
