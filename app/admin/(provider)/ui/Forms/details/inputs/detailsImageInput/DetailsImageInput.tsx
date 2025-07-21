@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styles from './DetailsImageInput.module.scss'
-import { DetailsFormDataEnum, ImageError, ImageFormComponentProps, ImageFormData } from '@/app/types/data/details.type'
+import { DetailsFormDataEnum, ImageFormComponentProps } from '@/app/types/data/details.type'
 import { v4 as uuidv4 } from 'uuid';
 import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput';
-import { createStore, get } from 'idb-keyval';
 import AutoResizingTextarea from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/AutoResizingTextarea';
 import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
 import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';

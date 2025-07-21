@@ -31,3 +31,8 @@ export interface Status extends StatusBasic {
     update: StatusType
     getOne?: StatusType
 }
+
+// ERROR ENUMS
+export enum ParsingResponseErrorsEnum {
+    GETNAMEFROMSIGNEDURL = 'ERROR'
+}

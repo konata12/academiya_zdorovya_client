@@ -1,5 +1,5 @@
 import { ListFormData, ListOrderComponent, OrderComponent, DetailsOrderSliceNameType } from "@/app/types/data/details.type";
-import { useDetailsFormSelectSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice";
+import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
 import { useAppDispatch } from "@/app/utils/redux/hooks";
 import { useCallback } from "react";
 
@@ -14,7 +14,7 @@ export function useOrderedListHandleKeyDown({
     componentData,
     orderSliceName,
 }: OrderedListHandleKeyDownHookProps) {
-    const { updateDetailsComponent } = useDetailsFormSelectSlice(orderSliceName)
+    const { updateDetailsComponent } = useDetailsFormSlice(orderSliceName)
 
     const dispatch = useAppDispatch()
 

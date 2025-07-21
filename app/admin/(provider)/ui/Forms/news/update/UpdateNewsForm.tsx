@@ -1,6 +1,6 @@
 import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
 import React from 'react';
-import styles from './CreateNewsForm.module.scss';
+import styles from './UpdateNewsForm.module.scss';
 import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
 import { ImageInputPreviewFromIndexedDB } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB';
 import { CreateNewsFormData, NewsFormDataEnum, NewsFormDataEnumType } from '@/app/types/data/news.type';
@@ -15,29 +15,33 @@ import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
 import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
 import { FormInputError } from '@/app/types/data/form.type';
-import { createNews } from '@/app/utils/redux/news/newsSlice';
+import { setNewsUpdateError, updateNews } from '@/app/utils/redux/news/newsSlice';
 import { fullfilled } from '@/app/services/response.service';
-import { useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
-import { clear } from 'idb-keyval';
-import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
+import _ from 'lodash';
 
 
 const titles = ['Стан вмісту', 'Опції']
-const indexedDBStoreName = 'news_create_images'
-const detailsOrderSliceName = 'newsCreateDetailsOrder'
+const indexedDBStoreName = 'news_update_images'
+const detailsOrderSliceName = 'newsUpdateDetailsOrder'
 
-export default function CreateNewsForm() {
+export default function UpdateNewsForm() {
     const {
         title,
         description,
         backgroundImg,
         details,
         errors,
-    } = useAppSelector((state: RootState) => state.newsCreateForm)
-    const { error } = useAppSelector((state: RootState) => state.news)
+    } = useAppSelector((state: RootState) => state.newsUpdateForm)
+    const {
+        news,
+        error
+    } = useAppSelector((state: RootState) => state.news)
 
     const router = useRouter()
+    const pathname = usePathname()
+    const { id } = useParams<{ id: string }>()
     const dispatch = useAppDispatch()
     const handleChange = useNewsFormHandleChange(indexedDBStoreName, detailsOrderSliceName)
     const {
@@ -45,7 +49,6 @@ export default function CreateNewsForm() {
         resetDetailsComponentsOrder,
         resetFromData,
     } = useDetailsFormSlice(detailsOrderSliceName)
-
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -127,14 +130,33 @@ export default function CreateNewsForm() {
             details,
         }
 
-        const response = await dispatch(createNews(data))
+        // CHECK IF DATA CHANGED
+        const oldNews = news.find(news => `${news.id}` === id)
+        let oldData: CreateNewsFormData | undefined = undefined
+        if (oldNews) {
+            const { id, createdAt, ...oldNewsData } = oldNews
+            oldData = oldNewsData
+        }
+
+        const dataIsEuqal = _.isEqual(data, oldData)
+
+        // IF DATA HASN'T CHANGED SET ERROR AND RETURN
+        if (dataIsEuqal) {
+            dispatch(setNewsUpdateError())
+            return
+        }
+
+        const response = await dispatch(updateNews({
+            data,
+            id
+        }))
         const isFulfilled = fullfilled(response.meta.requestStatus)
         if (isFulfilled) {
             // CLEAR DATA
-            clear(getIndexedDBStoreForImages('news_create_images'))
-            dispatch(resetDetailsComponentsOrder())
-            dispatch(resetFromData())
-            router.push('./')
+            // clear(getIndexedDBStoreForImages('news_update_images'))
+            // dispatch(resetDetailsComponentsOrder())
+            // dispatch(resetFromData())
+            // router.push('../')
         }
     }
 
@@ -188,6 +210,7 @@ export default function CreateNewsForm() {
                         imageName={backgroundImg}
                         indexedDBStoreName={indexedDBStoreName}
                         error={errors[NewsFormDataEnum.BACKGROUNDIMG]}
+                        className={{}}
                     />
                 </ImageInputContainer>
             </div>
@@ -214,7 +237,7 @@ export default function CreateNewsForm() {
 
                             <SafeLink
                                 className={`btn blue sm`}
-                                href={`/admin/news/create/details`}
+                                href={`${pathname}/details`}
                             >
                                 Створити вміст
                             </SafeLink>
@@ -237,7 +260,8 @@ export default function CreateNewsForm() {
             </div>
 
             <SubmitButton
-                error={error.create}
+                error={error.update}
+                label='Оновити дані'
             />
         </form >
     )

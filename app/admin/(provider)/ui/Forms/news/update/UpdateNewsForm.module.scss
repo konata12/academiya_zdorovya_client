@@ -1,0 +1,35 @@
+@use '../../../../../../styles/variables' as *;
+
+.titleInputContainer {
+    margin-bottom: 48px;
+}
+
+.descriptionInputContainer {
+    margin-bottom: 64px;
+}
+
+.imageSection {
+
+    .paragraph {
+        margin-bottom: 32px;
+    }
+}
+
+.detailsSection {
+    margin: 128px 0;
+
+    .title {
+        margin-bottom: 64px;
+    }
+}
+
+.preview {
+
+    .title {
+        margin-bottom: 64px;
+    }
+}
+
+.detailsErrorWrap.detailsErrorWrap {
+    border-radius: $border-rad-4
+}

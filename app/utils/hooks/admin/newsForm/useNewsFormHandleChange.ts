@@ -1,8 +1,10 @@
+import { NewsDetailsOrderSliceNameType } from "@/app/types/data/details.type"
 import { NewsFormDataEnum, NewsFormDataEnumType } from "@/app/types/data/news.type"
 import { FormElements } from "@/app/types/ui/form_components/inputContainers.type"
-import { useIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages"
+import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice"
+import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages"
 import { useAppDispatch } from "@/app/utils/redux/hooks"
-import { setNewsFormBackgroundImage, setNewsFormDescription, setNewsFormError, setNewsFormTitle } from "@/app/utils/redux/news/newsFormSlice"
+import { setNewsFormBackgroundImage, setNewsFormDescription, setNewsFormTitle } from "@/app/utils/redux/news/newsCreateFormSlice"
 import { del, set } from "idb-keyval"
 import { useCallback } from "react"
 import { v4 as uuidv4 } from 'uuid';
@@ -14,9 +16,18 @@ interface ChangeEventProps<T extends FormElements> {
     oldValue?: string | null
 }
 
-export function useNewsFormHandleChange(indexedDBStoreName: string) {
+export function useNewsFormHandleChange(
+    indexedDBStoreName: string,
+    detailsOrderSliceName: NewsDetailsOrderSliceNameType
+) {
     const dispatch = useAppDispatch()
-    const store = useIndexedDBStoreForImages(indexedDBStoreName)
+    const store = getIndexedDBStoreForImages(indexedDBStoreName)
+    const {
+        setFormError,
+        setTitle,
+        setDescription,
+        setBackgroundImage,
+    } = useDetailsFormSlice(detailsOrderSliceName)
 
     const handleChange = useCallback(<T extends FormElements>({
         e,
@@ -29,28 +40,28 @@ export function useNewsFormHandleChange(indexedDBStoreName: string) {
         switch (elementType) {
             case NewsFormDataEnum.TITLE:
                 // REQUIRED ERROR HANDLING 
-                if (newValue.length > 0) dispatch(setNewsFormError({
+                if (newValue.length > 0) dispatch(setFormError({
                     field: NewsFormDataEnum.TITLE,
                     message: ''
                 }))
 
-                dispatch(setNewsFormTitle(newValue))
+                dispatch(setTitle(newValue))
                 break;
 
             case NewsFormDataEnum.DESCRIPTION:
                 // REQUIRED ERROR HANDLING 
-                if (newValue.length > 0) dispatch(setNewsFormError({
+                if (newValue.length > 0) dispatch(setFormError({
                     field: NewsFormDataEnum.DESCRIPTION,
                     message: ''
                 }))
 
-                dispatch(setNewsFormDescription(newValue))
+                dispatch(setDescription(newValue))
                 break;
 
             case NewsFormDataEnum.BACKGROUNDIMG:
                 const imageName = uuidv4()
                 // REQUIRED ERROR HANDLING 
-                if (newValue.length > 0) dispatch(setNewsFormError({
+                if (newValue.length > 0) dispatch(setFormError({
                     field: NewsFormDataEnum.BACKGROUNDIMG,
                     message: ''
                 }))
@@ -60,10 +71,10 @@ export function useNewsFormHandleChange(indexedDBStoreName: string) {
                 } // Delete old image from IndexedDB if it exists
                 if (newFile && newFile[0]) set(imageName, newFile[0], store)
 
-                dispatch(setNewsFormBackgroundImage(imageName))
+                dispatch(setBackgroundImage(imageName))
                 break;
         }
-    }, [indexedDBStoreName])
+    }, [indexedDBStoreName, detailsOrderSliceName])
 
     return handleChange
 }

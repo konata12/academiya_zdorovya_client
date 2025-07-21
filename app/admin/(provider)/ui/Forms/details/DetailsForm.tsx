@@ -35,7 +35,7 @@ import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifi
 import { RootState } from '@/app/utils/redux/store';
 
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
-import { useDetailsFormSelectSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice';
+import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
 import { useOrderedForm } from '@/app/utils/hooks/admin/detailsForm/useOrderedForm';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
@@ -47,7 +47,7 @@ import DetailsParagraphInput from '@/app/admin/(provider)/ui/Forms/details/input
 import DetailsQuouteInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsQuouteInput/DetailsQuouteInput';
 import DetailsListInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsListInput/DetailsListInput';
 import DetailsImageInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput';
-import { getIndexedDBStoreForDetailsImages } from '@/app/services/details.service';
+import { getIndexedDBStoreNameForDetailsImages } from '@/app/services/details.service';
 
 
 export default function DetailsForm({
@@ -57,10 +57,10 @@ export default function DetailsForm({
     lists,
     images,
 
-    // need for determining which order slice to use
-    orderSliceName = 'newsDetailsOrder',
+    // need for determining which details order slice to use
+    orderSliceName,
 }: DetailsFromProps) {
-    const order = useAppSelector((state: RootState) => state.newsDetailsOrder.order)
+    const order = useAppSelector((state: RootState) => state[orderSliceName].order)
     console.log('order: ', order)
 
     const router = useRouter()
@@ -76,7 +76,7 @@ export default function DetailsForm({
 
         submitForm,
         setFormError,
-    } = useDetailsFormSelectSlice(orderSliceName)
+    } = useDetailsFormSlice(orderSliceName)
     const { setNodeRef } = useDroppable({
         id: 'DetailsForm'
     })
@@ -88,7 +88,7 @@ export default function DetailsForm({
         }),
     );
 
-    const imageStoreName = getIndexedDBStoreForDetailsImages(orderSliceName)
+    const imageStoreName = getIndexedDBStoreNameForDetailsImages(orderSliceName)
 
     // FORM SUBMIT
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

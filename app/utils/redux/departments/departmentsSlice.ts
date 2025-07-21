@@ -8,6 +8,7 @@ const initialState: DepartmentsInit = {
     departments: [],
     // need for every department to have seperate state for ModalWindow of every department
     departmentsIsModalOpen: [],
+
     status: {
         getAll: null,
         getOne: null,
@@ -72,7 +73,6 @@ export const createDepartment = createAsyncThunk('departments/create', async (
 ) => {
     try {
         const response = await axiosInstance.post<Department[]>(`${baseUrl}/admin/create`, data)
-        console.log(response)
         return response.data
     } catch (error) {
         if (error instanceof AxiosError) {

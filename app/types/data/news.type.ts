@@ -8,9 +8,9 @@ export interface News {
     id: number
     title: string
     description: string
-    backgroundImgUrl: string
-    createdAt: Date
-    details: DetailsRedactorType[]
+    backgroundImg: string
+    createdAt: string
+    details: DetailsRedactorType
 }
 
 export interface NewsInit {
@@ -41,6 +41,7 @@ export interface CreateNewsFormData {
     backgroundImg: string
     details: DetailsRedactorType
 }
+export interface UpdateNewsFormData extends CreateNewsFormData {}
 
 // ENUMS
 export enum NewsFormDataEnum {
@@ -48,6 +49,13 @@ export enum NewsFormDataEnum {
     DESCRIPTION = 'description',
     BACKGROUNDIMG = 'backgroundImg',
     DETAILS = 'details',
+}
+export enum NewsRequstDataEnum {
+    TITLE = NewsFormDataEnum.TITLE,
+    DESCRIPTION = NewsFormDataEnum.DESCRIPTION,
+    BACKGROUNDIMG = NewsFormDataEnum.BACKGROUNDIMG,
+    DETAILS = NewsFormDataEnum.DETAILS,
+    CREATEDAT = 'createdAt',
 }
 
 // ENUM TYPES

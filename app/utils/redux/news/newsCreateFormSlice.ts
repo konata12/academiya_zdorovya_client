@@ -15,8 +15,8 @@ const initialState: NewsFormData = {
     }
 }
 
-const newsFormSlice = createSlice({
-    name: 'newsForm',
+const newsCreateFormSlice = createSlice({
+    name: 'newsCreateForm',
     initialState,
     reducers: {
         setNewsFormTitle(state, action: { payload: string }) {
@@ -56,6 +56,6 @@ export const {
     setNewsFormError,
 
     resetNewsFromData,
-} = newsFormSlice.actions
+} = newsCreateFormSlice.actions
 
-export default newsFormSlice.reducer
+export default newsCreateFormSlice.reducer

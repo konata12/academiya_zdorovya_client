@@ -5,10 +5,13 @@ const initialState: ComponentOrderState = {
     order: []
 };
 
-const newsDetailsOrderSlice = createSlice({
-    name: 'newsDetailsOrder',
+const newsUpdateDetailsOrderSlice = createSlice({
+    name: 'newsUpdateDetailsOrder',
     initialState,
     reducers: {
+        setInitialDataOnLink(state, action: {payload: OrderComponent[]}) {
+            state.order = action.payload
+        },
         addDetailsComponent(state, action: {
             payload: OrderComponent
         }) {
@@ -53,6 +56,8 @@ const newsDetailsOrderSlice = createSlice({
 })
 
 export const {
+    setInitialDataOnLink,
+
     addDetailsComponent,
     removeDetailsComponent,
     updateDetailsComponent,
@@ -60,6 +65,6 @@ export const {
     setDetailsComponentError,
 
     resetDetailsComponentsOrder,
-} = newsDetailsOrderSlice.actions
+} = newsUpdateDetailsOrderSlice.actions
 
-export default newsDetailsOrderSlice.reducer
+export default newsUpdateDetailsOrderSlice.reducer

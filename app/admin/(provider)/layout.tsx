@@ -1,15 +1,17 @@
 'use client'
 
+import styles from './layout.module.scss';
+import { fullfilled } from '@/app/services/response.service';
+import { refreshTokens } from '@/app/utils/redux/auth/authSlice';
+import { RootState } from '@/app/utils/redux/store';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 import Footer from "@/app/admin/(provider)/ui/Footer/Footer";
 import Header from "@/app/admin/(provider)/ui/Header/Header";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import styles from './layout.module.scss';
-import { refreshTokens } from "@/app/utils/redux/auth/authSlice";
-import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
-import { fullfilled } from "@/app/services/response.service";
 import Main from "@/app/admin/(provider)/ui/Main/Main";
-import { RootState } from "@/app/utils/redux/store";
+import { useConnectionToIndexedDB } from '@/app/utils/hooks/admin/indexedDB/useConnectionToIndexedDb';
 
 
 export default function Admin({
@@ -29,7 +31,10 @@ export default function Admin({
         const isFulfilled = fullfilled(response.meta.requestStatus)
         if (!isFulfilled) router.push('/admin/login')
     }
-
+    
+    // CREATE INDEXED DB IF NOT CREATED
+    useConnectionToIndexedDB()
+    // AUTH
     useEffect(() => {
         if (accessToken) return
         refreshTokensAndCheckIsLogin()

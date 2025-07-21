@@ -1,4 +1,4 @@
-import { useCombinedRefs } from '@/app/utils/hooks/useCombinedRefs';
+import { useCombinedRefs } from '@/app/utils/hooks/common/useCombinedRefs';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface AutoResizingTextareaProps {

@@ -8,54 +8,14 @@ import {
 import { DragEndEvent } from '@dnd-kit/core';
 import { useAppDispatch } from '@/app/utils/redux/hooks';
 import { useCallback } from 'react';
-import { useDetailsFormSelectSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice';
+import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
 
 
 export function useOrderedForm(orderSliceName: DetailsOrderSliceNameType) {
-    const { setDetailsStateOrder } = useDetailsFormSelectSlice(orderSliceName)
+    const { setDetailsStateOrder } = useDetailsFormSlice(orderSliceName)
 
     const dispatch = useAppDispatch()
 
-    const renderOrderedComponents = useCallback((order: OrderComponent[]): DetailsFormData => {
-        const data: DetailsFormData = {
-            titles: [],
-            paragraphs: [],
-            quoutes: [],
-            lists: [],
-            images: [],
-        }
-
-        order.forEach((component) => {
-            switch (component.type) {
-                case DetailsFormDataEnum.TITLES:
-                    data.titles.push(component.data)
-                    break;
-
-                case DetailsFormDataEnum.PARAGRAPHS:
-                    data.paragraphs.push(component.data)
-                    break;
-
-                case DetailsFormDataEnum.QUOUTES:
-                    data.quoutes.push(component.data)
-                    break;
-
-                case DetailsFormDataEnum.LISTS:
-                    data.lists.push(component.data)
-                    break;
-
-                case DetailsFormDataEnum.IMAGES:
-                    data.images.push(component.data)
-                    break;
-
-                default:
-                    throw Error('renderOrderedComponents error')
-            }
-        })
-
-        return data
-    }, [])
-
-    // DRAG AND DROP HANDLER
     const handleDragEnd = useCallback((event: DragEndEvent, order: OrderComponent[]) => {
         const { active, over } = event
 
@@ -76,7 +36,6 @@ export function useOrderedForm(orderSliceName: DetailsOrderSliceNameType) {
     }, [])
 
     return {
-        renderOrderedComponents,
         handleDragEnd,
     }
 }

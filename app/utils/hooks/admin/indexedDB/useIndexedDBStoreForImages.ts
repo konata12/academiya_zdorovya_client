@@ -1,5 +1,5 @@
 import { createStore } from "idb-keyval";
 
-export function useIndexedDBStoreForImages(name: string) {
+export function getIndexedDBStoreForImages(name: string) {
     return createStore('app_db', name)
 }

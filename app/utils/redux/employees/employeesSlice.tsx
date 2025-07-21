@@ -52,6 +52,7 @@ export const fetchOneEmployee = createAsyncThunk('employees/getOne', async (
     { rejectWithValue }
 ) => {
     try {
+        
         const response = await axiosInstance.get<Employee[]>(`${baseUrl}/admin/${id}`)
         // console.log(response)
         return response.data

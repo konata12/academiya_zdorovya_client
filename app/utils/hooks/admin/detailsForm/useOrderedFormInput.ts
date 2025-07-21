@@ -23,7 +23,7 @@ import {
 import { del, set } from 'idb-keyval';
 import { useAppDispatch } from '@/app/utils/redux/hooks';
 import { useCallback } from 'react';
-import { useDetailsFormSelectSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSelectSlice';
+import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
 import { useIndexedDBStoreForDetailsImages } from '@/app/utils/hooks/admin/detailsForm/useIndexedDBStoreForDetailsImages';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -37,7 +37,7 @@ interface HandleChangeProps<T extends HTMLInputElement | HTMLTextAreaElement | H
 }
 
 export function useOrderedFormInput(orderSliceName: DetailsOrderSliceNameType) {
-    const { updateDetailsComponent } = useDetailsFormSelectSlice(orderSliceName)
+    const { updateDetailsComponent } = useDetailsFormSlice(orderSliceName)
 
     const store = useIndexedDBStoreForDetailsImages(orderSliceName)
     const dispatch = useAppDispatch()

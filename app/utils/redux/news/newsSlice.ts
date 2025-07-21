@@ -5,10 +5,11 @@ import {
     CreateNewsFormData,
     News,
     NewsFormData,
-    NewsInit
+    NewsInit,
+    UpdateNewsFormData
 } from '@/app/types/data/news.type';
 import { ErrorResponse } from '@/app/types/data/response.type';
-import { createNewsFormData } from '@/app/services/news.service';
+import { createNewsFormData, parseNewsResponse, updateNewsFormData } from '@/app/services/news.service';
 
 const initialState: NewsInit = {
     news: [],
@@ -38,9 +39,9 @@ export const fetchNews = createAsyncThunk('news/getAll', async (
 ) => {
     try {
         const response = await axiosInstance.get<News[]>(`${baseUrl}`)
-        console.log(response)
-        await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate delay
-        return response.data
+        const parsedNews = await parseNewsResponse(response.data)
+
+        return parsedNews
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
@@ -76,7 +77,6 @@ export const createNews = createAsyncThunk('news/create', async (
     { rejectWithValue }
 ) => {
     try {
-        console.log('createNews')
         const formData = await createNewsFormData(data)
         console.log('formData: ', Array.from(formData))
 
@@ -84,12 +84,17 @@ export const createNews = createAsyncThunk('news/create', async (
         console.log(response)
         return response.data
     } catch (error) {
-        console.error(error)
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
                 message: error.response?.data.error || 'Unexpected server error',
                 statusCode: error.status || 500
+            }
+            return rejectWithValue(serializableError)
+        } else if (error instanceof Error) {
+            const serializableError: ErrorResponse = {
+                message: error.message,
+                statusCode: 500
             }
             return rejectWithValue(serializableError)
         }
@@ -99,13 +104,16 @@ export const updateNews = createAsyncThunk('news/update', async ({
     data,
     id
 }: {
-    data: NewsFormData
+    data: UpdateNewsFormData
     id: string
 }, { rejectWithValue }) => {
     try {
-        console.log('redux', data)
-        // const formData = createNewsFormData(data)
-        const response = await axiosInstance.put(`${baseUrl}/admin/update/${id}`, data)
+        console.log('***************************************')
+        console.log('updating news')
+        const formData = await updateNewsFormData(data)
+        console.log('formData: ', Array.from(formData))
+
+        const response = await axiosInstance.put(`${baseUrl}/admin/update/${id}`, formData)
         console.log(response)
         return response.data
     } catch (error) {
@@ -142,11 +150,11 @@ const newsSlice = createSlice({
     name: 'news',
     initialState,
     reducers: {
-        openNewsModal(state, action: { payload: { i: number } }) {
-            state.newsIsModalOpen[action.payload.i] = true
+        openNewsModal(state, action: { payload: number }) {
+            state.newsIsModalOpen[action.payload] = true
         },
-        closeNewsModal(state, action: { payload: { i: number } }) {
-            state.newsIsModalOpen[action.payload.i] = false
+        closeNewsModal(state, action: { payload: number }) {
+            state.newsIsModalOpen[action.payload] = false
         },
 
         deleteNewsFromState(state, action: { payload: number }) {
@@ -170,10 +178,13 @@ const newsSlice = createSlice({
         },
         setNewsUpdateError(state) {
             state.error.update = {
-                message: 'Дані ті самі, окрім картинки, спочатку змініть значення',
+                message: 'Дані ті самі, спочатку змініть значення',
                 statusCode: 0
             }
-        }
+        },
+        resetNewsUpdateError(state) {
+            state.error.update = null
+        },
     },
     extraReducers(builder) {
         builder
@@ -216,12 +227,12 @@ const newsSlice = createSlice({
                 state.status.create = "loading"
                 state.error.create = null
             })
-            .addCase(createNews.fulfilled, (state, action: PayloadAction<News[] | undefined>) => {
+            .addCase(createNews.fulfilled, (state, /*action: PayloadAction<News[] | undefined>*/) => {
                 state.status.create = "succeeded"
-                if (action.payload) {
-                    state.news = action.payload
-                    state.newsIsModalOpen = new Array(state.news.length).fill(false)
-                }
+                // if (action.payload) {
+                //     state.news = action.payload
+                //     state.newsIsModalOpen = new Array(state.news.length).fill(false)
+                // }
             })
             .addCase(createNews.rejected, (state, action) => {
                 state.status.create = "failed"
@@ -261,6 +272,7 @@ export const {
     closeNewsModal,
     deleteNewsFromState,
     setNewsUpdateError,
+    resetNewsUpdateError,
     updateNewInState,
 } = newsSlice.actions
 

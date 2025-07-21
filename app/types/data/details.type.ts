@@ -1,8 +1,11 @@
 import { FormInputError } from "@/app/types/data/form.type"
 
 // MAIN
-export type DetailsOrderSliceNameType = 'newsDetailsOrder'
-export type DetailsOrderIndexedDBStoreNameType = 'news_images'
+export type NewsDetailsOrderSliceNameType = 'newsCreateDetailsOrder' | 'newsUpdateDetailsOrder'
+export type DetailsOrderSliceNameType = NewsDetailsOrderSliceNameType
+
+export type NewsDetailsOrderIndexedDBStoreNameType = 'news_create_images' | 'news_update_images'
+export type DetailsOrderIndexedDBStoreNameType = NewsDetailsOrderIndexedDBStoreNameType
 
 export interface DetailsDataRenderElementBasicType {
     order: number
@@ -173,7 +176,7 @@ export interface DetailsFromProps {
     quoutes?: boolean
     lists?: boolean
     images?: boolean
-    orderSliceName?: DetailsOrderSliceNameType
+    orderSliceName: DetailsOrderSliceNameType
 }
 
 // REDUX ORDER SLICE
