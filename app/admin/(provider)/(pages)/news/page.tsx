@@ -1,26 +1,34 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+
+import React, { useEffect } from 'react';
 import styles from './page.module.scss';
-import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation.service';
-import { fetchNews, deleteNews as deleteNewsAction, openNewsModal, closeNewsModal, deleteNewsFromState, resetNewsUpdateError } from '@/app/utils/redux/news/newsSlice';
+import { clear } from 'idb-keyval';
+import {
+    closeNewsModal,
+    deleteNews as deleteNewsAction,
+    deleteNewsFromState,
+    fetchNews,
+    openNewsModal,
+    resetNewsUpdateError,
+    toggleIsBannerNews as toggleIsBannerNewsAction
+} from '@/app/utils/redux/news/newsSlice';
 import { fullfilled } from '@/app/services/response.service';
+import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
+import { News } from '@/app/types/data/news.type';
+import { parseDetailsResponseToOrderComponent } from '@/app/services/details.service';
 import { RootState } from '@/app/utils/redux/store';
+import { setAllNewsFormUpdateDataOnLink } from '@/app/utils/redux/news/newsUpdateFormSlice';
+import { setInitialDataOnLink } from '@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice';
+import { transferNewsImagesBetweenIndexDBStores } from '@/app/services/news.service';
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { useParsedDate } from '@/app/utils/hooks/common/useParsedDate';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink';
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable';
 import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404';
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine';
 import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow';
-import { setAllNewsFormUpdateDataOnLink } from '@/app/utils/redux/news/newsUpdateFormSlice';
-import { News } from '@/app/types/data/news.type';
-import { parseDetailsResponseToOrderComponent } from '@/app/services/details.service';
-import { setInitialDataOnLink } from '@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice';
-import { transferNewsImagesBetweenIndexDBStores } from '@/app/services/news.service';
-import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
-import { clear } from 'idb-keyval';
 
 
 const titles = ['Назва', 'Дата публікування ', 'Опції']
@@ -63,6 +71,9 @@ export default function page() {
     }
     const closeModalWindow = (i: number) => {
         dispatch(closeNewsModal(i))
+    }
+    const toggleIsBannerNews = (id: number) => {
+        dispatch(toggleIsBannerNewsAction(id))
     }
     // LOAD DATA TO FORM AND ORDER SLICES AND LOAD IMAGES TO UPLOAD STORE
     const linkToUpdatePage = async (news: News) => {
@@ -131,12 +142,7 @@ export default function page() {
                             </button>
                         </ModalWindow>}
 
-                        <span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 14 14" fill="004BAE">
-                                <path d="M12.8327 4.25606C13.3227 4.25606 13.7614 4.57587 13.9294 5.05498C14.0974 5.53409 13.9597 6.07279 13.5852 6.40111L10.8261 8.74438L11.9671 12.3681C12.1234 12.8582 11.9647 13.3981 11.5716 13.7142C11.1772 14.0292 10.6371 14.0511 10.2229 13.7702L7.01108 11.5899L3.85175 13.7945C3.65458 13.9319 3.42825 14 3.20191 14C2.95575 14 2.70841 13.9197 2.50191 13.758C2.10525 13.4491 1.93958 12.9117 2.08891 12.4204L3.18558 8.7541L0.412414 6.40233C0.039081 6.07279 -0.0974182 5.53531 0.0717485 5.0562C0.240915 4.5783 0.678414 4.25971 1.16725 4.25971H4.66608L5.90508 0.791627C6.07542 0.316164 6.51175 0 6.99825 0C7.48475 0 7.92108 0.314948 8.09142 0.791627L9.33041 4.25971H12.8304L12.8327 4.25606Z"
-                                    fill="#none" />
-                            </svg>
-
+                        <span className={styles.tableLineOptions}>
                             <button
                                 onClick={() => { openModalWindow(i) }}
                                 className={`btn gray sm`}
@@ -148,6 +154,28 @@ export default function page() {
                                 onClick={() => linkToUpdatePage(news)}
                             >
                                 Змінити
+                            </button>
+
+                            <button
+                                className={styles.starBtn}
+                                onClick={(e) => {
+                                    // DISABLE BUTTON FOR 1 SECOND
+                                    const button = e.currentTarget;
+                                    button.disabled = true
+                                    setTimeout(() => {
+                                        button.disabled = false
+                                    }, 1000)
+
+                                    // MAKE REQUEST TO SERVER
+                                    toggleIsBannerNews(news.id)
+                                }}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="-2 -2 24 24" fill="none">
+                                    <path d="M18.3323 6.08008C19.0323 6.08008 19.6589 6.53696 19.8989 7.2214C20.1389 7.90585 19.9423 8.67541 19.4073 9.14445L15.4656 12.492L17.0956 17.6687C17.319 18.3688 17.0923 19.1401 16.5306 19.5918C15.9673 20.0417 15.1956 20.073 14.604 19.6717L10.0157 16.5569L5.50243 19.7064C5.22077 19.9027 4.89744 20 4.57411 20C4.22245 20 3.86912 19.8853 3.57412 19.6543C3.00746 19.2131 2.7708 18.4452 2.98413 17.7434L4.55078 12.5059L0.589156 9.14618C0.0558293 8.67541 -0.139167 7.90758 0.102497 7.22314C0.34416 6.54043 0.969152 6.0853 1.66748 6.0853H6.66575L8.43573 1.1309C8.67906 0.451663 9.30239 0 9.99738 0C10.6924 0 11.3157 0.449926 11.559 1.1309L13.329 6.0853H18.3289L18.3323 6.08008Z"
+                                        fill={news.isBannerNews ? '#004BAE' : 'none'}
+                                        stroke="#004BAE"
+                                        strokeWidth="2" />
+                                </svg>
                             </button>
                         </span>
                     </TableLine>))}

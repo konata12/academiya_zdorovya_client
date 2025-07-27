@@ -108,14 +108,28 @@ export const updateNews = createAsyncThunk('news/update', async ({
     id: string
 }, { rejectWithValue }) => {
     try {
-        console.log('***************************************')
-        console.log('updating news')
         const formData = await updateNewsFormData(data)
         console.log('formData: ', Array.from(formData))
 
         const response = await axiosInstance.put(`${baseUrl}/admin/update/${id}`, formData)
         console.log(response)
         return response.data
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            console.log(error)
+            const serializableError: ErrorResponse = {
+                message: error.response?.data.error || 'Unexpected server error',
+                statusCode: error.status || 500
+            }
+            return rejectWithValue(serializableError)
+        }
+    }
+})
+export const toggleIsBannerNews = createAsyncThunk('news/toggleIsBannerNews', async (id: number, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.patch(`${baseUrl}/admin/update/${id}`)
+        console.log(response)
+        return id
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
@@ -158,24 +172,22 @@ const newsSlice = createSlice({
         },
 
         deleteNewsFromState(state, action: { payload: number }) {
-            // if (state.news) {
-            //     const index = state.news.findIndex(new => {
-            //         return new.id === action.payload
-            //     })
-            //     state.news.splice(index, 1)
-            // }
-        },
-        updateNewInState(state, action: {
-            payload: {
-                data: NewsFormData,
-                id: string
+            if (state.news.length) {
+                const index = state.news.findIndex(news => news.id === action.payload)
+                state.news.splice(index, 1)
             }
-        }) {
-            // const index = state.news.findIndex(new => {
-            //     return new.id === +action.payload.id
-            // })
-            // state.news[index] = parseNewsFormDataToUpdate(action.payload.data, action.payload.id)
         },
+        // updateNewInState(state, action: {
+        //     payload: {
+        //         data: NewsFormData,
+        //         id: string
+        //     }
+        // }) {
+        // const index = state.news.findIndex(new => {
+        //     return new.id === +action.payload.id
+        // })
+        // state.news[index] = parseNewsFormDataToUpdate(action.payload.data, action.payload.id)
+        // },
         setNewsUpdateError(state) {
             state.error.update = {
                 message: 'Дані ті самі, спочатку змініть значення',
@@ -202,6 +214,7 @@ const newsSlice = createSlice({
             })
             .addCase(fetchNews.rejected, (state, action) => {
                 state.status.getAll = "failed"
+                state.news = []
                 state.error.getAll = action.payload as ErrorResponse
             })
 
@@ -227,12 +240,8 @@ const newsSlice = createSlice({
                 state.status.create = "loading"
                 state.error.create = null
             })
-            .addCase(createNews.fulfilled, (state, /*action: PayloadAction<News[] | undefined>*/) => {
+            .addCase(createNews.fulfilled, (state) => {
                 state.status.create = "succeeded"
-                // if (action.payload) {
-                //     state.news = action.payload
-                //     state.newsIsModalOpen = new Array(state.news.length).fill(false)
-                // }
             })
             .addCase(createNews.rejected, (state, action) => {
                 state.status.create = "failed"
@@ -248,6 +257,23 @@ const newsSlice = createSlice({
                 state.status.update = "succeeded"
             })
             .addCase(updateNews.rejected, (state, action) => {
+                state.status.update = "failed"
+                state.error.update = action.payload as ErrorResponse
+            })
+
+            // UPDATE NEW
+            .addCase(toggleIsBannerNews.pending, (state) => {
+                state.status.update = "loading"
+                state.error.update = null
+            })
+            .addCase(toggleIsBannerNews.fulfilled, (state, action: PayloadAction<number | undefined>) => {
+                state.status.update = "succeeded"
+                const index = state.news.findIndex(news => news.id === action.payload)
+                if (index !== -1) {
+                    state.news[index].isBannerNews = !state.news[index].isBannerNews
+                }
+            })
+            .addCase(toggleIsBannerNews.rejected, (state, action) => {
                 state.status.update = "failed"
                 state.error.update = action.payload as ErrorResponse
             })
@@ -273,7 +299,6 @@ export const {
     deleteNewsFromState,
     setNewsUpdateError,
     resetNewsUpdateError,
-    updateNewInState,
 } = newsSlice.actions
 
 export default newsSlice.reducer

@@ -18,12 +18,13 @@ export default function CommonTable404({
 }: CommonTable404) {
     const errorUIMessage = (): string => {
         if (status.getAll === 'loading' || status.getAll === null) return 'Завантаження...'
-            
+        
+        if (error.getAll?.statusCode === 500) return errorMessage
         if (error.getAll?.statusCode === 404 || !error.delete) {
             return notFoundMessage
-        } else {
-            return errorMessage
         }
+
+        return errorMessage
     }
 
     return (

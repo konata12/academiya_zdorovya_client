@@ -20,6 +20,8 @@ import { fullfilled } from '@/app/services/response.service';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
 import _ from 'lodash';
+import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
+import { clear } from 'idb-keyval';
 
 
 const titles = ['Стан вмісту', 'Опції']
@@ -153,10 +155,10 @@ export default function UpdateNewsForm() {
         const isFulfilled = fullfilled(response.meta.requestStatus)
         if (isFulfilled) {
             // CLEAR DATA
-            // clear(getIndexedDBStoreForImages('news_update_images'))
-            // dispatch(resetDetailsComponentsOrder())
-            // dispatch(resetFromData())
-            // router.push('../')
+            clear(getIndexedDBStoreForImages('news_update_images'))
+            dispatch(resetDetailsComponentsOrder())
+            dispatch(resetFromData())
+            router.push('../')
         }
     }
 

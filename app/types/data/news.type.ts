@@ -9,6 +9,7 @@ export interface News {
     title: string
     description: string
     backgroundImg: string
+    isBannerNews: boolean
     createdAt: string
     details: DetailsRedactorType
 }

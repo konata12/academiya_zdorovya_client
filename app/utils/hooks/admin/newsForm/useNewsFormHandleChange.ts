@@ -4,7 +4,6 @@ import { FormElements } from "@/app/types/ui/form_components/inputContainers.typ
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice"
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages"
 import { useAppDispatch } from "@/app/utils/redux/hooks"
-import { setNewsFormBackgroundImage, setNewsFormDescription, setNewsFormTitle } from "@/app/utils/redux/news/newsCreateFormSlice"
 import { del, set } from "idb-keyval"
 import { useCallback } from "react"
 import { v4 as uuidv4 } from 'uuid';

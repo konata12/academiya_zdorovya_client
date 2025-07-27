@@ -46,7 +46,6 @@ export default function CreateNewsForm() {
         resetFromData,
     } = useDetailsFormSlice(detailsOrderSliceName)
 
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const errorsData: {

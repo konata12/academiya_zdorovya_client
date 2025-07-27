@@ -7,9 +7,8 @@ import {
 import { CreateNewsFormData, News, NewsRequstDataEnum } from '@/app/types/data/news.type';
 import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from '@/app/services/response.service';
 import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
-import { NewsDetailsOrderIndexedDBStoreNameType } from '@/app/types/data/details.type';
 import { parseDetailsCreateRequestFormData, parseDetailsResponse, parseDetailsUpdateRequestFormData, transferDetailsRedactorTypeImagesBetweenIndexDBStores } from '@/app/services/details.service';
-import { renameFileOrBlob } from '@/app/services/files.service';
+import { renameFile, renameFileOrBlob } from '@/app/services/files.service';
 
 const storeName = 'news_images'
 const createStoreName = 'news_create_images'
@@ -32,7 +31,8 @@ export const createNewsFormData = async (data: CreateNewsFormData) => {
                 const image = await get<File>(value, getIndexedDBStoreForImages(createStoreName))
 
                 if (!(image instanceof File)) throw Error('Помилка BACKGROUNDIMG при створенні новини зображення')
-                formData.append(key, image)
+                const parsedImage = renameFile(image, value + image.name)
+                formData.append(key, parsedImage)
             } else if (key === NewsRequstDataEnum.DETAILS) {
                 if (typeof value === 'string') throw Error('Помилка даних редактора')
                 await parseDetailsCreateRequestFormData(formData, value, createStoreName)
@@ -43,6 +43,7 @@ export const createNewsFormData = async (data: CreateNewsFormData) => {
         return formData
     } catch (error) {
         console.error(error)
+        throw Error('Error when parsing create details formData')
     }
 }
 
@@ -71,11 +72,11 @@ export const updateNewsFormData = async (data: CreateNewsFormData) => {
             }
         }
         formData.append(NewsRequstDataEnum.CREATEDAT, `${Date.now()}`)
-        console.log(2)
 
         return formData
     } catch (error) {
         console.error(error)
+        throw Error('Error when parsing update details formData')
     }
 }
 

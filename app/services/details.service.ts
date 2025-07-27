@@ -127,7 +127,6 @@ export async function parseDetailsUpdateRequestFormData(
     details: DetailsRedactorType,
     storeName: DetailsOrderIndexedDBStoreNameType,
 ) {
-    console.log(123)
     const store = getIndexedDBStoreForImages(storeName);
     let imagesCount = 0
 
@@ -135,7 +134,6 @@ export async function parseDetailsUpdateRequestFormData(
     for (const [key, arr] of Object.entries(details)) {
         // loop through arrays titles, paragraphs, quoutes, lists, images
         for (let index = 0; index < arr.length; index++) {
-            console.log('parseDetailsUpdateRequestFormData: ', key)
             const detailsValue = arr[index];
             const detailsValueArr = Object.entries(detailsValue);
 
@@ -158,23 +156,8 @@ export async function parseDetailsUpdateRequestFormData(
                     const image = await get<File | Blob>(value, store);
                     if (!image) throw Error('Помилка при обробці зображень редактора');
 
-                    // CREATE IMAGE
+                    // PARSE IMAGE
                     let requestImage: File = renameFileOrBlob(image, value)
-
-                    // if (image instanceof File) {
-                    //     // PARSE IMAGE NAME
-                    //     const extension = image.type.split('/')[1]
-                    //     value = `${value}.${extension}`
-                    //     requestImage = renameFile(image, value)
-                    // } else {
-                    //     const nameSplit = value.split('.')
-                    //     const extension = nameSplit[nameSplit.length - 1]
-                    //     console.log(extension)
-                    //     requestImage = new File([image], value, {
-                    //         type: `image/${extension}`,
-                    //         lastModified: Date.now()
-                    //     })
-                    // }
 
                     formData.append(`details_images`, requestImage);
                     imagesCount++
