@@ -3,12 +3,13 @@ export interface ErrorResponse {
     statusCode: number
     message: string
     error?: string
+    id?: number
 }
 
 export interface ErrorsResponsesBasic {
     getAll: ErrorResponse | null
     create: ErrorResponse | null
-    delete: ErrorResponse | null
+    delete: (ErrorResponse | null)[]
 }
 export interface ErrorsResponses extends ErrorsResponsesBasic {
     update: ErrorResponse | null

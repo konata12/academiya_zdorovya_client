@@ -49,7 +49,7 @@ export default function page() {
         dispatch(fetchNews())
     }, [])
 
-    console.log({
+    console.log(123123, {
         news,
         newsIsModalOpen,
         error,
@@ -129,14 +129,14 @@ export default function page() {
                             >
                                 Скасувати видалення
                             </button>
-                            {error.delete?.message && <span
+                            {error.delete?.[i]?.message && <span
                                 className={`error ${styles.deleteError}`}
                             >
-                                {error.delete.message}
+                                {error.delete[i].message}
                             </span>}
                             <button
                                 onClick={() => { deleteNews(news.id, i) }}
-                                className={`btn blue lg ${error.delete?.message ? styles.deleteBtnError : ''}`}
+                                className={`btn blue lg ${error.delete?.[i]?.message ? styles.deleteBtnError : ''}`}
                             >
                                 Підтвердити
                             </button>
