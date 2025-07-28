@@ -13,7 +13,7 @@ import { addModalState, deleteModalState, setEmployeeBackgroundImgColorCheckbox,
 import HookFormInputContainerWithCheckbox from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithCheckbox/InputContainerWithCheckboxHookForm'
 import HookFormInputContainerWithDeleteBtn from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtnHookForm'
 import FormElementContainerWithCheckboxHookForm from '@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox'
-import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
+import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow'
 import { fullfilled } from '@/app/services/response.service'
 import { useRouter } from 'next/navigation'
 import { createEmployee as createEmployeeAction } from '@/app/utils/redux/employees/employeesSlice'

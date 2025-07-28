@@ -172,12 +172,6 @@ const newsSlice = createSlice({
             state.newsIsModalOpen[action.payload] = false
         },
 
-        deleteNewsFromState(state, action: { payload: number }) {
-            if (state.news.length) {
-                const index = state.news.findIndex(news => news.id === action.payload)
-                state.news.splice(index, 1)
-            }
-        },
         setNewsUpdateError(state) {
             state.error.update = {
                 message: 'Дані ті самі, спочатку змініть значення',
@@ -283,6 +277,7 @@ const newsSlice = createSlice({
                 if (index !== -1) {
                     state.news.splice(index, 1)
                     state.newsIsModalOpen.splice(index, 1)
+                    state.error.delete.splice(index, 1)
                 }
             })
             .addCase(deleteNews.rejected, (state, action) => {
@@ -301,7 +296,6 @@ const newsSlice = createSlice({
 export const {
     openNewsModal,
     closeNewsModal,
-    deleteNewsFromState,
     setNewsUpdateError,
     resetNewsUpdateError,
 } = newsSlice.actions

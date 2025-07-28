@@ -1,0 +1,14 @@
+@use '../../../../../styles/variables' as *;
+
+.deleteError {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.deleteBtn {
+    margin-bottom: 16px;
+}
+.deleteBtnError {
+    outline: 2px solid $error-color;
+}

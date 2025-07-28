@@ -18,7 +18,7 @@ const initialState: AboutTreatmentInit = {
         getOne: null,
         getAll: null,
         create: null,
-        delete: null,
+        delete: [],
         update: null
     }
 }
@@ -99,13 +99,14 @@ export const deleteAboutTreatment = createAsyncThunk('aboutTreatment/delete', as
     try {
         const response = await axiosInstance.delete(`${baseUrl}/admin/${id}`)
         console.log(response)
-        return response.data
+        return id
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
                 message: error.response?.data.message || 'Unexpected server error',
-                statusCode: error.status || 500
+                statusCode: error.status || 500,
+                id
             }
             return rejectWithValue(serializableError)
         }
@@ -162,6 +163,7 @@ const aboutTreatmentSlice = createSlice({
                 if (action.payload) {
                     state.aboutTreatments = action.payload
                     state.aboutTreatmentsIsModalOpen = new Array(state.aboutTreatments.length).fill(false)
+                    state.error.delete = new Array(state.aboutTreatments.length).fill(null)
                 }
             })
             .addCase(fetchAboutTreatments.rejected, (state, action) => {
@@ -201,16 +203,31 @@ const aboutTreatmentSlice = createSlice({
             })
 
             // DELETE ABOUT TREATMENT
-            .addCase(deleteAboutTreatment.pending, (state) => {
+            .addCase(deleteAboutTreatment.pending, (state, action: PayloadAction<number | undefined>) => {
                 state.status.delete = "loading"
-                state.error.delete = null
+                const index = state.aboutTreatments.findIndex(aboutTreatments => aboutTreatments.id === action.payload)
+                if (index !== -1) {
+                    state.error.delete[index] = null
+                }
             })
-            .addCase(deleteAboutTreatment.fulfilled, (state) => {
+            .addCase(deleteAboutTreatment.fulfilled, (state, action: PayloadAction<number | undefined>) => {
                 state.status.delete = "succeeded"
+                const index = state.aboutTreatments.findIndex(aboutTreatments => aboutTreatments.id === action.payload)
+                if (index !== -1) {
+                    state.aboutTreatments.splice(index, 1)
+                    state.aboutTreatmentsIsModalOpen.splice(index, 1)
+                    state.error.delete.splice(index, 1)
+                }
             })
             .addCase(deleteAboutTreatment.rejected, (state, action) => {
                 state.status.delete = "failed"
-                state.error.delete = action.payload as ErrorResponse
+                if (action.payload && typeof action.payload === 'object' && 'id' in action.payload) {
+                    const error = action.payload as ErrorResponse;
+                    const index = state.aboutTreatments.findIndex(aboutTreatments => aboutTreatments.id === error.id);
+                    if (index !== -1) {
+                        state.error.delete[index] = error;
+                    }
+                }
             })
     }
 })

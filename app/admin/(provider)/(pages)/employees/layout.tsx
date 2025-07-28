@@ -1,6 +1,6 @@
 'use client'
 
-import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow';
+import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow';
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable';
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine';

@@ -1,18 +1,23 @@
 'use client'
 
+import styles from './layout.module.scss';
+import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation.service';
+import {
+    closeDepartmentsModal,
+    deleteDepartment as deleteDepartmentAction,
+    fetchDepartments,
+    openDepartmentsModal
+} from '@/app/utils/redux/departments/departmentsSlice';
+import { RootState } from '@/app/utils/redux/store';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+
 import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable"
 import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine"
-import { useEffect } from "react"
-import styles from './layout.module.scss'
-import ModalWindow from "@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow"
-import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks"
-import { fetchDepartments, deleteDepartment as deleteDepartmentAction, deleteDepartmentFromState, openDepartmentsModal, closeDepartmentsModal } from "@/app/utils/redux/departments/departmentsSlice"
-import { RootState } from "@/app/utils/redux/store"
 import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink"
-import { fullfilled } from "@/app/services/response.service"
-import { usePathname } from "next/navigation"
-import { checkCreatePage, getUrlLastElement } from "@/app/services/navigation.service"
 import CommonTable404 from "@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404"
+import DeleteModalWindow from '@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow';
 
 const titles = ['Місто', 'Адреса', 'Гаряча лінія', 'Опції']
 
@@ -36,14 +41,8 @@ export default function Departments({
         dispatch(fetchDepartments())
     }, [])
 
-    const deleteDepartment = async (id: number, i: number) => {
-        const response = await dispatch(deleteDepartmentAction(id))
-        const isFulfilled = fullfilled(response.meta.requestStatus)
-
-        if (isFulfilled) {
-            dispatch(deleteDepartmentFromState(id))
-            closeModalWindow(i)
-        }
+    const deleteDepartment = async (id: number) => {
+        dispatch(deleteDepartmentAction(id))
     }
 
     const openModalWindow = (i: number) => {
@@ -68,22 +67,14 @@ export default function Departments({
                     <span>{department.city}</span>
                     <span>{department.address}</span>
                     <span>{department.hotline}</span>
-                    {departmentsIsModalOpen[i] && <ModalWindow
-                        title="Ви дійсно бажаєте видалити це відділеня?"
-                    >
-                        <button
-                            className={`btn cancel`}
-                            onClick={() => { closeModalWindow(i) }}
-                        >
-                            Скасувати видалення
-                        </button>
-                        <button
-                            onClick={() => { deleteDepartment(department.id, i) }}
-                            className={`btn blue lg`}
-                        >
-                            Підтвердити
-                        </button>
-                    </ModalWindow>}
+                    {departmentsIsModalOpen[i] && <DeleteModalWindow
+                        title='Ви дійсно бажаєте видалити це відділення?'
+                        error={error}
+                        index={i}
+                        id={department.id}
+                        closeModalHandler={closeModalWindow}
+                        deleteHandler={deleteDepartment}
+                    />}
                     <span>
                         <button
                             onClick={() => { openModalWindow(i) }}

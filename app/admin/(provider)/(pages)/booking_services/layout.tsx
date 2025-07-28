@@ -1,18 +1,23 @@
 'use client'
 
+import React, { useEffect } from 'react';
+import styles from './layout.module.scss';
+import { checkCreatePage } from '@/app/services/navigation.service';
+import {
+    closeModalBookingServices,
+    deleteBookingService as deleteBookingServiceAction,
+    fetchBookingServices,
+    openModalBookingServices
+    } from '@/app/utils/redux/booking_services/bookingServicesSlice';
+import { RootState } from '@/app/utils/redux/store';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { usePathname } from 'next/navigation';
+
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
-import { RootState } from '@/app/utils/redux/store'
-import React, { useEffect } from 'react'
-import styles from './layout.module.scss'
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
-import { closeModalBookingServices, deleteBookingServiceFromState, fetchBookingServices, openModalBookingServices, deleteBookingService as deleteBookingServiceAction } from '@/app/utils/redux/booking_services/bookingServicesSlice'
-import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
-import { fullfilled } from '@/app/services/response.service'
-import { usePathname } from 'next/navigation'
-import { checkCreatePage } from '@/app/services/navigation.service'
 import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404'
+import DeleteModalWindow from '@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow'
 
 const titles = ['Послуга', 'Опції']
 
@@ -35,14 +40,8 @@ export default function BookingServices({
         dispatch(fetchBookingServices())
     }, [])
 
-    const deleteBookingService = async (id: number, i: number) => {
-        const response = await dispatch(deleteBookingServiceAction(id))
-        const isFulfilled = fullfilled(response.meta.requestStatus)
-
-        if (isFulfilled) {
-            dispatch(deleteBookingServiceFromState(id))
-            closeModalWindow(i)
-        }
+    const deleteBookingService = async (id: number) => {
+        dispatch(deleteBookingServiceAction(id))
     }
 
     const openModalWindow = (i: number) => {
@@ -65,22 +64,14 @@ export default function BookingServices({
                     />
                 ) : (bookingServices.map((service, i) => <TableLine key={service.id}>
                     <span>{service.name}</span>
-                    {bookingServicesIsModalOpen[i] && <ModalWindow
-                        title="Ви дійсно бажаєте видалити це відділеня?"
-                    >
-                        <button
-                            className={`btn cancel`}
-                            onClick={() => { closeModalWindow(i) }}
-                        >
-                            Скасувати видалення
-                        </button>
-                        <button
-                            onClick={() => { deleteBookingService(service.id, i) }}
-                            className={`btn blue lg`}
-                        >
-                            Підтвердити
-                        </button>
-                    </ModalWindow>}
+                    {bookingServicesIsModalOpen[i] && <DeleteModalWindow
+                        title='Ви дійсно бажаєте видалити цю послугу для запису?'
+                        error={error}
+                        index={i}
+                        id={service.id}
+                        closeModalHandler={closeModalWindow}
+                        deleteHandler={deleteBookingService}
+                    />}
                     <button
                         onClick={() => { openModalWindow(i) }}
                         className={`btn gray sm`}

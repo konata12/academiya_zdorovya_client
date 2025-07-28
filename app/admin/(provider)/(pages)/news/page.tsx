@@ -6,13 +6,11 @@ import { clear } from 'idb-keyval';
 import {
     closeNewsModal,
     deleteNews as deleteNewsAction,
-    deleteNewsFromState,
     fetchNews,
     openNewsModal,
     resetNewsUpdateError,
     toggleIsBannerNews as toggleIsBannerNewsAction
 } from '@/app/utils/redux/news/newsSlice';
-import { fullfilled } from '@/app/services/response.service';
 import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
 import { News } from '@/app/types/data/news.type';
 import { parseDetailsResponseToOrderComponent } from '@/app/services/details.service';
@@ -28,7 +26,7 @@ import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink';
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable';
 import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404';
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine';
-import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow';
+import DeleteModalWindow from '@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow';
 
 
 const titles = ['Назва', 'Дата публікування ', 'Опції']
@@ -49,21 +47,8 @@ export default function page() {
         dispatch(fetchNews())
     }, [])
 
-    console.log(123123, {
-        news,
-        newsIsModalOpen,
-        error,
-        status
-    })
-
-    const deleteNews = async (id: number, i: number) => {
-        const response = await dispatch(deleteNewsAction(id))
-        const isFulfilled = fullfilled(response.meta.requestStatus)
-
-        if (isFulfilled) {
-            dispatch(deleteNewsFromState(id))
-            closeModalWindow(i)
-        }
+    const deleteNews = async (id: number) => {
+        dispatch(deleteNewsAction(id))
     }
 
     const openModalWindow = (i: number) => {
@@ -105,9 +90,9 @@ export default function page() {
             </div>
 
             <div className={styles.allNews}>
-                <p className={`title xs left ${styles.sectionTitle}`}>
+                {/* <p className={`title xs left ${styles.sectionTitle}`}>
                     Усі новини
-                </p>
+                </p> */}
 
                 <CommonTable titles={titles}>
                     {!news.length ? (
@@ -120,27 +105,14 @@ export default function page() {
                         <span>{news.title}</span>
                         <span>{getParsedDateString(news.createdAt)}</span>
 
-                        {newsIsModalOpen[i] && <ModalWindow
-                            title="Ви дійсно бажаєте видалити це відділеня?"
-                        >
-                            <button
-                                className={`btn cancel`}
-                                onClick={() => { closeModalWindow(i) }}
-                            >
-                                Скасувати видалення
-                            </button>
-                            {error.delete?.[i]?.message && <span
-                                className={`error ${styles.deleteError}`}
-                            >
-                                {error.delete[i].message}
-                            </span>}
-                            <button
-                                onClick={() => { deleteNews(news.id, i) }}
-                                className={`btn blue lg ${error.delete?.[i]?.message ? styles.deleteBtnError : ''}`}
-                            >
-                                Підтвердити
-                            </button>
-                        </ModalWindow>}
+                        {newsIsModalOpen[i] && <DeleteModalWindow
+                            title='Ви дійсно бажаєте видалити цю новину?'
+                            error={error}
+                            index={i}
+                            id={news.id}
+                            closeModalHandler={closeModalWindow}
+                            deleteHandler={deleteNews}
+                        />}
 
                         <span className={styles.tableLineOptions}>
                             <button

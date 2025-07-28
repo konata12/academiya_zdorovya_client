@@ -15,7 +15,7 @@ const initialState: BookingServiceInit = {
     error: {
         getAll: null,
         create: null,
-        delete: null,
+        delete: [],
     }
 }
 
@@ -67,13 +67,14 @@ export const deleteBookingService = createAsyncThunk('bookingServices/delete', a
     try {
         const response = await axiosInstance.delete(`${requesUrlBase}/admin/${id}`)
         console.log(response)
-        return response.data
+        return id
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
                 message: error.response?.data.message || 'Unexpected server error',
-                statusCode: error.status || 500
+                statusCode: error.status || 500,
+                id
             }
             return rejectWithValue(serializableError)
         }
@@ -90,15 +91,6 @@ const bookingServicesSlice = createSlice({
         closeModalBookingServices(state, action: { payload: { i: number } }) {
             state.bookingServicesIsModalOpen[action.payload.i] = false
         },
-
-        deleteBookingServiceFromState(state, action: { payload: number }) {
-            if (state.bookingServices) {
-                const index = state.bookingServices.findIndex(service => {
-                    return service.id === action.payload
-                })
-                state.bookingServices.splice(index, 1)
-            }
-        },
     },
     extraReducers(builder) {
         builder
@@ -112,6 +104,7 @@ const bookingServicesSlice = createSlice({
                 if (action.payload) {
                     state.bookingServices = action.payload
                     state.bookingServicesIsModalOpen = new Array(state.bookingServices.length).fill(false)
+                    state.error.delete = new Array(state.bookingServices.length).fill(null)
                 }
             })
             .addCase(fetchBookingServices.rejected, (state, action) => {
@@ -138,16 +131,31 @@ const bookingServicesSlice = createSlice({
             })
 
             // DELETE BOOKING SERVICES
-            .addCase(deleteBookingService.pending, (state) => {
+            .addCase(deleteBookingService.pending, (state, action: PayloadAction<number | undefined>) => {
                 state.status.delete = "loading"
-                state.error.delete = null
+                const index = state.bookingServices.findIndex(bookingServices => bookingServices.id === action.payload)
+                if (index !== -1) {
+                    state.error.delete[index] = null
+                }
             })
-            .addCase(deleteBookingService.fulfilled, (state) => {
+            .addCase(deleteBookingService.fulfilled, (state, action: PayloadAction<number | undefined>) => {
                 state.status.delete = "succeeded"
+                const index = state.bookingServices.findIndex(bookingServices => bookingServices.id === action.payload)
+                if (index !== -1) {
+                    state.bookingServices.splice(index, 1)
+                    state.bookingServicesIsModalOpen.splice(index, 1)
+                    state.error.delete.splice(index, 1)
+                }
             })
             .addCase(deleteBookingService.rejected, (state, action) => {
                 state.status.delete = "failed"
-                state.error.delete = action.payload as ErrorResponse
+                if (action.payload && typeof action.payload === 'object' && 'id' in action.payload) {
+                    const error = action.payload as ErrorResponse;
+                    const index = state.bookingServices.findIndex(bookingServices => bookingServices.id === error.id);
+                    if (index !== -1) {
+                        state.error.delete[index] = error;
+                    }
+                }
             })
     }
 })
@@ -155,7 +163,6 @@ const bookingServicesSlice = createSlice({
 export const {
     openModalBookingServices,
     closeModalBookingServices,
-    deleteBookingServiceFromState,
 } = bookingServicesSlice.actions
 
 export default bookingServicesSlice.reducer

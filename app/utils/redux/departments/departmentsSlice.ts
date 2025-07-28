@@ -20,7 +20,7 @@ const initialState: DepartmentsInit = {
         getAll: null,
         getOne: null,
         create: null,
-        delete: null,
+        delete: [],
         update: null,
     }
 }
@@ -115,13 +115,14 @@ export const deleteDepartment = createAsyncThunk('departments/delete', async (
     try {
         const response = await axiosInstance.delete(`${baseUrl}/admin/${id}`)
         console.log(response)
-        return response.data
+        return id
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
                 message: error.response?.data.message || 'Unexpected server error',
-                statusCode: error.status || 500
+                statusCode: error.status || 500,
+                id
             }
             return rejectWithValue(serializableError)
         }
@@ -139,14 +140,6 @@ const departmentsSlice = createSlice({
             state.departmentsIsModalOpen[action.payload.i] = false
         },
 
-        deleteDepartmentFromState(state, action: { payload: number }) {
-            if (state.departments) {
-                const index = state.departments.findIndex(department => {
-                    return department.id === action.payload
-                })
-                state.departments.splice(index, 1)
-            }
-        },
         updateDepartmentInState(state, action: {
             payload: {
                 data: DepartmentsFormData,
@@ -182,6 +175,7 @@ const departmentsSlice = createSlice({
                 if (action.payload) {
                     state.departments = action.payload
                     state.departmentsIsModalOpen = new Array(state.departments.length).fill(false)
+                    state.error.delete = new Array(state.departments.length).fill(null)
                 }
             })
             .addCase(fetchDepartments.rejected, (state, action) => {
@@ -237,16 +231,31 @@ const departmentsSlice = createSlice({
             })
 
             // DELETE DEPARTMENTS
-            .addCase(deleteDepartment.pending, (state) => {
+            .addCase(deleteDepartment.pending, (state, action: PayloadAction<number | undefined>) => {
                 state.status.delete = "loading"
-                state.error.delete = null
+                const index = state.departments.findIndex(departments => departments.id === action.payload)
+                if (index !== -1) {
+                    state.error.delete[index] = null
+                }
             })
-            .addCase(deleteDepartment.fulfilled, (state) => {
+            .addCase(deleteDepartment.fulfilled, (state, action: PayloadAction<number | undefined>) => {
                 state.status.delete = "succeeded"
+                const index = state.departments.findIndex(departments => departments.id === action.payload)
+                if (index !== -1) {
+                    state.departments.splice(index, 1)
+                    state.departmentsIsModalOpen.splice(index, 1)
+                    state.error.delete.splice(index, 1)
+                }
             })
             .addCase(deleteDepartment.rejected, (state, action) => {
                 state.status.delete = "failed"
-                state.error.delete = action.payload as ErrorResponse
+                if (action.payload && typeof action.payload === 'object' && 'id' in action.payload) {
+                    const error = action.payload as ErrorResponse;
+                    const index = state.departments.findIndex(departments => departments.id === error.id);
+                    if (index !== -1) {
+                        state.error.delete[index] = error;
+                    }
+                }
             })
     }
 })
@@ -254,7 +263,6 @@ const departmentsSlice = createSlice({
 export const {
     openDepartmentsModal,
     closeDepartmentsModal,
-    deleteDepartmentFromState,
     setUpdateError,
     updateDepartmentInState,
 } = departmentsSlice.actions

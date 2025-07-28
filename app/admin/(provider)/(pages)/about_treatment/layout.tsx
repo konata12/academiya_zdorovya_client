@@ -8,11 +8,12 @@ import { RootState } from '@/app/utils/redux/store'
 import { usePathname } from 'next/navigation'
 import React, { useEffect } from 'react'
 import TableLine from './../../ui/Tables/ListOption/TableLine';
-import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
+import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow'
 import { fullfilled } from '@/app/services/response.service'
 import { deleteAboutTreatment as deleteAboutTreatmentAction, closeAboutTreatmentsModal, deleteAboutTreatmentsFromState, openAboutTreatmentsModal, fetchAboutTreatments, deleteAboutTreatment } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice'
 import styles from './layout.module.scss'
 import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404'
+import DeleteModalWindow from '@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow'
 
 const titles = ['Послуга', 'Опції']
 
@@ -36,16 +37,8 @@ export default function WhatWeTreat({
         dispatch(fetchAboutTreatments())
     }, [])
 
-    const deleteAboutTreatment = async (id: number, i: number) => {
-        const response = await dispatch(deleteAboutTreatmentAction(id))
-        const isFulfilled = fullfilled(response.meta.requestStatus)
-
-        if (isFulfilled) {
-            dispatch(deleteAboutTreatmentsFromState(id))
-            closeModalWindow(i)
-        } else if (response.meta.requestStatus === 'rejected') {
-            return
-        }
+    const deleteAboutTreatment = async (id: number) => {
+        dispatch(deleteAboutTreatmentAction(id))
     }
 
     const openModalWindow = (i: number) => {
@@ -66,25 +59,14 @@ export default function WhatWeTreat({
                     />
                 ) : (aboutTreatments.map((aboutTreatment, i) => <TableLine key={i}>
                     <span>{aboutTreatment.title}</span>
-                    {aboutTreatmentsIsModalOpen[i] && <ModalWindow
-                        title="Ви дійсно бажаєте видалити це відділеня?"
-                    >
-                        <button
-                            className={`btn cancel`}
-                            onClick={() => { closeModalWindow(i) }}
-                        >
-                            Скасувати видалення
-                        </button>
-                        {error.delete && <p className={`error ${styles.deleteError}`}>
-                            {error.delete.message}
-                        </p>}
-                        <button
-                            onClick={() => { deleteAboutTreatment(aboutTreatment.id, i) }}
-                            className={`btn blue lg ${error.delete && styles.deleteButtonError}`}
-                        >
-                            Підтвердити
-                        </button>
-                    </ModalWindow>}
+                    {aboutTreatmentsIsModalOpen[i] && <DeleteModalWindow
+                        title='Ви дійсно бажаєте видалити цю новину?'
+                        error={error}
+                        index={i}
+                        id={aboutTreatment.id}
+                        closeModalHandler={closeModalWindow}
+                        deleteHandler={deleteAboutTreatment}
+                    />}
                     <span>
                         <button
                             onClick={() => { openModalWindow(i) }}

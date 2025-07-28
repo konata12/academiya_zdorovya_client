@@ -17,7 +17,7 @@ import {
     deletePriceSection as deletePriceSectionAction
 } from '@/app/utils/redux/prices/pricesSlice'
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'
-import ModalWindow from '@/app/admin/(provider)/ui/Forms/ModalWindow/ModalWindow'
+import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow'
 import { fullfilled } from '@/app/services/response.service'
 
 const titles = ['Послуга', 'Опції']
