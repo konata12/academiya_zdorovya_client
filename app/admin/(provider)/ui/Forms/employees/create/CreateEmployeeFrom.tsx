@@ -1,22 +1,41 @@
 'use client'
 
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
-import { RootState } from '@/app/utils/redux/store'
-import React, { useCallback, useEffect } from 'react'
-import styles from './CreateEmployeeForm.module.scss'
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
-import { AhivementsFormDataEnum, EmployeesBackgroundImgColorEnum, EmployeesCheckboxesType, EmployeesFormData, EmployeesFormDataEnum, EmployeesFormDataUICheckboxesEnum, EmployeesFormDataUIModalsStatesEnum, EmployeesModalsStatesType, WorkSpecialitysFormDataEnum } from '@/app/types/data/employees.type'
-import HookFormInputContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm'
-import HookFormTextareaContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/TextareaContainer/TextareaContainerHookForm'
+import FormElementContainerWithCheckboxHookForm from '@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox';
+import HookFormInputContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm';
+import HookFormInputContainerWithCheckbox from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithCheckbox/InputContainerWithCheckboxHookForm';
+import HookFormInputContainerWithDeleteBtn from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtnHookForm';
+import HookFormTextareaContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/TextareaContainer/TextareaContainerHookForm';
+import React, { useCallback, useEffect } from 'react';
+import styles from './CreateEmployeeForm.module.scss';
+import {
+    addModalState,
+    deleteModalState,
+    setEmployeeBackgroundImgColorCheckbox,
+    setEmployeeUIInitialState,
+    setModalState,
+    setModalStateInitValue,
+    triggerEmployeeUICheckbox
+    } from '@/app/utils/redux/employees/employeesFormUISlice';
+import {
+    AhivementsFormDataEnum,
+    EmployeesBackgroundImgColorEnum,
+    EmployeesCheckboxesType,
+    EmployeesFormData,
+    EmployeesFormDataEnum,
+    EmployeesFormDataUICheckboxesEnum,
+    EmployeesFormDataUIModalsStatesEnum,
+    EmployeesModalsStatesType,
+    WorkSpecialitysFormDataEnum
+    } from '@/app/types/data/employees.type';
+import { createEmployee as createEmployeeAction } from '@/app/utils/redux/employees/employeesSlice';
+import { fullfilled } from '@/app/services/response.service';
+import { RootState } from '@/app/utils/redux/store';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useRouter } from 'next/navigation';
+
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import { addModalState, deleteModalState, setEmployeeBackgroundImgColorCheckbox, setEmployeeUIInitialState, setModalState, setModalStateInitValue, triggerEmployeeUICheckbox } from '@/app/utils/redux/employees/employeesFormUISlice'
-import HookFormInputContainerWithCheckbox from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithCheckbox/InputContainerWithCheckboxHookForm'
-import HookFormInputContainerWithDeleteBtn from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtnHookForm'
-import FormElementContainerWithCheckboxHookForm from '@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox'
 import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow'
-import { fullfilled } from '@/app/services/response.service'
-import { useRouter } from 'next/navigation'
-import { createEmployee as createEmployeeAction } from '@/app/utils/redux/employees/employeesSlice'
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
 
 export default function CreateEmployeeFrom() {
@@ -79,7 +98,7 @@ export default function CreateEmployeeFrom() {
         }))
         dispatch(setModalStateInitValue({
             length: achivementFields.length,
-            modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN
+            modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
         }))
 
         return () => {
@@ -130,13 +149,13 @@ export default function CreateEmployeeFrom() {
             removeAchivement(index)
             dispatch(deleteModalState({
                 index,
-                modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN
+                modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
             }))
         }
     }
     const addAchivement = () => {
         appendAchivement({ value: '' })
-        dispatch(addModalState({ modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN }))
+        dispatch(addModalState({ modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN }))
     }
     // HANDLE MODAL STATES
     const setModalWindowState = (
@@ -393,7 +412,7 @@ export default function CreateEmployeeFrom() {
                                                 setModalWindowState(
                                                     index,
                                                     true,
-                                                    EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN
+                                                    EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
                                                 )
                                             }}
                                         />
@@ -407,7 +426,7 @@ export default function CreateEmployeeFrom() {
                                                     setModalWindowState(
                                                         index,
                                                         false,
-                                                        EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN
+                                                        EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
                                                     )
                                                 }}
                                             >

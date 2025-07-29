@@ -28,11 +28,12 @@ import {
     PURGE,
     REGISTER,
 } from 'redux-persist';
+import { PersistPartial } from 'redux-persist/es/persistReducer';
 
 // REDUCERS
 
 // Define the root state type
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof store.getState> & PersistPartial;
 
 // Define the app dispatch type
 export type AppDispatch = typeof store.dispatch;

@@ -2,17 +2,30 @@
 
 import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
 import styles from './CreateAboutTreatmentForm.module.scss';
-import { AboutTreatmentEnum, AboutTreatmentEnumType, AboutTreatmentFormData, CreateAboutTreatmentFormData } from '@/app/types/data/about_treatment.type';
-import { addAboutTreatmentCreateTreatmentType, deleteAboutTreatmentCreateTreatmentType, resetAboutTreatmentCreateForm, setAboutTreatmentCreateBasicValueError, setAboutTreatmentCreateTreatmentTypesValueError } from '@/app/utils/redux/about_treatment/aboutTreatmentCreateFormSlice';
+import {
+    AboutTreatmentEnum,
+    CreateAboutTreatmentFormData
+} from '@/app/types/data/about_treatment.type';
+import {
+    addAboutTreatmentCreateTreatmentType,
+    deleteAboutTreatmentCreateTreatmentType,
+    resetAboutTreatmentCreateForm,
+    setAboutTreatmentCreateBasicValueError,
+    setAboutTreatmentCreateTreatmentTypesValueError
+} from '@/app/utils/redux/about_treatment/aboutTreatmentCreateFormSlice';
 import {
     addTreatmentTypeModal,
     closeTreatmentTypeModal,
     deleteTreatmentTypeModal,
-    openTreatmentTypeModal
+    openTreatmentTypeModal,
+    setAboutTreatmentsFormUISliceDefaultValues
 } from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice';
+import { clear } from 'idb-keyval';
 import { createAboutTreatment as createAboutTreatmentAction } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice';
 import { FormInputError } from '@/app/types/data/form.type';
 import { fullfilled } from '@/app/services/response.service';
+import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
+import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
 import { RootState } from '@/app/utils/redux/store';
 import { useAboutTreatmentFormHandleChange } from '@/app/utils/hooks/admin/aboutTreatmentForm/useAboutTreatmentFormHandleChange';
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
@@ -20,10 +33,8 @@ import { useRouter } from 'next/navigation';
 
 import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
 import PreviewAboutTreatmentImage from '@/app/admin/(provider)/ui/Forms/aboutTreatment/PreviewAboutTreatmentImage/PreviewAboutTreatmentImage';
-import { clear } from 'idb-keyval';
-import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
+import { useEffect } from 'react';
 
 
 
@@ -43,12 +54,9 @@ export default function CreateAboutTreatmentForm() {
     const router = useRouter()
     const dispatch = useAppDispatch()
 
-    console.log({
-        title,
-        treatmentTypes,
-        image,
-        errors,
-    })
+    useEffect(() => {
+        dispatch(setAboutTreatmentsFormUISliceDefaultValues(1))
+    }, [])
 
     // TREATMENT TYPES FUNCTIONS
     const addTreatmentType = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -60,10 +68,12 @@ export default function CreateAboutTreatmentForm() {
         dispatch(deleteTreatmentTypeModal({ index: i }))
         dispatch(deleteAboutTreatmentCreateTreatmentType(i))
     }
-    const openTreatmentTypeModalWindow = (i: number) => {
+    const openTreatmentTypeModalWindow = (e: React.MouseEvent<HTMLButtonElement>, i: number) => {
+        e.preventDefault()
         dispatch(openTreatmentTypeModal(i))
     }
-    const closeTreatmentTypeModalWindow = (i: number) => {
+    const closeTreatmentTypeModalWindow = (e: React.MouseEvent<HTMLButtonElement>, i: number) => {
+        e.preventDefault()
         dispatch(closeTreatmentTypeModal(i))
     }
 
@@ -190,7 +200,7 @@ export default function CreateAboutTreatmentForm() {
                             </p>
 
                             {!!i && <button
-                                onClick={(e) => { openTreatmentTypeModalWindow(i) }}
+                                onClick={(e) => { openTreatmentTypeModalWindow(e, i) }}
                                 className={`btn blue sm`}
                             >
                                 Видалити
@@ -214,7 +224,7 @@ export default function CreateAboutTreatmentForm() {
                         >
                             <button
                                 className={`btn cancel`}
-                                onClick={() => { closeTreatmentTypeModalWindow(i) }}
+                                onClick={(e) => { closeTreatmentTypeModalWindow(e, i) }}
                             >
                                 Скасувати видалення
                             </button>

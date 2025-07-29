@@ -104,5 +104,5 @@ export enum EmployeesFormDataUICheckboxesEnum {
 }
 export enum EmployeesFormDataUIModalsStatesEnum {
     WORKSPECIALITYSMODALISOPEN = 'workSpecialitysModalIsOpen',
-    ACHIVEMENTSISMODALOPEN = 'achivementsModalIsOpen'
+    ACHIVEMENTSISMODALISOPEN = 'achivementsModalIsOpen'
 }

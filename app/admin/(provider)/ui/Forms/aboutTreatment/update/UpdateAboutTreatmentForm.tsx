@@ -7,7 +7,8 @@ import {
     addTreatmentTypeModal,
     closeTreatmentTypeModal,
     deleteTreatmentTypeModal,
-    openTreatmentTypeModal
+    openTreatmentTypeModal,
+    setAboutTreatmentsFormUISliceDefaultValues
 } from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice';
 import { resetAboutTreatmentUpdateError, setAboutTreatmentUpdateError, updateAboutTreatment } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice';
 import { FormInputError } from '@/app/types/data/form.type';
@@ -51,6 +52,7 @@ export default function UpdateAboutTreatmentForm() {
 
     // LOAD DATA TO FORM AND LOAD IMAGE TO UPLOAD STORE
     useEffect(() => {
+        dispatch(setAboutTreatmentsFormUISliceDefaultValues(oldAboutTreatment?.treatmentTypes.length || 1))
         if (oldAboutTreatment) {
             (async (aboutTreatment: AboutTreatment) => {
                 const setStore = getIndexedDBStoreForImages(updateStoreName)
@@ -66,6 +68,8 @@ export default function UpdateAboutTreatmentForm() {
             })(oldAboutTreatment)
         }
     }, [aboutTreatments])
+    console.log('treatmentTypesModalIsOpen:', treatmentTypesModalIsOpen)
+    console.log(errors)
 
     // TREATMENT TYPES FUNCTIONS
     const addTreatmentType = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -77,10 +81,12 @@ export default function UpdateAboutTreatmentForm() {
         dispatch(deleteTreatmentTypeModal({ index: i }))
         dispatch(deleteAboutTreatmentUpdateTreatmentType(i))
     }
-    const openTreatmentTypeModalWindow = (i: number) => {
+    const openTreatmentTypeModalWindow = (e: React.MouseEvent<HTMLButtonElement>, i: number) => {
+        e.preventDefault()
         dispatch(openTreatmentTypeModal(i))
     }
-    const closeTreatmentTypeModalWindow = (i: number) => {
+    const closeTreatmentTypeModalWindow = (e: React.MouseEvent<HTMLButtonElement>, i: number) => {
+        e.preventDefault()
         dispatch(closeTreatmentTypeModal(i))
     }
 
@@ -220,7 +226,7 @@ export default function UpdateAboutTreatmentForm() {
                             </p>
 
                             {!!i && <button
-                                onClick={(e) => { openTreatmentTypeModalWindow(i) }}
+                                onClick={(e) => { openTreatmentTypeModalWindow(e, i) }}
                                 className={`btn blue sm`}
                             >
                                 Видалити
@@ -244,7 +250,7 @@ export default function UpdateAboutTreatmentForm() {
                         >
                             <button
                                 className={`btn cancel`}
-                                onClick={() => { closeTreatmentTypeModalWindow(i) }}
+                                onClick={(e) => { closeTreatmentTypeModalWindow(e, i) }}
                             >
                                 Скасувати видалення
                             </button>

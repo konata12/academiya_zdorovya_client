@@ -100,7 +100,7 @@ export default function UpdateEmployeeFrom() {
             }))
             dispatch(setModalStateInitValue({
                 length: achivementFields.length,
-                modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN
+                modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
             }))
             dispatch(setCheckboxesDefaultValuesForUpdateForm({
                 instagram: employee.instagram,
@@ -209,13 +209,13 @@ export default function UpdateEmployeeFrom() {
             removeAchivement(index)
             dispatch(deleteModalState({
                 index,
-                modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN
+                modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
             }))
         }
     }
     const addAchivement = () => {
         appendAchivement({ value: '' })
-        dispatch(addModalState({ modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN }))
+        dispatch(addModalState({ modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN }))
     }
     // HANDLE MODAL STATES
     const setModalWindowState = (
@@ -472,7 +472,7 @@ export default function UpdateEmployeeFrom() {
                                                 setModalWindowState(
                                                     index,
                                                     true,
-                                                    EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN
+                                                    EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
                                                 )
                                             }}
                                         />
@@ -486,7 +486,7 @@ export default function UpdateEmployeeFrom() {
                                                     setModalWindowState(
                                                         index,
                                                         false,
-                                                        EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALOPEN
+                                                        EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
                                                     )
                                                 }}
                                             >
