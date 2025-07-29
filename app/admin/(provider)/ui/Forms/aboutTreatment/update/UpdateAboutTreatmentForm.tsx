@@ -1,166 +1,218 @@
 'use client'
 
-import { fullfilled } from '@/app/services/response.service'
-import { AboutTreatmentEnum, AboutTreatmentFormData } from '@/app/types/data/about_treatment.type'
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
-import { RootState } from '@/app/utils/redux/store'
-import { useParams, useRouter } from 'next/navigation'
-import React, { use, useEffect, useRef, useState } from 'react'
-import { SubmitHandler, useFieldArray, useForm, useWatch } from 'react-hook-form'
-import styles from './UpdateAboutTreatmentForm.module.scss'
-import { updateAboutTreatment as updateAboutTreatmentAction, updateAboutTreatmentInState } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice'
-import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow'
-import { addTreatmentTypeModal, closeTreatmentTypeModal, deleteTreatmentTypeModal, openTreatmentTypeModal } from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice'
-import { isEqual } from 'lodash'
-import { setFormDefaultValues } from '@/app/utils/redux/navigation/navigationSlice'
-import HookFormInputContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm'
-import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
+import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
+import styles from './UpdateAboutTreatmentForm.module.scss';
+import { AboutTreatment, AboutTreatmentEnum, CreateAboutTreatmentFormData } from '@/app/types/data/about_treatment.type';
+import {
+    addTreatmentTypeModal,
+    closeTreatmentTypeModal,
+    deleteTreatmentTypeModal,
+    openTreatmentTypeModal
+} from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice';
+import { resetAboutTreatmentUpdateError, setAboutTreatmentUpdateError, updateAboutTreatment } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice';
+import { FormInputError } from '@/app/types/data/form.type';
+import { fullfilled } from '@/app/services/response.service';
+import { RootState } from '@/app/utils/redux/store';
+import { useAboutTreatmentFormHandleChange } from '@/app/utils/hooks/admin/aboutTreatmentForm/useAboutTreatmentFormHandleChange';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useParams, useRouter } from 'next/navigation';
 
-const formDefaultValues: AboutTreatmentFormData = {
-    title: '',
-    treatmentTypes: [{ value: '' }],
-    image: null
-}
+import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow'
+import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
+import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
+import PreviewAboutTreatmentImage from '@/app/admin/(provider)/ui/Forms/aboutTreatment/PreviewAboutTreatmentImage/PreviewAboutTreatmentImage';
+import { clear } from 'idb-keyval';
+import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
+import { addAboutTreatmentUpdateTreatmentType, deleteAboutTreatmentUpdateTreatmentType, resetAboutTreatmentUpdateForm, setAboutTreatmentUpdateBasicValueError, setAboutTreatmentUpdateTreatmentTypesValueError, setAllAboutTreatmentDataOnLink } from '@/app/utils/redux/about_treatment/aboutTreatmentUpdateFormSlice';
+import { useEffect } from 'react';
+import { transferImageBetweenIndexDBStores } from '@/app/services/indexedDB.service';
+import _ from 'lodash';
+
+
+const storeName = 'about_treatment_images'
+const updateStoreName = 'about_treatment_update_images'
 
 export default function UpdateAboutTreatmentForm() {
-    const [imageContainerHeight, setImageContainerHeight] = useState<number>(0)
-    const [imageHeight, setImageHeight] = useState<number>(0)
-
-    const { error } = useAppSelector((state: RootState) => state.aboutTreatment)
+    const {
+        title,
+        treatmentTypes,
+        image,
+        errors,
+    } = useAppSelector((state: RootState) => state.aboutTreatmentUpdateForm)
     const { treatmentTypesModalIsOpen } = useAppSelector((state: RootState) => state.aboutTreatmentsFormUI)
-
-    const imageRef = useRef<HTMLImageElement | null>(null)
-    const imageContainerRef = useRef<HTMLDivElement | null>(null)
-    const formDefaultValuesRef = useRef(true)
+    const { aboutTreatments, error } = useAppSelector((state: RootState) => state.aboutTreatment)
 
     const router = useRouter()
+    const { id } = useParams<{ id: string }>()
     const dispatch = useAppDispatch()
+    const handleChange = useAboutTreatmentFormHandleChange(updateStoreName)
 
-    const { id } = useParams() // get id from url
+    const oldAboutTreatment = aboutTreatments.find(aboutTreatment => `${aboutTreatment.id}` === id)
 
-    const {
-        register,
-        handleSubmit,
-        control,
-        formState: { errors },
-    } = useForm<AboutTreatmentFormData>({
-        defaultValues: formDefaultValues
-    })
-
-    const formValues = useWatch({ control })
-    const image = formValues.image?.[0] // Watch the image input
-
-    const {
-        fields: treatmentTypesFields,
-        append: appendTreatmentTypes,
-        remove: removeTreatmentTypes
-    } = useFieldArray({
-        control,
-        name: "treatmentTypes", // Name of the array in the form state
-    });
-
-    // CHECK IF FORM DATA IS DEFAULT
+    // LOAD DATA TO FORM AND LOAD IMAGE TO UPLOAD STORE
     useEffect(() => {
-        const equal = isEqual(formValues, formDefaultValues)
-        formDefaultValuesRef.current = equal
-        dispatch(setFormDefaultValues(equal))
+        if (oldAboutTreatment) {
+            (async (aboutTreatment: AboutTreatment) => {
+                const setStore = getIndexedDBStoreForImages(updateStoreName)
+                // CLEAR PREVIOUS NEWS UPDATE FORM DATA IMAGES
+                await clear(setStore)
 
-        // after leaving page set formDefaultValues in redix to initial
-        return () => {
-            dispatch(setFormDefaultValues(true))
+                // TRANSFER IMAGES TO ANOTHER STORE
+                await transferImageBetweenIndexDBStores(aboutTreatment.image, storeName, updateStoreName)
+
+                // SET DATA TO UPDATE SLICES
+                dispatch(resetAboutTreatmentUpdateError())
+                dispatch(setAllAboutTreatmentDataOnLink(aboutTreatment))
+            })(oldAboutTreatment)
         }
-    }, [formValues])
-
-    // CREATE QUIT PAGE LISTENERS
-    useEffect(() => {
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            if (!formDefaultValuesRef.current) {
-                e.preventDefault()
-                e.returnValue = ''
-            }
-        }
-
-        window.addEventListener('beforeunload', handleBeforeUnload)
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload)
-        }
-    }, [])
-
-    // SET IMAGE HEIGHT
-    useEffect(() => {
-        if (imageContainerRef.current) {
-            setImageContainerHeight(imageContainerRef.current.offsetHeight)
-        }
-    }, [imageContainerRef.current])
-    useEffect(() => {
-        if (imageRef.current && image) {
-            const img = imageRef.current;
-            img.onload = () => {
-                setImageHeight(img.offsetHeight);
-            };
-        }
-    }, [image, imageContainerRef.current]);
-
-    const imageMarginTop = imageContainerRef.current && (imageHeight > imageContainerHeight)
-        ? (imageHeight - imageContainerHeight + 'px')
-        : '64px'
-
-    // CREATE ABOUT TREATMENT FUNCTION
-    const updateAboutTreatment: SubmitHandler<AboutTreatmentFormData> = async (data) => {
-        if (id) {
-            const aboutTreatmentId = id.toString()
-            const response = await dispatch(updateAboutTreatmentAction({ data, aboutTreatmentId }))
-            const isFulfilled = fullfilled(response.meta.requestStatus)
-
-            if (isFulfilled) {
-                data.image = null
-                dispatch(updateAboutTreatmentInState({ data, aboutTreatmentId }))
-                router.push('/admin/about_treatment')
-            }
-        }
-    }
+    }, [aboutTreatments])
 
     // TREATMENT TYPES FUNCTIONS
     const addTreatmentType = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
-        appendTreatmentTypes({ value: '' }); // Append a new title object
+        dispatch(addAboutTreatmentUpdateTreatmentType()) // Append a new title object
         dispatch(addTreatmentTypeModal())
     }
     const deleteTreatmentType = (i: number) => {
         dispatch(deleteTreatmentTypeModal({ index: i }))
-        removeTreatmentTypes(i)
+        dispatch(deleteAboutTreatmentUpdateTreatmentType(i))
     }
-    const openTreatmentTypeModalWindow = (e: React.MouseEvent<HTMLButtonElement>, i: number) => {
-        e.preventDefault()
-        dispatch(openTreatmentTypeModal({ index: i }))
+    const openTreatmentTypeModalWindow = (i: number) => {
+        dispatch(openTreatmentTypeModal(i))
     }
     const closeTreatmentTypeModalWindow = (i: number) => {
-        dispatch(closeTreatmentTypeModal({ index: i }))
+        dispatch(closeTreatmentTypeModal(i))
+    }
+
+    // CREATE ABOUT TREATMENT FUNCTION
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const errorsData: {
+            error: FormInputError,
+            id: `${AboutTreatmentEnum.TREATMENTTYPES}_${number}`
+            | AboutTreatmentEnum.TITLE
+            | AboutTreatmentEnum.IMG
+
+        }[] = []
+
+        // FORM VALIDATION
+        if (!title.length) {
+            dispatch(setAboutTreatmentUpdateBasicValueError({
+                field: AboutTreatmentEnum.TITLE,
+                message: 'Введіть повну назву'
+            }));
+
+            errorsData.push({
+                id: AboutTreatmentEnum.TITLE,
+                error: { message: 'Введіть повну назву' }
+            });
+        }
+        if (treatmentTypes.length) {
+            treatmentTypes.forEach((treatmentType, index) => {
+                if (!treatmentType.length) {
+                    dispatch(setAboutTreatmentUpdateTreatmentTypesValueError({
+                        index,
+                        message: 'Введіть тип послуги'
+                    }));
+
+                    errorsData.push({
+                        id: `${AboutTreatmentEnum.TREATMENTTYPES}_${index}`,
+                        error: { message: 'Введіть тип послуги' }
+                    });
+                }
+            })
+        }
+        if (!image) {
+            dispatch(setAboutTreatmentUpdateBasicValueError({
+                field: AboutTreatmentEnum.IMG,
+                message: 'Добавте зображення'
+            }));
+
+            // SCROLL TO INPUT
+            errorsData.push({
+                id: AboutTreatmentEnum.IMG,
+                error: { message: 'Добавте зображення' }
+            });
+        }
+
+        // SCROLL TO ERROR INPUT
+        if (errorsData.length) {
+            console.log(errorsData)
+            // SCROLL TO INPUT
+            if (errorsData[0].id === AboutTreatmentEnum.IMG) {
+                (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).labels?.[0].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                })
+            } else {
+                (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                })
+            }
+            return
+        }
+        if (!image) return
+
+        const data: CreateAboutTreatmentFormData = {
+            title,
+            treatmentTypes,
+            image
+        }
+        console.log('data: ', data)
+
+        // CHECK IF DATA CHANGED
+        let oldData: CreateAboutTreatmentFormData | undefined = undefined
+        if (oldAboutTreatment) {
+            const { id, ...oldNewsData } = oldAboutTreatment
+            oldData = oldNewsData
+        }
+
+        const dataIsEuqal = _.isEqual(data, oldData)
+
+        // IF DATA HASN'T CHANGED SET ERROR AND RETURN
+        if (dataIsEuqal) {
+            dispatch(setAboutTreatmentUpdateError())
+            return
+        }
+
+        const response = await dispatch(updateAboutTreatment({
+            oldImageName: oldData?.image,
+            data,
+            id,
+        }))
+        const isFulfilled = fullfilled(response.meta.requestStatus)
+        if (isFulfilled) {
+            // CLEAR DATA
+            clear(getIndexedDBStoreForImages(updateStoreName))
+            dispatch(resetAboutTreatmentUpdateForm())
+            router.push('../')
+        }
     }
 
     return (
         <form
             className={styles.form}
-            onSubmit={handleSubmit(updateAboutTreatment)}
+            onSubmit={handleSubmit}
         >
-            <HookFormInputContainer<AboutTreatmentFormData>
-                label='Повна назва послуги'
-                name={AboutTreatmentEnum.TITLE}
-                errors={errors}
-                register={register}
-                registerOptions={{
-                    required: "Назва обов'язкова",
-                }}
+            <InputContainer
+                label="Повна назва послуги"
+                inputId={AboutTreatmentEnum.TITLE}
+                value={title}
+                error={errors[AboutTreatmentEnum.TITLE]}
+                changeEvent={(e) => handleChange({
+                    e,
+                    elementType: AboutTreatmentEnum.TITLE,
+                })}
             />
 
             <div className={styles.treatmentTypes}>
                 <p className={`title left sm ${styles.title}`}>Що включає послуга</p>
 
-                {treatmentTypesFields.map((treatmentType, i) => {
+                {treatmentTypes.map((treatmentType, i) => {
                     return <div
                         className={styles.treatmentType}
-                        key={treatmentType.id}
+                        key={i}
                     >
                         <div className={styles.top}>
                             <p className='inputLabel'>
@@ -168,24 +220,25 @@ export default function UpdateAboutTreatmentForm() {
                             </p>
 
                             {!!i && <button
-                                onClick={(e) => { openTreatmentTypeModalWindow(e, i) }}
+                                onClick={(e) => { openTreatmentTypeModalWindow(i) }}
                                 className={`btn blue sm`}
                             >
                                 Видалити
                             </button>}
                         </div>
-                        <input
-                            className={`input ${styles.treatmentTypeInput} ${errors[AboutTreatmentEnum.TREATMENTTYPES]?.[i] && 'wrong'}`}
-                            {...register(`treatmentTypes.${i}.value`, {
-                                required: "Рядок типу послуги не має бути пустим",
+                        <InputContainer
+                            inputId={`${AboutTreatmentEnum.TREATMENTTYPES}_${i}`}
+                            value={treatmentType}
+                            error={errors[AboutTreatmentEnum.TREATMENTTYPES][i]}
+                            className={{
+                                input: `input ${styles.treatmentTypeInput} ${errors[AboutTreatmentEnum.TREATMENTTYPES]?.[i].message && 'wrong'}`
+                            }}
+                            changeEvent={(e) => handleChange({
+                                e,
+                                elementType: AboutTreatmentEnum.TREATMENTTYPES,
+                                arrIndex: i,
                             })}
-                            placeholder="Введіть тип послуги"
                         />
-                        {errors[AboutTreatmentEnum.TREATMENTTYPES]?.[i]?.value && (
-                            <p className={`error`}>
-                                {errors[AboutTreatmentEnum.TREATMENTTYPES][i]?.value?.message}
-                            </p>
-                        )}
                         {treatmentTypesModalIsOpen[i] && <ModalWindow
                             title="Ви дійсно бажаєте видалити цей рядок?"
                         >
@@ -215,54 +268,27 @@ export default function UpdateAboutTreatmentForm() {
             </div>
 
             <div className={styles.addPhoto}>
-                <p className='title left sm'>
+                <p className={`title left sm ${styles.title}`}>
                     Фото для детального варіанту
                 </p>
+                <p className={`inputLabel ${styles.label}`}>
+                    {'Завантажте фото (без фону, в форматі:  .png)'}
+                </p>
 
-                <div className={styles.imageInputZone}>
-                    <p className='inputLabel'>
-                        {'Завантажте фото (без фону, в форматі:  .png)'}
-                    </p>
-
-                    <input
-                        id='upload_image'
-                        type="file"
-                        hidden
-                        {...register(AboutTreatmentEnum.IMG, {
-                            required: "Завантажте фото",
-                        })}
+                <ImageInputContainer
+                    inputId={AboutTreatmentEnum.IMG}
+                    changeEvent={(e) => handleChange({
+                        e,
+                        elementType: AboutTreatmentEnum.IMG,
+                        oldValue: image
+                    })}
+                >
+                    <PreviewAboutTreatmentImage
+                        image={image}
+                        error={errors[AboutTreatmentEnum.IMG]}
+                        indexedDBStoreName={updateStoreName}
                     />
-                    <label
-                        className='btn blue sm'
-                        htmlFor="upload_image"
-                    >
-                        Завантажити
-                    </label>
-
-                    <div className={styles.imagePreview}>
-                        {errors[AboutTreatmentEnum.IMG] && <p className={`error ${styles.errorMessage}`}>
-                            {errors[AboutTreatmentEnum.IMG].message}
-                        </p>}
-
-                        <div
-                            className={`${styles.imageContainer} ${errors[AboutTreatmentEnum.IMG] && styles.error}`}
-                            ref={imageContainerRef}
-                            style={{
-                                marginTop: imageMarginTop
-                            }}
-                        >
-                            {image && <img
-                                className={styles.image}
-                                src={URL.createObjectURL(image)}
-                                ref={imageRef}
-                                alt="Preview"
-                            />}
-                        </div>
-                        <p className={styles.caption}>
-                            Попередній перегляд
-                        </p>
-                    </div>
-                </div>
+                </ImageInputContainer>
             </div>
 
             <SubmitButton

@@ -17,31 +17,31 @@ const aboutTreatmentCreateFormSlice = createSlice({
     initialState,
     reducers: {
         // SET VALUES
-        setAboutTreatmentTitle(state, action: PayloadAction<string>) {
+        setAboutTreatmentCreateTitle(state, action: PayloadAction<string>) {
             state.title = action.payload
         },
-        addAboutTreatmentTreatmentType(state) {
+        addAboutTreatmentCreateTreatmentType(state) {
             const length = state.treatmentTypes.length
             state.treatmentTypes[length] = ''
             state.errors.treatmentTypes[length] = { message: '' }
         },
-        setAboutTreatmentTreatmentType(state, action: {
+        setAboutTreatmentCreateTreatmentType(state, action: {
             payload: { index: number, value: string }
         }) {
             const { index, value } = action.payload
             state.treatmentTypes[index] = value
         },
-        deleteAboutTreatmentTreatmentType(state, action: { payload: number }) {
+        deleteAboutTreatmentCreateTreatmentType(state, action: { payload: number }) {
             const index = action.payload
             state.treatmentTypes.splice(index, 1)
             state.errors.treatmentTypes.splice(index, 1)
         },
-        setAboutTreatmentImage(state, action: PayloadAction<string>) {
+        setAboutTreatmentCreateImage(state, action: PayloadAction<string>) {
             state.image = action.payload
         },
 
         // SET ERRORS
-        setAboutTreatmentBasicValueError(state, action: {
+        setAboutTreatmentCreateBasicValueError(state, action: {
             payload: {
                 field: AboutTreatmentEnum.TITLE | AboutTreatmentEnum.IMG,
                 message: string
@@ -50,7 +50,7 @@ const aboutTreatmentCreateFormSlice = createSlice({
             const field = action.payload.field
             state.errors[field] = { message: action.payload.message }
         },
-        setAboutTreatmentTreatmentTypesValueError(state, action: {
+        setAboutTreatmentCreateTreatmentTypesValueError(state, action: {
             payload: {
                 index: number,
                 message: string
@@ -66,14 +66,14 @@ const aboutTreatmentCreateFormSlice = createSlice({
 })
 
 export const {
-    setAboutTreatmentTitle,
-    addAboutTreatmentTreatmentType,
-    setAboutTreatmentTreatmentType,
-    deleteAboutTreatmentTreatmentType,
-    setAboutTreatmentImage,
+    setAboutTreatmentCreateTitle,
+    addAboutTreatmentCreateTreatmentType,
+    setAboutTreatmentCreateTreatmentType,
+    deleteAboutTreatmentCreateTreatmentType,
+    setAboutTreatmentCreateImage,
 
-    setAboutTreatmentBasicValueError,
-    setAboutTreatmentTreatmentTypesValueError,
+    setAboutTreatmentCreateBasicValueError,
+    setAboutTreatmentCreateTreatmentTypesValueError,
 
     resetAboutTreatmentCreateForm,
 } = aboutTreatmentCreateFormSlice.actions

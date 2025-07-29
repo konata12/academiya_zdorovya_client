@@ -50,6 +50,12 @@ export const fetchNews = createAsyncThunk('news/getAll', async (
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
+        } else if (error instanceof Error) {
+            const serializableError: ErrorResponse = {
+                message: error.message,
+                statusCode: 500
+            }
+            return rejectWithValue(serializableError)
         }
     }
 })
@@ -120,6 +126,12 @@ export const updateNews = createAsyncThunk('news/update', async ({
             const serializableError: ErrorResponse = {
                 message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
+            }
+            return rejectWithValue(serializableError)
+        } else if (error instanceof Error) {
+            const serializableError: ErrorResponse = {
+                message: error.message,
+                statusCode: 500
             }
             return rejectWithValue(serializableError)
         }

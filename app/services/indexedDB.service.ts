@@ -1,5 +1,7 @@
 // app/lib/db.ts
+import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
 import { openDB, IDBPDatabase } from 'idb';
+import { get, set } from 'idb-keyval';
 
 interface AppDBSchema {
     // ABOUT TREATMENT
@@ -38,7 +40,6 @@ const DB_VERSION = 2;
 let dbInstance: Promise<IDBPDatabase<AppDBSchema>> | null = null;
 
 export const getIndexedDB = async (): Promise<IDBPDatabase<AppDBSchema>> => {
-    console.log('creating db start')
     // Server-side guard
     if (typeof window === 'undefined') {
         throw new Error('IndexedDB is only available in the browser');
@@ -46,7 +47,6 @@ export const getIndexedDB = async (): Promise<IDBPDatabase<AppDBSchema>> => {
 
     // Singleton pattern
     if (!dbInstance) {
-        console.log('creating db second step')
         dbInstance = openDB<AppDBSchema>(DB_NAME, DB_VERSION, {
             upgrade(db) {
                 // Create stores if they don't exist
@@ -100,3 +100,57 @@ export const getIndexedDB = async (): Promise<IDBPDatabase<AppDBSchema>> => {
 
     return dbInstance;
 };
+
+export async function transferImageBetweenIndexDBStores(
+    image: string,
+    getStoreName: string,
+    setStoreName: string,
+) {
+    const getStore = getIndexedDBStoreForImages(getStoreName)
+    const setStore = getIndexedDBStoreForImages(setStoreName)
+    try {
+        const imageFile = await get<Blob | File>(image, getStore)
+        await set(image, imageFile, setStore)
+    } catch (error) {
+        console.log(error)
+        throw new Error('Failed to transfer image between IndexedDB stores');
+    }
+}
+export async function transferAndReplaceImageBetweenIndexDBStores(
+    newImageName: string,
+    oldImageName: string | undefined,
+    getStoreName: string,
+    setStoreName: string,
+) {
+    try {
+        if (!oldImageName) throw new Error('Old image name is required for replacement');
+        const db = await getIndexedDB();
+
+        // Start a transaction that includes both stores
+        const tx = db.transaction([getStoreName, setStoreName], 'readwrite');
+        const getStore = tx.objectStore(getStoreName);
+        const setStore = tx.objectStore(setStoreName);
+
+        // Get the new image from source store
+        const newImage = await getStore.get(newImageName);
+        if (!newImage) {
+            throw new Error(`Image ${newImageName} not found in ${getStoreName}`);
+        }
+
+        // Perform all operations atomically
+        await Promise.all([
+            // Add new image to destination store
+            setStore.put(newImage, newImageName),
+
+            // Remove old image from destination store if it exists
+            setStore.delete(oldImageName),
+        ]);
+
+        // Wait for transaction to complete
+        await tx.done;
+
+    } catch (error) {
+        console.error('Failed to transfer and replace image:', error);
+        throw new Error(`Failed to transfer image: ${error instanceof Error ? error.message : String(error)}`);
+    }
+}

@@ -1,21 +1,34 @@
 'use client'
 
+import React, { useEffect } from 'react';
+import styles from './layout.module.scss';
+import TableLine from './../../ui/Tables/ListOption/TableLine';
+import { AboutTreatment } from '@/app/types/data/about_treatment.type';
+import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation.service';
+import { clear } from 'idb-keyval';
+import {
+    closeAboutTreatmentsModal,
+    deleteAboutTreatment as deleteAboutTreatmentAction,
+    fetchAboutTreatments,
+    openAboutTreatmentsModal,
+    resetAboutTreatmentUpdateError
+    } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice';
+import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
+import { RootState } from '@/app/utils/redux/store';
+import { setAllAboutTreatmentDataOnLink } from '@/app/utils/redux/about_treatment/aboutTreatmentUpdateFormSlice';
+import { transferImageBetweenIndexDBStores } from '@/app/services/indexedDB.service';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { usePathname, useRouter } from 'next/navigation';
+
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
-import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation.service'
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
-import { RootState } from '@/app/utils/redux/store'
-import { usePathname } from 'next/navigation'
-import React, { useEffect } from 'react'
-import TableLine from './../../ui/Tables/ListOption/TableLine';
-import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow'
-import { fullfilled } from '@/app/services/response.service'
-import { deleteAboutTreatment as deleteAboutTreatmentAction, closeAboutTreatmentsModal, deleteAboutTreatmentsFromState, openAboutTreatmentsModal, fetchAboutTreatments, deleteAboutTreatment } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice'
-import styles from './layout.module.scss'
 import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404'
 import DeleteModalWindow from '@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow'
 
 const titles = ['Послуга', 'Опції']
+
+const storeName = 'about_treatment_images'
+const updateStoreName = 'about_treatment_update_images'
 
 export default function WhatWeTreat({
     children,
@@ -30,6 +43,7 @@ export default function WhatWeTreat({
     } = useAppSelector((state: RootState) => state.aboutTreatment)
 
     const dispatch = useAppDispatch()
+    const router = useRouter()
     const pathname = usePathname()
     const isCreatePage = checkCreatePage(pathname)
 
@@ -40,7 +54,6 @@ export default function WhatWeTreat({
     const deleteAboutTreatment = async (id: number) => {
         dispatch(deleteAboutTreatmentAction(id))
     }
-
     const openModalWindow = (i: number) => {
         dispatch(openAboutTreatmentsModal({ i }))
     }

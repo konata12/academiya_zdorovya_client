@@ -30,6 +30,8 @@ import DeleteModalWindow from '@/app/admin/(provider)/ui/Modals/DeleteModalWindo
 
 
 const titles = ['Назва', 'Дата публікування ', 'Опції']
+const storeName = 'news_images'
+const updateStoreName = 'news_update_images'
 
 export default function page() {
     const {
@@ -62,8 +64,8 @@ export default function page() {
     }
     // LOAD DATA TO FORM AND ORDER SLICES AND LOAD IMAGES TO UPLOAD STORE
     const linkToUpdatePage = async (news: News) => {
-        const getStore = getIndexedDBStoreForImages('news_images')
-        const setStore = getIndexedDBStoreForImages('news_update_images')
+        const getStore = getIndexedDBStoreForImages(storeName)
+        const setStore = getIndexedDBStoreForImages(updateStoreName)
         // CLEAR PREVIOUS NEWS UPDATE FORM DATA IMAGES
         await clear(setStore)
         // PARSE DETAILS TO REDUX TYPE

@@ -1,5 +1,6 @@
 import aboutTreatment from '@/app/utils/redux/about_treatment/aboutTreatmentSlice';
 import aboutTreatmentCreateFormSlice from '@/app/utils/redux/about_treatment/aboutTreatmentCreateFormSlice';
+import aboutTreatmentUpdateFormSlice from '@/app/utils/redux/about_treatment/aboutTreatmentUpdateFormSlice';
 import aboutTreatmentsFormUISlice from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice';
 import authSlice from '@/app/utils/redux/auth/authSlice';
 import bookingServicesSlice from '@/app/utils/redux/booking_services/bookingServicesSlice';
@@ -45,6 +46,7 @@ const rootReducer = combineReducers({
 
     // ABOUT TREATMENT CREATION
     aboutTreatmentCreateForm: aboutTreatmentCreateFormSlice,
+    aboutTreatmentUpdateForm: aboutTreatmentUpdateFormSlice,
 
 
     // NEWS CREATION

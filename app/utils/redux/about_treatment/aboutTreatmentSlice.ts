@@ -1,4 +1,5 @@
-import { createAboutTreatmentFormData, parseFormDataToUpdate } from "@/app/services/about_treatment.service"
+import { createAboutTreatmentFormData, parseAboutTreatmentsResponse, updateAboutTreatmentFormData } from "@/app/services/about_treatment.service"
+import { transferAndReplaceImageBetweenIndexDBStores } from "@/app/services/indexedDB.service"
 import { AboutTreatment, AboutTreatmentFormData, AboutTreatmentInit, CreateAboutTreatmentFormData } from "@/app/types/data/about_treatment.type"
 import { ErrorResponse } from "@/app/types/data/response.type"
 import axiosInstance from "@/app/utils/axios"
@@ -28,8 +29,9 @@ const baseUrl = 'about-treatment'
 export const fetchAboutTreatments = createAsyncThunk('aboutTreatment/get', async (_, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get<AboutTreatment[]>(`${baseUrl}`)
-        console.log(response)
-        return response.data
+        const parseAboutTreatments = await parseAboutTreatmentsResponse(response.data)
+
+        return parseAboutTreatments
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
@@ -38,10 +40,15 @@ export const fetchAboutTreatments = createAsyncThunk('aboutTreatment/get', async
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
+        } else if (error instanceof Error) {
+            const serializableError: ErrorResponse = {
+                message: error.message,
+                statusCode: 500
+            }
+            return rejectWithValue(serializableError)
         }
     }
 })
-
 export const createAboutTreatment = createAsyncThunk('aboutTreatment/create', async (
     data: CreateAboutTreatmentFormData,
     { rejectWithValue }
@@ -49,7 +56,7 @@ export const createAboutTreatment = createAsyncThunk('aboutTreatment/create', as
     try {
         const formData = await createAboutTreatmentFormData(data)
         console.log('formData: ', Array.from(formData))
-        // throw new Error('Test error') // For testing purposes, remove in production
+        throw new Error('Test error') // This line is for testing purposes, remove it in production
 
         const response = await axiosInstance.post<AboutTreatment[]>(`${baseUrl}/admin/create`, formData)
         console.log(response)
@@ -71,25 +78,31 @@ export const createAboutTreatment = createAsyncThunk('aboutTreatment/create', as
         }
     }
 })
-
 export const updateAboutTreatment = createAsyncThunk('aboutTreatment/update', async ({
+    oldImageName,
     data,
-    aboutTreatmentId: id
+    id,
 }: {
-    data: AboutTreatmentFormData
-    aboutTreatmentId: string
+    oldImageName: string | undefined
+    data: CreateAboutTreatmentFormData
+    id: string
 },
     { rejectWithValue }
 ) => {
     try {
-        // const formData = createAboutTreatmentFormData(data)
-        // for (const [key, value] of formData.entries()) {
-        //     console.log(key, value);
-        // }
+        const formData = await updateAboutTreatmentFormData(data)
+        console.log('formData: ', Array.from(formData))
 
-        // const response = await axiosInstance.put<AboutTreatment[]>(`${baseUrl}/admin/update/${id}`, formData)
-        // console.log(response)
-        // return response.data
+        const response = await axiosInstance.put<AboutTreatment[]>(`${baseUrl}/admin/update/${id}`, formData)
+        // IF SET NEW IMAGE REPLACE IT IN MAIN STORE
+        if (oldImageName !== data.image) await transferAndReplaceImageBetweenIndexDBStores(
+            data.image,
+            oldImageName,
+            'about_treatment_update_images',
+            'about_treatment_images'
+        )
+        console.log('response:', response)
+        return { data, id }
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
@@ -107,7 +120,6 @@ export const updateAboutTreatment = createAsyncThunk('aboutTreatment/update', as
         }
     }
 })
-
 export const deleteAboutTreatment = createAsyncThunk('aboutTreatment/delete', async (
     id: number,
     { rejectWithValue }) => {
@@ -139,32 +151,15 @@ const aboutTreatmentSlice = createSlice({
             state.aboutTreatmentsIsModalOpen[action.payload.i] = false
         },
 
-        deleteAboutTreatmentsFromState(state, action: { payload: number }) {
-            if (state.aboutTreatments) {
-                const index = state.aboutTreatments.findIndex(priceSection => {
-                    return priceSection.id === action.payload
-                })
-                state.aboutTreatments.splice(index, 1)
-            }
-        },
-        updateAboutTreatmentInState(state, action: {
-            payload: {
-                data: AboutTreatmentFormData,
-                aboutTreatmentId: string
-            }
-        }) {
-            const index = state.aboutTreatments.findIndex(aboutTreatment => {
-                return aboutTreatment.id === +action.payload.aboutTreatmentId
-            })
-            const parsedData: AboutTreatment = parseFormDataToUpdate(action.payload.data, action.payload.aboutTreatmentId)
-            state.aboutTreatments[index] = parsedData
-        },
-        setUpdateError(state) {
+        setAboutTreatmentUpdateError(state) {
             state.error.update = {
                 message: 'Дані ті самі, спочатку змініть значення',
                 statusCode: 0
             }
-        }
+        },
+        resetAboutTreatmentUpdateError(state) {
+            state.error.update = null
+        },
     },
     extraReducers(builder) {
         builder
@@ -209,8 +204,20 @@ const aboutTreatmentSlice = createSlice({
                 state.status.update = "loading"
                 state.error.update = null
             })
-            .addCase(updateAboutTreatment.fulfilled, (state) => {
+            .addCase(updateAboutTreatment.fulfilled, (state, action: PayloadAction<{
+                data: CreateAboutTreatmentFormData;
+                id: string;
+            } | undefined>) => {
                 state.status.update = "succeeded"
+                if (action.payload) {
+                    const { data, id } = action.payload
+                    const index = state.aboutTreatments.findIndex(aboutTreatment => `${aboutTreatment.id}` === id)
+
+                    state.aboutTreatments[index] = {
+                        id: +id,
+                        ...data
+                    }
+                }
             })
             .addCase(updateAboutTreatment.rejected, (state, action) => {
                 state.status.update = "failed"
@@ -250,9 +257,8 @@ const aboutTreatmentSlice = createSlice({
 export const {
     openAboutTreatmentsModal,
     closeAboutTreatmentsModal,
-    deleteAboutTreatmentsFromState,
-    updateAboutTreatmentInState,
-    setUpdateError
+    setAboutTreatmentUpdateError,
+    resetAboutTreatmentUpdateError,
 } = aboutTreatmentSlice.actions
 
 export default aboutTreatmentSlice.reducer

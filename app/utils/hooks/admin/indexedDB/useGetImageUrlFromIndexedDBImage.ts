@@ -31,7 +31,7 @@ export function useGetImageUrlFromIndexedDBImage(imageName: string | null, store
                 URL.revokeObjectURL(imageUrl); // Clean up the object URL
             }
         };
-    }, [imageName, store, imageUrl]);
+    }, [imageName, storeName]);
 
     return imageUrl;
 }

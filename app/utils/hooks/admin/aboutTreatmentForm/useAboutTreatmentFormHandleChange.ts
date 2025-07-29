@@ -1,15 +1,9 @@
 import { AboutTreatmentEnum, AboutTreatmentEnumType, AboutTreatmentFormIndexedDBType } from '@/app/types/data/about_treatment.type';
+import { del, set } from 'idb-keyval';
 import { FormElements } from '@/app/types/ui/form_components/inputContainers.type';
 import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
-import {
-    setAboutTreatmentBasicValueError,
-    setAboutTreatmentImage,
-    setAboutTreatmentTitle,
-    setAboutTreatmentTreatmentType,
-    setAboutTreatmentTreatmentTypesValueError
-    } from '@/app/utils/redux/about_treatment/aboutTreatmentCreateFormSlice';
+import { useAboutTreatmentFormSlice } from '@/app/utils/hooks/admin/aboutTreatmentForm/useAboutTreatmentFormSlice';
 import { useAppDispatch } from '@/app/utils/redux/hooks';
-import { del, set } from 'idb-keyval';
 import { useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -26,6 +20,13 @@ export function useAboutTreatmentFormHandleChange(
 ) {
     const dispatch = useAppDispatch()
     const store = getIndexedDBStoreForImages(indexedDBStoreName)
+    const {
+        setTitle,
+        setImage,
+        setTreatmentType,
+        setBasicValueError,
+        setTreatmentTypesValueError,
+    } = useAboutTreatmentFormSlice(indexedDBStoreName)
 
     const handleChange = useCallback(<T extends FormElements>({
         e,
@@ -39,23 +40,23 @@ export function useAboutTreatmentFormHandleChange(
         switch (elementType) {
             case AboutTreatmentEnum.TITLE:
                 // REQUIRED ERROR HANDLING 
-                if (newValue.length > 0) dispatch(setAboutTreatmentBasicValueError({
+                if (newValue.length > 0) dispatch(setBasicValueError({
                     field: AboutTreatmentEnum.TITLE,
                     message: ''
                 }))
 
-                dispatch(setAboutTreatmentTitle(newValue))
+                dispatch(setTitle(newValue))
                 break;
 
             case AboutTreatmentEnum.TREATMENTTYPES:
                 // REQUIRED ERROR HANDLING 
                 if (arrIndex !== undefined) {
-                    if (newValue.length > 0) dispatch(setAboutTreatmentTreatmentTypesValueError({
+                    if (newValue.length > 0) dispatch(setTreatmentTypesValueError({
                         index: arrIndex,
                         message: ''
                     }))
 
-                    dispatch(setAboutTreatmentTreatmentType({
+                    dispatch(setTreatmentType({
                         index: arrIndex,
                         value: newValue,
                     }))
@@ -65,7 +66,7 @@ export function useAboutTreatmentFormHandleChange(
             case AboutTreatmentEnum.IMG:
                 const imageName = uuidv4()
                 // REQUIRED ERROR HANDLING 
-                if (newValue.length > 0) dispatch(setAboutTreatmentBasicValueError({
+                if (newValue.length > 0) dispatch(setBasicValueError({
                     field: AboutTreatmentEnum.IMG,
                     message: ''
                 }))
@@ -75,7 +76,7 @@ export function useAboutTreatmentFormHandleChange(
                 } // Delete old image from IndexedDB if it exists
                 if (newFile && newFile[0]) set(imageName, newFile[0], store)
 
-                dispatch(setAboutTreatmentImage(imageName))
+                dispatch(setImage(imageName))
                 break;
         }
     }, [indexedDBStoreName])

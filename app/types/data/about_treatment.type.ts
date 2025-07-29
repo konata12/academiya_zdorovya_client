@@ -6,7 +6,7 @@ export type AboutTreatmentFormIndexedDBType = 'about_treatment_create_images' | 
 export interface AboutTreatment {
     id: number
     title: string
-    image: string | null
+    image: string
     treatmentTypes: string[]
 }
 export interface AboutTreatmentInit {

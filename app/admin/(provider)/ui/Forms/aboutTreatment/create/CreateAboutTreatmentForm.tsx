@@ -3,7 +3,7 @@
 import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
 import styles from './CreateAboutTreatmentForm.module.scss';
 import { AboutTreatmentEnum, AboutTreatmentEnumType, AboutTreatmentFormData, CreateAboutTreatmentFormData } from '@/app/types/data/about_treatment.type';
-import { addAboutTreatmentTreatmentType, deleteAboutTreatmentTreatmentType, resetAboutTreatmentCreateForm, setAboutTreatmentBasicValueError, setAboutTreatmentTreatmentTypesValueError } from '@/app/utils/redux/about_treatment/aboutTreatmentCreateFormSlice';
+import { addAboutTreatmentCreateTreatmentType, deleteAboutTreatmentCreateTreatmentType, resetAboutTreatmentCreateForm, setAboutTreatmentCreateBasicValueError, setAboutTreatmentCreateTreatmentTypesValueError } from '@/app/utils/redux/about_treatment/aboutTreatmentCreateFormSlice';
 import {
     addTreatmentTypeModal,
     closeTreatmentTypeModal,
@@ -53,12 +53,12 @@ export default function CreateAboutTreatmentForm() {
     // TREATMENT TYPES FUNCTIONS
     const addTreatmentType = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
-        dispatch(addAboutTreatmentTreatmentType()) // Append a new title object
+        dispatch(addAboutTreatmentCreateTreatmentType()) // Append a new title object
         dispatch(addTreatmentTypeModal())
     }
     const deleteTreatmentType = (i: number) => {
         dispatch(deleteTreatmentTypeModal({ index: i }))
-        dispatch(deleteAboutTreatmentTreatmentType(i))
+        dispatch(deleteAboutTreatmentCreateTreatmentType(i))
     }
     const openTreatmentTypeModalWindow = (i: number) => {
         dispatch(openTreatmentTypeModal(i))
@@ -86,7 +86,7 @@ export default function CreateAboutTreatmentForm() {
 
         // FORM VALIDATION
         if (!title.length) {
-            dispatch(setAboutTreatmentBasicValueError({
+            dispatch(setAboutTreatmentCreateBasicValueError({
                 field: AboutTreatmentEnum.TITLE,
                 message: 'Введіть повну назву'
             }));
@@ -99,7 +99,7 @@ export default function CreateAboutTreatmentForm() {
         if (treatmentTypes.length) {
             treatmentTypes.forEach((treatmentType, index) => {
                 if (!treatmentType.length) {
-                    dispatch(setAboutTreatmentTreatmentTypesValueError({
+                    dispatch(setAboutTreatmentCreateTreatmentTypesValueError({
                         index,
                         message: 'Введіть тип послуги'
                     }));
@@ -112,7 +112,7 @@ export default function CreateAboutTreatmentForm() {
             })
         }
         if (!image) {
-            dispatch(setAboutTreatmentBasicValueError({
+            dispatch(setAboutTreatmentCreateBasicValueError({
                 field: AboutTreatmentEnum.IMG,
                 message: 'Добавте зображення'
             }));

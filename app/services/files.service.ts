@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 export function renameFile(file: File, newName: string): File {
     return new File([file], newName, {
         type: file.type,
