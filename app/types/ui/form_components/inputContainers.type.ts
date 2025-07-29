@@ -66,7 +66,7 @@ export interface InputContainerWithChangeEventProps<T extends FormElements> {
 
 
 export interface InputContainerBasicProps {
-    label: string
+    label?: string
     inputId: string
     error?: FormInputError
     children?: React.ReactNode

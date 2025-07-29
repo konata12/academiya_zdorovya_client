@@ -1,26 +1,26 @@
 import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
 import React from 'react';
 import styles from './CreateNewsForm.module.scss';
+import { clear } from 'idb-keyval';
+import { createNews } from '@/app/utils/redux/news/newsSlice';
+import { CreateNewsFormData, NewsFormDataEnum, NewsFormDataEnumType } from '@/app/types/data/news.type';
+import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
+import { FormInputError } from '@/app/types/data/form.type';
+import { fullfilled } from '@/app/services/response.service';
+import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
 import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
 import { ImageInputPreviewFromIndexedDB } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB';
-import { CreateNewsFormData, NewsFormDataEnum, NewsFormDataEnumType } from '@/app/types/data/news.type';
 import { RootState } from '@/app/utils/redux/store';
 import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer';
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
 import { useNewsFormHandleChange } from '@/app/utils/hooks/admin/newsForm/useNewsFormHandleChange';
+import { useRouter } from 'next/navigation';
 
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
-import { FormInputError } from '@/app/types/data/form.type';
-import { createNews } from '@/app/utils/redux/news/newsSlice';
-import { fullfilled } from '@/app/services/response.service';
-import { useRouter } from 'next/navigation';
-import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
-import { clear } from 'idb-keyval';
-import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
 
 
 const titles = ['Стан вмісту', 'Опції']
@@ -100,7 +100,7 @@ export default function CreateNewsForm() {
             });
         }
 
-        // FORM VALIDATION
+        // SCROLL TO ERROR INPUT
         if (errorsData.length) {
             console.log(errorsData)
             // SCROLL TO INPUT
@@ -130,7 +130,7 @@ export default function CreateNewsForm() {
         const isFulfilled = fullfilled(response.meta.requestStatus)
         if (isFulfilled) {
             // CLEAR DATA
-            clear(getIndexedDBStoreForImages('news_create_images'))
+            clear(getIndexedDBStoreForImages(indexedDBStoreName))
             dispatch(resetDetailsComponentsOrder())
             dispatch(resetFromData())
             router.push('./')

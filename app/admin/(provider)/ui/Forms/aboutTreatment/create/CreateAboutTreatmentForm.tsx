@@ -1,117 +1,188 @@
 'use client'
 
-import { fullfilled } from '@/app/services/response.service'
-import { AboutTreatmentEnum, AboutTreatmentFormData } from '@/app/types/data/about_treatment.type'
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
-import { RootState } from '@/app/utils/redux/store'
-import { useRouter } from 'next/navigation'
-import React, { useEffect, useRef, useState } from 'react'
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
-import styles from './CreateAboutTreatmentForm.module.scss'
-import { createAboutTreatment as createAboutTreatmentAction } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice'
+import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
+import styles from './CreateAboutTreatmentForm.module.scss';
+import { AboutTreatmentEnum, AboutTreatmentEnumType, AboutTreatmentFormData, CreateAboutTreatmentFormData } from '@/app/types/data/about_treatment.type';
+import { addAboutTreatmentTreatmentType, deleteAboutTreatmentTreatmentType, resetAboutTreatmentCreateForm, setAboutTreatmentBasicValueError, setAboutTreatmentTreatmentTypesValueError } from '@/app/utils/redux/about_treatment/aboutTreatmentCreateFormSlice';
+import {
+    addTreatmentTypeModal,
+    closeTreatmentTypeModal,
+    deleteTreatmentTypeModal,
+    openTreatmentTypeModal
+} from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice';
+import { createAboutTreatment as createAboutTreatmentAction } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice';
+import { FormInputError } from '@/app/types/data/form.type';
+import { fullfilled } from '@/app/services/response.service';
+import { RootState } from '@/app/utils/redux/store';
+import { useAboutTreatmentFormHandleChange } from '@/app/utils/hooks/admin/aboutTreatmentForm/useAboutTreatmentFormHandleChange';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useRouter } from 'next/navigation';
+
 import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow'
-import { addTreatmentTypeModal, closeTreatmentTypeModal, deleteTreatmentTypeModal, openTreatmentTypeModal } from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice'
-import HookFormInputContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
+import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
+import PreviewAboutTreatmentImage from '@/app/admin/(provider)/ui/Forms/aboutTreatment/PreviewAboutTreatmentImage/PreviewAboutTreatmentImage';
+import { clear } from 'idb-keyval';
+import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
+
+
+
+const indexedDBStoreName = 'about_treatment_create_images'
 
 export default function CreateAboutTreatmentForm() {
-    const { error } = useAppSelector((state: RootState) => state.aboutTreatment)
+    const {
+        title,
+        treatmentTypes,
+        image,
+        errors,
+    } = useAppSelector((state: RootState) => state.aboutTreatmentCreateForm)
     const { treatmentTypesModalIsOpen } = useAppSelector((state: RootState) => state.aboutTreatmentsFormUI)
-    const [imageContainerHeight, setImageContainerHeight] = useState<number>(0)
-    const [imageHeight, setImageHeight] = useState<number>(0)
+    const { error } = useAppSelector((state: RootState) => state.aboutTreatment)
 
-    const imageRef = useRef<HTMLImageElement | null>(null)
-    const imageContainerRef = useRef<HTMLDivElement | null>(null)
+    const handleChange = useAboutTreatmentFormHandleChange(indexedDBStoreName)
     const router = useRouter()
     const dispatch = useAppDispatch()
 
-    const {
-        register,
-        handleSubmit,
-        control,
-        watch,
-        formState: { errors },
-    } = useForm<AboutTreatmentFormData>({
-        defaultValues: { treatmentTypes: [{ value: '' }] }, // Initial field
+    console.log({
+        title,
+        treatmentTypes,
+        image,
+        errors,
     })
-    const image = watch('image')?.[0] // Watch the image input
-
-    const {
-        fields: treatmentTypesFields,
-        append: appendTreatmentTypes,
-        remove: removeTreatmentTypes
-    } = useFieldArray({
-        control,
-        name: "treatmentTypes", // Name of the array in the form state
-    });
-
-    // SET IMAGE HEIGHT
-    useEffect(() => {
-        if (imageContainerRef.current) {
-            setImageContainerHeight(imageContainerRef.current.offsetHeight)
-        }
-    }, [imageContainerRef.current])
-    useEffect(() => {
-        if (imageRef.current && image) {
-            const img = imageRef.current;
-            img.onload = () => {
-                setImageHeight(img.offsetHeight);
-            };
-        }
-    }, [image, imageContainerRef.current]);
-
-    const imageMarginTop = imageContainerRef.current && (imageHeight > imageContainerHeight)
-        ? (imageHeight - imageContainerHeight + 'px')
-        : '64px'
-
-    // CREATE ABOUT TREATMENT FUNCTION
-    const createAboutTreatment: SubmitHandler<AboutTreatmentFormData> = async (data) => {
-        console.log(data)
-        const response = await dispatch(createAboutTreatmentAction(data))
-        const isFulfilled = fullfilled(response.meta.requestStatus)
-        if (isFulfilled) router.push('/admin/about_treatment')
-    }
 
     // TREATMENT TYPES FUNCTIONS
     const addTreatmentType = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
-        appendTreatmentTypes({ value: '' }); // Append a new title object
+        dispatch(addAboutTreatmentTreatmentType()) // Append a new title object
         dispatch(addTreatmentTypeModal())
     }
     const deleteTreatmentType = (i: number) => {
         dispatch(deleteTreatmentTypeModal({ index: i }))
-        removeTreatmentTypes(i)
+        dispatch(deleteAboutTreatmentTreatmentType(i))
     }
-    const openTreatmentTypeModalWindow = (e: React.MouseEvent<HTMLButtonElement>, i: number) => {
-        e.preventDefault()
-        dispatch(openTreatmentTypeModal({ index: i }))
+    const openTreatmentTypeModalWindow = (i: number) => {
+        dispatch(openTreatmentTypeModal(i))
     }
     const closeTreatmentTypeModalWindow = (i: number) => {
-        dispatch(closeTreatmentTypeModal({ index: i }))
+        dispatch(closeTreatmentTypeModal(i))
+    }
+
+    // CREATE ABOUT TREATMENT FUNCTION
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const errorsData: {
+            error: FormInputError,
+            id: `${AboutTreatmentEnum.TREATMENTTYPES}_${number}`
+            | AboutTreatmentEnum.TITLE
+            | AboutTreatmentEnum.IMG
+
+        }[] = []
+        console.log({
+            title,
+            treatmentTypes,
+            image,
+            errors,
+        })
+
+        // FORM VALIDATION
+        if (!title.length) {
+            dispatch(setAboutTreatmentBasicValueError({
+                field: AboutTreatmentEnum.TITLE,
+                message: 'Введіть повну назву'
+            }));
+
+            errorsData.push({
+                id: AboutTreatmentEnum.TITLE,
+                error: { message: 'Введіть повну назву' }
+            });
+        }
+        if (treatmentTypes.length) {
+            treatmentTypes.forEach((treatmentType, index) => {
+                if (!treatmentType.length) {
+                    dispatch(setAboutTreatmentTreatmentTypesValueError({
+                        index,
+                        message: 'Введіть тип послуги'
+                    }));
+
+                    errorsData.push({
+                        id: `${AboutTreatmentEnum.TREATMENTTYPES}_${index}`,
+                        error: { message: 'Введіть тип послуги' }
+                    });
+                }
+            })
+        }
+        if (!image) {
+            dispatch(setAboutTreatmentBasicValueError({
+                field: AboutTreatmentEnum.IMG,
+                message: 'Добавте зображення'
+            }));
+
+            // SCROLL TO INPUT
+            errorsData.push({
+                id: AboutTreatmentEnum.IMG,
+                error: { message: 'Добавте зображення' }
+            });
+        }
+
+        // SCROLL TO ERROR INPUT
+        if (errorsData.length) {
+            console.log(errorsData)
+            // SCROLL TO INPUT
+            if (errorsData[0].id === AboutTreatmentEnum.IMG) {
+                (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).labels?.[0].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                })
+            } else {
+                (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                })
+            }
+            return
+        }
+        if (!image) return
+
+        const data: CreateAboutTreatmentFormData = {
+            title,
+            treatmentTypes,
+            image
+        }
+        console.log('data: ', data)
+
+        const response = await dispatch(createAboutTreatmentAction(data))
+        const isFulfilled = fullfilled(response.meta.requestStatus)
+        if (isFulfilled) {
+            // CLEAR DATA
+            clear(getIndexedDBStoreForImages(indexedDBStoreName))
+            dispatch(resetAboutTreatmentCreateForm())
+            router.push('./')
+        }
     }
 
     return (
         <form
             className={styles.form}
-            onSubmit={handleSubmit(createAboutTreatment)}
+            onSubmit={handleSubmit}
         >
-            <HookFormInputContainer<AboutTreatmentFormData>
-                label='Повна назва послуги'
-                name={AboutTreatmentEnum.TITLE}
-                errors={errors}
-                register={register}
-                registerOptions={{
-                    required: "Назва обов'язкова",
-                }}
+            <InputContainer
+                label="Повна назва послуги"
+                inputId={AboutTreatmentEnum.TITLE}
+                value={title}
+                error={errors[AboutTreatmentEnum.TITLE]}
+                changeEvent={(e) => handleChange({
+                    e,
+                    elementType: AboutTreatmentEnum.TITLE,
+                })}
             />
 
             <div className={styles.treatmentTypes}>
                 <p className={`title left sm ${styles.title}`}>Що включає послуга</p>
 
-                {treatmentTypesFields.map((treatmentType, i) => {
+                {treatmentTypes.map((treatmentType, i) => {
                     return <div
                         className={styles.treatmentType}
-                        key={treatmentType.id}
+                        key={i}
                     >
                         <div className={styles.top}>
                             <p className='inputLabel'>
@@ -119,24 +190,25 @@ export default function CreateAboutTreatmentForm() {
                             </p>
 
                             {!!i && <button
-                                onClick={(e) => { openTreatmentTypeModalWindow(e, i) }}
+                                onClick={(e) => { openTreatmentTypeModalWindow(i) }}
                                 className={`btn blue sm`}
                             >
                                 Видалити
                             </button>}
                         </div>
-                        <input
-                            className={`input ${styles.treatmentTypeInput} ${errors[AboutTreatmentEnum.TREATMENTTYPES]?.[i] && 'wrong'}`}
-                            {...register(`treatmentTypes.${i}.value`, {
-                                required: "Рядок типу послуги не має бути пустим",
+                        <InputContainer
+                            inputId={`${AboutTreatmentEnum.TREATMENTTYPES}_${i}`}
+                            value={treatmentType}
+                            error={errors[AboutTreatmentEnum.TREATMENTTYPES][i]}
+                            className={{
+                                input: `input ${styles.treatmentTypeInput} ${errors[AboutTreatmentEnum.TREATMENTTYPES]?.[i].message && 'wrong'}`
+                            }}
+                            changeEvent={(e) => handleChange({
+                                e,
+                                elementType: AboutTreatmentEnum.TREATMENTTYPES,
+                                arrIndex: i,
                             })}
-                            placeholder="Введіть тип послуги"
                         />
-                        {errors[AboutTreatmentEnum.TREATMENTTYPES]?.[i]?.value && (
-                            <p className={`error`}>
-                                {errors[AboutTreatmentEnum.TREATMENTTYPES][i]?.value?.message}
-                            </p>
-                        )}
                         {treatmentTypesModalIsOpen[i] && <ModalWindow
                             title="Ви дійсно бажаєте видалити цей рядок?"
                         >
@@ -166,57 +238,27 @@ export default function CreateAboutTreatmentForm() {
             </div>
 
             <div className={styles.addPhoto}>
-                <p className='title left sm'>
+                <p className={`title left sm ${styles.title}`}>
                     Фото для детального варіанту
                 </p>
+                <p className={`inputLabel ${styles.label}`}>
+                    {'Завантажте фото (без фону, в форматі:  .png)'}
+                </p>
 
-                <div className={styles.imageInputZone}>
-                    <p className='inputLabel'>
-                        {'Завантажте фото (без фону, в форматі:  .png)'}
-                    </p>
-
-                    <input
-                        id='upload_image'
-                        type="file"
-                        hidden
-                        {...register(AboutTreatmentEnum.IMG, {
-                            required: "Завантажте фото",
-                        })}
+                <ImageInputContainer
+                    inputId={AboutTreatmentEnum.IMG}
+                    changeEvent={(e) => handleChange({
+                        e,
+                        elementType: AboutTreatmentEnum.IMG,
+                        oldValue: image
+                    })}
+                >
+                    <PreviewAboutTreatmentImage
+                        image={image}
+                        error={errors[AboutTreatmentEnum.IMG]}
+                        indexedDBStoreName={indexedDBStoreName}
                     />
-                    <label
-                        className='btn blue sm'
-                        htmlFor="upload_image"
-                    >
-                        Завантажити
-                    </label>
-
-                    <div className={styles.imagePreview}>
-                        {errors[AboutTreatmentEnum.IMG] && <p className={`error ${styles.errorMessage}`}>
-                            {errors[AboutTreatmentEnum.IMG].message}
-                        </p>}
-
-                        <div
-                            className={`
-                                ${styles.imageContainer} 
-                                ${errors[AboutTreatmentEnum.IMG] ? styles.error : ''}
-                            `}
-                            ref={imageContainerRef}
-                            style={{
-                                marginTop: imageMarginTop
-                            }}
-                        >
-                            {image && <img
-                                className={styles.image}
-                                src={URL.createObjectURL(image)}
-                                ref={imageRef}
-                                alt="Preview"
-                            />}
-                        </div>
-                        <p className={styles.caption}>
-                            Попередній перегляд
-                        </p>
-                    </div>
-                </div>
+                </ImageInputContainer>
             </div>
 
             <SubmitButton

@@ -11,12 +11,12 @@ export default function BasicInputContainer({
     
     return (
         <div className={`${styles.inputContainer} ${className?.inputContainer || ''}`}>
-            <label
+            {label && <label
                 className={`inputLabel ${className?.inputLabel || ''}`}
                 htmlFor={inputId}
             >
                 {label}
-            </label>
+            </label>}
 
             {children}
 

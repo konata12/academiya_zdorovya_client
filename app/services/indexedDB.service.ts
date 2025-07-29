@@ -2,6 +2,21 @@
 import { openDB, IDBPDatabase } from 'idb';
 
 interface AppDBSchema {
+    // ABOUT TREATMENT
+    'about_treatment_images': {
+        key: string;
+        value: Blob;
+    };
+    'about_treatment_create_images': {
+        key: string;
+        value: Blob;
+    };
+    'about_treatment_update_images': {
+        key: string;
+        value: Blob;
+    };
+
+    //NEWS
     'news_images': {
         key: string;
         value: Blob;
@@ -18,7 +33,7 @@ interface AppDBSchema {
 }
 
 const DB_NAME = 'app_db';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbInstance: Promise<IDBPDatabase<AppDBSchema>> | null = null;
 
@@ -35,10 +50,21 @@ export const getIndexedDB = async (): Promise<IDBPDatabase<AppDBSchema>> => {
         dbInstance = openDB<AppDBSchema>(DB_NAME, DB_VERSION, {
             upgrade(db) {
                 // Create stores if they don't exist
+                // ABOUT TREATMENT
+                if (!db.objectStoreNames.contains('about_treatment_images')) {
+                    db.createObjectStore('about_treatment_images');
+                }
+                if (!db.objectStoreNames.contains('about_treatment_create_images')) {
+                    db.createObjectStore('about_treatment_create_images');
+                }
+                if (!db.objectStoreNames.contains('about_treatment_update_images')) {
+                    db.createObjectStore('about_treatment_update_images');
+                }
+
+                // NEWS
                 if (!db.objectStoreNames.contains('news_images')) {
                     db.createObjectStore('news_images');
                 }
-
                 if (!db.objectStoreNames.contains('news_update_images')) {
                     db.createObjectStore('news_update_images');
                 }

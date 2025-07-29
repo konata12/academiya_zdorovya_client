@@ -10,7 +10,6 @@ export default function page({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor} loading={null}>

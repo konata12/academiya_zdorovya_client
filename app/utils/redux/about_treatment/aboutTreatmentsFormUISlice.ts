@@ -9,12 +9,12 @@ const aboutTreatmentsFormUISlice = createSlice({
     name: 'aboutTreatmentsFormUI',
     initialState,
     reducers: {
-        openTreatmentTypeModal(state, action: { payload: { index: number } }) {
-            const index = action.payload.index
+        openTreatmentTypeModal(state, action: { payload: number }) {
+            const index = action.payload
             state.treatmentTypesModalIsOpen[index] = true
         },
-        closeTreatmentTypeModal(state, action: { payload: { index: number } }) {
-            const index = action.payload.index
+        closeTreatmentTypeModal(state, action: { payload: number}) {
+            const index = action.payload
             state.treatmentTypesModalIsOpen[index] = false
         },
 

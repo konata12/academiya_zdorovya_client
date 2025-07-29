@@ -1,3 +1,20 @@
+import aboutTreatment from '@/app/utils/redux/about_treatment/aboutTreatmentSlice';
+import aboutTreatmentCreateFormSlice from '@/app/utils/redux/about_treatment/aboutTreatmentCreateFormSlice';
+import aboutTreatmentsFormUISlice from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice';
+import authSlice from '@/app/utils/redux/auth/authSlice';
+import bookingServicesSlice from '@/app/utils/redux/booking_services/bookingServicesSlice';
+import departmentsSlice from '@/app/utils/redux/departments/departmentsSlice';
+import employeesFormUISlice from '@/app/utils/redux/employees/employeesFormUISlice';
+import employeesSlice from '@/app/utils/redux/employees/employeesSlice';
+import navigationSlice from '@/app/utils/redux/navigation/navigationSlice';
+import newsCreateDetailsOrderSlice from '@/app/utils/redux/details/news/newsCreateDetailsOrderSlice';
+import newsCreateFormSlice from '@/app/utils/redux/news/newsCreateFormSlice';
+import newsSlice from '@/app/utils/redux/news/newsSlice';
+import newsUpdateDetailsOrderSlice from '@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice';
+import newsUpdateFormSlice from '@/app/utils/redux/news/newsUpdateFormSlice';
+import pricesCreateFormUiSlice from '@/app/utils/redux/prices/pricesCreateFormUiSlice';
+import pricesSlice from '@/app/utils/redux/prices/pricesSlice';
+import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import {
@@ -10,24 +27,8 @@ import {
     PURGE,
     REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 
 // REDUCERS
-import authSlice from "@/app/utils/redux/auth/authSlice";
-import departmentsSlice from "@/app/utils/redux/departments/departmentsSlice";
-import navigationSlice from "@/app/utils/redux/navigation/navigationSlice";
-import bookingServicesSlice from "@/app/utils/redux/booking_services/bookingServicesSlice";
-import pricesSlice from '@/app/utils/redux/prices/pricesSlice';
-import pricesCreateFormUiSlice from '@/app/utils/redux/prices/pricesCreateFormUiSlice';
-import aboutTreatment from '@/app/utils/redux/about_treatment/aboutTreatmentSlice'
-import employeesSlice from '@/app/utils/redux/employees/employeesSlice'
-import employeesFormUISlice from '@/app/utils/redux/employees/employeesFormUISlice'
-import aboutTreatmentsFormUISlice from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice'
-import newsSlice from '@/app/utils/redux/news/newsSlice'
-import newsCreateFormSlice from '@/app/utils/redux/news/newsCreateFormSlice'
-import newsUpdateFormSlice from '@/app/utils/redux/news/newsUpdateFormSlice'
-import newsCreateDetailsOrderSlice from '@/app/utils/redux/details/news/newsCreateDetailsOrderSlice'
-import newsUpdateDetailsOrderSlice from '@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice'
 
 // Define the root state type
 export type RootState = ReturnType<typeof store.getState>;
@@ -41,6 +42,10 @@ const rootReducer = combineReducers({
     aboutTreatmentsFormUI: aboutTreatmentsFormUISlice,
     pricesCreateFormUI: pricesCreateFormUiSlice,
     employeesFormUI: employeesFormUISlice,
+
+    // ABOUT TREATMENT CREATION
+    aboutTreatmentCreateForm: aboutTreatmentCreateFormSlice,
+
 
     // NEWS CREATION
     newsCreateForm: newsCreateFormSlice,

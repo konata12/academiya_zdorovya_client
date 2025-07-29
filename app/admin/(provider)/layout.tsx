@@ -6,7 +6,7 @@ import { refreshTokens } from '@/app/utils/redux/auth/authSlice';
 import { RootState } from '@/app/utils/redux/store';
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import Footer from "@/app/admin/(provider)/ui/Footer/Footer";
 import Header from "@/app/admin/(provider)/ui/Header/Header";
@@ -20,9 +20,9 @@ export default function Admin({
     children: React.ReactNode;
 }>) {
     const {
-            accessToken,
+        accessToken,
     } = useAppSelector((state: RootState) => state.auth)
-    
+
     const dispatch = useAppDispatch()
     const router = useRouter()
 
@@ -31,7 +31,7 @@ export default function Admin({
         const isFulfilled = fullfilled(response.meta.requestStatus)
         if (!isFulfilled) router.push('/admin/login')
     }
-    
+
     // CREATE INDEXED DB IF NOT CREATED
     useConnectionToIndexedDB()
     // AUTH
@@ -39,6 +39,8 @@ export default function Admin({
         if (accessToken) return
         refreshTokensAndCheckIsLogin()
     }, [])
+
+
 
     return (
         <>

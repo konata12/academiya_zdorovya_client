@@ -1,5 +1,5 @@
-import { createFormData, parseFormDataToUpdate } from "@/app/services/about_treatment.service"
-import { AboutTreatment, AboutTreatmentFormData, AboutTreatmentInit } from "@/app/types/data/about_treatment.type"
+import { createAboutTreatmentFormData, parseFormDataToUpdate } from "@/app/services/about_treatment.service"
+import { AboutTreatment, AboutTreatmentFormData, AboutTreatmentInit, CreateAboutTreatmentFormData } from "@/app/types/data/about_treatment.type"
 import { ErrorResponse } from "@/app/types/data/response.type"
 import axiosInstance from "@/app/utils/axios"
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
@@ -43,11 +43,14 @@ export const fetchAboutTreatments = createAsyncThunk('aboutTreatment/get', async
 })
 
 export const createAboutTreatment = createAsyncThunk('aboutTreatment/create', async (
-    data: AboutTreatmentFormData,
+    data: CreateAboutTreatmentFormData,
     { rejectWithValue }
 ) => {
     try {
-        const formData = createFormData(data)
+        const formData = await createAboutTreatmentFormData(data)
+        console.log('formData: ', Array.from(formData))
+        // throw new Error('Test error') // For testing purposes, remove in production
+
         const response = await axiosInstance.post<AboutTreatment[]>(`${baseUrl}/admin/create`, formData)
         console.log(response)
         return response.data
@@ -57,6 +60,12 @@ export const createAboutTreatment = createAsyncThunk('aboutTreatment/create', as
             const serializableError: ErrorResponse = {
                 message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
+            }
+            return rejectWithValue(serializableError)
+        } else if (error instanceof Error) {
+            const serializableError: ErrorResponse = {
+                message: error.message,
+                statusCode: 500
             }
             return rejectWithValue(serializableError)
         }
@@ -73,20 +82,26 @@ export const updateAboutTreatment = createAsyncThunk('aboutTreatment/update', as
     { rejectWithValue }
 ) => {
     try {
-        const formData = createFormData(data)
-        for (const [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
+        // const formData = createAboutTreatmentFormData(data)
+        // for (const [key, value] of formData.entries()) {
+        //     console.log(key, value);
+        // }
 
-        const response = await axiosInstance.put<AboutTreatment[]>(`${baseUrl}/admin/update/${id}`, formData)
-        console.log(response)
-        return response.data
+        // const response = await axiosInstance.put<AboutTreatment[]>(`${baseUrl}/admin/update/${id}`, formData)
+        // console.log(response)
+        // return response.data
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
                 message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
+            }
+            return rejectWithValue(serializableError)
+        } else if (error instanceof Error) {
+            const serializableError: ErrorResponse = {
+                message: error.message,
+                statusCode: 500
             }
             return rejectWithValue(serializableError)
         }
