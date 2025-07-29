@@ -12,7 +12,7 @@ import {
     fetchAboutTreatments,
     openAboutTreatmentsModal,
     resetAboutTreatmentUpdateError
-    } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice';
+} from '@/app/utils/redux/about_treatment/aboutTreatmentSlice';
 import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
 import { RootState } from '@/app/utils/redux/store';
 import { setAllAboutTreatmentDataOnLink } from '@/app/utils/redux/about_treatment/aboutTreatmentUpdateFormSlice';
@@ -24,6 +24,7 @@ import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
 import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404'
 import DeleteModalWindow from '@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow'
+import { fullfilled } from '@/app/services/response.service';
 
 const titles = ['Послуга', 'Опції']
 
@@ -52,7 +53,11 @@ export default function WhatWeTreat({
     }, [])
 
     const deleteAboutTreatment = async (id: number) => {
-        dispatch(deleteAboutTreatmentAction(id))
+        const response = await dispatch(deleteAboutTreatmentAction(id))
+        const isFulfilled = fullfilled(response.meta.requestStatus)
+        if (isFulfilled) {
+            router.push('/admin/about_treatment')
+        }
     }
     const openModalWindow = (i: number) => {
         dispatch(openAboutTreatmentsModal({ i }))

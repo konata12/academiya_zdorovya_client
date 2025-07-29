@@ -140,6 +140,12 @@ export default function UpdateAboutTreatmentForm() {
                 error: { message: 'Добавте зображення' }
             });
         }
+        if (errors[AboutTreatmentEnum.IMG].message) {
+            errorsData.push({
+                id: AboutTreatmentEnum.IMG,
+                error: errors[AboutTreatmentEnum.IMG]
+            });
+        }
 
         // SCROLL TO ERROR INPUT
         if (errorsData.length) {

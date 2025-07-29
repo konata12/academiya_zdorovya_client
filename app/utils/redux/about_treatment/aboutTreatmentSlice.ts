@@ -56,11 +56,11 @@ export const createAboutTreatment = createAsyncThunk('aboutTreatment/create', as
     try {
         const formData = await createAboutTreatmentFormData(data)
         console.log('formData: ', Array.from(formData))
-        throw new Error('Test error') // This line is for testing purposes, remove it in production
 
         const response = await axiosInstance.post<AboutTreatment[]>(`${baseUrl}/admin/create`, formData)
+        const parseAboutTreatments = await parseAboutTreatmentsResponse(response.data)
         console.log(response)
-        return response.data
+        return parseAboutTreatments
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
@@ -112,6 +112,7 @@ export const updateAboutTreatment = createAsyncThunk('aboutTreatment/update', as
             }
             return rejectWithValue(serializableError)
         } else if (error instanceof Error) {
+            console.log('error: ', error)
             const serializableError: ErrorResponse = {
                 message: error.message,
                 statusCode: 500

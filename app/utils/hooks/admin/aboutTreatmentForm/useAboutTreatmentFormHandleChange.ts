@@ -65,16 +65,26 @@ export function useAboutTreatmentFormHandleChange(
 
             case AboutTreatmentEnum.IMG:
                 const imageName = uuidv4()
-                // REQUIRED ERROR HANDLING 
-                if (newValue.length > 0) dispatch(setBasicValueError({
-                    field: AboutTreatmentEnum.IMG,
-                    message: ''
-                }))
-
+                // Delete old image from IndexedDB if it exists
                 if (oldValue) {
                     del(oldValue, store)
-                } // Delete old image from IndexedDB if it exists
-                if (newFile && newFile[0]) set(imageName, newFile[0], store)
+                }
+                if (newFile && newFile[0]) {
+                    // IF IMAGE IS NOT PNG SHOW ERROR
+                    if (newFile[0].type !== 'image/png') {
+                        dispatch(setBasicValueError({
+                            field: AboutTreatmentEnum.IMG,
+                            message: 'Зображення повинно бути в форматі PNG'
+                        }))
+                    } else {
+                        dispatch(setBasicValueError({
+                            field: AboutTreatmentEnum.IMG,
+                            message: ''
+                        }))
+                    }
+
+                    set(imageName, newFile[0], store)
+                }
 
                 dispatch(setImage(imageName))
                 break;

@@ -29,7 +29,7 @@ export const createAboutTreatmentFormData = async (data: CreateAboutTreatmentFor
         } else if (key === AboutTreatmentEnum.TREATMENTTYPES) {
             if (!value.length || typeof value === 'string') throw Error('Список варіантів лікування не може бути порожнім')
 
-            value.forEach(treatmentType => formData.append(key, treatmentType))
+            value.forEach(treatmentType => formData.append(`${key}[]`, treatmentType))
         }
     }
 

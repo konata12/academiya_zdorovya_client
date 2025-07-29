@@ -9,10 +9,11 @@ interface PreviewAboutTreatmentImageProps {
     indexedDBStoreName: AboutTreatmentFormIndexedDBType
 }
 
+
 export default function PreviewAboutTreatmentImage({
     image,
     error,
-    indexedDBStoreName
+    indexedDBStoreName,
 }: PreviewAboutTreatmentImageProps) {
     const [imageContainerHeight, setImageContainerHeight] = useState<number>(0)
     const [imageHeight, setImageHeight] = useState<number>(0)

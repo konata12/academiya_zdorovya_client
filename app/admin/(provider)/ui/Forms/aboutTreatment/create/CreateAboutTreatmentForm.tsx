@@ -58,6 +58,8 @@ export default function CreateAboutTreatmentForm() {
         dispatch(setAboutTreatmentsFormUISliceDefaultValues(1))
     }, [])
 
+    console.log(error)
+
     // TREATMENT TYPES FUNCTIONS
     const addTreatmentType = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
@@ -87,12 +89,6 @@ export default function CreateAboutTreatmentForm() {
             | AboutTreatmentEnum.IMG
 
         }[] = []
-        console.log({
-            title,
-            treatmentTypes,
-            image,
-            errors,
-        })
 
         // FORM VALIDATION
         if (!title.length) {
@@ -131,6 +127,12 @@ export default function CreateAboutTreatmentForm() {
             errorsData.push({
                 id: AboutTreatmentEnum.IMG,
                 error: { message: 'Добавте зображення' }
+            });
+        }
+        if (errors[AboutTreatmentEnum.IMG].message) {
+            errorsData.push({
+                id: AboutTreatmentEnum.IMG,
+                error: errors[AboutTreatmentEnum.IMG]
             });
         }
 
