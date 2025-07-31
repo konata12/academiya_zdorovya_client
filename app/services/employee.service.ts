@@ -1,21 +1,30 @@
-import { Employee, EmployeesFormData } from "@/app/types/data/employees.type"
+import { renameFile } from "@/app/services/files.service"
+import { CreateEmployeesFormData, Employee, EmployeeFormData, EmployeesFormDataEnum } from "@/app/types/data/employees.type"
+import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages"
+import { get } from "idb-keyval"
 
+const storeName = 'employee_images'
+const updateStoreName = 'employee_update_images'
+const createStoreName = 'employee_create_images'
 
-export const createEmployeeFormData = (data: EmployeesFormData) => {
+export const createEmployeeFormData = async (data: CreateEmployeesFormData) => {
     const formData = new FormData()
 
     for (const key in data) {
-        const value = data[key as keyof EmployeesFormData]
+        const value = data[key as keyof CreateEmployeesFormData]
 
-        if (value instanceof FileList) {
-            Array.from(value).forEach((file: File) => {
-                formData.append(key, file)
-            })
+        if (key === EmployeesFormDataEnum.IMAGE) {
+            if (typeof value !== 'string') throw Error('Помилка зображення при створенні варіанту лікування')
+            const image = await get<File>(value, getIndexedDBStoreForImages(createStoreName))
+
+            if (!(image instanceof File)) throw Error('Помилка зображення при створенні варіанту лікування 2')
+            const parsedImage = renameFile(image, value + image.name)
+            formData.append(key, parsedImage)
         }
         else if (Array.isArray(value) && typeof value !== 'string') {
             if (key !== undefined) {
                 value.forEach((item) => {
-                    formData.append(`${key}[]`, item.value)
+                    formData.append(`${key}[]`, item)
                 })
             }
         }
@@ -27,7 +36,7 @@ export const createEmployeeFormData = (data: EmployeesFormData) => {
     return formData
 }
 
-export const parseEmployeeFormDataToUpdate = (data: EmployeesFormData, id: string): Employee => {
+export const parseEmployeeFormDataToUpdate = (data: EmployeeFormData, id: string): Employee => {
     return {
         id: +id,
         name: data.name,
@@ -39,9 +48,9 @@ export const parseEmployeeFormDataToUpdate = (data: EmployeesFormData, id: strin
         facebook: data.facebook || null,
         X: data.X || null,
         youtube: data.youtube || null,
-        workSpecialities: data.workSpecialities.map((type) => type.value),
-        achivements: data.achivements ? data.achivements.map((type) => type.value) : [],
+        workSpecialities: data.workSpecialities.map((type) => type),
+        achivements: data.achivements ? data.achivements.map((type) => type) : [],
         backgroundImgColor: data.backgroundImgColor,
-        imgUrl: null,
+        image: 'string',
     }
 }

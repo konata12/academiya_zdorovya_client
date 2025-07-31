@@ -5,7 +5,7 @@ export default function BasicInputContainer({
     label,
     inputId,
     error,
-    children,
+    children, 
     className,
 }: InputContainerBasicProps) {
     

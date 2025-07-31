@@ -1,10 +1,11 @@
 import aboutTreatment from '@/app/utils/redux/about_treatment/aboutTreatmentSlice';
 import aboutTreatmentCreateFormSlice from '@/app/utils/redux/about_treatment/aboutTreatmentCreateFormSlice';
-import aboutTreatmentUpdateFormSlice from '@/app/utils/redux/about_treatment/aboutTreatmentUpdateFormSlice';
 import aboutTreatmentsFormUISlice from '@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice';
+import aboutTreatmentUpdateFormSlice from '@/app/utils/redux/about_treatment/aboutTreatmentUpdateFormSlice';
 import authSlice from '@/app/utils/redux/auth/authSlice';
 import bookingServicesSlice from '@/app/utils/redux/booking_services/bookingServicesSlice';
 import departmentsSlice from '@/app/utils/redux/departments/departmentsSlice';
+import employeeCreateFormSlice from '@/app/utils/redux/employees/employeeCreateFormSlice';
 import employeesFormUISlice from '@/app/utils/redux/employees/employeesFormUISlice';
 import employeesSlice from '@/app/utils/redux/employees/employeesSlice';
 import navigationSlice from '@/app/utils/redux/navigation/navigationSlice';
@@ -18,6 +19,7 @@ import pricesSlice from '@/app/utils/redux/prices/pricesSlice';
 import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
+import { PersistPartial } from 'redux-persist/es/persistReducer';
 import {
     persistStore,
     persistReducer,
@@ -28,7 +30,6 @@ import {
     PURGE,
     REGISTER,
 } from 'redux-persist';
-import { PersistPartial } from 'redux-persist/es/persistReducer';
 
 // REDUCERS
 
@@ -49,6 +50,8 @@ const rootReducer = combineReducers({
     aboutTreatmentCreateForm: aboutTreatmentCreateFormSlice,
     aboutTreatmentUpdateForm: aboutTreatmentUpdateFormSlice,
 
+    // EMPLOYEE CREATION
+    employeeCreateForm: employeeCreateFormSlice,
 
     // NEWS CREATION
     newsCreateForm: newsCreateFormSlice,

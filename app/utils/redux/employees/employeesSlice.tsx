@@ -1,5 +1,5 @@
 import { createEmployeeFormData, parseEmployeeFormDataToUpdate } from "@/app/services/employee.service";
-import { Employee, EmployeesFormData, EmployeesInit } from "@/app/types/data/employees.type";
+import { CreateEmployeesFormData, Employee, EmployeeFormData, EmployeesInit } from "@/app/types/data/employees.type";
 import { ErrorResponse } from "@/app/types/data/response.type";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -20,7 +20,7 @@ const initialState: EmployeesInit = {
         getAll: null,
         getOne: null,
         create: null,
-        delete: null,
+        delete: [],
         update: null,
     }
 }
@@ -39,20 +39,19 @@ export const fetchEmployees = createAsyncThunk('employees/getAll', async (
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
         }
     }
 })
-
 export const fetchOneEmployee = createAsyncThunk('employees/getOne', async (
     id: string,
     { rejectWithValue }
 ) => {
     try {
-        
+
         const response = await axiosInstance.get<Employee[]>(`${baseUrl}/admin/${id}`)
         // console.log(response)
         return response.data
@@ -60,20 +59,22 @@ export const fetchOneEmployee = createAsyncThunk('employees/getOne', async (
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
         }
     }
 })
-
 export const createEmployee = createAsyncThunk('employees/create', async (
-    data: EmployeesFormData,
+    data: CreateEmployeesFormData,
     { rejectWithValue }
 ) => {
     try {
-        const formData = createEmployeeFormData(data)
+        const formData = await createEmployeeFormData(data)
+        console.log('formData: ', Array.from(formData))
+        throw new Error('TEST ERROR')
+
         const response = await axiosInstance.post<Employee[]>(`${baseUrl}/admin/create`, formData)
         console.log(response)
         return response.data
@@ -81,24 +82,23 @@ export const createEmployee = createAsyncThunk('employees/create', async (
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
         }
     }
 })
-
 export const updateEmployee = createAsyncThunk('employees/update', async ({
     data,
     id
 }: {
-    data: EmployeesFormData
+    data: CreateEmployeesFormData
     id: string
 }, { rejectWithValue }) => {
     try {
         console.log('redux', data)
-        const formData = createEmployeeFormData(data)
+        const formData = await createEmployeeFormData(data)
         const response = await axiosInstance.put(`${baseUrl}/admin/update/${id}`, formData)
         console.log(response)
         return response.data
@@ -106,14 +106,13 @@ export const updateEmployee = createAsyncThunk('employees/update', async ({
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
         }
     }
 })
-
 export const deleteEmployee = createAsyncThunk('employees/delete', async (
     id: number,
     { rejectWithValue }) => {
@@ -125,7 +124,7 @@ export const deleteEmployee = createAsyncThunk('employees/delete', async (
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
-                message: error.response?.data.error || 'Unexpected server error',
+                message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -154,7 +153,7 @@ const employeesSlice = createSlice({
         },
         updateEmployeeInState(state, action: {
             payload: {
-                data: EmployeesFormData,
+                data: EmployeeFormData,
                 id: string
             }
         }) {
@@ -239,14 +238,14 @@ const employeesSlice = createSlice({
             // DELETE EMPLOYEES
             .addCase(deleteEmployee.pending, (state) => {
                 state.status.delete = "loading"
-                state.error.delete = null
+                // state.error.delete = null
             })
             .addCase(deleteEmployee.fulfilled, (state) => {
                 state.status.delete = "succeeded"
             })
             .addCase(deleteEmployee.rejected, (state, action) => {
                 state.status.delete = "failed"
-                state.error.delete = action.payload as ErrorResponse
+                // state.error.delete = action.payload as ErrorResponse
             })
     }
 })

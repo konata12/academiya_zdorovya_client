@@ -4,7 +4,7 @@ import {
     Path,
     RegisterOptions,
     UseFormRegister
-    } from 'react-hook-form';
+} from 'react-hook-form';
 import { FormInputError } from '@/app/types/data/form.type';
 import { InputHTMLAttributes } from 'react';
 
@@ -20,12 +20,12 @@ export interface HookFormInputContainerBasicProps<T extends Record<string, any>>
     errors: FieldErrors<T>;
 }
 
-export interface FromElementContainerWithCheckboxProps<T extends Record<string, any>>
+export interface FromElementContainerWithCheckboxProps
     extends CheckboxProps {
     children: React.ReactNode;
     className?: FormElementWithCheckboxStyles;
     label: string;
-    name: Path<T>;
+    checkboxId: string;
 }
 
 
@@ -64,7 +64,6 @@ export interface InputContainerWithChangeEventProps<T extends FormElements> {
     changeEvent?: ChangeEvent<T>;
 }
 
-
 export interface InputContainerBasicProps {
     label?: string
     inputId: string
@@ -88,6 +87,26 @@ export interface TextareaContainer<T extends FormElements>
     minRows?: number;
     maxRows?: number;
     className?: TextareaContainerStyles;
+}
+export interface InputContainerWithCheckboxProps
+    extends InputContainerBasicProps,
+    InputContainerWithChangeEventProps<HTMLInputElement>{
+    
+    handleCheckbox: (e: React.ChangeEvent<HTMLInputElement>) => void
+    value: InputHTMLAttributes<HTMLInputElement>['value']
+    type?: React.HTMLInputTypeAttribute;
+    isChecked: boolean
+    className?: FormElementWithCheckboxStyles
+}
+export interface InputContainerWithDeleteBtnProps 
+    extends InputContainerBasicProps,
+    InputContainerWithChangeEventProps<HTMLInputElement>{
+    
+    handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => void
+    value: InputHTMLAttributes<HTMLInputElement>['value']
+    index?: number
+    type?: React.HTMLInputTypeAttribute;
+    className?: InputContainerWithDeleteBtnStyles
 }
 
 // DEFAULT IMAGE 

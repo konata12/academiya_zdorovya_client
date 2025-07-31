@@ -5,7 +5,7 @@ import { RootState } from '@/app/utils/redux/store'
 import React, { useCallback, useEffect, useRef } from 'react'
 import styles from './UpdateEmployeeForm.module.scss'
 import { SubmitHandler, useFieldArray, useForm, useWatch } from 'react-hook-form'
-import { Employee, AhivementsFormDataEnum, EmployeesBackgroundImgColorEnum, EmployeesCheckboxesType, EmployeesFormData, EmployeesFormDataEnum, EmployeesFormDataUICheckboxesEnum, EmployeesFormDataUIModalsStatesEnum, EmployeesModalsStatesType, WorkSpecialitysFormDataEnum } from '@/app/types/data/employees.type'
+import { Employee, AhivementsFormDataEnum, EmployeesBackgroundImgColorEnum, EmployeesCheckboxesType, EmployeeFormData, EmployeesFormDataEnum, EmployeesFormDataUICheckboxesEnum, EmployeesFormDataUIModalsStatesEnum, EmployeesModalsStatesType, WorkSpecialitysFormDataEnum } from '@/app/types/data/employees.type'
 import HookFormInputContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm'
 import HookFormTextareaContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/TextareaContainer/TextareaContainerHookForm'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
@@ -54,7 +54,7 @@ export default function UpdateEmployeeFrom() {
         reset,
         watch,
         formState: { errors },
-    } = useForm<EmployeesFormData>({
+    } = useForm<EmployeeFormData>({
         defaultValues: {
             [EmployeesFormDataEnum.WORKSPECIALITIES]: [{
                 value: ''
@@ -145,7 +145,7 @@ export default function UpdateEmployeeFrom() {
     }, [])
 
     // CREATE ABOUT TREATMENT FUNCTION
-    const updateEmployee: SubmitHandler<EmployeesFormData> = async (data) => {
+    const updateEmployee: SubmitHandler<EmployeeFormData> = async (data) => {
         if (employee) {
             const id = `${employee.id}`
             const checkboxesAreDefault = !!employee.instagram === instagramCheckbox &&
@@ -234,7 +234,7 @@ export default function UpdateEmployeeFrom() {
             <div className={styles.inputs}>
                 <div className={styles.mainInfo}>
                     <div className={styles.fullName}>
-                        <HookFormInputContainer<EmployeesFormData>
+                        <HookFormInputContainer<EmployeeFormData>
                             label="Ім'я"
                             className={{
                                 inputContainer: styles.nameInputContainer
@@ -247,7 +247,7 @@ export default function UpdateEmployeeFrom() {
                             }}
                         />
 
-                        <HookFormInputContainer<EmployeesFormData>
+                        <HookFormInputContainer<EmployeeFormData>
                             label="Прізвище"
                             className={{
                                 inputContainer: styles.surnameInputContainer
@@ -261,7 +261,7 @@ export default function UpdateEmployeeFrom() {
                         />
                     </div>
 
-                    <HookFormInputContainer<EmployeesFormData>
+                    <HookFormInputContainer<EmployeeFormData>
                         label="Посада"
                         className={{
                             inputContainer: styles.surnameInputContainer
@@ -273,7 +273,7 @@ export default function UpdateEmployeeFrom() {
                             required: "Посада обов'язкова"
                         }}
                     />
-                    <HookFormTextareaContainer<EmployeesFormData>
+                    <HookFormTextareaContainer<EmployeeFormData>
                         label="Коротко про лікаря"
                         className={{
                             inputContainer: styles.surnameInputContainer
@@ -293,7 +293,7 @@ export default function UpdateEmployeeFrom() {
                     </p>
 
                     <div className={styles.socialMediaCheckboxes}>
-                        <HookFormInputContainerWithCheckbox<EmployeesFormData>
+                        <HookFormInputContainerWithCheckbox<EmployeeFormData>
                             label="Instagram"
                             name={EmployeesFormDataEnum.INSTAGRAM}
                             register={register}
@@ -308,7 +308,7 @@ export default function UpdateEmployeeFrom() {
                                 EmployeesFormDataUICheckboxesEnum.INSTAGRAMCHECKBOX
                             )}
                         />
-                        <HookFormInputContainerWithCheckbox<EmployeesFormData>
+                        <HookFormInputContainerWithCheckbox<EmployeeFormData>
                             label="Facebook"
                             name={EmployeesFormDataEnum.FACEBOOK}
                             register={register}
@@ -323,7 +323,7 @@ export default function UpdateEmployeeFrom() {
                                 EmployeesFormDataUICheckboxesEnum.FACEBOOKCHECKBOX
                             )}
                         />
-                        <HookFormInputContainerWithCheckbox<EmployeesFormData>
+                        <HookFormInputContainerWithCheckbox<EmployeeFormData>
                             label="X / Twitter"
                             name={EmployeesFormDataEnum.X}
                             register={register}
@@ -338,7 +338,7 @@ export default function UpdateEmployeeFrom() {
                                 EmployeesFormDataUICheckboxesEnum.XCHECKBOX
                             )}
                         />
-                        <HookFormInputContainerWithCheckbox<EmployeesFormData>
+                        <HookFormInputContainerWithCheckbox<EmployeeFormData>
                             label="Youtube"
                             name={EmployeesFormDataEnum.YOUTUBE}
                             register={register}
@@ -361,7 +361,7 @@ export default function UpdateEmployeeFrom() {
                         Освіта та практика
                     </p>
 
-                    <HookFormTextareaContainer<EmployeesFormData>
+                    <HookFormTextareaContainer<EmployeeFormData>
                         label="Освіта та практика"
                         className={{
                             inputLabel: styles.label,
@@ -386,7 +386,7 @@ export default function UpdateEmployeeFrom() {
                         {workSpecialityFields.map((field, index) => {
                             return (
                                 <div key={field.id}>
-                                    <HookFormInputContainerWithDeleteBtn<EmployeesFormData>
+                                    <HookFormInputContainerWithDeleteBtn<EmployeeFormData>
                                         label={`Напрямок ${index + 1}`}
                                         name={EmployeesFormDataEnum.WORKSPECIALITIES}
                                         register={register}
@@ -442,7 +442,7 @@ export default function UpdateEmployeeFrom() {
                 </div>
 
                 <div className={styles.achivements}>
-                    <FormElementContainerWithCheckboxHookForm<EmployeesFormData>
+                    <FormElementContainerWithCheckboxHookForm<EmployeeFormData>
                         label='Досягнення за час роботи (опціонально*)'
                         name={EmployeesFormDataEnum.ACHIVEMENTS}
                         isChecked={achivementsCheckbox}
@@ -458,7 +458,7 @@ export default function UpdateEmployeeFrom() {
                             {achivementFields.map((field, index) => {
                                 return (
                                     <div key={field.id}>
-                                        <HookFormInputContainerWithDeleteBtn<EmployeesFormData>
+                                        <HookFormInputContainerWithDeleteBtn<EmployeeFormData>
                                             label={`Досягнення ${index + 1}`}
                                             name={EmployeesFormDataEnum.ACHIVEMENTS}
                                             register={register}
@@ -617,7 +617,7 @@ export default function UpdateEmployeeFrom() {
     )
 }
 
-function createFromDefaultValues(employee: Employee | undefined): EmployeesFormData {
+function createFromDefaultValues(employee: Employee | undefined): EmployeeFormData {
     if (employee) {
         return {
             name: employee.name,

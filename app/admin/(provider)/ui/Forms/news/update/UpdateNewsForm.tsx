@@ -194,7 +194,7 @@ export default function UpdateNewsForm() {
 
             <div className={styles.imageSection}>
                 <p className={`title sm left`}>
-                    Обготка новини
+                    Обгортка новини
                 </p>
                 <p className={`inputLabel ${styles.paragraph}`}>
                     Завантажте фото

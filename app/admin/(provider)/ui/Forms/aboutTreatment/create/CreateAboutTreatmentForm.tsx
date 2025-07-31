@@ -58,8 +58,6 @@ export default function CreateAboutTreatmentForm() {
         dispatch(setAboutTreatmentsFormUISliceDefaultValues(1))
     }, [])
 
-    console.log(error)
-
     // TREATMENT TYPES FUNCTIONS
     const addTreatmentType = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
@@ -87,7 +85,6 @@ export default function CreateAboutTreatmentForm() {
             id: `${AboutTreatmentEnum.TREATMENTTYPES}_${number}`
             | AboutTreatmentEnum.TITLE
             | AboutTreatmentEnum.IMG
-
         }[] = []
 
         // FORM VALIDATION

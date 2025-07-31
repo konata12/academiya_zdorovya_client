@@ -1,4 +1,5 @@
 'use client'
+
 import { usePathname } from "next/navigation"
 import styles from './navbar.module.scss'
 import Image from "next/image"
@@ -17,6 +18,7 @@ export default function Navbar() {
             <Link href={'/'}>
                 <Image
                     src={logo}
+                    priority={true}
                     alt="logo"
                 />
             </Link>

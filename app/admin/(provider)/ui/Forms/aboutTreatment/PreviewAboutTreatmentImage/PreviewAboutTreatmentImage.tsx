@@ -9,7 +9,6 @@ interface PreviewAboutTreatmentImageProps {
     indexedDBStoreName: AboutTreatmentFormIndexedDBType
 }
 
-
 export default function PreviewAboutTreatmentImage({
     image,
     error,

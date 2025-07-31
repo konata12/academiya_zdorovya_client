@@ -9,7 +9,6 @@ const initialState: EmployeesFormDataUI = {
     XCheckbox: false,
     youtubeCheckbox: false,
     achivementsCheckbox: false,
-    backgroundImgColor: 'blue',
 
     // MODALS
     workSpecialitysModalIsOpen: [],
@@ -30,11 +29,6 @@ const employeesFormUISlice = createSlice({
             const checkboxName = action.payload.checkboxName
             state[checkboxName] = action.payload.state
         },
-        setEmployeeBackgroundImgColorCheckbox(state, action: {
-            payload: EmployeesBackgroundImgColorType
-        }) {
-            state.backgroundImgColor = action.payload
-        },
         setCheckboxesDefaultValuesForUpdateForm(state, action: {
             payload: {
                 instagram: string | null,
@@ -50,7 +44,6 @@ const employeesFormUISlice = createSlice({
             state.XCheckbox = !!action.payload.X
             state.youtubeCheckbox = !!action.payload.youtube
             state.achivementsCheckbox = !!action.payload.achivements.length
-            state.backgroundImgColor = action.payload.backgroundImgColor
         },
 
         // MODALS
@@ -111,7 +104,6 @@ const employeesFormUISlice = createSlice({
 export const {
     // CHECKBOXES
     triggerEmployeeUICheckbox,
-    setEmployeeBackgroundImgColorCheckbox,
     setCheckboxesDefaultValuesForUpdateForm,
     // MODALS
     setModalStateInitValue,

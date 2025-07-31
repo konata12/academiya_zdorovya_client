@@ -31,7 +31,7 @@ const aboutTreatmentCreateFormSlice = createSlice({
             const { index, value } = action.payload
             state.treatmentTypes[index] = value
         },
-        deleteAboutTreatmentCreateTreatmentType(state, action: { payload: number }) {
+        deleteAboutTreatmentCreateTreatmentType(state, action: PayloadAction<number>) {
             const index = action.payload
             state.treatmentTypes.splice(index, 1)
             state.errors.treatmentTypes.splice(index, 1)
@@ -47,7 +47,7 @@ const aboutTreatmentCreateFormSlice = createSlice({
                 message: string
             }
         }) {
-            const field = action.payload.field
+            const { field } = action.payload
             state.errors[field] = { message: action.payload.message }
         },
         setAboutTreatmentCreateTreatmentTypesValueError(state, action: {
@@ -56,8 +56,8 @@ const aboutTreatmentCreateFormSlice = createSlice({
                 message: string
             }
         }) {
-            const index = action.payload.index
-            state.errors[AboutTreatmentEnum.TREATMENTTYPES][index] = { message: action.payload.message }
+            const { index, message } = action.payload
+            state.errors[AboutTreatmentEnum.TREATMENTTYPES][index] = { message }
         },
 
         // RESET FORM

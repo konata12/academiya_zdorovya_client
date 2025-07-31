@@ -18,6 +18,20 @@ interface AppDBSchema {
         value: Blob;
     };
 
+    // EMPLOYEE
+    'employee_images': {
+        key: string;
+        value: Blob;
+    };
+    'employee_create_images': {
+        key: string;
+        value: Blob;
+    };
+    'employee_update_images': {
+        key: string;
+        value: Blob;
+    };
+
     //NEWS
     'news_images': {
         key: string;
@@ -35,7 +49,7 @@ interface AppDBSchema {
 }
 
 const DB_NAME = 'app_db';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 let dbInstance: Promise<IDBPDatabase<AppDBSchema>> | null = null;
 
@@ -59,6 +73,17 @@ export const getIndexedDB = async (): Promise<IDBPDatabase<AppDBSchema>> => {
                 }
                 if (!db.objectStoreNames.contains('about_treatment_update_images')) {
                     db.createObjectStore('about_treatment_update_images');
+                }
+
+                // EMPLOYEE
+                if (!db.objectStoreNames.contains('employee_images')) {
+                    db.createObjectStore('employee_images');
+                }
+                if (!db.objectStoreNames.contains('employee_create_images')) {
+                    db.createObjectStore('employee_create_images');
+                }
+                if (!db.objectStoreNames.contains('employee_update_images')) {
+                    db.createObjectStore('employee_update_images');
                 }
 
                 // NEWS

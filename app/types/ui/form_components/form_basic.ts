@@ -8,7 +8,7 @@ export interface ReactHookFromComponent<T extends Record<string, any>> {
     setValue?: UseFormSetValue<T>
 }
 export interface CheckboxProps {
-    handleFunction: (event: ChangeEvent<HTMLInputElement>) => void
+    handleFunction: (e: ChangeEvent<HTMLInputElement>) => void
     isChecked: boolean
     elemId?: string
     className?: CheckboxStyles

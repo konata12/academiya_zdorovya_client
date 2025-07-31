@@ -1,5 +1,7 @@
+import { FormInputError } from "@/app/types/data/form.type"
 import { ErrorsResponses, Status } from "@/app/types/data/response.type"
 
+export type EmployeeFormIndexedDBType = "employee_create_images" | 'employee_update_images'
 // GENERAL TYPES
 export interface Employee {
     id: number
@@ -15,7 +17,7 @@ export interface Employee {
     workSpecialities: string[]
     achivements: string[]
     backgroundImgColor: EmployeesBackgroundImgColorType
-    imgUrl: string | null
+    image: string
 }
 
 export interface EmployeesInit {
@@ -25,12 +27,24 @@ export interface EmployeesInit {
     error: ErrorsResponses
 }
 
+
 // FORM DATA
-interface WorkSpecialityFromData {
-    value: string
+interface EmployeeFormDataErrorsType {
+    name: FormInputError
+    surname: FormInputError
+    position: FormInputError
+    description: FormInputError
+    degree: FormInputError
+    instagram: FormInputError
+    facebook: FormInputError
+    X: FormInputError
+    youtube: FormInputError
+    workSpecialities: FormInputError[]
+    achivements: FormInputError[]
+    backgroundImgColor: FormInputError
+    image: FormInputError
 }
-interface AchivementFromData extends WorkSpecialityFromData { }
-export interface EmployeesFormData {
+export interface EmployeeFormData {
     name: string
     surname: string
     position: string
@@ -40,11 +54,44 @@ export interface EmployeesFormData {
     facebook?: string
     X?: string
     youtube?: string
-    workSpecialities: WorkSpecialityFromData[]
-    achivements?: AchivementFromData[]
+    workSpecialities: string[]
+    achivements?: string[]
     backgroundImgColor: EmployeesBackgroundImgColorType
-    image: FileList | null
+    image: string | null
+
+    errors: EmployeeFormDataErrorsType
 }
+// CREATE/UPDATE FORM DATA
+export interface CreateEmployeesFormData {
+    name: string
+    surname: string
+    position: string
+    description: string
+    degree: string
+    instagram?: string
+    facebook?: string
+    X?: string
+    youtube?: string
+    workSpecialities: string[]
+    achivements?: string[]
+    backgroundImgColor: EmployeesBackgroundImgColorType
+    image: string
+}
+// CREATE/UPDATE FORM DATA SLICE TYPES
+export type EmployeeStringKeysType = EmployeesFormDataEnum.NAME
+    | EmployeesFormDataEnum.SURNAME
+    | EmployeesFormDataEnum.POSITION
+    | EmployeesFormDataEnum.DESCRIPTION
+    | EmployeesFormDataEnum.DEGREE
+    | EmployeesFormDataEnum.IMAGE
+export type EmployeeSocialMediaKeysType = EmployeesFormDataEnum.INSTAGRAM
+    | EmployeesFormDataEnum.FACEBOOK
+    | EmployeesFormDataEnum.X
+    | EmployeesFormDataEnum.YOUTUBE
+export type EmployeeStringArrayKeysType = EmployeesFormDataEnum.WORKSPECIALITIES
+    | EmployeesFormDataEnum.ACHIVEMENTS
+
+export type EmployeeStringKeysWithoutImageType = Exclude<EmployeeStringKeysType, EmployeesFormDataEnum.IMAGE>
 
 // UI FORM DATA
 export interface EmployeesFormDataSocialMediaUICheckboxes {
@@ -62,12 +109,12 @@ export interface EmployeesFormDataUI
     extends
     EmployeesFormDataSocialMediaUICheckboxes,
     EmployeesFormDataUIModalsStates {
-    backgroundImgColor: EmployeesBackgroundImgColorType
 }
 
 export type EmployeesCheckboxesType = `${EmployeesFormDataUICheckboxesEnum}`
 export type EmployeesModalsStatesType = `${EmployeesFormDataUIModalsStatesEnum}`
 export type EmployeesBackgroundImgColorType = `${EmployeesBackgroundImgColorEnum}`
+export type EmployeesFormDataEnumType = `${EmployeesFormDataEnum}`
 
 // ENUMS
 export enum WorkSpecialitysFormDataEnum {
@@ -89,7 +136,7 @@ export enum EmployeesFormDataEnum {
     WORKSPECIALITIES = 'workSpecialities',
     ACHIVEMENTS = 'achivements',
     BACKGROUNDIMGCOLOR = 'backgroundImgColor',
-    IMAGE = 'image'
+    IMAGE = 'image',
 }
 export enum EmployeesBackgroundImgColorEnum {
     GREY = 'grey',
