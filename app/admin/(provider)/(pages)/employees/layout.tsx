@@ -8,11 +8,12 @@ import React, { useEffect } from 'react'
 import styles from './layout.module.scss'
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { RootState } from "@/app/utils/redux/store"
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation.service';
 import { fullfilled } from '@/app/services/response.service';
 import { closeEmployeesModal, deleteEmployeeFromState, fetchEmployees, openEmployeesModal, deleteEmployee as deleteEmployeeAction } from '@/app/utils/redux/employees/employeesSlice';
 import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404';
+import DeleteModalWindow from '@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow';
 
 
 const titles = ['ПІ лікаря', 'Посада', 'Опції']
@@ -30,21 +31,19 @@ export default function layout({
     } = useAppSelector((state: RootState) => state.employees)
 
     const dispatch = useAppDispatch()
+    const router = useRouter()
     const pathname = usePathname()
     const isCreatePage = checkCreatePage(pathname)
+    console.log('employees: ', employees)
 
     useEffect(() => {
         dispatch(fetchEmployees())
     }, [])
 
-    const deleteEmployee = async (id: number, i: number) => {
+    const deleteEmployee = async (id: number) => {
         const response = await dispatch(deleteEmployeeAction(id))
         const isFulfilled = fullfilled(response.meta.requestStatus)
-
-        if (isFulfilled) {
-            dispatch(deleteEmployeeFromState(id))
-            closeModalWindow(i)
-        }
+        if (isFulfilled) router.push('/admin/employees')
     }
 
     const openModalWindow = (i: number) => {
@@ -70,22 +69,14 @@ export default function layout({
                 ) : (employees.map((employee, i) => <TableLine key={employee.id}>
                     <span>{`${employee.name} ${employee.surname}`}</span>
                     <span>{employee.position}</span>
-                    {employeesIsModalOpen[i] && <ModalWindow
-                        title="Ви дійсно бажаєте видалити це відділеня?"
-                    >
-                        <button
-                            className={`btn cancel`}
-                            onClick={() => { closeModalWindow(i) }}
-                        >
-                            Скасувати видалення
-                        </button>
-                        <button
-                            onClick={() => { deleteEmployee(employee.id, i) }}
-                            className={`btn blue lg`}
-                        >
-                            Підтвердити
-                        </button>
-                    </ModalWindow>}
+                    {employeesIsModalOpen[i] && <DeleteModalWindow
+                        title='Ви дійсно бажаєте видалити цього працівника?'
+                        error={error}
+                        index={i}
+                        id={employee.id}
+                        closeModalHandler={closeModalWindow}
+                        deleteHandler={deleteEmployee}
+                    />}
                     <span>
                         <button
                             onClick={() => { openModalWindow(i) }}

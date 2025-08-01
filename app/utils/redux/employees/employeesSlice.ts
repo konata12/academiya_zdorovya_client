@@ -1,5 +1,6 @@
-import { createEmployeeFormData, parseEmployeeFormDataToUpdate } from "@/app/services/employee.service";
-import { CreateEmployeesFormData, Employee, EmployeeFormData, EmployeesInit } from "@/app/types/data/employees.type";
+import { createEmployeeFormData, parseEmployeeFormDataToUpdate, parseEmployeesResponse, updateEmployeeFormData } from "@/app/services/employee.service";
+import { transferAndReplaceImageBetweenIndexDBStores } from "@/app/services/indexedDB.service";
+import { CreateEmployeeFormData, Employee, EmployeeFormData, EmployeesInit } from "@/app/types/data/employees.type";
 import { ErrorResponse } from "@/app/types/data/response.type";
 import axiosInstance from "@/app/utils/axios";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -33,8 +34,9 @@ export const fetchEmployees = createAsyncThunk('employees/getAll', async (
 ) => {
     try {
         const response = await axiosInstance.get<Employee[]>(`${baseUrl}`)
-        console.log(response)
-        return response.data
+        const parsedEmployees = await parseEmployeesResponse(response.data)
+
+        return parsedEmployees
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
@@ -67,13 +69,12 @@ export const fetchOneEmployee = createAsyncThunk('employees/getOne', async (
     }
 })
 export const createEmployee = createAsyncThunk('employees/create', async (
-    data: CreateEmployeesFormData,
+    data: CreateEmployeeFormData,
     { rejectWithValue }
 ) => {
     try {
         const formData = await createEmployeeFormData(data)
         console.log('formData: ', Array.from(formData))
-        throw new Error('TEST ERROR')
 
         const response = await axiosInstance.post<Employee[]>(`${baseUrl}/admin/create`, formData)
         console.log(response)
@@ -86,28 +87,50 @@ export const createEmployee = createAsyncThunk('employees/create', async (
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
+        } else if (error instanceof Error) {
+            console.error('error: ', error)
+            const serializableError: ErrorResponse = {
+                message: error.message,
+                statusCode: 500
+            }
+            return rejectWithValue(serializableError)
         }
     }
 })
 export const updateEmployee = createAsyncThunk('employees/update', async ({
+    oldImageName,
     data,
-    id
+    id,
 }: {
-    data: CreateEmployeesFormData
+    oldImageName: string | undefined
+    data: CreateEmployeeFormData
     id: string
 }, { rejectWithValue }) => {
     try {
-        console.log('redux', data)
-        const formData = await createEmployeeFormData(data)
+        const formData = await updateEmployeeFormData(data)
         const response = await axiosInstance.put(`${baseUrl}/admin/update/${id}`, formData)
-        console.log(response)
-        return response.data
+        // IF SET NEW IMAGE REPLACE IT IN MAIN STORE
+        if (oldImageName !== data.image) await transferAndReplaceImageBetweenIndexDBStores(
+            data.image,
+            oldImageName,
+            'employee_update_images',
+            'employee_images'
+        )
+        console.log('response:', response)
+        return { data, id }
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
                 message: error.response?.data.message || 'Unexpected server error',
                 statusCode: error.status || 500
+            }
+            return rejectWithValue(serializableError)
+        } else if (error instanceof Error) {
+            console.error('error: ', error)
+            const serializableError: ErrorResponse = {
+                message: error.message,
+                statusCode: 500
             }
             return rejectWithValue(serializableError)
         }
@@ -119,13 +142,14 @@ export const deleteEmployee = createAsyncThunk('employees/delete', async (
     try {
         const response = await axiosInstance.delete(`${baseUrl}/admin/${id}`)
         console.log(response)
-        return response.data
+        return id
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
             const serializableError: ErrorResponse = {
                 message: error.response?.data.message || 'Unexpected server error',
-                statusCode: error.status || 500
+                statusCode: error.status || 500,
+                id
             }
             return rejectWithValue(serializableError)
         }
@@ -162,12 +186,16 @@ const employeesSlice = createSlice({
             })
             state.employees[index] = parseEmployeeFormDataToUpdate(action.payload.data, action.payload.id)
         },
+
         setEmployeeUpdateError(state) {
             state.error.update = {
-                message: 'Дані ті самі, окрім картинки, спочатку змініть значення',
+                message: 'Дані ті самі, спочатку змініть значення',
                 statusCode: 0
             }
-        }
+        },
+        resetEmployeeUpdateError(state) {
+            state.error.update = null
+        },
     },
     extraReducers(builder) {
         builder
@@ -227,8 +255,33 @@ const employeesSlice = createSlice({
                 state.status.update = "loading"
                 state.error.update = null
             })
-            .addCase(updateEmployee.fulfilled, (state) => {
+            .addCase(updateEmployee.fulfilled, (state, action: PayloadAction<{
+                data: CreateEmployeeFormData;
+                id: string;
+            } | undefined>) => {
                 state.status.update = "succeeded"
+                if (action.payload) {
+                    const { data, id } = action.payload
+                    const {
+                        instagram,
+                        facebook,
+                        X,
+                        youtube,
+                        achivements,
+                        ...parsedData
+                    } = data
+                    const index = state.employees.findIndex(employee => `${employee.id}` === id)
+
+                    state.employees[index] = {
+                        ...parsedData,
+                        id: +id,
+                        instagram: instagram || null,
+                        facebook: facebook || null,
+                        X: X || null,
+                        youtube: youtube || null,
+                        achivements: achivements || null,
+                    }
+                }
             })
             .addCase(updateEmployee.rejected, (state, action) => {
                 state.status.update = "failed"
@@ -236,16 +289,31 @@ const employeesSlice = createSlice({
             })
 
             // DELETE EMPLOYEES
-            .addCase(deleteEmployee.pending, (state) => {
+            .addCase(deleteEmployee.pending, (state, action: PayloadAction<number | undefined>) => {
                 state.status.delete = "loading"
-                // state.error.delete = null
+                const index = state.employees.findIndex(employees => employees.id === action.payload)
+                if (index !== -1) {
+                    state.error.delete[index] = null
+                }
             })
-            .addCase(deleteEmployee.fulfilled, (state) => {
+            .addCase(deleteEmployee.fulfilled, (state, action: PayloadAction<number | undefined>) => {
                 state.status.delete = "succeeded"
+                const index = state.employees.findIndex(employees => employees.id === action.payload)
+                if (index !== -1) {
+                    state.employees.splice(index, 1)
+                    state.employeesIsModalOpen.splice(index, 1)
+                    state.error.delete.splice(index, 1)
+                }
             })
             .addCase(deleteEmployee.rejected, (state, action) => {
                 state.status.delete = "failed"
-                // state.error.delete = action.payload as ErrorResponse
+                if (action.payload && typeof action.payload === 'object' && 'id' in action.payload) {
+                    const error = action.payload as ErrorResponse;
+                    const index = state.employees.findIndex(employees => employees.id === error.id);
+                    if (index !== -1) {
+                        state.error.delete[index] = error;
+                    }
+                }
             })
     }
 })
@@ -256,6 +324,7 @@ export const {
     deleteEmployeeFromState,
     setEmployeeUpdateError,
     updateEmployeeInState,
+    resetEmployeeUpdateError,
 } = employeesSlice.actions
 
 export default employeesSlice.reducer

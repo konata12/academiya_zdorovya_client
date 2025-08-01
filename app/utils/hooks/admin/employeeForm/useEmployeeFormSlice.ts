@@ -7,6 +7,14 @@ import {
     setEmployeeCreateStringArrayValue,
     setEmployeeCreateStringValue
     } from '@/app/utils/redux/employees/employeeCreateFormSlice';
+import {
+    setEmployeeUpdateBackgroundImgColor,
+    setEmployeeUpdateBasicValueError,
+    setEmployeeUpdateSocialMediaValue,
+    setEmployeeUpdateStringArrayError,
+    setEmployeeUpdateStringArrayValue,
+    setEmployeeUpdateStringValue
+    } from '@/app/utils/redux/employees/employeeUpdateFormSlice';
 import { useMemo } from 'react';
 
 
@@ -27,12 +35,12 @@ export function useEmployeeFormSlice(indexedDBStoreName: EmployeeFormIndexedDBTy
             case "employee_update_images":
                 return {
                     // FORM SLICE
-                    setStringValue: setEmployeeCreateStringValue,
-                    setSocialMediaValue: setEmployeeCreateSocialMediaValue,
-                    setStringArrayValue: setEmployeeCreateStringArrayValue,
-                    setBackgroundImgColor: setEmployeeCreateBackgroundImgColor,
-                    setBasicValueError: setEmployeeCreateBasicValueError,
-                    setStringArrayValueError: setEmployeeCreateStringArrayError,
+                    setStringValue: setEmployeeUpdateStringValue,
+                    setSocialMediaValue: setEmployeeUpdateSocialMediaValue,
+                    setStringArrayValue: setEmployeeUpdateStringArrayValue,
+                    setBackgroundImgColor: setEmployeeUpdateBackgroundImgColor,
+                    setBasicValueError: setEmployeeUpdateBasicValueError,
+                    setStringArrayValueError: setEmployeeUpdateStringArrayError,
                 };
         }
     }, [indexedDBStoreName])

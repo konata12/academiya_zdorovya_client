@@ -1,5 +1,13 @@
-import { EmployeeFormData, EmployeesBackgroundImgColorType, EmployeesFormDataEnum, EmployeeSocialMediaKeysType, EmployeeStringArrayKeysType, EmployeeStringKeysType } from "@/app/types/data/employees.type";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import {
+    Employee,
+    EmployeeFormData,
+    EmployeesBackgroundImgColorType,
+    EmployeesFormDataEnum,
+    EmployeeSocialMediaKeysType,
+    EmployeeStringArrayKeysType,
+    EmployeeStringKeysType
+} from '@/app/types/data/employees.type';
 
 const initState: EmployeeFormData = {
     name: '',
@@ -32,12 +40,42 @@ const initState: EmployeeFormData = {
     }
 }
 
-const employeeCreateFormSlice = createSlice({
-    name: 'employeeCreateForm',
+const employeeUpdateFormSlice = createSlice({
+    name: 'employeeUpdateForm',
     initialState: initState,
     reducers: {
         // SET VALUES
-        setEmployeeCreateStringValue(state, action: {
+        setAllEmployeeUpdateDataOnLink(state, action: { payload: Employee }) {
+            const {
+                id,
+                instagram,
+                facebook,
+                X,
+                youtube,
+                achivements,
+                ...data
+            } = action.payload
+            const {
+                workSpecialities: workSpecialitiesErrors,
+                achivements: achivementsErrors,
+                ...errors
+            } = state.errors
+
+            return {
+                ...data,
+                instagram: instagram || undefined,
+                facebook: facebook || undefined,
+                X: X || undefined,
+                youtube: youtube || undefined,
+                achivements: achivements || undefined,
+                errors: {
+                    ...errors,
+                    workSpecialities: new Array(data.workSpecialities.length).fill({ message: '' }),
+                    achivements: achivements ? new Array(achivements.length).fill({ message: '' }) : [],
+                }
+            }
+        },
+        setEmployeeUpdateStringValue(state, action: {
             payload: {
                 field: EmployeeStringKeysType,
                 value: string
@@ -46,7 +84,7 @@ const employeeCreateFormSlice = createSlice({
             const { field, value } = action.payload
             state[field] = value
         },
-        setEmployeeCreateSocialMediaValue(state, action: {
+        setEmployeeUpdateSocialMediaValue(state, action: {
             payload: {
                 field: EmployeeSocialMediaKeysType,
                 value: string | undefined
@@ -55,7 +93,7 @@ const employeeCreateFormSlice = createSlice({
             const { field, value } = action.payload
             state[field] = value
         },
-        addEmployeeCreateStringArrayValue(state, action: {
+        addEmployeeUpdateStringArrayValue(state, action: {
             payload: EmployeeStringArrayKeysType
         }) {
             const field = action.payload
@@ -70,7 +108,7 @@ const employeeCreateFormSlice = createSlice({
                 state.errors[field] = [{ message: '' }];
             }
         },
-        setEmployeeCreateStringArrayValue(state, action: {
+        setEmployeeUpdateStringArrayValue(state, action: {
             payload: {
                 index: number,
                 value: string,
@@ -84,7 +122,7 @@ const employeeCreateFormSlice = createSlice({
                 state[field] = [value]
             }
         },
-        deleteEmployeeCreateStringArrayValue(state, action: {
+        deleteEmployeeUpdateStringArrayValue(state, action: {
             payload: {
                 index: number,
                 field: EmployeeStringArrayKeysType,
@@ -100,12 +138,12 @@ const employeeCreateFormSlice = createSlice({
             state.achivements = ['']
             state.errors.achivements = [{ message: '' }]
         },
-        setEmployeeCreateBackgroundImgColor(state, action: { payload: EmployeesBackgroundImgColorType }) {
+        setEmployeeUpdateBackgroundImgColor(state, action: { payload: EmployeesBackgroundImgColorType }) {
             const value = action.payload
             state[EmployeesFormDataEnum.BACKGROUNDIMGCOLOR] = value
         },
         // SET ERRORS
-        setEmployeeCreateBasicValueError(state, action: {
+        setEmployeeUpdateBasicValueError(state, action: {
             payload: {
                 field: Exclude<EmployeesFormDataEnum, EmployeeStringArrayKeysType>,
                 message: string
@@ -114,7 +152,7 @@ const employeeCreateFormSlice = createSlice({
             const { field, message } = action.payload
             state.errors[field] = { message }
         },
-        setEmployeeCreateStringArrayError(state, action: {
+        setEmployeeUpdateStringArrayError(state, action: {
             payload: {
                 field: EmployeeStringArrayKeysType,
                 index: number,
@@ -126,23 +164,24 @@ const employeeCreateFormSlice = createSlice({
         },
 
         // RESET FORM
-        resetEmployeeCreateForm: () => initState,
+        resetEmployeeUpdateForm: () => initState,
     },
 })
 
 export const {
-    setEmployeeCreateStringValue,
-    setEmployeeCreateSocialMediaValue,
-    addEmployeeCreateStringArrayValue,
-    setEmployeeCreateStringArrayValue,
-    deleteEmployeeCreateStringArrayValue,
+    setAllEmployeeUpdateDataOnLink,
+    setEmployeeUpdateStringValue,
+    setEmployeeUpdateSocialMediaValue,
+    addEmployeeUpdateStringArrayValue,
+    setEmployeeUpdateStringArrayValue,
+    deleteEmployeeUpdateStringArrayValue,
     setAchivementsFirstValue,
-    setEmployeeCreateBackgroundImgColor,
+    setEmployeeUpdateBackgroundImgColor,
 
-    setEmployeeCreateBasicValueError,
-    setEmployeeCreateStringArrayError,
+    setEmployeeUpdateBasicValueError,
+    setEmployeeUpdateStringArrayError,
 
-    resetEmployeeCreateForm,
-} = employeeCreateFormSlice.actions
+    resetEmployeeUpdateForm,
+} = employeeUpdateFormSlice.actions
 
-export default employeeCreateFormSlice.reducer
+export default employeeUpdateFormSlice.reducer

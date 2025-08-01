@@ -6,6 +6,7 @@ import authSlice from '@/app/utils/redux/auth/authSlice';
 import bookingServicesSlice from '@/app/utils/redux/booking_services/bookingServicesSlice';
 import departmentsSlice from '@/app/utils/redux/departments/departmentsSlice';
 import employeeCreateFormSlice from '@/app/utils/redux/employees/employeeCreateFormSlice';
+import employeeUpdateFormSlice from '@/app/utils/redux/employees/employeeUpdateFormSlice';
 import employeesFormUISlice from '@/app/utils/redux/employees/employeesFormUISlice';
 import employeesSlice from '@/app/utils/redux/employees/employeesSlice';
 import navigationSlice from '@/app/utils/redux/navigation/navigationSlice';
@@ -16,7 +17,6 @@ import newsUpdateDetailsOrderSlice from '@/app/utils/redux/details/news/newsUpda
 import newsUpdateFormSlice from '@/app/utils/redux/news/newsUpdateFormSlice';
 import pricesCreateFormUiSlice from '@/app/utils/redux/prices/pricesCreateFormUiSlice';
 import pricesSlice from '@/app/utils/redux/prices/pricesSlice';
-import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { PersistPartial } from 'redux-persist/es/persistReducer';
@@ -30,6 +30,7 @@ import {
     PURGE,
     REGISTER,
 } from 'redux-persist';
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 
 // REDUCERS
 
@@ -52,6 +53,7 @@ const rootReducer = combineReducers({
 
     // EMPLOYEE CREATION
     employeeCreateForm: employeeCreateFormSlice,
+    employeeUpdateForm: employeeUpdateFormSlice,
 
     // NEWS CREATION
     newsCreateForm: newsCreateFormSlice,
@@ -69,6 +71,7 @@ const rootReducer = combineReducers({
     news: newsSlice,
 });
 
+const storage = createWebStorage('local')
 const persistConfig = {
     key: 'root',
     version: 1,

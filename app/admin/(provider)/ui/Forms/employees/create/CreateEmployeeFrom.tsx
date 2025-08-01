@@ -1,54 +1,56 @@
 'use client'
 
 import FormElementContainerWithCheckboxHookForm from '@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox';
-import React, { useCallback, useEffect } from 'react';
+import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
+import InputContainerWithCheckbox from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainerWithCheckbox/InputContainerWithCheckbox';
+import InputContainerWithDeleteBtn from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtn';
+import React, { useEffect } from 'react';
 import styles from './CreateEmployeeForm.module.scss';
+import {
+    addEmployeeCreateStringArrayValue,
+    deleteEmployeeCreateStringArrayValue,
+    resetEmployeeCreateForm,
+    setAchivementsFirstValue,
+    setEmployeeCreateBackgroundImgColor
+} from '@/app/utils/redux/employees/employeeCreateFormSlice';
 import {
     addModalState,
     deleteModalState,
-    setEmployeeUIInitialState,
+    setEmployeeUIFormValues,
     setModalState,
-    setModalStateInitValue,
     triggerEmployeeUICheckbox
 } from '@/app/utils/redux/employees/employeesFormUISlice';
+import { clear } from 'idb-keyval';
+import { createEmployee as createEmployeeAction } from '@/app/utils/redux/employees/employeesSlice';
 import {
-    AhivementsFormDataEnum,
+    CreateEmployeeFormData,
     EmployeesBackgroundImgColorEnum,
     EmployeesCheckboxesType,
-    EmployeeFormData,
     EmployeesFormDataEnum,
+    EmployeesFormDataEnumType,
     EmployeesFormDataUICheckboxesEnum,
     EmployeesFormDataUIModalsStatesEnum,
     EmployeesModalsStatesType,
-    WorkSpecialitysFormDataEnum,
-    EmployeesBackgroundImgColorType,
-    EmployeesFormDataEnumType,
-    EmployeeStringArrayKeysType,
-    EmployeeStringKeysType,
-    EmployeeStringKeysWithoutImageType,
     EmployeeSocialMediaKeysType,
-    CreateEmployeesFormData
+    EmployeeStringArrayKeysType,
+    EmployeeStringKeysWithoutImageType
 } from '@/app/types/data/employees.type';
-import { createEmployee as createEmployeeAction } from '@/app/utils/redux/employees/employeesSlice';
+import { FormInputError } from '@/app/types/data/form.type';
 import { fullfilled } from '@/app/services/response.service';
+import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
+import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
 import { RootState } from '@/app/utils/redux/store';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer';
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useEmployeeFormHandleChange } from '@/app/utils/hooks/admin/employeeForm/useEmployeeFormHandleChange';
+import { useEmployeeFormSlice } from '@/app/utils/hooks/admin/employeeForm/useEmployeeFormSlice';
 import { useRouter } from 'next/navigation';
+
 
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
 import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow'
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
-import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
-import { useEmployeeFormHandleChange } from '@/app/utils/hooks/admin/employeeForm/useEmployeeFormHandleChange';
-import InputContainerWithCheckbox from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainerWithCheckbox/InputContainerWithCheckbox';
-import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer';
-import { addEmployeeCreateStringArrayValue, deleteEmployeeCreateStringArrayValue, employeeCreateFormInitialState, setAchivementsFirstValue, setEmployeeCreateBackgroundImgColor } from '@/app/utils/redux/employees/employeeCreateFormSlice';
-import InputContainerWithDeleteBtn from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtn';
-import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
 import PreviewEmployeeImage from '@/app/admin/(provider)/ui/Forms/employees/PreviewEmployeeImage/PreviewEmployeeImage';
-import { FormInputError } from '@/app/types/data/form.type';
-import { useEmployeeFormSlice } from '@/app/utils/hooks/admin/employeeForm/useEmployeeFormSlice';
 
 const indexedDBStoreName = 'employee_create_images'
 
@@ -96,22 +98,7 @@ export default function CreateEmployeeFrom() {
 
     // UI Slice state reset 
     useEffect(() => {
-        dispatch(setModalStateInitValue({
-            length: workSpecialities.length,
-            modalName: EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN
-        }))
-        dispatch(setModalStateInitValue({
-            length: achivements?.length || 0,
-            modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
-        }))
-
-        return () => {
-            dispatch(setEmployeeUIInitialState())
-        }
-    }, [])
-
-    const conditionalRequired = useCallback((checkbox: boolean, requiredMessage: string) => {
-        return checkbox ? { required: requiredMessage } : {}
+        dispatch(setEmployeeUIFormValues(data))
     }, [])
 
     const handleSocialMediaCheckbox = (
@@ -337,7 +324,7 @@ export default function CreateEmployeeFrom() {
         }
         if (!image) return
 
-        const requestData: CreateEmployeesFormData = {
+        const requestData: CreateEmployeeFormData = {
             name,
             surname,
             position,
@@ -355,8 +342,13 @@ export default function CreateEmployeeFrom() {
         console.log(requestData)
 
         const response = await dispatch(createEmployeeAction(requestData))
-        // const isFulfilled = fullfilled(response.meta.requestStatus)
-        // if (isFulfilled) router.push('/admin/employees')
+        const isFulfilled = fullfilled(response.meta.requestStatus)
+        if (isFulfilled) {
+            // CLEAR DATA
+            clear(getIndexedDBStoreForImages(indexedDBStoreName))
+            dispatch(resetEmployeeCreateForm())
+            router.push('./')
+        }
     }
 
     return (
@@ -493,66 +485,6 @@ export default function CreateEmployeeFrom() {
                                 elementType: EmployeesFormDataEnum.YOUTUBE,
                             })}
                         />
-                        {/* <HookFormInputContainerWithCheckbox<EmployeeFormData>
-                            label="Instagram"
-                            name={EmployeesFormDataEnum.INSTAGRAM}
-                            register={register}
-                            errors={errors}
-                            registerOptions={{
-                                ...conditionalRequired(instagramCheckbox, "Якщо повинен бути Instagram, то надайте посилання")
-                            }}
-
-                            isChecked={instagramCheckbox}
-                            handleFunction={(e) => handleSocialMediaCheckbox(
-                                e,
-                                EmployeesFormDataUICheckboxesEnum.INSTAGRAMCHECKBOX
-                            )}
-                        />
-                        <HookFormInputContainerWithCheckbox<EmployeeFormData>
-                            label="Facebook"
-                            name={EmployeesFormDataEnum.FACEBOOK}
-                            register={register}
-                            errors={errors}
-                            registerOptions={{
-                                ...conditionalRequired(facebookCheckbox, "Якщо повинен бути Facebook, то надайте посилання")
-                            }}
-
-                            isChecked={facebookCheckbox}
-                            handleFunction={(e) => handleSocialMediaCheckbox(
-                                e,
-                                EmployeesFormDataUICheckboxesEnum.FACEBOOKCHECKBOX
-                            )}
-                        />
-                        <HookFormInputContainerWithCheckbox<EmployeeFormData>
-                            label="X / Twitter"
-                            name={EmployeesFormDataEnum.X}
-                            register={register}
-                            errors={errors}
-                            registerOptions={{
-                                ...conditionalRequired(XCheckbox, "Якщо повинен бути X / Twitter, то надайте посилання")
-                            }}
-
-                            isChecked={XCheckbox}
-                            handleFunction={(e) => handleSocialMediaCheckbox(
-                                e,
-                                EmployeesFormDataUICheckboxesEnum.XCHECKBOX
-                            )}
-                        />
-                        <HookFormInputContainerWithCheckbox<EmployeeFormData>
-                            label="Youtube"
-                            name={EmployeesFormDataEnum.YOUTUBE}
-                            register={register}
-                            errors={errors}
-                            registerOptions={{
-                                ...conditionalRequired(youtubeCheckbox, "Якщо повинен бути Youtube, то надайте посилання")
-                            }}
-
-                            isChecked={youtubeCheckbox}
-                            handleFunction={(e) => handleSocialMediaCheckbox(
-                                e,
-                                EmployeesFormDataUICheckboxesEnum.YOUTUBECHECKBOX
-                            )}
-                        /> */}
                     </div>
                 </div>
 

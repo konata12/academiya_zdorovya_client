@@ -8,14 +8,14 @@ const navigationSlice = createSlice({
     name: 'navigation',
     initialState,
     reducers: {
-        setFormDefaultValues(state, action: { payload: boolean }) {
+        setFormDefaultValuesNavigation(state, action: { payload: boolean }) {
             state.formDefaultValues = action.payload
         }
     }
 })
 
 export const {
-    setFormDefaultValues
+    setFormDefaultValuesNavigation
 } = navigationSlice.actions
 
 export default navigationSlice.reducer

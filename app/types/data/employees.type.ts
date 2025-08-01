@@ -15,7 +15,7 @@ export interface Employee {
     X: string | null
     youtube: string | null
     workSpecialities: string[]
-    achivements: string[]
+    achivements: string[] | null
     backgroundImgColor: EmployeesBackgroundImgColorType
     image: string
 }
@@ -62,7 +62,22 @@ export interface EmployeeFormData {
     errors: EmployeeFormDataErrorsType
 }
 // CREATE/UPDATE FORM DATA
-export interface CreateEmployeesFormData {
+export interface CreateEmployeeFormData {
+    name: string
+    surname: string
+    position: string
+    description: string
+    degree: string
+    instagram?: string
+    facebook?: string
+    X?: string
+    youtube?: string
+    workSpecialities: string[]
+    achivements?: string[]
+    backgroundImgColor: EmployeesBackgroundImgColorType
+    image: string
+}
+export interface UpdateEmployeeRequestIsEuqalCheck {
     name: string
     surname: string
     position: string

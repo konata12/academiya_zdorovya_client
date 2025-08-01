@@ -16,6 +16,7 @@ export default function InputContainerWithCheckbox({
     changeEvent,
 }: InputContainerWithCheckboxProps) {
     const checkboxId = `${inputId}_checkbox`
+    value = value || ''
 
     return (
         <div className={`${styles.inputContainer} ${className?.inputContainer || ''}`}>

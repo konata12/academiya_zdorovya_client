@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
-import { setFormDefaultValues } from '@/app/utils/redux/navigation/navigationSlice'
+import { setFormDefaultValuesNavigation } from '@/app/utils/redux/navigation/navigationSlice'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -33,7 +33,7 @@ export default function SafeLink({
                 return;
             }
         }
-        dispatch(setFormDefaultValues(true)) // after leaving page set formDefaultValues in redux to initial
+        dispatch(setFormDefaultValuesNavigation(true)) // after leaving page set formDefaultValues in redux to initial
         router.push(href); // Navigate manually
     };
 

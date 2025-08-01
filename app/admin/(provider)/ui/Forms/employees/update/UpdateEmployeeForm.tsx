@@ -1,187 +1,173 @@
 'use client'
 
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
-import { RootState } from '@/app/utils/redux/store'
-import React, { useCallback, useEffect, useRef } from 'react'
-import styles from './UpdateEmployeeForm.module.scss'
-import { SubmitHandler, useFieldArray, useForm, useWatch } from 'react-hook-form'
-import { Employee, AhivementsFormDataEnum, EmployeesBackgroundImgColorEnum, EmployeesCheckboxesType, EmployeeFormData, EmployeesFormDataEnum, EmployeesFormDataUICheckboxesEnum, EmployeesFormDataUIModalsStatesEnum, EmployeesModalsStatesType, WorkSpecialitysFormDataEnum } from '@/app/types/data/employees.type'
-import HookFormInputContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm'
-import HookFormTextareaContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/TextareaContainer/TextareaContainerHookForm'
+import FormElementContainerWithCheckboxHookForm from '@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox';
+import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
+import InputContainerWithCheckbox from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainerWithCheckbox/InputContainerWithCheckbox';
+import InputContainerWithDeleteBtn from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtn';
+import React, { useEffect } from 'react';
+import styles from './UpdateEmployeeForm.module.scss';
+import {
+    addEmployeeUpdateStringArrayValue,
+    deleteEmployeeUpdateStringArrayValue,
+    resetEmployeeUpdateForm,
+    setAchivementsFirstValue,
+    setAllEmployeeUpdateDataOnLink,
+    setEmployeeUpdateBackgroundImgColor
+} from '@/app/utils/redux/employees/employeeUpdateFormSlice';
+import {
+    addModalState,
+    deleteModalState,
+    setEmployeeUIFormValues,
+    setModalState,
+    triggerEmployeeUICheckbox
+} from '@/app/utils/redux/employees/employeesFormUISlice';
+import { clear } from 'idb-keyval';
+import { resetEmployeeUpdateError, setEmployeeUpdateError, updateEmployee } from '@/app/utils/redux/employees/employeesSlice';
+import {
+    CreateEmployeeFormData,
+    Employee,
+    EmployeeFormData,
+    EmployeesBackgroundImgColorEnum,
+    EmployeesCheckboxesType,
+    EmployeesFormDataEnum,
+    EmployeesFormDataEnumType,
+    EmployeesFormDataUICheckboxesEnum,
+    EmployeesFormDataUIModalsStatesEnum,
+    EmployeesModalsStatesType,
+    EmployeeSocialMediaKeysType,
+    EmployeeStringArrayKeysType,
+    EmployeeStringKeysWithoutImageType,
+    UpdateEmployeeRequestIsEuqalCheck
+} from '@/app/types/data/employees.type';
+import { FormInputError } from '@/app/types/data/form.type';
+import { fullfilled } from '@/app/services/response.service';
+import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
+import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
+import { RootState } from '@/app/utils/redux/store';
+import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useEmployeeFormHandleChange } from '@/app/utils/hooks/admin/employeeForm/useEmployeeFormHandleChange';
+import { useEmployeeFormSlice } from '@/app/utils/hooks/admin/employeeForm/useEmployeeFormSlice';
+import { useParams, useRouter } from 'next/navigation';
+
+
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import { addModalState, deleteModalState, setCheckboxesDefaultValuesForUpdateForm, setEmployeeBackgroundImgColorCheckbox, setEmployeeUIInitialState, setModalState, setModalStateInitValue, triggerEmployeeUICheckbox } from '@/app/utils/redux/employees/employeesFormUISlice'
-import HookFormInputContainerWithCheckbox from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithCheckbox/InputContainerWithCheckboxHookForm'
-import HookFormInputContainerWithDeleteBtn from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainerWithDeleteBtn/InputContainerWithDeleteBtnHookForm'
-import FormElementContainerWithCheckboxHookForm from '@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox'
 import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow'
-import { fullfilled } from '@/app/services/response.service'
-import { useParams, useRouter } from 'next/navigation'
-import { updateEmployee as updateEmployeeAction, setEmployeeUpdateError, updateEmployeeInState } from '@/app/utils/redux/employees/employeesSlice'
 import Checkbox from '@/app/admin/(provider)/ui/Checkbox/Checkbox'
-import { isEqual } from 'lodash'
-import { setFormDefaultValues } from '@/app/utils/redux/navigation/navigationSlice'
+import PreviewEmployeeImage from '@/app/admin/(provider)/ui/Forms/employees/PreviewEmployeeImage/PreviewEmployeeImage';
+import { transferImageBetweenIndexDBStores } from '@/app/services/indexedDB.service';
+import _ from 'lodash';
+import { useFormChangeCheck } from '@/app/utils/hooks/common/useFormChangeCheck';
+
+const storeName = 'employee_images'
+const updateStoreName = 'employee_update_images'
 
 export default function UpdateEmployeeFrom() {
-    const { employees, error } = useAppSelector((state: RootState) => state.employees)
+    const {
+        errors,
+        ...data
+    } = useAppSelector((state: RootState) => state.employeeUpdateForm)
     const {
         instagramCheckbox,
         facebookCheckbox,
         XCheckbox,
         youtubeCheckbox,
         achivementsCheckbox,
-        backgroundImgColor,
 
         workSpecialitysModalIsOpen,
         achivementsModalIsOpen,
     } = useAppSelector((state: RootState) => state.employeesFormUI)
-
-    const formDefaultValuesRef = useRef(true)
+    const { employees, error } = useAppSelector((state: RootState) => state.employees)
 
     const router = useRouter()
+    const { id } = useParams<{ id: string }>()
     const dispatch = useAppDispatch()
-
-    const { id } = useParams() // get id from url
-    const employee = employees.find(employee => {
-        if (id) return employee.id === +id
-    })
-    const formDefaultValues = createFromDefaultValues(employee)
-    console.log(formDefaultValues)
-
+    const handleChange = useEmployeeFormHandleChange(updateStoreName)
     const {
-        register,
-        handleSubmit,
-        control,
-        reset,
-        watch,
-        formState: { errors },
-    } = useForm<EmployeeFormData>({
-        defaultValues: {
-            [EmployeesFormDataEnum.WORKSPECIALITIES]: [{
-                value: ''
-            }],
-            [EmployeesFormDataEnum.ACHIVEMENTS]: [{
-                value: ''
-            }],
-        }
-    })
+        setBasicValueError,
+        setStringArrayValueError,
+    } = useEmployeeFormSlice(updateStoreName)
 
-    const formValues = useWatch({ control })
-    const image = watch(EmployeesFormDataEnum.IMAGE)?.[0] // Watch the image input
+    const oldEmployee = employees.find(employee => `${employee.id}` === id)
+    // console.log('data:', data)
 
+    // GET FORM VALUES FROM SLICE
     const {
-        fields: workSpecialityFields,
-        append: appendWorkSpeciality,
-        remove: removeWorkSpeciality
-    } = useFieldArray({ // needs array of objects to work properly
-        control,
-        name: EmployeesFormDataEnum.WORKSPECIALITIES,
-    });
-    const {
-        fields: achivementFields,
-        append: appendAchivement,
-        remove: removeAchivement
-    } = useFieldArray({ // needs array of objects to work properly
-        control,
-        name: EmployeesFormDataEnum.ACHIVEMENTS,
-    });
-
-    // Reset form values when `employee` is available | just creates default values
-    useEffect(() => {
-        if (employee) {
-            reset(formDefaultValues);
-        }
-    }, [employee, reset])
-    // UI Slice state reset 
-    useEffect(() => {
-        if (employee) {
-            dispatch(setModalStateInitValue({
-                length: workSpecialityFields.length,
-                modalName: EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN
-            }))
-            dispatch(setModalStateInitValue({
-                length: achivementFields.length,
-                modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
-            }))
-            dispatch(setCheckboxesDefaultValuesForUpdateForm({
-                instagram: employee.instagram,
-                facebook: employee.facebook,
-                X: employee.X,
-                youtube: employee.youtube,
-                achivements: employee.achivements,
-                backgroundImgColor: employee.backgroundImgColor,
-            }))
-        }
-
-        return () => {
-            dispatch(setEmployeeUIInitialState())
-        }
-    }, [employee])
-    // CHECK IF FORM DATA IS DEFAULT
-    useEffect(() => {
-        formValues.image = undefined
-        const equal = isEqual(formValues, formDefaultValues)
-        formDefaultValuesRef.current = equal
-        dispatch(setFormDefaultValues(equal))
-
-        // after leaving page set formDefaultValues in redix to initial
-        return () => {
-            dispatch(setFormDefaultValues(true))
-        }
-    }, [formValues])
-    // CREATE QUIT PAGE LISTENERS
-    useEffect(() => {
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            if (!formDefaultValuesRef.current) {
-                e.preventDefault()
-                e.returnValue = ''
-            }
-        }
-
-        window.addEventListener('beforeunload', handleBeforeUnload)
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload)
-        }
-    }, [])
-
-    // CREATE ABOUT TREATMENT FUNCTION
-    const updateEmployee: SubmitHandler<EmployeeFormData> = async (data) => {
-        if (employee) {
-            const id = `${employee.id}`
-            const checkboxesAreDefault = !!employee.instagram === instagramCheckbox &&
-                !!employee.facebook === facebookCheckbox &&
-                !!employee.X === XCheckbox &&
-                !!employee.youtube === youtubeCheckbox &&
-                !!employee.achivements.length === achivementsCheckbox
-
-            //  IF NOT UPDATED DON'T ALLOW REQUEST
-            if (formDefaultValuesRef.current && checkboxesAreDefault) {
-                dispatch(setEmployeeUpdateError())
-                return
-            }
-
-            // CORRECTLY SET ACHIVEMENTS AND BACKGROUND COLOR
-            const achivements = data.achivements
-            if ((achivements?.length === 1 && achivements[0].value === '') || !achivementsCheckbox) data.achivements = undefined
-            if (!instagramCheckbox) data.instagram = undefined
-            if (!facebookCheckbox) data.facebook = undefined
-            if (!XCheckbox) data.X = undefined
-            if (!youtubeCheckbox) data.youtube = undefined
-            data.backgroundImgColor = backgroundImgColor
-
-            const response = await dispatch(updateEmployeeAction({ data, id }))
-            const isFulfilled = fullfilled(response.meta.requestStatus)
-            if (isFulfilled) {
-                data.image = null
-                dispatch(updateEmployeeInState({ data, id }))
-                router.push('/admin/employees')
-            }
+        name,
+        surname,
+        position,
+        description,
+        degree,
+        instagram,
+        facebook,
+        X,
+        youtube,
+        workSpecialities,
+        achivements,
+        backgroundImgColor,
+        image,
+    } = data
+    // CHECK IF DATA CHANGED
+    let oldData: UpdateEmployeeRequestIsEuqalCheck | undefined = undefined
+    if (oldEmployee) {
+        const {
+            id,
+            instagram,
+            facebook,
+            X,
+            youtube,
+            achivements,
+            ...oldEmployeeData
+        } = oldEmployee
+        oldData = {
+            ...oldEmployeeData,
+            instagram: (instagram && instagramCheckbox) ? instagram : undefined,
+            facebook: (facebook && facebookCheckbox) ? facebook : undefined,
+            X: (X && XCheckbox) ? X : undefined,
+            youtube: (youtube && youtubeCheckbox) ? youtube : undefined,
+            achivements: (achivements && achivementsCheckbox) ? achivements : undefined,
         }
     }
 
-    const conditionalRequired = useCallback((checkbox: boolean, requiredMessage: string) => {
-        return checkbox ? { required: requiredMessage } : {}
-    }, [])
+    // UI Slice state reset 
+    useEffect(() => {
+        // dispatch(setEmployeeUIFormValues(data))
+        if (oldEmployee) {
+            (async (employee: Employee) => {
+                const {
+                    id,
+                    instagram,
+                    facebook,
+                    X,
+                    youtube,
+                    achivements,
+                    ...employeeOtherData
+                } = employee
+                const setStore = getIndexedDBStoreForImages(updateStoreName)
+                // CLEAR PREVIOUS NEWS UPDATE FORM DATA IMAGES
+                await clear(setStore)
+
+                // TRANSFER IMAGES TO ANOTHER STORE
+                await transferImageBetweenIndexDBStores(employee.image, storeName, updateStoreName)
+
+                // SET DATA TO UPDATE SLICES
+                dispatch(resetEmployeeUpdateError())
+                dispatch(setAllEmployeeUpdateDataOnLink(employee))
+
+                dispatch(setEmployeeUIFormValues({
+                    ...employeeOtherData,
+                    instagram: instagram ? instagram : undefined,
+                    facebook: facebook ? facebook : undefined,
+                    X: X ? X : undefined,
+                    youtube: youtube ? youtube : undefined,
+                    achivements: achivements ? achivements : undefined,
+                }))
+            })(oldEmployee)
+        }
+    }, [employees])
+
+    // CHECK IF FORM DATA IS DEFAULT
+    useFormChangeCheck(oldData, data)
 
     const handleSocialMediaCheckbox = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -191,31 +177,51 @@ export default function UpdateEmployeeFrom() {
         dispatch(triggerEmployeeUICheckbox({ checkboxName, state }))
     }
     // HANDLE ARRAY FIELDS
-    const deleteWorkSpeciality = (index: number) => {
-        if (workSpecialityFields.length > 1) {
-            removeWorkSpeciality(index)
+    const deleteWorkSpeciality = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
+        e.preventDefault()
+
+        if (workSpecialities.length > 1) {
+            dispatch(deleteEmployeeUpdateStringArrayValue({
+                index,
+                field: EmployeesFormDataEnum.WORKSPECIALITIES
+            }))
             dispatch(deleteModalState({
                 index,
                 modalName: EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN
             }))
         }
     }
-    const addWorkSpeciality = () => {
-        appendWorkSpeciality({ value: '' })
+    const addWorkSpeciality = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        dispatch(addEmployeeUpdateStringArrayValue(EmployeesFormDataEnum.WORKSPECIALITIES))
         dispatch(addModalState({ modalName: EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN }))
     }
     const deleteAchivement = (index: number) => {
-        if (achivementFields.length > 1) {
-            removeAchivement(index)
+        if (achivements && achivements.length > 1) {
+            dispatch(deleteEmployeeUpdateStringArrayValue({
+                index,
+                field: EmployeesFormDataEnum.ACHIVEMENTS
+            }))
             dispatch(deleteModalState({
                 index,
                 modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
             }))
         }
     }
-    const addAchivement = () => {
-        appendAchivement({ value: '' })
+    const addAchivement = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        dispatch(addEmployeeUpdateStringArrayValue(EmployeesFormDataEnum.ACHIVEMENTS))
         dispatch(addModalState({ modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN }))
+    }
+    const handleAchievmentsCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const state = e.target.checked
+        dispatch(triggerEmployeeUICheckbox({
+            checkboxName: EmployeesFormDataUICheckboxesEnum.ACHIVEMENTSCHECKBOX,
+            state
+        }))
+        if (state && !achivements) {
+            dispatch(setAchivementsFirstValue())
+        }
     }
     // HANDLE MODAL STATES
     const setModalWindowState = (
@@ -226,64 +232,266 @@ export default function UpdateEmployeeFrom() {
         dispatch(setModalState({ index, state, modalName }))
     }
 
+    // CREATE EMPLOYEE FUNCTION
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        console.log('handleSubmit')
+        e.preventDefault()
+
+        // SET ERROR ARRAY
+        const errorsData: {
+            error: FormInputError,
+            id: Exclude<EmployeesFormDataEnumType, EmployeeStringArrayKeysType>
+            | `${EmployeesFormDataEnum.WORKSPECIALITIES}_${number}`
+            | `${EmployeesFormDataEnum.ACHIVEMENTS}_${number}`
+        }[] = []
+        // GET ARRAY OF DATA ENTRIES
+        const entries = Object.entries(data)
+        // SET ARRAYS FOR GROUPING FIELDS BY VALUE TYPES
+        const stringFields: EmployeeStringKeysWithoutImageType[] = [
+            EmployeesFormDataEnum.NAME,
+            EmployeesFormDataEnum.SURNAME,
+            EmployeesFormDataEnum.POSITION,
+            EmployeesFormDataEnum.DESCRIPTION,
+            EmployeesFormDataEnum.DEGREE,
+        ];
+
+        // FORM VALIDATION
+        entries.forEach((entry) => {
+            const entryKey = entry[0]
+            // VALIDATION FOR STRING VALUES
+            if (stringFields.includes(entryKey as EmployeeStringKeysWithoutImageType)) {
+                const key = entry[0] as EmployeeStringKeysWithoutImageType
+                const value = entry[1] as string
+
+                if (!value) {
+                    // SET APPROPRIATE MESSAGE ERROR
+                    let message: string
+                    switch (key) {
+                        case EmployeesFormDataEnum.NAME:
+                            message = "Ім'я обов'язкове"
+                            break;
+                        case EmployeesFormDataEnum.SURNAME:
+                            message = "Прізвище обов'язкове"
+                            break;
+                        case EmployeesFormDataEnum.POSITION:
+                            message = "Посада обов'язкова"
+                            break;
+                        case EmployeesFormDataEnum.DESCRIPTION:
+                            message = "Короткий опис обов'язковий"
+                            break;
+                        case EmployeesFormDataEnum.DEGREE:
+                            message = "Інформація про освіту та практику обов'язкова"
+                            break;
+                    }
+
+                    dispatch(setBasicValueError({
+                        field: key,
+                        message
+                    }));
+
+                    errorsData.push({
+                        id: key,
+                        error: { message }
+                    });
+                }
+            }
+            // VALIDATION FOR SOCIAL MEDIA VALUES (only if checkbox is checked)
+            else if (
+                entryKey === EmployeesFormDataEnum.INSTAGRAM && instagramCheckbox ||
+                entryKey === EmployeesFormDataEnum.FACEBOOK && facebookCheckbox ||
+                entryKey === EmployeesFormDataEnum.X && XCheckbox ||
+                entryKey === EmployeesFormDataEnum.YOUTUBE && youtubeCheckbox
+            ) {
+                const key = entry[0] as EmployeeSocialMediaKeysType
+                const value = entry[1] as string
+
+                if (!value) {
+                    const message = "Будь ласка, введіть посилання"
+                    dispatch(setBasicValueError({
+                        field: key,
+                        message
+                    }));
+
+                    errorsData.push({
+                        id: key,
+                        error: { message }
+                    });
+                }
+            }
+            // VALIDATION FOR STRING ARRAY VALUES
+            else if (
+                entryKey === EmployeesFormDataEnum.WORKSPECIALITIES ||
+                entryKey === EmployeesFormDataEnum.ACHIVEMENTS && achivementsCheckbox
+            ) {
+                const values = entry[1] as string[]
+                let message: string = "Введіть напрямок діяльності"
+                switch (entryKey) {
+                    case EmployeesFormDataEnum.WORKSPECIALITIES:
+                        message = "Введіть напрямок діяльності"
+                        break;
+                    case EmployeesFormDataEnum.ACHIVEMENTS:
+                        message = "Введіть досягнення"
+                        break;
+                }
+
+                values.forEach((speciality, index) => {
+                    if (!speciality) {
+                        dispatch(setStringArrayValueError({
+                            field: entryKey,
+                            index,
+                            message,
+                        }));
+
+                        errorsData.push({
+                            id: `${entryKey}_${index}`,
+                            error: { message }
+                        });
+                    }
+                })
+            }
+            // VALIDATION FOR IMAGE
+            else if (entryKey === EmployeesFormDataEnum.IMAGE) {
+                const value = entry[1] as string
+                const message = 'Завантажте фото'
+
+                if (!value) {
+                    dispatch(setBasicValueError({
+                        field: entryKey,
+                        message
+                    }));
+
+                    errorsData.push({
+                        id: entryKey,
+                        error: { message }
+                    });
+                }
+            }
+        })
+        if (errors[EmployeesFormDataEnum.IMAGE].message) {
+            errorsData.push({
+                id: EmployeesFormDataEnum.IMAGE,
+                error: errors[EmployeesFormDataEnum.IMAGE]
+            });
+        }
+
+        // SCROLL TO ERROR INPUT
+        if (errorsData.length) {
+            console.log(errorsData)
+            // SCROLL TO INPUT
+            if (errorsData[0].id === EmployeesFormDataEnum.IMAGE) {
+                (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).labels?.[0].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                })
+            } else {
+                (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                })
+            }
+            return
+        }
+        if (!image) return
+
+        const dataIsEuqal = _.isEqual(data, oldData)
+
+        // IF DATA HASN'T CHANGED SET ERROR AND RETURN
+        if (dataIsEuqal) {
+            dispatch(setEmployeeUpdateError())
+            return
+        }
+
+        const requestData: CreateEmployeeFormData = {
+            name,
+            surname,
+            position,
+            description,
+            degree,
+            instagram: instagramCheckbox ? instagram : undefined,
+            facebook: facebookCheckbox ? facebook : undefined,
+            X: XCheckbox ? X : undefined,
+            youtube: youtubeCheckbox ? youtube : undefined,
+            workSpecialities,
+            achivements: achivementsCheckbox ? achivements : undefined,
+            backgroundImgColor,
+            image,
+        }
+
+        const response = await dispatch(updateEmployee({
+            oldImageName: oldData?.image,
+            data: requestData,
+            id,
+        }))
+        const isFulfilled = fullfilled(response.meta.requestStatus)
+        if (isFulfilled) {
+            // CLEAR DATA
+            clear(getIndexedDBStoreForImages(updateStoreName))
+            dispatch(resetEmployeeUpdateForm())
+            router.push('../')
+        }
+    }
+
     return (
         <form
-            onSubmit={handleSubmit(updateEmployee)}
+            onSubmit={handleSubmit}
             className={styles.createEmployeeForm}
         >
             <div className={styles.inputs}>
                 <div className={styles.mainInfo}>
                     <div className={styles.fullName}>
-                        <HookFormInputContainer<EmployeeFormData>
+                        <InputContainer
                             label="Ім'я"
+                            inputId={EmployeesFormDataEnum.NAME}
+                            value={name}
+                            error={errors[EmployeesFormDataEnum.NAME]}
                             className={{
                                 inputContainer: styles.nameInputContainer
                             }}
-                            name={EmployeesFormDataEnum.NAME}
-                            register={register}
-                            errors={errors}
-                            registerOptions={{
-                                required: "Ім'я обов'язкове"
-                            }}
+                            changeEvent={(e) => handleChange({
+                                e,
+                                elementType: EmployeesFormDataEnum.NAME,
+                            })}
                         />
-
-                        <HookFormInputContainer<EmployeeFormData>
+                        <InputContainer
                             label="Прізвище"
+                            inputId={EmployeesFormDataEnum.SURNAME}
+                            value={surname}
+                            error={errors[EmployeesFormDataEnum.SURNAME]}
                             className={{
                                 inputContainer: styles.surnameInputContainer
                             }}
-                            name={EmployeesFormDataEnum.SURNAME}
-                            register={register}
-                            errors={errors}
-                            registerOptions={{
-                                required: "Прізвище обов'язкове"
-                            }}
+                            changeEvent={(e) => handleChange({
+                                e,
+                                elementType: EmployeesFormDataEnum.SURNAME,
+                            })}
                         />
                     </div>
 
-                    <HookFormInputContainer<EmployeeFormData>
+                    <InputContainer
                         label="Посада"
+                        inputId={EmployeesFormDataEnum.POSITION}
+                        value={position}
+                        error={errors[EmployeesFormDataEnum.POSITION]}
                         className={{
                             inputContainer: styles.surnameInputContainer
                         }}
-                        name={EmployeesFormDataEnum.POSITION}
-                        register={register}
-                        errors={errors}
-                        registerOptions={{
-                            required: "Посада обов'язкова"
-                        }}
+                        changeEvent={(e) => handleChange({
+                            e,
+                            elementType: EmployeesFormDataEnum.POSITION,
+                        })}
                     />
-                    <HookFormTextareaContainer<EmployeeFormData>
+                    <InputContainer
                         label="Коротко про лікаря"
+                        inputId={EmployeesFormDataEnum.DESCRIPTION}
+                        value={description}
+                        error={errors[EmployeesFormDataEnum.DESCRIPTION]}
                         className={{
                             inputContainer: styles.surnameInputContainer
                         }}
-                        name={EmployeesFormDataEnum.DESCRIPTION}
-                        register={register}
-                        errors={errors}
-                        registerOptions={{
-                            required: "Короткий опис обов'язковий"
-                        }}
+                        changeEvent={(e) => handleChange({
+                            e,
+                            elementType: EmployeesFormDataEnum.DESCRIPTION,
+                        })}
                     />
                 </div>
 
@@ -293,65 +501,69 @@ export default function UpdateEmployeeFrom() {
                     </p>
 
                     <div className={styles.socialMediaCheckboxes}>
-                        <HookFormInputContainerWithCheckbox<EmployeeFormData>
-                            label="Instagram"
-                            name={EmployeesFormDataEnum.INSTAGRAM}
-                            register={register}
-                            errors={errors}
-                            registerOptions={{
-                                ...conditionalRequired(instagramCheckbox, "Якщо повинен бути Instagram, то надайте посилання")
-                            }}
-
+                        <InputContainerWithCheckbox
+                            label={'Instagram'}
+                            inputId={EmployeesFormDataEnum.INSTAGRAM}
+                            value={instagram}
                             isChecked={instagramCheckbox}
-                            handleFunction={(e) => handleSocialMediaCheckbox(
+                            error={errors[EmployeesFormDataEnum.INSTAGRAM]}
+
+                            handleCheckbox={(e) => handleSocialMediaCheckbox(
                                 e,
                                 EmployeesFormDataUICheckboxesEnum.INSTAGRAMCHECKBOX
                             )}
+                            changeEvent={(e) => handleChange({
+                                e,
+                                elementType: EmployeesFormDataEnum.INSTAGRAM,
+                            })}
                         />
-                        <HookFormInputContainerWithCheckbox<EmployeeFormData>
-                            label="Facebook"
-                            name={EmployeesFormDataEnum.FACEBOOK}
-                            register={register}
-                            errors={errors}
-                            registerOptions={{
-                                ...conditionalRequired(facebookCheckbox, "Якщо повинен бути Facebook, то надайте посилання")
-                            }}
-
+                        <InputContainerWithCheckbox
+                            label={'Facebook'}
+                            inputId={EmployeesFormDataEnum.FACEBOOK}
+                            value={facebook}
                             isChecked={facebookCheckbox}
-                            handleFunction={(e) => handleSocialMediaCheckbox(
+                            error={errors[EmployeesFormDataEnum.FACEBOOK]}
+
+                            handleCheckbox={(e) => handleSocialMediaCheckbox(
                                 e,
                                 EmployeesFormDataUICheckboxesEnum.FACEBOOKCHECKBOX
                             )}
+                            changeEvent={(e) => handleChange({
+                                e,
+                                elementType: EmployeesFormDataEnum.FACEBOOK,
+                            })}
                         />
-                        <HookFormInputContainerWithCheckbox<EmployeeFormData>
-                            label="X / Twitter"
-                            name={EmployeesFormDataEnum.X}
-                            register={register}
-                            errors={errors}
-                            registerOptions={{
-                                ...conditionalRequired(XCheckbox, "Якщо повинен бути X / Twitter, то надайте посилання")
-                            }}
-
+                        <InputContainerWithCheckbox
+                            label={'X / Twitter'}
+                            inputId={EmployeesFormDataEnum.X}
+                            value={X}
                             isChecked={XCheckbox}
-                            handleFunction={(e) => handleSocialMediaCheckbox(
+                            error={errors[EmployeesFormDataEnum.X]}
+
+                            handleCheckbox={(e) => handleSocialMediaCheckbox(
                                 e,
                                 EmployeesFormDataUICheckboxesEnum.XCHECKBOX
                             )}
+                            changeEvent={(e) => handleChange({
+                                e,
+                                elementType: EmployeesFormDataEnum.X,
+                            })}
                         />
-                        <HookFormInputContainerWithCheckbox<EmployeeFormData>
-                            label="Youtube"
-                            name={EmployeesFormDataEnum.YOUTUBE}
-                            register={register}
-                            errors={errors}
-                            registerOptions={{
-                                ...conditionalRequired(youtubeCheckbox, "Якщо повинен бути Youtube, то надайте посилання")
-                            }}
-
+                        <InputContainerWithCheckbox
+                            label={'Youtube'}
+                            inputId={EmployeesFormDataEnum.YOUTUBE}
+                            value={youtube}
                             isChecked={youtubeCheckbox}
-                            handleFunction={(e) => handleSocialMediaCheckbox(
+                            error={errors[EmployeesFormDataEnum.YOUTUBE]}
+
+                            handleCheckbox={(e) => handleSocialMediaCheckbox(
                                 e,
                                 EmployeesFormDataUICheckboxesEnum.YOUTUBECHECKBOX
                             )}
+                            changeEvent={(e) => handleChange({
+                                e,
+                                elementType: EmployeesFormDataEnum.YOUTUBE,
+                            })}
                         />
                     </div>
                 </div>
@@ -361,19 +573,20 @@ export default function UpdateEmployeeFrom() {
                         Освіта та практика
                     </p>
 
-                    <HookFormTextareaContainer<EmployeeFormData>
+                    <TextareaContainer
                         label="Освіта та практика"
+                        inputId={EmployeesFormDataEnum.DEGREE}
+                        value={degree}
+                        error={errors[EmployeesFormDataEnum.DEGREE]}
                         className={{
                             inputLabel: styles.label,
                             textarea: styles.textarea
                         }}
-                        name={EmployeesFormDataEnum.DEGREE}
-                        register={register}
-                        errors={errors}
-                        minRows={3}
-                        registerOptions={{
-                            required: "Інформація про освіту та практику обов'язкова"
-                        }}
+                        changeEvent={(e) => handleChange({
+                            e,
+                            elementType: EmployeesFormDataEnum.DEGREE,
+                        })}
+                        minRows={5}
                     />
                 </div>
 
@@ -383,36 +596,42 @@ export default function UpdateEmployeeFrom() {
                     </p>
 
                     <div className={styles.workSpecialitiesContainer}>
-                        {workSpecialityFields.map((field, index) => {
+                        {workSpecialities.map((speciality, i) => {
                             return (
-                                <div key={field.id}>
-                                    <HookFormInputContainerWithDeleteBtn<EmployeeFormData>
-                                        label={`Напрямок ${index + 1}`}
-                                        name={EmployeesFormDataEnum.WORKSPECIALITIES}
-                                        register={register}
-                                        errors={errors}
-                                        registerOptions={{
-                                            required: "Введіть напрямок діяльності"
+                                <div key={i}>
+                                    <InputContainerWithDeleteBtn
+                                        label={`Напрямок ${i + 1}`}
+                                        inputId={EmployeesFormDataEnum.WORKSPECIALITIES}
+                                        value={speciality}
+                                        index={i}
+                                        error={errors[EmployeesFormDataEnum.WORKSPECIALITIES][i]}
+                                        className={{
+                                            inputContainer: styles.surnameInputContainer
                                         }}
-                                        fieldKey={WorkSpecialitysFormDataEnum.VALUE}
-                                        index={index}
-                                        handleFunction={() => {
+
+                                        handleDelete={() => {
                                             setModalWindowState(
-                                                index,
+                                                i,
                                                 true,
                                                 EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN
                                             )
                                         }}
+                                        changeEvent={(e) => handleChange({
+                                            e,
+                                            arrIndex: i,
+                                            elementType: EmployeesFormDataEnum.WORKSPECIALITIES,
+                                        })}
+
                                     />
 
-                                    {workSpecialitysModalIsOpen[index] && <ModalWindow
+                                    {workSpecialitysModalIsOpen[i] && <ModalWindow
                                         title="Ви дійсно бажаєте видалити це відділеня?"
                                     >
                                         <button
                                             className={`btn cancel`}
                                             onClick={() => {
                                                 setModalWindowState(
-                                                    index,
+                                                    i,
                                                     false,
                                                     EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN
                                                 )
@@ -421,7 +640,7 @@ export default function UpdateEmployeeFrom() {
                                             Скасувати видалення
                                         </button>
                                         <button
-                                            onClick={() => { deleteWorkSpeciality(index) }}
+                                            onClick={(e) => { deleteWorkSpeciality(e, i) }}
                                             className={`btn blue lg`}
                                         >
                                             Підтвердити
@@ -442,49 +661,52 @@ export default function UpdateEmployeeFrom() {
                 </div>
 
                 <div className={styles.achivements}>
-                    <FormElementContainerWithCheckboxHookForm<EmployeeFormData>
+                    <FormElementContainerWithCheckboxHookForm
                         label='Досягнення за час роботи (опціонально*)'
-                        name={EmployeesFormDataEnum.ACHIVEMENTS}
+                        checkboxId={EmployeesFormDataEnum.ACHIVEMENTS}
                         isChecked={achivementsCheckbox}
-                        handleFunction={(e) => handleSocialMediaCheckbox(
-                            e,
-                            EmployeesFormDataUICheckboxesEnum.ACHIVEMENTSCHECKBOX
-                        )}
+                        handleFunction={(e) => handleAchievmentsCheckbox(e)}
                         className={{
                             inputLabel: `title sm left ${styles.label}`
                         }}
                     >
                         <div className={styles.workSpecialitiesContainer}>
-                            {achivementFields.map((field, index) => {
+                            {achivements && achivements.map((achivement, i) => {
                                 return (
-                                    <div key={field.id}>
-                                        <HookFormInputContainerWithDeleteBtn<EmployeeFormData>
-                                            label={`Досягнення ${index + 1}`}
-                                            name={EmployeesFormDataEnum.ACHIVEMENTS}
-                                            register={register}
-                                            errors={errors}
-                                            registerOptions={{
-                                                ...conditionalRequired(achivementsCheckbox, "Якщо повинні бути досягнення, то введіть їх")
+                                    <div key={i}>
+                                        <InputContainerWithDeleteBtn
+                                            label={`Напрямок ${i + 1}`}
+                                            inputId={EmployeesFormDataEnum.ACHIVEMENTS}
+                                            value={achivement}
+                                            index={i}
+                                            error={errors[EmployeesFormDataEnum.ACHIVEMENTS][i]}
+                                            className={{
+                                                inputContainer: styles.surnameInputContainer
                                             }}
-                                            fieldKey={AhivementsFormDataEnum.VALUE}
-                                            index={index}
-                                            handleFunction={() => {
+
+                                            handleDelete={() => {
                                                 setModalWindowState(
-                                                    index,
+                                                    i,
                                                     true,
                                                     EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
                                                 )
                                             }}
+                                            changeEvent={(e) => handleChange({
+                                                e,
+                                                arrIndex: i,
+                                                elementType: EmployeesFormDataEnum.ACHIVEMENTS,
+                                            })}
+
                                         />
 
-                                        {achivementsModalIsOpen[index] && <ModalWindow
+                                        {achivementsModalIsOpen[i] && <ModalWindow
                                             title="Ви дійсно бажаєте видалити це відділеня?"
                                         >
                                             <button
                                                 className={`btn cancel`}
                                                 onClick={() => {
                                                     setModalWindowState(
-                                                        index,
+                                                        i,
                                                         false,
                                                         EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN
                                                     )
@@ -493,7 +715,7 @@ export default function UpdateEmployeeFrom() {
                                                 Скасувати видалення
                                             </button>
                                             <button
-                                                onClick={() => { deleteAchivement(index) }}
+                                                onClick={() => { deleteAchivement(i) }}
                                                 className={`btn blue lg`}
                                             >
                                                 Підтвердити
@@ -530,7 +752,7 @@ export default function UpdateEmployeeFrom() {
                                     const newColor = backgroundImgColor === EmployeesBackgroundImgColorEnum.BLUE
                                         ? EmployeesBackgroundImgColorEnum.GREY
                                         : EmployeesBackgroundImgColorEnum.BLUE
-                                    dispatch(setEmployeeBackgroundImgColorCheckbox(newColor))
+                                    dispatch(setEmployeeUpdateBackgroundImgColor(newColor))
                                 }}
                                 className={{
                                     label: styles.checkbox
@@ -552,60 +774,21 @@ export default function UpdateEmployeeFrom() {
                         {'Завантажте фото (без фону, в форматі:  .png)'}
                     </p>
 
-                    <input
-                        id='upload_image'
-                        type="file"
-                        hidden
-                        {...register(EmployeesFormDataEnum.IMAGE, {
-                            required: "Завантажте фото",
+                    <ImageInputContainer
+                        inputId={EmployeesFormDataEnum.IMAGE}
+                        changeEvent={(e) => handleChange({
+                            e,
+                            elementType: EmployeesFormDataEnum.IMAGE,
+                            oldValue: image
                         })}
-                    />
-                    <label
-                        className={`btn blue sm`}
-                        htmlFor="upload_image"
                     >
-                        Завантажити
-                    </label>
-
-                    <div className={styles.imagePreview}>
-                        {errors[EmployeesFormDataEnum.IMAGE] && <p className={`error ${styles.errorMessage}`}>
-                            {errors[EmployeesFormDataEnum.IMAGE].message}
-                        </p>}
-
-                        <div className={styles.images}>
-                            <div
-                                className={`
-                                    ${styles.imageContainer} 
-                                    ${styles.small} 
-                                    ${errors[EmployeesFormDataEnum.IMAGE] ? styles.error : ''} 
-                                    ${styles[backgroundImgColor]}
-                                `}
-                            >
-                                {image && <img
-                                    className={styles.image}
-                                    src={URL.createObjectURL(image)}
-                                    alt="Preview"
-                                />}
-                            </div>
-                            <div
-                                className={`
-                                    ${styles.imageContainer} 
-                                    ${styles.big} 
-                                    ${errors[EmployeesFormDataEnum.IMAGE] ? styles.error : ''} 
-                                    ${styles[backgroundImgColor]}
-                                `}
-                            >
-                                {image && <img
-                                    className={styles.image}
-                                    src={URL.createObjectURL(image)}
-                                    alt="Preview"
-                                />}
-                            </div>
-                        </div>
-                        <p className={styles.caption}>
-                            Попередній перегляд
-                        </p>
-                    </div>
+                        <PreviewEmployeeImage
+                            image={image}
+                            error={errors[EmployeesFormDataEnum.IMAGE]}
+                            indexedDBStoreName={updateStoreName}
+                            backgroundImgColor={backgroundImgColor}
+                        />
+                    </ImageInputContainer>
                 </div>
             </div>
 
@@ -615,44 +798,4 @@ export default function UpdateEmployeeFrom() {
             />
         </form>
     )
-}
-
-function createFromDefaultValues(employee: Employee | undefined): EmployeeFormData {
-    if (employee) {
-        return {
-            name: employee.name,
-            surname: employee.surname,
-            position: employee.position,
-            description: employee.description,
-            degree: employee.degree,
-            instagram: employee.instagram !== null ? employee.instagram : undefined,
-            facebook: employee.facebook !== null ? employee.facebook : undefined,
-            X: employee.X !== null ? employee.X : undefined,
-            youtube: employee.youtube !== null ? employee.youtube : undefined,
-            workSpecialities: employee.workSpecialities.length ? employee.workSpecialities.map((item) => {
-                return { value: item }
-            }) : [{ value: '' }],
-            achivements: employee.achivements.length ? employee.achivements.map((item) => {
-                return { value: item }
-            }) : [{ value: '' }],
-            backgroundImgColor: employee.backgroundImgColor,
-            image: null,
-        }
-    } else {
-        return {
-            name: '',
-            surname: '',
-            position: '',
-            description: '',
-            degree: '',
-            instagram: undefined,
-            facebook: undefined,
-            X: undefined,
-            youtube: undefined,
-            workSpecialities: [{ value: '' }],
-            achivements: [{ value: '' }],
-            backgroundImgColor: EmployeesBackgroundImgColorEnum.BLUE,
-            image: null,
-        }
-    }
 }

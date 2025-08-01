@@ -1,6 +1,13 @@
-import { EmployeesBackgroundImgColorType, EmployeesCheckboxesType, EmployeesFormDataUI, EmployeesModalsStatesType } from "@/app/types/data/employees.type";
-import { createSlice } from "@reduxjs/toolkit";
-import { set } from "lodash";
+import {
+    CreateEmployeeFormData,
+    EmployeeFormData,
+    EmployeesBackgroundImgColorType,
+    EmployeesCheckboxesType,
+    EmployeesFormDataEnum,
+    EmployeesFormDataUI,
+    EmployeesModalsStatesType
+} from '@/app/types/data/employees.type';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: EmployeesFormDataUI = {
     // CHECKBOXES
@@ -47,19 +54,6 @@ const employeesFormUISlice = createSlice({
         },
 
         // MODALS
-        setModalStateInitValue(state, action: {
-            payload: {
-                length: number,
-                modalName: EmployeesModalsStatesType
-            }
-        }) {
-            const modalName = action.payload.modalName
-            const lehgth = action.payload.length
-
-            for (let i = 0; i < lehgth; i++) {
-                state[modalName].push(false)
-            }
-        },
         setModalState(state, action: {
             payload: {
                 state: boolean,
@@ -95,8 +89,37 @@ const employeesFormUISlice = createSlice({
         },
 
         // INITIAL STATE
-        setEmployeeUIInitialState() {
-            return initialState
+        setEmployeeUIFormValues(state, action: {
+            payload: Omit<EmployeeFormData, 'errors'>
+        }) {
+            const {
+                workSpecialities,
+                achivements,
+            } = action.payload
+
+            // SET CHECKBOCES
+            for (const key in action.payload) {
+                switch (key) {
+                    case EmployeesFormDataEnum.INSTAGRAM:
+                    case EmployeesFormDataEnum.FACEBOOK:
+                    case EmployeesFormDataEnum.X:
+                    case EmployeesFormDataEnum.YOUTUBE:
+                        const valueSoc = action.payload[key]
+
+                        state[`${key}Checkbox`] = !!valueSoc
+                        break;
+
+                    case EmployeesFormDataEnum.ACHIVEMENTS:
+                        const valueAch = action.payload[key]
+
+                        state[`${key}Checkbox`] = valueAch && !!valueAch.length ? true : false
+                        break;
+                }
+            }
+
+            // SET MODAL VALUES
+            state.workSpecialitysModalIsOpen = new Array(workSpecialities.length).fill(false)
+            if (achivements) state.achivementsModalIsOpen = new Array(achivements.length).fill(false)
         }
     }
 })
@@ -106,12 +129,11 @@ export const {
     triggerEmployeeUICheckbox,
     setCheckboxesDefaultValuesForUpdateForm,
     // MODALS
-    setModalStateInitValue,
     setModalState,
     addModalState,
     deleteModalState,
     // INITIAL STATE
-    setEmployeeUIInitialState,
+    setEmployeeUIFormValues,
 } = employeesFormUISlice.actions
 
 export default employeesFormUISlice.reducer

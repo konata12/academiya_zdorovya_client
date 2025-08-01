@@ -28,6 +28,7 @@ import { addAboutTreatmentUpdateTreatmentType, deleteAboutTreatmentUpdateTreatme
 import { useEffect } from 'react';
 import { transferImageBetweenIndexDBStores } from '@/app/services/indexedDB.service';
 import _ from 'lodash';
+import { useFormChangeCheck } from '@/app/utils/hooks/common/useFormChangeCheck';
 
 
 const storeName = 'about_treatment_images'
@@ -35,10 +36,8 @@ const updateStoreName = 'about_treatment_update_images'
 
 export default function UpdateAboutTreatmentForm() {
     const {
-        title,
-        treatmentTypes,
-        image,
         errors,
+        ...data
     } = useAppSelector((state: RootState) => state.aboutTreatmentUpdateForm)
     const { treatmentTypesModalIsOpen } = useAppSelector((state: RootState) => state.aboutTreatmentsFormUI)
     const { aboutTreatments, error } = useAppSelector((state: RootState) => state.aboutTreatment)
@@ -49,6 +48,18 @@ export default function UpdateAboutTreatmentForm() {
     const handleChange = useAboutTreatmentFormHandleChange(updateStoreName)
 
     const oldAboutTreatment = aboutTreatments.find(aboutTreatment => `${aboutTreatment.id}` === id)
+    // GET FORM VALUES FROM SLICE
+    const {
+        title,
+        treatmentTypes,
+        image,
+    } = data
+    // CHECK IF DATA CHANGED
+    let oldData: CreateAboutTreatmentFormData | undefined = undefined
+    if (oldAboutTreatment) {
+        const { id, ...oldNewsData } = oldAboutTreatment
+        oldData = oldNewsData
+    }
 
     // LOAD DATA TO FORM AND LOAD IMAGE TO UPLOAD STORE
     useEffect(() => {
@@ -68,8 +79,9 @@ export default function UpdateAboutTreatmentForm() {
             })(oldAboutTreatment)
         }
     }, [aboutTreatments])
-    console.log('treatmentTypesModalIsOpen:', treatmentTypesModalIsOpen)
-    console.log(errors)
+
+    // CHECK IF FORM DATA IS DEFAULT
+    useFormChangeCheck(oldData, data)
 
     // TREATMENT TYPES FUNCTIONS
     const addTreatmentType = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -172,13 +184,6 @@ export default function UpdateAboutTreatmentForm() {
             image
         }
         console.log('data: ', data)
-
-        // CHECK IF DATA CHANGED
-        let oldData: CreateAboutTreatmentFormData | undefined = undefined
-        if (oldAboutTreatment) {
-            const { id, ...oldNewsData } = oldAboutTreatment
-            oldData = oldNewsData
-        }
 
         const dataIsEuqal = _.isEqual(data, oldData)
 

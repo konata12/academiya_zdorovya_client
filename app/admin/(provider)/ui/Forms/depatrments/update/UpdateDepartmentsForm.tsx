@@ -7,12 +7,13 @@ import { useParams, useRouter } from 'next/navigation'; import { GOOGLE_MAPS_URL
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { RootState } from '@/app/utils/redux/store';
 import { setUpdateError, updateDepartment as updateDepartmentAction, updateDepartmentInState } from "@/app/utils/redux/departments/departmentsSlice"
-import { setFormDefaultValues as setFormDefaultValuesRedux } from '@/app/utils/redux/navigation/navigationSlice'
+import { setFormDefaultValuesNavigation } from '@/app/utils/redux/navigation/navigationSlice'
 import { Department, DepartmentsDefaultFormData, DepartmentsFormData, DepartmentsFormDataEnum } from '@/app/types/data/departments.type';
 import { isEqual } from 'lodash';
 import HookFormInputContainer from '@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm';
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton';
 import { fullfilled } from '@/app/services/response.service';
+import { useFormChangeCheck } from '@/app/utils/hooks/common/useFormChangeCheck';
 
 export default function UpdateDepartmentForm() {
     const [formDefaultValues, setFormDefaultValues] = useState(true)
@@ -53,40 +54,7 @@ export default function UpdateDepartmentForm() {
     }, [department, reset])
 
     // CHECK IF FORM DATA IS DEFAULT
-    useEffect(() => {
-        if (department) {
-            const equal = checkIsEqual(formValues, department)
-            setFormDefaultValues(equal)
-        }
-    }, [formValues, department])
-
-    // Update the ref whenever formDefaultValues changes
-    useEffect(() => {
-        formDefaultValuesRef.current = formDefaultValues
-        // update defultVelues state in redux
-        dispatch(setFormDefaultValuesRedux(formDefaultValuesRef.current))
-
-        // after leaving page set formDefaultValues in redix to initial
-        return () => {
-            dispatch(setFormDefaultValuesRedux(true))
-        }
-    }, [formDefaultValues])
-
-    // CREATE QUIT PAGE LISTENERS
-    useEffect(() => {
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            if (!formDefaultValuesRef.current) {
-                e.preventDefault()
-                e.returnValue = ''
-            }
-        }
-
-        window.addEventListener('beforeunload', handleBeforeUnload)
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload)
-        }
-    }, [])
+    useFormChangeCheck(department, formValues)
 
     const updateDepartment: SubmitHandler<DepartmentsFormData> = async (data) => {
         const id = `${department?.id}`

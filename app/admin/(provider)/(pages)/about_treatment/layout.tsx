@@ -3,20 +3,14 @@
 import React, { useEffect } from 'react';
 import styles from './layout.module.scss';
 import TableLine from './../../ui/Tables/ListOption/TableLine';
-import { AboutTreatment } from '@/app/types/data/about_treatment.type';
 import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation.service';
-import { clear } from 'idb-keyval';
 import {
     closeAboutTreatmentsModal,
     deleteAboutTreatment as deleteAboutTreatmentAction,
     fetchAboutTreatments,
     openAboutTreatmentsModal,
-    resetAboutTreatmentUpdateError
 } from '@/app/utils/redux/about_treatment/aboutTreatmentSlice';
-import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
 import { RootState } from '@/app/utils/redux/store';
-import { setAllAboutTreatmentDataOnLink } from '@/app/utils/redux/about_treatment/aboutTreatmentUpdateFormSlice';
-import { transferImageBetweenIndexDBStores } from '@/app/services/indexedDB.service';
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -27,9 +21,6 @@ import DeleteModalWindow from '@/app/admin/(provider)/ui/Modals/DeleteModalWindo
 import { fullfilled } from '@/app/services/response.service';
 
 const titles = ['Послуга', 'Опції']
-
-const storeName = 'about_treatment_images'
-const updateStoreName = 'about_treatment_update_images'
 
 export default function WhatWeTreat({
     children,
@@ -55,9 +46,7 @@ export default function WhatWeTreat({
     const deleteAboutTreatment = async (id: number) => {
         const response = await dispatch(deleteAboutTreatmentAction(id))
         const isFulfilled = fullfilled(response.meta.requestStatus)
-        if (isFulfilled) {
-            router.push('/admin/about_treatment')
-        }
+        if (isFulfilled) router.push('/admin/about_treatment')
     }
     const openModalWindow = (i: number) => {
         dispatch(openAboutTreatmentsModal({ i }))
