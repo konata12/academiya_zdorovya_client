@@ -14,6 +14,14 @@ import {
     setDetailsStateOrder as setNewsUpdateDetailsStateOrder,
     updateDetailsComponent as updateNewsUpdateDetailsComponent
     } from '@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice';
+import {
+    addServiceTreatmentTypeCreateDetailsComponent,
+    removeServiceTreatmentTypeCreateDetailsComponent,
+    resetServiceTreatmentTypeCreateDetailsComponentsOrder,
+    setServiceTreatmentTypeCreateDetailsComponentError,
+    setServiceTreatmentTypeCreateDetailsStateOrder,
+    updateServiceTreatmentTypeCreateDetailsComponent
+    } from '@/app/utils/redux/details/services/serviceTreatmentTypeCreateDetailsOrderSlice';
 import { DetailsOrderSliceNameType } from '@/app/types/data/details.type';
 import {
     resetNewsFromData,
@@ -31,12 +39,16 @@ import {
     setNewsUpdateFormError,
     setNewsUpdateFormTitle
     } from '@/app/utils/redux/news/newsUpdateFormSlice';
+import { resetServiceTreatmentTypeCreateFormData, setServiceTreatmentTypeCreateFormBackgroundImg, setServiceTreatmentTypeCreateFormDescription, setServiceTreatmentTypeCreateFormDetails, setServiceTreatmentTypeCreateFormError, setServiceTreatmentTypeCreateFormTitle } from '@/app/utils/redux/services/serviceTreatmentTypeCreateFormSlice';
 import { useMemo } from 'react';
+import { addServiceTreatmentTypeUpdateDetailsComponent, removeServiceTreatmentTypeUpdateDetailsComponent, resetServiceTreatmentTypeUpdateDetailsComponentsOrder, setServiceTreatmentTypeUpdateDetailsComponentError, setServiceTreatmentTypeUpdateDetailsStateOrder, updateServiceTreatmentTypeUpdateDetailsComponent } from '@/app/utils/redux/details/services/serviceTreatmentTypeUpdateDetailsOrderSlice';
+import { resetServiceTreatmentTypeUpdateFormData, setServiceTreatmentTypeUpdateFormBackgroundImg, setServiceTreatmentTypeUpdateFormDescription, setServiceTreatmentTypeUpdateFormDetails, setServiceTreatmentTypeUpdateFormError, setServiceTreatmentTypeUpdateFormTitle } from '@/app/utils/redux/services/serviceTreatmentTypeUpdateFormSlice';
 
 
 export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
     const actions = useMemo(() => {
         switch (orderSliceName) {
+            // NEWS
             case "newsCreateDetailsOrder":
                 return {
                     // DETAILS ORDER SLICE
@@ -57,7 +69,6 @@ export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
                     resetDetailsComponentsOrder: resetNewsDetailsComponentsOrder,
                     resetFromData: resetNewsFromData,
                 }
-
             case "newsUpdateDetailsOrder":
                 return {
                     // DETAILS ORDER SLICE
@@ -78,7 +89,49 @@ export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
                     resetDetailsComponentsOrder: resetNewsUpdateDetailsComponentsOrder,
                     resetFromData: resetNewsUpdateFromData,
                 }
-            // default: throw Error('useDetailsFormSlice error')
+            
+            // SERVICES
+            case "serviceTreatmentTypeCreateDetailsOrder":
+                return {
+                    // DETAILS ORDER SLICE
+                    addDetailsComponent: addServiceTreatmentTypeCreateDetailsComponent,
+                    removeDetailsComponent: removeServiceTreatmentTypeCreateDetailsComponent,
+                    updateDetailsComponent: updateServiceTreatmentTypeCreateDetailsComponent,
+                    setDetailsStateOrder: setServiceTreatmentTypeCreateDetailsStateOrder,
+                    setDetailsComponentError: setServiceTreatmentTypeCreateDetailsComponentError,
+
+                    // FORM SLICE
+                    submitForm: setServiceTreatmentTypeCreateFormDetails,
+                    setFormError: setServiceTreatmentTypeCreateFormError,
+                    setTitle: setServiceTreatmentTypeCreateFormTitle,
+                    setDescription: setServiceTreatmentTypeCreateFormDescription,
+                    setBackgroundImage: setServiceTreatmentTypeCreateFormBackgroundImg,
+
+                    // RESET DATA
+                    resetDetailsComponentsOrder: resetServiceTreatmentTypeCreateDetailsComponentsOrder,
+                    resetFromData: resetServiceTreatmentTypeCreateFormData,
+                }
+
+            case "serviceTreatmentTypeUpdateDetailsOrder":
+                return {
+                    // DETAILS ORDER SLICE
+                    addDetailsComponent: addServiceTreatmentTypeUpdateDetailsComponent,
+                    removeDetailsComponent: removeServiceTreatmentTypeUpdateDetailsComponent,
+                    updateDetailsComponent: updateServiceTreatmentTypeUpdateDetailsComponent,
+                    setDetailsStateOrder: setServiceTreatmentTypeUpdateDetailsStateOrder,
+                    setDetailsComponentError: setServiceTreatmentTypeUpdateDetailsComponentError,
+
+                    // FORM SLICE
+                    submitForm: setServiceTreatmentTypeUpdateFormDetails,
+                    setFormError: setServiceTreatmentTypeUpdateFormError,
+                    setTitle: setServiceTreatmentTypeUpdateFormTitle,
+                    setDescription: setServiceTreatmentTypeUpdateFormDescription,
+                    setBackgroundImage: setServiceTreatmentTypeUpdateFormBackgroundImg,
+
+                    // RESET DATA
+                    resetDetailsComponentsOrder: resetServiceTreatmentTypeUpdateDetailsComponentsOrder,
+                    resetFromData: resetServiceTreatmentTypeUpdateFormData,
+                }
         }
     }, [orderSliceName])
 

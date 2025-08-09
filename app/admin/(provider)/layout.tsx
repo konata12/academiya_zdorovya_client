@@ -40,8 +40,6 @@ export default function Admin({
         refreshTokensAndCheckIsLogin()
     }, [])
 
-
-
     return (
         <>
             <div className={styles.layout}>

@@ -24,6 +24,7 @@ export interface FromElementContainerWithCheckboxProps
     extends CheckboxProps {
     children: React.ReactNode;
     className?: FormElementWithCheckboxStyles;
+    dependency?: any[]
     label: string;
     checkboxId: string;
 }
@@ -90,23 +91,49 @@ export interface TextareaContainer<T extends FormElements>
 }
 export interface InputContainerWithCheckboxProps
     extends InputContainerBasicProps,
-    InputContainerWithChangeEventProps<HTMLInputElement>{
-    
+    InputContainerWithChangeEventProps<HTMLInputElement> {
+
     handleCheckbox: (e: React.ChangeEvent<HTMLInputElement>) => void
     value: InputHTMLAttributes<HTMLInputElement>['value']
     type?: React.HTMLInputTypeAttribute;
     isChecked: boolean
     className?: FormElementWithCheckboxStyles
 }
-export interface InputContainerWithDeleteBtnProps 
+export interface TextareaContainerWithCheckboxProps
+    extends Omit<InputContainerWithCheckboxProps, 'changeEvent' | 'value'>,
+    InputContainerWithChangeEventProps<HTMLTextAreaElement> {
+    value: string | undefined | null
+    minRows?: number;
+    maxRows?: number;
+}
+export interface InputContainerWithDeleteBtnProps
     extends InputContainerBasicProps,
-    InputContainerWithChangeEventProps<HTMLInputElement>{
-    
+    InputContainerWithChangeEventProps<HTMLInputElement> {
+
     handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => void
     value: InputHTMLAttributes<HTMLInputElement>['value']
     index?: number
     type?: React.HTMLInputTypeAttribute;
     className?: InputContainerWithDeleteBtnStyles
+}
+export interface InputContainerWithTwoInputsWithDeleteBtnProps {
+
+    handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => void
+    labelOne: string
+    labelTwo: string
+    inputIdOne: string
+    inputIdTwo: string
+    valueOne: InputHTMLAttributes<HTMLInputElement>['value']
+    valueTwo: InputHTMLAttributes<HTMLInputElement>['value']
+    errorOne?: FormInputError
+    errorTwo?: FormInputError
+    index?: number
+    typeOne?: React.HTMLInputTypeAttribute;
+    typeTwo?: React.HTMLInputTypeAttribute;
+    className?: InputContainerWithTwoInputsWithDeleteBtnStyles
+
+    changeEventOne?: ChangeEvent<HTMLInputElement>
+    changeEventTwo?: ChangeEvent<HTMLInputElement>
 }
 
 // DEFAULT IMAGE 
@@ -145,6 +172,11 @@ interface FormElementWithCheckboxStyles extends InputContainerStyles {
 }
 interface InputContainerWithDeleteBtnStyles extends InputContainerStyles {
     buttonContainer?: string;
+}
+interface InputContainerWithTwoInputsWithDeleteBtnStyles {
+    buttonContainer?: string;
+    firstInput?: InputContainerStyles
+    secondInput?: InputContainerStyles
 }
 
 // STYLES OF DEFAULT INPUT IMAGE CONTAINERS

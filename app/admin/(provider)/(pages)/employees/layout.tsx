@@ -1,17 +1,22 @@
 'use client'
 
-import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow';
+import React, { useEffect } from 'react';
+import styles from './layout.module.scss';
+import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation.service';
+import {
+    closeEmployeesModal,
+    deleteEmployee as deleteEmployeeAction,
+    fetchEmployees,
+    openEmployeesModal
+    } from '@/app/utils/redux/employees/employeesSlice';
+import { fullfilled } from '@/app/services/response.service';
+import { RootState } from '@/app/utils/redux/store';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { usePathname, useRouter } from 'next/navigation';
+
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable';
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine';
-import React, { useEffect } from 'react'
-import styles from './layout.module.scss'
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
-import { RootState } from "@/app/utils/redux/store"
-import { usePathname, useRouter } from 'next/navigation';
-import { checkCreatePage, getUrlLastElement } from '@/app/services/navigation.service';
-import { fullfilled } from '@/app/services/response.service';
-import { closeEmployeesModal, deleteEmployeeFromState, fetchEmployees, openEmployeesModal, deleteEmployee as deleteEmployeeAction } from '@/app/utils/redux/employees/employeesSlice';
 import CommonTable404 from '@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404';
 import DeleteModalWindow from '@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow';
 

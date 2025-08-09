@@ -4,11 +4,12 @@ import aboutTreatmentsFormUISlice from '@/app/utils/redux/about_treatment/aboutT
 import aboutTreatmentUpdateFormSlice from '@/app/utils/redux/about_treatment/aboutTreatmentUpdateFormSlice';
 import authSlice from '@/app/utils/redux/auth/authSlice';
 import bookingServicesSlice from '@/app/utils/redux/booking_services/bookingServicesSlice';
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import departmentsSlice from '@/app/utils/redux/departments/departmentsSlice';
 import employeeCreateFormSlice from '@/app/utils/redux/employees/employeeCreateFormSlice';
-import employeeUpdateFormSlice from '@/app/utils/redux/employees/employeeUpdateFormSlice';
 import employeesFormUISlice from '@/app/utils/redux/employees/employeesFormUISlice';
 import employeesSlice from '@/app/utils/redux/employees/employeesSlice';
+import employeeUpdateFormSlice from '@/app/utils/redux/employees/employeeUpdateFormSlice';
 import navigationSlice from '@/app/utils/redux/navigation/navigationSlice';
 import newsCreateDetailsOrderSlice from '@/app/utils/redux/details/news/newsCreateDetailsOrderSlice';
 import newsCreateFormSlice from '@/app/utils/redux/news/newsCreateFormSlice';
@@ -17,6 +18,13 @@ import newsUpdateDetailsOrderSlice from '@/app/utils/redux/details/news/newsUpda
 import newsUpdateFormSlice from '@/app/utils/redux/news/newsUpdateFormSlice';
 import pricesCreateFormUiSlice from '@/app/utils/redux/prices/pricesCreateFormUiSlice';
 import pricesSlice from '@/app/utils/redux/prices/pricesSlice';
+import serviceCreateFormSlice from '@/app/utils/redux/services/serviceCreateFormSlice';
+import serviceFormUISlice from '@/app/utils/redux/services/serviceFromUISlice';
+import servicesSlice from '@/app/utils/redux/services/servicesSlice';
+import serviceTreatmentTypeCreateDetailsOrderSlice from '@/app/utils/redux/details/services/serviceTreatmentTypeCreateDetailsOrderSlice';
+import serviceTreatmentTypeCreateFormSlice from '@/app/utils/redux/services/serviceTreatmentTypeCreateFormSlice';
+import serviceTreatmentTypeUpdateDetailsOrderSlice from '@/app/utils/redux/details/services/serviceTreatmentTypeUpdateDetailsOrderSlice';
+import serviceTreatmentTypeUpdateFormSlice from '@/app/utils/redux/services/serviceTreatmentTypeUpdateFormSlice';
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { PersistPartial } from 'redux-persist/es/persistReducer';
@@ -30,7 +38,6 @@ import {
     PURGE,
     REGISTER,
 } from 'redux-persist';
-import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 
 // REDUCERS
 
@@ -46,6 +53,7 @@ const rootReducer = combineReducers({
     aboutTreatmentsFormUI: aboutTreatmentsFormUISlice,
     pricesCreateFormUI: pricesCreateFormUiSlice,
     employeesFormUI: employeesFormUISlice,
+    serviceFormUI: serviceFormUISlice,
 
     // ABOUT TREATMENT CREATION
     aboutTreatmentCreateForm: aboutTreatmentCreateFormSlice,
@@ -61,6 +69,13 @@ const rootReducer = combineReducers({
     newsCreateDetailsOrder: newsCreateDetailsOrderSlice,
     newsUpdateDetailsOrder: newsUpdateDetailsOrderSlice,
 
+    // SERVICE CREATION
+    serviceCreateForm: serviceCreateFormSlice,
+    serviceTreatmentTypeCreateForm: serviceTreatmentTypeCreateFormSlice,
+    serviceTreatmentTypeUpdateForm: serviceTreatmentTypeUpdateFormSlice,
+    serviceTreatmentTypeCreateDetailsOrder: serviceTreatmentTypeCreateDetailsOrderSlice,
+    serviceTreatmentTypeUpdateDetailsOrder: serviceTreatmentTypeUpdateDetailsOrderSlice,
+
     // API
     auth: authSlice,
     aboutTreatment: aboutTreatment,
@@ -69,6 +84,7 @@ const rootReducer = combineReducers({
     employees: employeesSlice,
     prices: pricesSlice,
     news: newsSlice,
+    services: servicesSlice,
 });
 
 const storage = createWebStorage('local')

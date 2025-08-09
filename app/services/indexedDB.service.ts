@@ -45,11 +45,24 @@ interface AppDBSchema {
         key: string;
         value: Blob;
     };
-    // Add other stores as needed
+
+    //SERVICE
+    'service_images': {
+        key: string;
+        value: Blob;
+    };
+    'service_update_images': {
+        key: string;
+        value: Blob;
+    };
+    'service_create_images': {
+        key: string;
+        value: Blob;
+    };
 }
 
 const DB_NAME = 'app_db';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 
 let dbInstance: Promise<IDBPDatabase<AppDBSchema>> | null = null;
 
@@ -97,7 +110,16 @@ export const getIndexedDB = async (): Promise<IDBPDatabase<AppDBSchema>> => {
                     db.createObjectStore('news_create_images');
                 }
 
-                // Add more stores as needed
+                // SERVICE
+                if (!db.objectStoreNames.contains('service_images')) {
+                    db.createObjectStore('service_images');
+                }
+                if (!db.objectStoreNames.contains('service_update_images')) {
+                    db.createObjectStore('service_update_images');
+                }
+                if (!db.objectStoreNames.contains('service_create_images')) {
+                    db.createObjectStore('service_create_images');
+                }
             },
 
             // Enhanced error handling

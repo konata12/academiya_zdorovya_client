@@ -1,5 +1,5 @@
-import { ErrorsResponses, ErrorsResponsesBasic, Status, StatusBasic } from '@/app/types/data/response.type'
-import React from 'react'
+import React from 'react';
+import { ErrorsResponsesBasic, StatusBasic } from '@/app/types/data/response.type';
 
 interface CommonTable404 {
     error: ErrorsResponsesBasic

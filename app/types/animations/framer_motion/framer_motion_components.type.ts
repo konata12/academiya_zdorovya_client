@@ -25,4 +25,5 @@ interface AnimatePresenseWithDynamicHeightStyle {
 export interface AnimatePresenseWithDynamicHeightProps extends AnimationWrapperBasicProps {
     childrenIsrendered: boolean
     className?: AnimatePresenseWithDynamicHeightStyle 
+    dependency?: any[]
 }

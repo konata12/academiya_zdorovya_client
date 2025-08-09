@@ -1,5 +1,13 @@
 import React, { useCallback } from 'react';
 import styles from './DetailsForm.module.scss';
+import { DraggableAreaContainerForDetails } from '@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainerForDetails';
+import { getIndexedDBStoreNameForDetailsImages } from '@/app/services/details.service';
+import { RootState } from '@/app/utils/redux/store';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
+import { useOrderedForm } from '@/app/utils/hooks/admin/detailsForm/useOrderedForm';
+import { useRouter } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
 import {
     DescriptionImage,
     DescriptionImageSize,
@@ -10,35 +18,14 @@ import {
     DetailsFormDataEnum,
     DetailsFormDataEnumType,
     DetailsFormDataErrorType,
-    DetailsFormDataType,
     DetailsFromProps,
     DetailsRedactorType,
     ImageError,
-    ImageFormData,
     ListError,
-    ListFormData,
     OrderComponent,
-    ParagraphFormData,
     QuouteError,
-    QuouteFormData,
-    TitleFormData,
 } from '@/app/types/data/details.type';
-import {
-    DndContext,
-    PointerSensor,
-    useDroppable,
-    useSensor,
-    useSensors
-} from '@dnd-kit/core';
-import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
-import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { RootState } from '@/app/utils/redux/store';
 
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
-import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
-import { useOrderedForm } from '@/app/utils/hooks/admin/detailsForm/useOrderedForm';
-import { useRouter } from 'next/navigation';
-import { v4 as uuidv4 } from 'uuid';
 import DetailsTitleInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsTitleInput/DetailsTitleInput'
 import CreateDetailsInputBtn from '@/app/admin/(provider)/ui/Forms/details/createDetailsInputBtn/CreateDetailsInputBtn'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
@@ -47,7 +34,6 @@ import DetailsParagraphInput from '@/app/admin/(provider)/ui/Forms/details/input
 import DetailsQuouteInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsQuouteInput/DetailsQuouteInput';
 import DetailsListInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsListInput/DetailsListInput';
 import DetailsImageInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput';
-import { getIndexedDBStoreNameForDetailsImages } from '@/app/services/details.service';
 
 
 export default function DetailsForm({
@@ -77,16 +63,6 @@ export default function DetailsForm({
         submitForm,
         setFormError,
     } = useDetailsFormSlice(orderSliceName)
-    const { setNodeRef } = useDroppable({
-        id: 'DetailsForm'
-    })
-    const sensors = useSensors(
-        useSensor(PointerSensor, {
-            activationConstraint: {
-                distance: 8, // Require 8px movement to start dragging
-            },
-        }),
-    );
 
     const imageStoreName = getIndexedDBStoreNameForDetailsImages(orderSliceName)
 
@@ -419,100 +395,89 @@ export default function DetailsForm({
                 })}
             </div>
 
-            <DndContext
-                sensors={sensors}
-                onDragEnd={(e) => handleDragEnd(e, order)}
-
-                modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+            <DraggableAreaContainerForDetails
+                handleDragEnd={handleDragEnd}
+                dndContextId='DetailsForm'
+                order={order}
+                droppableAreaClassName={styles.mainBody}
             >
-                <SortableContext
-                    items={order.map((element) => element.data.orderId)}
-                    strategy={horizontalListSortingStrategy}
-                >
-                    {/* DROPPABLE AREA */}
-                    <div
-                        ref={setNodeRef}
-                        className={styles.mainBody}
+                {order.map((element, index) => {
+                    return <DetailsDraggableContainer
+                        id={element.data.orderId}
+                        elementType={element.type}
+                        index={index}
+                        handleDelete={() => deleteInput(element)}
+                        key={index}
                     >
-                        {order.map((element, index) => {
-                            return <DetailsDraggableContainer
-                                id={element.data.orderId}
-                                elementType={element.type}
-                                index={index}
-                                handleDelete={() => deleteInput(element)}
-                                key={index}
-                            >
-                                {(() => {
-                                    const componentData = element.data
-                                    const key = componentData.orderId
+                        {(() => {
+                            const componentData = element.data
+                            const key = componentData.orderId
 
-                                    switch (element.type) {
-                                        case DetailsFormDataEnum.TITLES:
-                                            return <DetailsTitleInput
-                                                key={key}
-                                                componentData={element}
-                                                index={index}
-                                                orderSliceName={orderSliceName}
-                                                className={styles.orderedComponent}
-                                            />
+                            switch (element.type) {
+                                case DetailsFormDataEnum.TITLES:
+                                    return <DetailsTitleInput
+                                        key={key}
+                                        componentData={element}
+                                        index={index}
+                                        orderSliceName={orderSliceName}
+                                        className={styles.orderedComponent}
+                                    />
 
-                                        case DetailsFormDataEnum.PARAGRAPHS:
-                                            return <DetailsParagraphInput
-                                                key={key}
-                                                componentData={element}
-                                                index={index}
-                                                orderSliceName={orderSliceName}
-                                                className={styles.orderedComponent}
-                                            />
+                                case DetailsFormDataEnum.PARAGRAPHS:
+                                    return <DetailsParagraphInput
+                                        key={key}
+                                        componentData={element}
+                                        index={index}
+                                        orderSliceName={orderSliceName}
+                                        className={styles.orderedComponent}
+                                    />
 
-                                        case DetailsFormDataEnum.QUOUTES:
-                                            return <DetailsQuouteInput
-                                                key={key}
-                                                componentData={element}
-                                                index={index}
-                                                orderSliceName={orderSliceName}
-                                                className={{
-                                                    quoute: styles.orderedComponent,
-                                                    author: styles.orderedComponent,
-                                                    container: styles.orderedComponent,
-                                                }}
-                                            />
+                                case DetailsFormDataEnum.QUOUTES:
+                                    return <DetailsQuouteInput
+                                        key={key}
+                                        componentData={element}
+                                        index={index}
+                                        orderSliceName={orderSliceName}
+                                        className={{
+                                            quoute: styles.orderedComponent,
+                                            author: styles.orderedComponent,
+                                            container: styles.orderedComponent,
+                                        }}
+                                    />
 
-                                        case DetailsFormDataEnum.LISTS:
-                                            return <DetailsListInput
-                                                key={key}
-                                                componentData={element}
-                                                index={index}
-                                                orderSliceName={orderSliceName}
-                                                className={{
-                                                    option: styles.orderedComponent,
-                                                    container: styles.orderedComponent,
-                                                }}
-                                            />
+                                case DetailsFormDataEnum.LISTS:
+                                    return <DetailsListInput
+                                        key={key}
+                                        componentData={element}
+                                        index={index}
+                                        orderSliceName={orderSliceName}
+                                        className={{
+                                            option: styles.orderedComponent,
+                                            container: styles.orderedComponent,
+                                        }}
+                                    />
 
-                                        case DetailsFormDataEnum.IMAGES:
-                                            return <DetailsImageInput
-                                                key={key}
-                                                componentData={element}
-                                                index={index}
-                                                orderSliceName={orderSliceName}
-                                                indexedDBStoreName={imageStoreName}
-                                                className={{
-                                                    image: styles.orderedComponent,
-                                                    description: styles.orderedComponent,
-                                                    container: styles.orderedComponent,
-                                                }}
-                                            />
+                                case DetailsFormDataEnum.IMAGES:
+                                    return <DetailsImageInput
+                                        key={key}
+                                        componentData={element}
+                                        index={index}
+                                        orderSliceName={orderSliceName}
+                                        indexedDBStoreName={imageStoreName}
+                                        className={{
+                                            image: styles.orderedComponent,
+                                            description: styles.orderedComponent,
+                                            container: styles.orderedComponent,
+                                        }}
+                                    />
 
-                                        default:
-                                            break;
-                                    }
-                                })()}
-                            </DetailsDraggableContainer>
-                        })}
-                    </div>
-                </SortableContext>
-            </DndContext>
+                                default:
+                                    break;
+                            }
+                        })()}
+                    </DetailsDraggableContainer>
+                })}
+            </DraggableAreaContainerForDetails>
 
             <SubmitButton
                 error={null}

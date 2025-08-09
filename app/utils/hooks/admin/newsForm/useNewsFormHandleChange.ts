@@ -65,9 +65,10 @@ export function useNewsFormHandleChange(
                     message: ''
                 }))
 
+                // Delete old image from IndexedDB if it exists
                 if (oldValue) {
                     del(oldValue, store)
-                } // Delete old image from IndexedDB if it exists
+                }
                 if (newFile && newFile[0]) set(imageName, newFile[0], store)
 
                 dispatch(setBackgroundImage(imageName))

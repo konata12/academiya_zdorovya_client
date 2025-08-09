@@ -1,0 +1,15 @@
+@use '../../../../styles/variables' as *;
+
+.sectionTitle {
+    margin-bottom: 32px;
+}
+
+.tableLineOptions {
+    display: flex;
+    align-items: center;
+}
+
+.addButton {
+    width: 100%;
+    margin-top: 32px;
+}

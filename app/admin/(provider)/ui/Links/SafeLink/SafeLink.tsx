@@ -6,17 +6,21 @@ import { useRouter } from 'next/navigation'
 export default function SafeLink({
     href,
     children,
-    className
+    className,
+    customHandleClick
 }: {
     href: string
     children: React.ReactNode
     className?: string
+    customHandleClick?: (e: any) => void
 }) {
     const router = useRouter()
     const dispatch = useAppDispatch()
     const formDefaultValues = useAppSelector(state => state.navigation.formDefaultValues)
 
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        if (customHandleClick) customHandleClick(e)
+
         if (!formDefaultValues) {
             // Get the closest <a> element
             const linkElement = (e.target as HTMLElement).closest('a')

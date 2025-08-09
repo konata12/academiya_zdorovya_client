@@ -1,0 +1,23 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/functions' as *;
+
+.container {
+    position: relative;
+
+    .drag {
+        position: absolute;
+        top: 50%;
+        right: 24px;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+
+        .circle {
+            height: 4px;
+            width: 4px;
+            border-radius: 50%;
+            background-color: rgba-color($text-color-black, 0.5);
+        }
+    }
+}

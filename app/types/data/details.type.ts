@@ -1,15 +1,19 @@
+import { DraggableComponent } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer"
 import { FormInputError } from "@/app/types/data/form.type"
+import { OrderElementBasicType } from "@/app/utils/hooks/admin/dragAndDrop/useOrderedList"
 
 // MAIN
 export type NewsDetailsOrderSliceNameType = 'newsCreateDetailsOrder' | 'newsUpdateDetailsOrder'
+export type ServiceTreatmentTypeDetailsOrderSliceNameType = 'serviceTreatmentTypeCreateDetailsOrder' | 'serviceTreatmentTypeUpdateDetailsOrder'
 export type DetailsOrderSliceNameType = NewsDetailsOrderSliceNameType
+    | ServiceTreatmentTypeDetailsOrderSliceNameType
 
+export type ServiceDetailsOrderIndexedDBStoreNameType = 'service_create_images' | 'service_update_images'
 export type NewsDetailsOrderIndexedDBStoreNameType = 'news_create_images' | 'news_update_images'
 export type DetailsOrderIndexedDBStoreNameType = NewsDetailsOrderIndexedDBStoreNameType
+    | ServiceDetailsOrderIndexedDBStoreNameType
 
-export interface DetailsDataRenderElementBasicType {
-    order: number
-}
+export interface DetailsDataRenderElementBasicType extends OrderElementBasicType {}
 
 export type DescriptionImageSize = 'big' | 'small'
 
@@ -56,9 +60,7 @@ export type ComponentsFormDataEnum = TitleFormDataEnumType
 
 
 // FORM DATA
-export interface DetailsFromElementBasicType {
-    orderId: string
-}
+export interface DetailsFromElementBasicType extends DraggableComponent {}
 
 export interface TitleFormData extends DetailsFromElementBasicType {
     [TitleFormDataEnum.TITLE]: string

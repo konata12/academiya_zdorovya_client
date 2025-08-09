@@ -1,5 +1,4 @@
 import {
-    CreateEmployeeFormData,
     EmployeeFormData,
     EmployeesBackgroundImgColorType,
     EmployeesCheckboxesType,

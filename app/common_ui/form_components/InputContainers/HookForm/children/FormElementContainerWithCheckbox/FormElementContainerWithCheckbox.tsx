@@ -12,8 +12,9 @@ export default function FormElementContainerWithCheckbox({
 
     handleFunction,
     isChecked,
+    dependency
 }: FromElementContainerWithCheckboxProps) {
-
+    
     return (
         <div className={`${styles.inputContainer} ${className?.inputContainer || ''}`}>
             <div className={`${styles.checkboxContainer} ${className?.checkboxContainer || ''}`}>
@@ -32,6 +33,7 @@ export default function FormElementContainerWithCheckbox({
 
             <AnimatePresenseWithDynamicHeight
                 childrenIsrendered={isChecked}
+                dependency={dependency}
                 className={{
                     absoluteContainer: styles.absoluteContainer
                 }}

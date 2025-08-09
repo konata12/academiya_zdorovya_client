@@ -1,0 +1,40 @@
+@use '../../../../../../../../styles/variables' as *;
+@use '../../../../../../../../styles/mixins' as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    max-height: 508px;
+    overflow-y: scroll;
+
+    border-radius: $border-rad-5;
+    background-color: #fff;
+
+    .line {
+        cursor: pointer;
+        display: block;
+        padding: 32px 28px;
+        background-color: transparent;
+        border: none;
+        outline: none;
+
+        @include rgba-text($text-color-black, 0.5);
+        font-size: 17px;
+        text-align: start;
+
+        &.lineBorder {
+            border-top: 2px $disabled-color solid;
+        }
+
+        &.center {
+            cursor: auto;
+            text-align: center;
+            font-size: 32px;
+            color: $text-color-black;
+        }
+
+        &.error {
+            color: $error-color;
+        }
+    }
+}

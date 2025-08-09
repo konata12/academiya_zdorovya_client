@@ -87,10 +87,6 @@ export default function page() {
                 Новини
             </p>
 
-            <div className={styles.mainNews}>
-
-            </div>
-
             <div className={styles.allNews}>
                 {/* <p className={`title xs left ${styles.sectionTitle}`}>
                     Усі новини

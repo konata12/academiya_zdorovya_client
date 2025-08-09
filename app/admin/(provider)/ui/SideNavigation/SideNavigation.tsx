@@ -18,7 +18,7 @@ export const routes: Route[] = [
     { label: 'Що лікуємо', path: '/admin/about_treatment' },
     { label: 'Лікарі', path: '/admin/employees' },
     { label: 'Послуги для запису', path: '/admin/booking_services' },
-    { label: 'Послуги', path: '/admin/services' },
+    { label: 'Послуги', path: '/admin/services', checkRender: true },
     { label: 'Ціни на послуги', path: '/admin/prices' },
     { label: 'Відгуки', path: '/admin/reviews' },
     { label: 'Новини', path: '/admin/news', checkRender: true },
@@ -38,6 +38,13 @@ export default function SideNavigation() {
 
     const checkIsSideNavigationOpen = useCallback((routes: Route[]) => {
         const route = routes.find(route => pathname.includes(route.path))
+
+        // IF SERVICE PAGE
+        if (route && route.path === '/admin/services' && !pathname.includes('treatmentType')) {
+            return true
+        } else if (route && route.path === '/admin/services' && !pathname.includes('treatmentType')) {
+            return false
+        }
 
         // if route not checks render or pathArray length is less than 3
         if (!route?.checkRender || pathArray.length <= 3) return true

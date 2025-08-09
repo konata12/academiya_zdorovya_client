@@ -49,6 +49,12 @@ export function getIndexedDBStoreNameForDetailsImages(orderSliceName: DetailsOrd
         case 'newsUpdateDetailsOrder':
             store = 'news_update_images';
             break;
+        case 'serviceTreatmentTypeCreateDetailsOrder':
+            store = 'service_create_images';
+            break;
+        case 'serviceTreatmentTypeUpdateDetailsOrder':
+            store = 'service_update_images';
+            break;
 
         default:
             throw new Error(`Unknown order slice name: ${orderSliceName}`);
@@ -76,9 +82,11 @@ export async function parseDetailsCreateRequestFormData(
     formData: FormData,
     details: DetailsRedactorType,
     storeName: DetailsOrderIndexedDBStoreNameType,
+    mainKey?: string
 ) {
     const store = getIndexedDBStoreForImages(storeName);
     let imagesCount = 0
+    mainKey = mainKey ? mainKey : ''
 
     // loop through titles, paragraphs, quoutes, lists, images
     for (const [key, arr] of Object.entries(details)) {
@@ -90,7 +98,7 @@ export async function parseDetailsCreateRequestFormData(
             // loop through key/value of every title, paragraph, quoute, list, image
             for (const item of detailsValueArr) {
                 let [subKey, value] = item;
-                const formDataKey = `details[${key}][${index}][${subKey}]`;
+                const formDataKey = `${mainKey}${mainKey ? '[details]' : 'details'}[${key}][${index}][${subKey}]`;
 
                 // ADD LIST OPTIONS TO FORMDATA
                 if (subKey === ListFormDataEnum.OPTIONS && value instanceof Array) {

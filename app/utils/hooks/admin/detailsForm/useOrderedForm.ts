@@ -1,7 +1,5 @@
 import { arrayMove } from '@dnd-kit/sortable';
 import {
-    DetailsFormData,
-    DetailsFormDataEnum,
     OrderComponent,
     DetailsOrderSliceNameType,
     } from '@/app/types/data/details.type';

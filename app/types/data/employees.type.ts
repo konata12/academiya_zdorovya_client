@@ -123,8 +123,7 @@ export interface EmployeesFormDataUIModalsStates {
 export interface EmployeesFormDataUI
     extends
     EmployeesFormDataSocialMediaUICheckboxes,
-    EmployeesFormDataUIModalsStates {
-}
+    EmployeesFormDataUIModalsStates {}
 
 export type EmployeesCheckboxesType = `${EmployeesFormDataUICheckboxesEnum}`
 export type EmployeesModalsStatesType = `${EmployeesFormDataUIModalsStatesEnum}`
