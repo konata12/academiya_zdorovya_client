@@ -49,10 +49,10 @@ export function getIndexedDBStoreNameForDetailsImages(orderSliceName: DetailsOrd
         case 'newsUpdateDetailsOrder':
             store = 'news_update_images';
             break;
-        case 'serviceTreatmentTypeCreateDetailsOrder':
+        case 'serviceTypeCreateDetailsOrder':
             store = 'service_create_images';
             break;
-        case 'serviceTreatmentTypeUpdateDetailsOrder':
+        case 'serviceTypeUpdateDetailsOrder':
             store = 'service_update_images';
             break;
 

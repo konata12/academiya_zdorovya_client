@@ -1,5 +1,5 @@
-import {  ServiceTreatmentTypeDetailsOrderSliceNameType } from "@/app/types/data/details.type"
-import { ServiceTreatmentTypesEnum, ServiceTreatmentTypesEnumType } from "@/app/types/data/services.type"
+import {  ServiceTypeDetailsOrderSliceNameType } from "@/app/types/data/details.type"
+import { ServiceTypesEnum, ServiceTypesEnumType } from "@/app/types/data/services.type"
 import { FormElements } from "@/app/types/ui/form_components/inputContainers.type"
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice"
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages"
@@ -11,13 +11,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 interface ChangeEventProps<T extends FormElements> {
     e: React.ChangeEvent<T>
-    elementType: ServiceTreatmentTypesEnumType
+    elementType: ServiceTypesEnumType
     oldValue?: string | null
 }
 
-export function useServiceTreatmentTypeFormHandleChange(
+export function useServiceTypeFormHandleChange(
     indexedDBStoreName: string,
-    detailsOrderSliceName: ServiceTreatmentTypeDetailsOrderSliceNameType
+    detailsOrderSliceName: ServiceTypeDetailsOrderSliceNameType
 ) {
     const dispatch = useAppDispatch()
     const store = getIndexedDBStoreForImages(indexedDBStoreName)
@@ -37,31 +37,31 @@ export function useServiceTreatmentTypeFormHandleChange(
         const newFile = (e as React.ChangeEvent<HTMLInputElement>).target.files || null
 
         switch (elementType) {
-            case ServiceTreatmentTypesEnum.TITLE:
+            case ServiceTypesEnum.TITLE:
                 // REQUIRED ERROR HANDLING 
                 if (newValue.length > 0) dispatch(setFormError({
-                    field: ServiceTreatmentTypesEnum.TITLE,
+                    field: ServiceTypesEnum.TITLE,
                     message: ''
                 }))
 
                 dispatch(setTitle(newValue))
                 break;
 
-            case ServiceTreatmentTypesEnum.DESCRIPTION:
+            case ServiceTypesEnum.DESCRIPTION:
                 // REQUIRED ERROR HANDLING 
                 if (newValue.length > 0) dispatch(setFormError({
-                    field: ServiceTreatmentTypesEnum.DESCRIPTION,
+                    field: ServiceTypesEnum.DESCRIPTION,
                     message: ''
                 }))
 
                 dispatch(setDescription(newValue))
                 break;
 
-            case ServiceTreatmentTypesEnum.BACKGROUNDIMG:
+            case ServiceTypesEnum.BACKGROUNDIMG:
                 const imageName = uuidv4()
                 // REQUIRED ERROR HANDLING 
                 if (newValue.length > 0) dispatch(setFormError({
-                    field: ServiceTreatmentTypesEnum.BACKGROUNDIMG,
+                    field: ServiceTypesEnum.BACKGROUNDIMG,
                     message: ''
                 }))
 

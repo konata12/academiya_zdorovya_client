@@ -40,7 +40,7 @@ export function useServiceFormHandleChange(
         ServiceFormDataEnum.TITLE,
         ServiceFormDataEnum.SHORTDESCRIPTION,
         ServiceFormDataEnum.MAINDESCRIPTION,
-        ServiceFormDataEnum.TREATMENTTYPESDESCRIPTION,
+        ServiceFormDataEnum.SERVICETYPESDESCRIPTION,
     ];
 
     const handleChange = useCallback(<T extends FormElements>({

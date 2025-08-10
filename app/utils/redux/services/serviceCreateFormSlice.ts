@@ -1,12 +1,12 @@
 import {
-    CreateServiceTreatmentTypesFormData,
+    CreateServiceTypesFormData,
     ServiceEmployeeFormData,
     ServiceEmployeeBasicType,
     ServiceFormData,
     ServiceFormDataEnum,
     ServiceStringKeysType,
     ServiceTreatmentStageEnumType,
-    ServiceTreatmentTypeServiceFormData
+    ServiceTypeServiceFormData
     } from '@/app/types/data/services.type';
 import { createSlice } from '@reduxjs/toolkit';
 import { delMany } from 'idb-keyval';
@@ -24,8 +24,8 @@ const initialState: ServiceFormData = {
         description: '',
     }],
     mainDescription: '',
-    treatmentTypesDescription: null,
-    treatmentTypes: [],
+    serviceTypesDescription: null,
+    serviceTypes: [],
     employees: [],
     errors: {
         title: { message: '' },
@@ -36,8 +36,8 @@ const initialState: ServiceFormData = {
             description: { message: '' },
         }],
         mainDescription: { message: '' },
-        treatmentTypesDescription: { message: '' },
-        treatmentTypes: { message: '' },
+        serviceTypesDescription: { message: '' },
+        serviceTypes: { message: '' },
         employees: { message: '' },
     }
 }
@@ -83,29 +83,29 @@ const serviceCreateFormSlice = createSlice({
             const { field, index, value } = action.payload
             state.treatmentStages[index][field] = value
         },
-        // TREATMENT TYPES
-        deleteServiceCreateTreatmentTypesValue(state, action: { payload: number }) {
+        // SERVICE TYPES
+        deleteServiceCreateTypesValue(state, action: { payload: number }) {
             const index = action.payload
             const imagesNames: string[] = [
-                state.treatmentTypes[index].backgroundImg,
-                ...(state.treatmentTypes[index].details.images.map(image => image[ImageFormDataEnum.IMAGE]))
+                state.serviceTypes[index].backgroundImg,
+                ...(state.serviceTypes[index].details.images.map(image => image[ImageFormDataEnum.IMAGE]))
             ]
 
-            state.treatmentTypes.splice(index, 1)
+            state.serviceTypes.splice(index, 1)
             const store = getIndexedDBStoreForImages(indexedDBStoreName)
             delMany(imagesNames, store)
         },
-        setServiceCreateTreatmentTypesValue(state, action: {
+        setServiceCreateTypesValue(state, action: {
             payload: {
                 index: number,
-                value: ServiceTreatmentTypeServiceFormData,
+                value: ServiceTypeServiceFormData,
             }
         }) {
             const { index, value } = action.payload
-            if (!isNaN(index)) state.treatmentTypes[index] = value
+            if (!isNaN(index)) state.serviceTypes[index] = value
         },
-        setServiceCreateTreatmentTypes(state, action: { payload: ServiceTreatmentTypeServiceFormData[] }) {
-            state.treatmentTypes = action.payload
+        setServiceCreateTypes(state, action: { payload: ServiceTypeServiceFormData[] }) {
+            state.serviceTypes = action.payload
         },
         // TREATMENT EMPLOYEES
         addServiceCreateEmployeesValue(state, action: { payload: ServiceEmployeeBasicType }) {
@@ -160,10 +160,10 @@ export const {
     addServiceCreateTreatmentStagesValue,
     deleteServiceCreateTreatmentStagesValue,
     setServiceCreateTreatmentStagesValue,
-    // TREATMENT TYPES
-    deleteServiceCreateTreatmentTypesValue,
-    setServiceCreateTreatmentTypesValue,
-    setServiceCreateTreatmentTypes,
+    // SERVICE TYPES
+    deleteServiceCreateTypesValue,
+    setServiceCreateTypesValue,
+    setServiceCreateTypes,
     // TREATMENT EMPLOYEES
     addServiceCreateEmployeesValue,
     deleteServiceCreateEmployeesValue,

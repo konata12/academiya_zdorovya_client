@@ -8,16 +8,16 @@ import {
     addServiceCreateTreatmentStagesValue,
     deleteServiceCreateEmployeesValue,
     deleteServiceCreateTreatmentStagesValue,
-    deleteServiceCreateTreatmentTypesValue,
+    deleteServiceCreateTypesValue,
     resetServiceFromData,
     setServiceCreateEmployees,
     setServiceCreateTreatmentStagesError,
-    setServiceCreateTreatmentTypes
+    setServiceCreateTypes
 } from '@/app/utils/redux/services/serviceCreateFormSlice';
 import { DraggableAreaContainer } from '@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer';
 import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
 import { ImageInputPreviewFromIndexedDB } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB';
-import { resetServiceTreatmentTypeCreateFormData, setServiceTreatmentTypeCreateFormDataOnLink, setServiceTreatmentTypeCreateFormInitData } from '@/app/utils/redux/services/serviceTreatmentTypeCreateFormSlice';
+import { resetServiceTypeCreateFormData, setServiceTypeCreateFormDataOnLink, setServiceTypeCreateFormInitData } from '@/app/utils/redux/services/serviceTypeCreateFormSlice';
 import { RootState } from '@/app/utils/redux/store';
 import {
     CreateServiceEmployeesFormData,
@@ -36,12 +36,12 @@ import {
     ServiceTreatmentStageBasicType,
     ServiceTreatmentStageEnum,
     ServiceTreatmentStageFormDataError,
-    ServiceTreatmentTypesEnum,
-    ServiceTreatmentTypeServiceFormData
+    ServiceTypesEnum,
+    ServiceTypeServiceFormData
 } from '@/app/types/data/services.type';
 import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer';
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
-import { OrderedListServiceTreatmentTypeInterface, useOrderedList } from '@/app/utils/hooks/admin/dragAndDrop/useOrderedList';
+import { OrderedListServiceTypeInterface, useOrderedList } from '@/app/utils/hooks/admin/dragAndDrop/useOrderedList';
 import { useRouter } from 'next/navigation';
 import { useServiceFormHandleChange } from '@/app/utils/hooks/admin/serviceForm/useServiceFormHandleChange';
 import { useServiceFormSlice } from '@/app/utils/hooks/admin/serviceForm/useServiceFormSlice';
@@ -67,7 +67,7 @@ import { createService } from '@/app/utils/redux/services/servicesSlice';
 
 
 const indexedDBStoreName = 'service_create_images'
-const treatmentTypesTableTitles = ['Види послуг', 'Опції']
+const serviceTypesTableTitles = ['Види послуг', 'Опції']
 
 export default function CreateServicesForm() {
     const {
@@ -75,11 +75,11 @@ export default function CreateServicesForm() {
         ...data
     } = useAppSelector((state: RootState) => state.serviceCreateForm)
     const {
-        treatmentTypesCheckbox,
-        treatmentTypesDescriptionCheckbox,
+        serviceTypesCheckbox,
+        serviceTypesDescriptionCheckbox,
 
         treatmentStagesModalIsOpen,
-        treatmentTypesModalIsOpen,
+        serviceTypesModalIsOpen,
         employeesModalIsOpen,
     } = useAppSelector((state: RootState) => state.serviceFormUI)
     const { error } = useAppSelector((state: RootState) => state.services)
@@ -100,18 +100,20 @@ export default function CreateServicesForm() {
         image,
         treatmentStages,
         mainDescription,
-        treatmentTypesDescription,
-        treatmentTypes,
+        serviceTypesDescription,
+        serviceTypes,
         employees,
     } = data
 
     // HANDLE DRAG END PROPS DATA
-    const treatmentTypesDragData: OrderedListServiceTreatmentTypeInterface = {
-        order: treatmentTypes,
-        valueName: ServiceFormDataEnum.TREATMENTTYPES,
+    const serviceTypesDragData: OrderedListServiceTypeInterface = {
+        order: serviceTypes,
+        valueName: ServiceFormDataEnum.SERVICETYPES,
         sliceName: 'servicesCreateForm',
     }
     // console.log('data:', data)
+    // console.log('error.create:', error.create)
+    
     // console.log('errors:', errors)
     // console.log('ui data:', {
     // treatmentTypesCheckbox,
@@ -126,10 +128,10 @@ export default function CreateServicesForm() {
     useEffect(() => {
         const message = ''
         dispatch(setBasicValueError({
-            field: ServiceFormDataEnum.TREATMENTTYPES,
+            field: ServiceFormDataEnum.SERVICETYPES,
             message
         }));
-    }, [treatmentTypes])
+    }, [serviceTypes])
 
     // HANDLE ARRAY FIELDS
     const deleteTreatmentStage = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
@@ -148,27 +150,27 @@ export default function CreateServicesForm() {
         dispatch(addServiceCreateTreatmentStagesValue())
         dispatch(addModalState({ modalName: ServiceFormDataUIModalsStatesEnum.TREATMENTSTAGESMODALISOPEN }))
     }
-    const deteleTreatmentType = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
+    const deteleServiceType = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
         e.preventDefault()
 
-        dispatch(deleteServiceCreateTreatmentTypesValue(index))
+        dispatch(deleteServiceCreateTypesValue(index))
         dispatch(deleteModalState({
             index,
-            modalName: ServiceFormDataUIModalsStatesEnum.TREATMENTSTYPESMODALISOPEN
+            modalName: ServiceFormDataUIModalsStatesEnum.SERVICETYPESMODALISOPEN
         }))
     }
-    const addTreatmentType = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const addServiceType = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault()
 
-        dispatch(setServiceTreatmentTypeCreateFormInitData())
-        dispatch(addModalState({ modalName: ServiceFormDataUIModalsStatesEnum.TREATMENTSTYPESMODALISOPEN }))
+        dispatch(setServiceTypeCreateFormInitData())
+        dispatch(addModalState({ modalName: ServiceFormDataUIModalsStatesEnum.SERVICETYPESMODALISOPEN }))
     }
-    const linkToUpdateTreatmentType = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
+    const linkToUpdateServiceType = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
         e.preventDefault()
 
-        const treatmentType = treatmentTypes[index]
-        dispatch(setServiceTreatmentTypeCreateFormDataOnLink(treatmentType))
-        router.push(`/admin/services/create/treatmentType/${index}`)
+        const serviceType = serviceTypes[index]
+        dispatch(setServiceTypeCreateFormDataOnLink(serviceType))
+        router.push(`/admin/services/create/serviceType/${index}`)
     }
     const deleteEmoployee = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
         e.preventDefault()
@@ -254,9 +256,9 @@ export default function CreateServicesForm() {
                     });
                 }
             }
-            // VALIDATION FOR TREATMENTTYPES VALUE
-            else if (treatmentTypesCheckbox) {
-                if (entryKey === ServiceFormDataEnum.TREATMENTTYPESDESCRIPTION && treatmentTypesDescriptionCheckbox) {
+            // VALIDATION FOR SERVICETTYPES VALUE
+            else if (serviceTypesCheckbox) {
+                if (entryKey === ServiceFormDataEnum.SERVICETYPESDESCRIPTION && serviceTypesDescriptionCheckbox) {
                     const value = entry[1] as string
 
                     if (!value) {
@@ -272,8 +274,8 @@ export default function CreateServicesForm() {
                         });
                     }
                 }
-                if (entryKey === ServiceFormDataEnum.TREATMENTTYPES) {
-                    const value = entry[1] as ServiceTreatmentTypeServiceFormData[]
+                if (entryKey === ServiceFormDataEnum.SERVICETYPES) {
+                    const value = entry[1] as ServiceTypeServiceFormData[]
 
                     if (!value.length) {
                         const message = "Добавте вид послуги"
@@ -380,9 +382,9 @@ export default function CreateServicesForm() {
             shortDescription,
             treatmentStages: treatmentStages.map((stage, i) => { return { ...stage, order: i } }),
             mainDescription,
-            treatmentTypesDescription: treatmentTypesCheckbox && treatmentTypesDescriptionCheckbox
-                ? treatmentTypesDescription : null,
-            treatmentTypes: treatmentTypesCheckbox ? parseOrderedArrayToRequest(treatmentTypes) : null,
+            serviceTypesDescription: serviceTypesCheckbox && serviceTypesDescriptionCheckbox
+                ? serviceTypesDescription : null,
+            serviceTypes: serviceTypesCheckbox ? parseOrderedArrayToRequest(serviceTypes) : null,
             employees: parseOrderedArrayToRequest(employees),
             image,
         }
@@ -561,18 +563,18 @@ export default function CreateServicesForm() {
                 />
             </div>
 
-            <div className={styles.treatmentTypes}>
+            <div className={styles.serviceTypes}>
                 <FormElementContainerWithCheckbox
                     label='Види послуги (опціонально*)'
-                    checkboxId={ServiceFormDataUICheckboxesEnum.TREATMENTTYPESCHECKBOX}
-                    isChecked={treatmentTypesCheckbox}
+                    checkboxId={ServiceFormDataUICheckboxesEnum.SERVICETYPESCHECKBOX}
+                    isChecked={serviceTypesCheckbox}
                     dependency={[
-                        treatmentTypes,
-                        treatmentTypesDescriptionCheckbox,
+                        serviceTypes,
+                        serviceTypesDescriptionCheckbox,
                     ]}
                     handleFunction={(e) => handleServiceFormCheckbox(
                         e,
-                        ServiceFormDataUICheckboxesEnum.TREATMENTTYPESCHECKBOX,
+                        ServiceFormDataUICheckboxesEnum.SERVICETYPESCHECKBOX,
                     )}
                     className={{
                         inputLabel: `title sm left ${styles.label}`
@@ -580,47 +582,47 @@ export default function CreateServicesForm() {
                 >
                     <TextareaContainerWithCheckbox
                         label='Опис видів послуги (опціонально*)'
-                        inputId={ServiceFormDataEnum.TREATMENTTYPESDESCRIPTION}
-                        value={treatmentTypesDescription}
-                        isChecked={treatmentTypesDescriptionCheckbox}
-                        error={errors[ServiceFormDataEnum.TREATMENTTYPESDESCRIPTION]}
+                        inputId={ServiceFormDataEnum.SERVICETYPESDESCRIPTION}
+                        value={serviceTypesDescription}
+                        isChecked={serviceTypesDescriptionCheckbox}
+                        error={errors[ServiceFormDataEnum.SERVICETYPESDESCRIPTION]}
                         minRows={5}
 
                         handleCheckbox={(e) => handleServiceFormCheckbox(
                             e,
-                            ServiceFormDataUICheckboxesEnum.TREATMENTTYPESDESCRIPTIONCHECKBOX,
+                            ServiceFormDataUICheckboxesEnum.SERVICETYPESDESCRIPTIONCHECKBOX,
                         )}
                         changeEvent={(e) => handleChange({
                             e,
-                            elementType: ServiceFormDataEnum.TREATMENTTYPESDESCRIPTION,
+                            elementType: ServiceFormDataEnum.SERVICETYPESDESCRIPTION,
                         })}
                     />
 
-                    {!!treatmentTypes.length && <>
+                    {!!serviceTypes.length && <>
                         <p className={`inputLabel ${styles.tableTitle}`}>
                             Таблиця видів послуги
                         </p>
                         <CommonTable
-                            titles={treatmentTypesTableTitles}
+                            titles={serviceTypesTableTitles}
                         >
-                            <DraggableAreaContainer<OrderedListServiceTreatmentTypeInterface>
+                            <DraggableAreaContainer<OrderedListServiceTypeInterface>
                                 handleDragEnd={handleDragEnd}
                                 dndContextId='ServiceTratmentTypesList'
-                                data={treatmentTypesDragData}
+                                data={serviceTypesDragData}
                                 droppableAreaClassName={styles.mainBody}
                             >
-                                {treatmentTypes.map((treatmentType, i) => {
+                                {serviceTypes.map((serviceType, i) => {
                                     return <DraggableElementContainer
                                         key={i}
-                                        id={treatmentType.orderId}
+                                        id={serviceType.orderId}
                                         hasDraggableArea={true}
                                     >
                                         <TableLine>
                                             <span>
-                                                {treatmentType[ServiceTreatmentTypesEnum.TITLE]}
+                                                {serviceType[ServiceTypesEnum.TITLE]}
                                             </span>
 
-                                            {treatmentTypesModalIsOpen[i] && <ModalWindow
+                                            {serviceTypesModalIsOpen[i] && <ModalWindow
                                                 title="Ви дійсно бажаєте видалити цей етап?"
                                             >
                                                 <button
@@ -629,14 +631,14 @@ export default function CreateServicesForm() {
                                                         setModalWindowState(
                                                             i,
                                                             false,
-                                                            ServiceFormDataUIModalsStatesEnum.TREATMENTSTYPESMODALISOPEN
+                                                            ServiceFormDataUIModalsStatesEnum.SERVICETYPESMODALISOPEN
                                                         )
                                                     }}
                                                 >
                                                     Скасувати видалення
                                                 </button>
                                                 <button
-                                                    onClick={(e) => { deteleTreatmentType(e, i) }}
+                                                    onClick={(e) => { deteleServiceType(e, i) }}
                                                     className={`btn blue lg`}
                                                 >
                                                     Підтвердити
@@ -649,7 +651,7 @@ export default function CreateServicesForm() {
                                                         setModalWindowState(
                                                             i,
                                                             true,
-                                                            ServiceFormDataUIModalsStatesEnum.TREATMENTSTYPESMODALISOPEN
+                                                            ServiceFormDataUIModalsStatesEnum.SERVICETYPESMODALISOPEN
                                                         )
                                                     }
                                                     type='button'
@@ -659,7 +661,7 @@ export default function CreateServicesForm() {
                                                 </button>
                                                 <button
                                                     className={`btn blue sm`}
-                                                    onClick={(e) => linkToUpdateTreatmentType(e, i)}
+                                                    onClick={(e) => linkToUpdateServiceType(e, i)}
                                                 >
                                                     Змінити
                                                 </button>
@@ -679,11 +681,12 @@ export default function CreateServicesForm() {
                     </>}
 
                     <SafeLink
-                        className={`btn blue xl ${styles.btn} ${errors.treatmentTypes.message ? styles.error : ''}`}
-                        href={`/admin/services/create/treatmentType/${treatmentTypes.length}`}
-                        customHandleClick={(e) => addTreatmentType(e)}
+                        className={`btn blue xl ${styles.btn} ${errors.serviceTypes.message ? styles.error : ''}`}
+                        href={`/admin/services/create/serviceType/${serviceTypes.length}`}
+                        id={ServiceFormDataEnum.SERVICETYPES}
+                        customHandleClick={(e) => addServiceType(e)}
                     >
-                        {errors.treatmentTypes.message ? 'Добавте вид послуги' : 'Додати вид послуги'}
+                        {errors.serviceTypes.message ? 'Добавте вид послуги' : 'Додати вид послуги'}
                     </SafeLink>
                 </FormElementContainerWithCheckbox>
             </div>

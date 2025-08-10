@@ -3,12 +3,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: ServiceFormDataUI = {
     // CHECKBOXES
-    treatmentTypesCheckbox: false,
-    treatmentTypesDescriptionCheckbox: false,
+    serviceTypesCheckbox: false,
+    serviceTypesDescriptionCheckbox: false,
 
     // MODALS
     treatmentStagesModalIsOpen: [false],
-    treatmentTypesModalIsOpen: [],
+    serviceTypesModalIsOpen: [],
     employeesModalIsOpen: [],
 }
 
@@ -75,7 +75,7 @@ const serviceFormUISlice = createSlice({
 
             if (
                 state[modalName].length > 1 
-                || modalName === ServiceFormDataUIModalsStatesEnum.TREATMENTSTYPESMODALISOPEN
+                || modalName === ServiceFormDataUIModalsStatesEnum.SERVICETYPESMODALISOPEN
                 || modalName === ServiceFormDataUIModalsStatesEnum.EMPLOYEEMODALISOPEN
             ) {
                 state[modalName].splice(index, 1)

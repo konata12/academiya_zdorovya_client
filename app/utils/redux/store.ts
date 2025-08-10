@@ -21,10 +21,8 @@ import pricesSlice from '@/app/utils/redux/prices/pricesSlice';
 import serviceCreateFormSlice from '@/app/utils/redux/services/serviceCreateFormSlice';
 import serviceFormUISlice from '@/app/utils/redux/services/serviceFromUISlice';
 import servicesSlice from '@/app/utils/redux/services/servicesSlice';
-import serviceTreatmentTypeCreateDetailsOrderSlice from '@/app/utils/redux/details/services/serviceTreatmentTypeCreateDetailsOrderSlice';
-import serviceTreatmentTypeCreateFormSlice from '@/app/utils/redux/services/serviceTreatmentTypeCreateFormSlice';
-import serviceTreatmentTypeUpdateDetailsOrderSlice from '@/app/utils/redux/details/services/serviceTreatmentTypeUpdateDetailsOrderSlice';
-import serviceTreatmentTypeUpdateFormSlice from '@/app/utils/redux/services/serviceTreatmentTypeUpdateFormSlice';
+import serviceTypeCreateDetailsOrderSlice from '@/app/utils/redux/details/services/serviceTypeCreateDetailsOrderSlice';
+import serviceTypeCreateFormSlice from '@/app/utils/redux/services/serviceTypeCreateFormSlice';
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { PersistPartial } from 'redux-persist/es/persistReducer';
@@ -71,10 +69,8 @@ const rootReducer = combineReducers({
 
     // SERVICE CREATION
     serviceCreateForm: serviceCreateFormSlice,
-    serviceTreatmentTypeCreateForm: serviceTreatmentTypeCreateFormSlice,
-    serviceTreatmentTypeUpdateForm: serviceTreatmentTypeUpdateFormSlice,
-    serviceTreatmentTypeCreateDetailsOrder: serviceTreatmentTypeCreateDetailsOrderSlice,
-    serviceTreatmentTypeUpdateDetailsOrder: serviceTreatmentTypeUpdateDetailsOrderSlice,
+    serviceTypeCreateForm: serviceTypeCreateFormSlice,
+    serviceTypeCreateDetailsOrder: serviceTypeCreateDetailsOrderSlice,
 
     // API
     auth: authSlice,

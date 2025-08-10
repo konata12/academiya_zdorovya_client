@@ -15,13 +15,21 @@ import {
     updateDetailsComponent as updateNewsUpdateDetailsComponent
     } from '@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice';
 import {
-    addServiceTreatmentTypeCreateDetailsComponent,
-    removeServiceTreatmentTypeCreateDetailsComponent,
-    resetServiceTreatmentTypeCreateDetailsComponentsOrder,
-    setServiceTreatmentTypeCreateDetailsComponentError,
-    setServiceTreatmentTypeCreateDetailsStateOrder,
-    updateServiceTreatmentTypeCreateDetailsComponent
-    } from '@/app/utils/redux/details/services/serviceTreatmentTypeCreateDetailsOrderSlice';
+    addServiceTypeCreateDetailsComponent,
+    removeServiceTypeCreateDetailsComponent,
+    resetServiceTypeCreateDetailsComponentsOrder,
+    setServiceTypeCreateDetailsComponentError,
+    setServiceTypeCreateDetailsStateOrder,
+    updateServiceTypeCreateDetailsComponent
+    } from '@/app/utils/redux/details/services/serviceTypeCreateDetailsOrderSlice';
+import {
+    addServiceTreatmentTypeUpdateDetailsComponent,
+    removeServiceTreatmentTypeUpdateDetailsComponent,
+    resetServiceTreatmentTypeUpdateDetailsComponentsOrder,
+    setServiceTreatmentTypeUpdateDetailsComponentError,
+    setServiceTreatmentTypeUpdateDetailsStateOrder,
+    updateServiceTreatmentTypeUpdateDetailsComponent
+    } from '@/app/utils/redux/details/services/serviceTreatmentTypeUpdateDetailsOrderSlice';
 import { DetailsOrderSliceNameType } from '@/app/types/data/details.type';
 import {
     resetNewsFromData,
@@ -39,10 +47,23 @@ import {
     setNewsUpdateFormError,
     setNewsUpdateFormTitle
     } from '@/app/utils/redux/news/newsUpdateFormSlice';
-import { resetServiceTreatmentTypeCreateFormData, setServiceTreatmentTypeCreateFormBackgroundImg, setServiceTreatmentTypeCreateFormDescription, setServiceTreatmentTypeCreateFormDetails, setServiceTreatmentTypeCreateFormError, setServiceTreatmentTypeCreateFormTitle } from '@/app/utils/redux/services/serviceTreatmentTypeCreateFormSlice';
+import {
+    resetServiceTreatmentTypeUpdateFormData,
+    setServiceTreatmentTypeUpdateFormBackgroundImg,
+    setServiceTreatmentTypeUpdateFormDescription,
+    setServiceTreatmentTypeUpdateFormDetails,
+    setServiceTreatmentTypeUpdateFormError,
+    setServiceTreatmentTypeUpdateFormTitle
+    } from '@/app/utils/redux/services/serviceTreatmentTypeUpdateFormSlice';
+import {
+    resetServiceTypeCreateFormData,
+    setServiceTypeCreateFormBackgroundImg,
+    setServiceTypeCreateFormDescription,
+    setServiceTypeCreateFormDetails,
+    setServiceTypeCreateFormError,
+    setServiceTypeCreateFormTitle
+    } from '@/app/utils/redux/services/serviceTypeCreateFormSlice';
 import { useMemo } from 'react';
-import { addServiceTreatmentTypeUpdateDetailsComponent, removeServiceTreatmentTypeUpdateDetailsComponent, resetServiceTreatmentTypeUpdateDetailsComponentsOrder, setServiceTreatmentTypeUpdateDetailsComponentError, setServiceTreatmentTypeUpdateDetailsStateOrder, updateServiceTreatmentTypeUpdateDetailsComponent } from '@/app/utils/redux/details/services/serviceTreatmentTypeUpdateDetailsOrderSlice';
-import { resetServiceTreatmentTypeUpdateFormData, setServiceTreatmentTypeUpdateFormBackgroundImg, setServiceTreatmentTypeUpdateFormDescription, setServiceTreatmentTypeUpdateFormDetails, setServiceTreatmentTypeUpdateFormError, setServiceTreatmentTypeUpdateFormTitle } from '@/app/utils/redux/services/serviceTreatmentTypeUpdateFormSlice';
 
 
 export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
@@ -91,28 +112,28 @@ export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
                 }
             
             // SERVICES
-            case "serviceTreatmentTypeCreateDetailsOrder":
+            case "serviceTypeCreateDetailsOrder":
                 return {
                     // DETAILS ORDER SLICE
-                    addDetailsComponent: addServiceTreatmentTypeCreateDetailsComponent,
-                    removeDetailsComponent: removeServiceTreatmentTypeCreateDetailsComponent,
-                    updateDetailsComponent: updateServiceTreatmentTypeCreateDetailsComponent,
-                    setDetailsStateOrder: setServiceTreatmentTypeCreateDetailsStateOrder,
-                    setDetailsComponentError: setServiceTreatmentTypeCreateDetailsComponentError,
+                    addDetailsComponent: addServiceTypeCreateDetailsComponent,
+                    removeDetailsComponent: removeServiceTypeCreateDetailsComponent,
+                    updateDetailsComponent: updateServiceTypeCreateDetailsComponent,
+                    setDetailsStateOrder: setServiceTypeCreateDetailsStateOrder,
+                    setDetailsComponentError: setServiceTypeCreateDetailsComponentError,
 
                     // FORM SLICE
-                    submitForm: setServiceTreatmentTypeCreateFormDetails,
-                    setFormError: setServiceTreatmentTypeCreateFormError,
-                    setTitle: setServiceTreatmentTypeCreateFormTitle,
-                    setDescription: setServiceTreatmentTypeCreateFormDescription,
-                    setBackgroundImage: setServiceTreatmentTypeCreateFormBackgroundImg,
+                    submitForm: setServiceTypeCreateFormDetails,
+                    setFormError: setServiceTypeCreateFormError,
+                    setTitle: setServiceTypeCreateFormTitle,
+                    setDescription: setServiceTypeCreateFormDescription,
+                    setBackgroundImage: setServiceTypeCreateFormBackgroundImg,
 
                     // RESET DATA
-                    resetDetailsComponentsOrder: resetServiceTreatmentTypeCreateDetailsComponentsOrder,
-                    resetFromData: resetServiceTreatmentTypeCreateFormData,
+                    resetDetailsComponentsOrder: resetServiceTypeCreateDetailsComponentsOrder,
+                    resetFromData: resetServiceTypeCreateFormData,
                 }
 
-            case "serviceTreatmentTypeUpdateDetailsOrder":
+            case "serviceTypeUpdateDetailsOrder":
                 return {
                     // DETAILS ORDER SLICE
                     addDetailsComponent: addServiceTreatmentTypeUpdateDetailsComponent,

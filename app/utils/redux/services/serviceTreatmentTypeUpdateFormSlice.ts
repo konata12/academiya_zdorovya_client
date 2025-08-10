@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { DetailsRedactorType } from '@/app/types/data/details.type';
-import { ServiceTreatmentTypeFormData, ServiceTreatmentTypesEnumType } from '@/app/types/data/services.type';
+import { ServiceTypeFormData, ServiceTypesEnumType } from '@/app/types/data/services.type';
 
-const initialState: ServiceTreatmentTypeFormData = {
+const initialState: ServiceTypeFormData = {
     title: '',
     description: '',
     backgroundImg: null,
@@ -33,7 +33,7 @@ const serviceTreatmentTypeUpdateFormSlice = createSlice({
         },
         setServiceTreatmentTypeUpdateFormError(state, action: {
             payload: {
-                field: ServiceTreatmentTypesEnumType,
+                field: ServiceTypesEnumType,
                 message: string
             }
         }) {

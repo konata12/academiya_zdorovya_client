@@ -7,10 +7,12 @@ export default function SafeLink({
     href,
     children,
     className,
+    id,
     customHandleClick
 }: {
     href: string
     children: React.ReactNode
+    id?: string
     className?: string
     customHandleClick?: (e: any) => void
 }) {
@@ -44,6 +46,7 @@ export default function SafeLink({
     return (
         <Link
             className={`${className || ''}`}
+            id={id}
             href={href}
             onClick={handleClick}
         >

@@ -3,7 +3,7 @@
 import React from 'react';
 import styles from './page.module.scss';
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
-import CreateServiceTreatmentTypeForm from '@/app/admin/(provider)/ui/Forms/services/create/treatmentType/CreateServiceTreatmentTypeForm';
+import CreateServiceTypeForm from '@/app/admin/(provider)/ui/Forms/services/create/serviceType/CreateServiceTypeForm';
 
 
 export default function page() {
@@ -22,7 +22,7 @@ export default function page() {
                 </SafeLink>
             </div>
             
-            <CreateServiceTreatmentTypeForm />
+            <CreateServiceTypeForm />
         </div>
     )
 }

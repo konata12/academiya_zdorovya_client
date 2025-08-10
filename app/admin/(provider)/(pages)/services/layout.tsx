@@ -88,7 +88,7 @@ export default function page({
 
     return (
         <>
-            {pathname.includes('treatmentType') || <>
+            {pathname.includes('serviceType') || <>
                 <p className={`title lg`}>
                     Послуги
                 </p>

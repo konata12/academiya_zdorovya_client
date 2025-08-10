@@ -2,12 +2,11 @@ import {
     CreateServiceEmployeesFormData,
     CreateServiceFormData,
     CreateServiceTreatmentStagesFormData,
-    CreateServiceTreatmentTypesFormData,
+    CreateServiceTypesFormData,
     ServiceEmployeesFormDataEnum,
     ServiceFormDataEnum,
     ServiceTreatmentStageEnum,
-    ServiceTreatmentTypesEnum,
-    ServiceTreatmentTypesEnumType
+    ServiceTypesEnum,
 } from '@/app/types/data/services.type';
 import { get } from 'idb-keyval';
 import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
@@ -44,38 +43,41 @@ export const createServiceFormData = async (data: CreateServiceFormData) => {
                     }
                 })
             }
-            else if (key === ServiceFormDataEnum.TREATMENTTYPES) {
-                const typedValues = value as CreateServiceTreatmentTypesFormData[]
+            else if (key === ServiceFormDataEnum.SERVICETYPES) {
+                const typedValues = value as CreateServiceTypesFormData[] | null
+                console.log('typedValues:', typedValues)
 
-                await Promise.all(typedValues.map(async (typedValue, i) => {
-                    for (const typedKey in typedValue) {
-                        const value = typedValue[typedKey as keyof CreateServiceTreatmentTypesFormData]
+                if (typedValues) {
+                    await Promise.all(typedValues.map(async (typedValue, i) => {
+                        for (const typedKey in typedValue) {
+                            const value = typedValue[typedKey as keyof CreateServiceTypesFormData]
 
-                        if (typedKey === 'order') {
-                            if (typeof value !== 'number') {
-                                throw Error('Заголовок або опис неправильного формату')
+                            if (typedKey === 'order') {
+                                if (typeof value !== 'number') {
+                                    throw Error('Заголовок або опис неправильного формату')
+                                }
+                                formData.append(`${key}[${i}][${typedKey}]`, `${value}`)
+
+                            } else if (typedKey === ServiceTypesEnum.TITLE || typedKey === ServiceTypesEnum.DESCRIPTION) {
+                                if (typeof value !== 'string') {
+                                    throw Error('Заголовок або опис неправильного формату')
+                                }
+                                formData.append(`${key}[${i}][${typedKey}]`, value)
+                            } else if (typedKey === ServiceTypesEnum.BACKGROUNDIMG) {
+                                if (typeof value !== 'string') throw Error('Помилка BACKGROUNDIMG при створенні новини зображення')
+                                const image = await get<File>(value, getIndexedDBStoreForImages(createStoreName))
+
+                                if (!(image instanceof File)) throw Error('Помилка BACKGROUNDIMG при створенні новини зображення')
+                                const parsedImage = renameFile(image, value + image.name)
+                                formData.append(`${key}[${i}][${typedKey}]`, value)
+                                formData.append(`backgroundImgs`, parsedImage)
+                            } else if (typedKey === ServiceTypesEnum.DETAILS) {
+                                if (typeof value === 'string' || typeof value === 'number') throw Error('Помилка даних редактора')
+                                await parseDetailsCreateRequestFormData(formData, value, createStoreName, `${key}[${i}]`)
                             }
-                            formData.append(`${key}[${i}][${typedKey}]`, `${value}`)
-
-                        } else if (typedKey === ServiceTreatmentTypesEnum.TITLE || typedKey === ServiceTreatmentTypesEnum.DESCRIPTION) {
-                            if (typeof value !== 'string') {
-                                throw Error('Заголовок або опис неправильного формату')
-                            }
-                            formData.append(`${key}[${i}][${typedKey}]`, value)
-                        } else if (typedKey === ServiceTreatmentTypesEnum.BACKGROUNDIMG) {
-                            if (typeof value !== 'string') throw Error('Помилка BACKGROUNDIMG при створенні новини зображення')
-                            const image = await get<File>(value, getIndexedDBStoreForImages(createStoreName))
-
-                            if (!(image instanceof File)) throw Error('Помилка BACKGROUNDIMG при створенні новини зображення')
-                            const parsedImage = renameFile(image, value + image.name)
-                            formData.append(`${key}[${i}][${typedKey}]`, value)
-                            formData.append(`backgroundImgs`, parsedImage)
-                        } else if (typedKey === ServiceTreatmentTypesEnum.DETAILS) {
-                            if (typeof value === 'string' || typeof value === 'number') throw Error('Помилка даних редактора')
-                            await parseDetailsCreateRequestFormData(formData, value, createStoreName, `${key}[${i}]`)
                         }
-                    }
-                }))
+                    }))
+                }
             }
             else if (key === ServiceFormDataEnum.EMPLOYEES) {
                 const employees = value as CreateServiceEmployeesFormData[]
@@ -85,7 +87,7 @@ export const createServiceFormData = async (data: CreateServiceFormData) => {
                     formData.append(`${key}[${i}][${ServiceEmployeesFormDataEnum.ID}]`, `${employee[ServiceEmployeesFormDataEnum.ID]}`)
                 })
             }
-            else if (key === ServiceFormDataEnum.TREATMENTTYPESDESCRIPTION) {
+            else if (key === ServiceFormDataEnum.SERVICETYPESDESCRIPTION) {
                 if (!Array.isArray(value) && value !== null) {
                     formData.append(key, value)
                 }

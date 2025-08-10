@@ -5,26 +5,26 @@ const initialState: ComponentOrderState = {
     order: []
 };
 
-const serviceTreatmentTypeCreateDetailsOrderSlice = createSlice({
-    name: 'serviceTreatmentTypeCreateDetailsOrder',
+const serviceTypeCreateDetailsOrderSlice = createSlice({
+    name: 'serviceTypeCreateDetailsOrder',
     initialState,
     reducers: {
-        setServiceTreatmentTypeCreateDetailsInitialDataOnLink(state, action: {payload: OrderComponent[]}) {
+        setServiceTypeCreateDetailsInitialDataOnLink(state, action: {payload: OrderComponent[]}) {
             state.order = action.payload
         },
-        addServiceTreatmentTypeCreateDetailsComponent(state, action: {
+        addServiceTypeCreateDetailsComponent(state, action: {
             payload: OrderComponent
         }) {
             state.order.push(action.payload)
         },
-        removeServiceTreatmentTypeCreateDetailsComponent(state, action: {
+        removeServiceTypeCreateDetailsComponent(state, action: {
             payload: string
         }) {
             state.order = state.order.filter(component => {
                 return component.data.orderId !== action.payload
             });
         },
-        updateServiceTreatmentTypeCreateDetailsComponent(state, action: {
+        updateServiceTypeCreateDetailsComponent(state, action: {
             payload: {
                 detailsComponent: OrderComponent,
                 index: number,
@@ -34,12 +34,12 @@ const serviceTreatmentTypeCreateDetailsOrderSlice = createSlice({
 
             state.order[index] = action.payload.detailsComponent
         },
-        setServiceTreatmentTypeCreateDetailsStateOrder(state, action: {
+        setServiceTypeCreateDetailsStateOrder(state, action: {
             payload: OrderComponent[]
         }) {
             state.order = action.payload
         },
-        setServiceTreatmentTypeCreateDetailsComponentError(state, action: {
+        setServiceTypeCreateDetailsComponentError(state, action: {
             payload: {
                 error: DetailsFormDataErrorType,
                 index: number,
@@ -51,19 +51,19 @@ const serviceTreatmentTypeCreateDetailsOrderSlice = createSlice({
         },
 
 
-        resetServiceTreatmentTypeCreateDetailsComponentsOrder: () => initialState,
+        resetServiceTypeCreateDetailsComponentsOrder: () => initialState,
     }
 })
 
 export const {
-    setServiceTreatmentTypeCreateDetailsInitialDataOnLink,
-    addServiceTreatmentTypeCreateDetailsComponent,
-    removeServiceTreatmentTypeCreateDetailsComponent,
-    updateServiceTreatmentTypeCreateDetailsComponent,
-    setServiceTreatmentTypeCreateDetailsStateOrder,
-    setServiceTreatmentTypeCreateDetailsComponentError,
+    setServiceTypeCreateDetailsInitialDataOnLink,
+    addServiceTypeCreateDetailsComponent,
+    removeServiceTypeCreateDetailsComponent,
+    updateServiceTypeCreateDetailsComponent,
+    setServiceTypeCreateDetailsStateOrder,
+    setServiceTypeCreateDetailsComponentError,
 
-    resetServiceTreatmentTypeCreateDetailsComponentsOrder,
-} = serviceTreatmentTypeCreateDetailsOrderSlice.actions
+    resetServiceTypeCreateDetailsComponentsOrder,
+} = serviceTypeCreateDetailsOrderSlice.actions
 
-export default serviceTreatmentTypeCreateDetailsOrderSlice.reducer
+export default serviceTypeCreateDetailsOrderSlice.reducer

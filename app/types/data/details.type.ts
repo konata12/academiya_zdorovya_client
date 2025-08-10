@@ -4,9 +4,9 @@ import { OrderElementBasicType } from "@/app/utils/hooks/admin/dragAndDrop/useOr
 
 // MAIN
 export type NewsDetailsOrderSliceNameType = 'newsCreateDetailsOrder' | 'newsUpdateDetailsOrder'
-export type ServiceTreatmentTypeDetailsOrderSliceNameType = 'serviceTreatmentTypeCreateDetailsOrder' | 'serviceTreatmentTypeUpdateDetailsOrder'
+export type ServiceTypeDetailsOrderSliceNameType = 'serviceTypeCreateDetailsOrder' | 'serviceTypeUpdateDetailsOrder'
 export type DetailsOrderSliceNameType = NewsDetailsOrderSliceNameType
-    | ServiceTreatmentTypeDetailsOrderSliceNameType
+    | ServiceTypeDetailsOrderSliceNameType
 
 export type ServiceDetailsOrderIndexedDBStoreNameType = 'service_create_images' | 'service_update_images'
 export type NewsDetailsOrderIndexedDBStoreNameType = 'news_create_images' | 'news_update_images'

@@ -1,31 +1,35 @@
-import { FormInputError } from '@/app/types/data/form.type'
-import { CreateServiceTreatmentTypesFormData, ServiceTreatmentTypesEnum, ServiceTreatmentTypesEnumType, ServiceTreatmentTypeServiceFormData } from '@/app/types/data/services.type'
-import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice'
-import { useServiceTreatmentTypeFormHandleChange } from '@/app/utils/hooks/admin/serviceForm/useServiceTreatmentTypeFormHandleChange'
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
-import { RootState } from '@/app/utils/redux/store'
-import React, { useEffect } from 'react'
 import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
-import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer'
-import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer'
-import { ImageInputPreviewFromIndexedDB } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB'
-import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper'
+import React, { useEffect } from 'react';
+import styles from './CreateServiceTypeForm.module.scss';
+import {
+    ServiceTypesEnum,
+    ServiceTypesEnumType,
+    ServiceTypeServiceFormData
+    } from '@/app/types/data/services.type';
+import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
+import { FormInputError } from '@/app/types/data/form.type';
+import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
+import { ImageInputPreviewFromIndexedDB } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB';
+import { parseDetailsResponseToOrderComponent } from '@/app/services/details.service';
+import { RootState } from '@/app/utils/redux/store';
+import { setServiceCreateTypesValue } from '@/app/utils/redux/services/serviceCreateFormSlice';
+import { setServiceTypeCreateDetailsInitialDataOnLink } from '@/app/utils/redux/details/services/serviceTypeCreateDetailsOrderSlice';
+import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer';
+import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
+import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
+import { useParams, useRouter } from 'next/navigation';
+import { useServiceTypeFormHandleChange } from '@/app/utils/hooks/admin/serviceForm/useServiceTreatmentTypeFormHandleChange';
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import styles from './CreateServiceTreatmentTypeForm.module.scss'
-import { useParams, useRouter } from 'next/navigation'
-import { setServiceCreateTreatmentTypesValue } from '@/app/utils/redux/services/serviceCreateFormSlice'
-import { parseDetailsResponseToOrderComponent } from '@/app/services/details.service'
-import { setServiceTreatmentTypeCreateDetailsInitialDataOnLink } from '@/app/utils/redux/details/services/serviceTreatmentTypeCreateDetailsOrderSlice'
 
 
 const titles = ['Стан вмісту', 'Опції']
 const indexedDBStoreName = 'service_create_images'
-const detailsOrderSliceName = 'serviceTreatmentTypeCreateDetailsOrder'
+const detailsOrderSliceName = 'serviceTypeCreateDetailsOrder'
 
-export default function CreateServiceTreatmentTypeForm() {
+export default function CreateServiceTypeForm() {
     const {
         orderId,
         title,
@@ -33,12 +37,12 @@ export default function CreateServiceTreatmentTypeForm() {
         backgroundImg,
         details,
         errors,
-    } = useAppSelector((state: RootState) => state.serviceTreatmentTypeCreateForm)
+    } = useAppSelector((state: RootState) => state.serviceTypeCreateForm)
 
     const router = useRouter()
     const { id } = useParams<{ id: string }>()
     const dispatch = useAppDispatch()
-    const handleChange = useServiceTreatmentTypeFormHandleChange(indexedDBStoreName, detailsOrderSliceName)
+    const handleChange = useServiceTypeFormHandleChange(indexedDBStoreName, detailsOrderSliceName)
     const {
         setFormError,
     } = useDetailsFormSlice(detailsOrderSliceName)
@@ -48,7 +52,7 @@ export default function CreateServiceTreatmentTypeForm() {
         const parsedDetails = details 
             ? parseDetailsResponseToOrderComponent(details)
             : []
-        dispatch(setServiceTreatmentTypeCreateDetailsInitialDataOnLink(parsedDetails))
+        dispatch(setServiceTypeCreateDetailsInitialDataOnLink(parsedDetails))
     }, [])
 
     console.log({
@@ -62,52 +66,52 @@ export default function CreateServiceTreatmentTypeForm() {
         e.preventDefault()
         const errorsData: {
             error: FormInputError,
-            id: ServiceTreatmentTypesEnumType
+            id: ServiceTypesEnumType
         }[] = []
 
         // FORM VALIDATION
         if (!title.length) {
             dispatch(setFormError({
-                field: ServiceTreatmentTypesEnum.TITLE,
+                field: ServiceTypesEnum.TITLE,
                 message: 'Введіть повну назву'
             }));
 
             errorsData.push({
-                id: ServiceTreatmentTypesEnum.TITLE,
+                id: ServiceTypesEnum.TITLE,
                 error: { message: 'Введіть повну назву' }
             });
         }
         if (!description.length) {
             dispatch(setFormError({
-                field: ServiceTreatmentTypesEnum.DESCRIPTION,
+                field: ServiceTypesEnum.DESCRIPTION,
                 message: 'Введіть опис'
             }));
 
             errorsData.push({
-                id: ServiceTreatmentTypesEnum.DESCRIPTION,
+                id: ServiceTypesEnum.DESCRIPTION,
                 error: { message: 'Введіть опис' }
             });
         }
         if (!backgroundImg) {
             dispatch(setFormError({
-                field: ServiceTreatmentTypesEnum.BACKGROUNDIMG,
+                field: ServiceTypesEnum.BACKGROUNDIMG,
                 message: 'Добавте зображення'
             }));
 
             // SCROLL TO INPUT
             errorsData.push({
-                id: ServiceTreatmentTypesEnum.BACKGROUNDIMG,
+                id: ServiceTypesEnum.BACKGROUNDIMG,
                 error: { message: 'Добавте зображення' }
             });
         }
         if (!details) {
             dispatch(setFormError({
-                field: ServiceTreatmentTypesEnum.DETAILS,
+                field: ServiceTypesEnum.DETAILS,
                 message: 'Створіть вміст послуги'
             }));
 
             errorsData.push({
-                id: ServiceTreatmentTypesEnum.DETAILS,
+                id: ServiceTypesEnum.DETAILS,
                 error: { message: 'Створіть вміст послуги' }
             });
         }
@@ -116,7 +120,7 @@ export default function CreateServiceTreatmentTypeForm() {
         if (errorsData.length) {
             console.log(errorsData)
             // SCROLL TO INPUT
-            if (errorsData[0].id === ServiceTreatmentTypesEnum.BACKGROUNDIMG) {
+            if (errorsData[0].id === ServiceTypesEnum.BACKGROUNDIMG) {
                 (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).labels?.[0].scrollIntoView({
                     behavior: 'smooth',
                     block: 'center'
@@ -131,7 +135,7 @@ export default function CreateServiceTreatmentTypeForm() {
         }
         if (!details || !backgroundImg) return
 
-        const data: ServiceTreatmentTypeServiceFormData = {
+        const data: ServiceTypeServiceFormData = {
             orderId,
             title,
             description,
@@ -139,7 +143,7 @@ export default function CreateServiceTreatmentTypeForm() {
             details,
         }
 
-        dispatch(setServiceCreateTreatmentTypesValue({
+        dispatch(setServiceCreateTypesValue({
             index: Number(id),
             value: data
         }))
@@ -150,29 +154,29 @@ export default function CreateServiceTreatmentTypeForm() {
         <form onSubmit={handleSubmit}>
             <InputContainer
                 label="Повна назва послуги"
-                inputId={ServiceTreatmentTypesEnum.TITLE}
+                inputId={ServiceTypesEnum.TITLE}
                 value={title}
-                error={errors[ServiceTreatmentTypesEnum.TITLE]}
+                error={errors[ServiceTypesEnum.TITLE]}
                 className={{
                     inputContainer: styles.titleInputContainer
                 }}
                 changeEvent={(e) => handleChange({
                     e,
-                    elementType: ServiceTreatmentTypesEnum.TITLE,
+                    elementType: ServiceTypesEnum.TITLE,
                 })}
             />
             <TextareaContainer
                 label="Короткий опис послуги"
-                inputId={ServiceTreatmentTypesEnum.DESCRIPTION}
+                inputId={ServiceTypesEnum.DESCRIPTION}
                 value={description}
-                error={errors[ServiceTreatmentTypesEnum.DESCRIPTION]}
+                error={errors[ServiceTypesEnum.DESCRIPTION]}
                 className={{
                     inputContainer: styles.descriptionInputContainer
                 }}
                 minRows={4}
                 changeEvent={(e) => handleChange({
                     e,
-                    elementType: ServiceTreatmentTypesEnum.DESCRIPTION,
+                    elementType: ServiceTypesEnum.DESCRIPTION,
                 })}
             />
 
@@ -185,17 +189,17 @@ export default function CreateServiceTreatmentTypeForm() {
                 </p>
 
                 <ImageInputContainer
-                    inputId={ServiceTreatmentTypesEnum.BACKGROUNDIMG}
+                    inputId={ServiceTypesEnum.BACKGROUNDIMG}
                     changeEvent={(e) => handleChange({
                         e,
-                        elementType: ServiceTreatmentTypesEnum.BACKGROUNDIMG,
+                        elementType: ServiceTypesEnum.BACKGROUNDIMG,
                         oldValue: backgroundImg
                     })}
                 >
                     <ImageInputPreviewFromIndexedDB
                         imageName={backgroundImg}
                         indexedDBStoreName={indexedDBStoreName}
-                        error={errors[ServiceTreatmentTypesEnum.BACKGROUNDIMG]}
+                        error={errors[ServiceTypesEnum.BACKGROUNDIMG]}
                     />
                 </ImageInputContainer>
             </div>
@@ -213,7 +217,7 @@ export default function CreateServiceTreatmentTypeForm() {
                 >
                     <CommonTable
                         titles={titles}
-                        tableId={ServiceTreatmentTypesEnum.DETAILS}
+                        tableId={ServiceTypesEnum.DETAILS}
                     >
                         <TableLine>
                             <span>
@@ -238,7 +242,7 @@ export default function CreateServiceTreatmentTypeForm() {
 
                 <SafeLink
                     className={`btn blue sm`}
-                    href={`/admin/news/create/preview`}
+                    href={`/admin/services/create/preview`}
                 >
                     Дивитись сторінку новини
                 </SafeLink>

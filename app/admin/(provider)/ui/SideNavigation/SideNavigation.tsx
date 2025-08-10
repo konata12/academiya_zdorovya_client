@@ -40,9 +40,9 @@ export default function SideNavigation() {
         const route = routes.find(route => pathname.includes(route.path))
 
         // IF SERVICE PAGE
-        if (route && route.path === '/admin/services' && !pathname.includes('treatmentType')) {
+        if (route && route.path === '/admin/services' && !pathname.includes('serviceType')) {
             return true
-        } else if (route && route.path === '/admin/services' && !pathname.includes('treatmentType')) {
+        } else if (route && route.path === '/admin/services' && !pathname.includes('serviceType')) {
             return false
         }
 

@@ -1,7 +1,7 @@
 import { arrayMove } from '@dnd-kit/sortable';
 import { DragEndEvent } from '@dnd-kit/core';
-import { ServiceEmployeeFormData, ServiceFormDataEnum, ServiceTreatmentTypeServiceFormData } from '@/app/types/data/services.type';
-import { setServiceCreateEmployees, setServiceCreateTreatmentTypes } from '@/app/utils/redux/services/serviceCreateFormSlice';
+import { ServiceEmployeeFormData, ServiceFormDataEnum, ServiceTypeServiceFormData } from '@/app/types/data/services.type';
+import { setServiceCreateEmployees, setServiceCreateTypes } from '@/app/utils/redux/services/serviceCreateFormSlice';
 import { useAppDispatch } from '@/app/utils/redux/hooks';
 import { useCallback } from 'react';
 
@@ -14,15 +14,15 @@ export interface OrderedListServiceEmployeeInterface {
     valueName: ServiceFormDataEnum.EMPLOYEES,
     sliceName: 'servicesCreateForm',
 }
-export interface OrderedListServiceTreatmentTypeInterface {
-    order: ServiceTreatmentTypeServiceFormData[],
-    valueName: ServiceFormDataEnum.TREATMENTTYPES,
+export interface OrderedListServiceTypeInterface {
+    order: ServiceTypeServiceFormData[],
+    valueName: ServiceFormDataEnum.SERVICETYPES,
     sliceName: 'servicesCreateForm',
 }
 export type DraggableComponentsDataType = OrderedListServiceEmployeeInterface
-    | OrderedListServiceTreatmentTypeInterface
+    | OrderedListServiceTypeInterface
 export type DraggableComponentsType = ServiceEmployeeFormData
-    | ServiceTreatmentTypeServiceFormData
+    | ServiceTypeServiceFormData
 
 export function useOrderedList() {
     const dispatch = useAppDispatch()
@@ -52,8 +52,8 @@ export function useOrderedList() {
         switch (sliceName) {
             case 'servicesCreateForm':
                 switch (valueName) {
-                    case ServiceFormDataEnum.TREATMENTTYPES:
-                        dispatch(setServiceCreateTreatmentTypes(arrayMove(order, activeItemIndex, overItemIndex)))
+                    case ServiceFormDataEnum.SERVICETYPES:
+                        dispatch(setServiceCreateTypes(arrayMove(order, activeItemIndex, overItemIndex)))
                         break;
 
                     case ServiceFormDataEnum.EMPLOYEES:
