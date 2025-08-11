@@ -1,7 +1,9 @@
 // ERROR RESPONSE TYPES
-export interface ErrorResponse {
-    statusCode: number
+export interface ErrorBase {
     message: string
+}
+export interface ErrorResponse extends ErrorBase {
+    statusCode: number
     error?: string
     id?: number
 }

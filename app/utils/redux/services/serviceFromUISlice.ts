@@ -82,6 +82,8 @@ const serviceFormUISlice = createSlice({
             }
         },
 
+        resetServiceUIFormData: () => initialState,
+
         // INITIAL STATE
         // setEmployeeUIFormValues(state, action: {
         //     payload: Omit<EmployeeFormData, 'errors'>
@@ -127,6 +129,7 @@ export const {
     addModalState,
     deleteModalState,
     // INITIAL STATE
+    resetServiceUIFormData,
     // setEmployeeUIFormValues,
 } = serviceFormUISlice.actions
 

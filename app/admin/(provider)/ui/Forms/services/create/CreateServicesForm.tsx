@@ -10,44 +10,46 @@ import {
     deleteServiceCreateTreatmentStagesValue,
     deleteServiceCreateTypesValue,
     resetServiceFromData,
-    setServiceCreateEmployees,
     setServiceCreateTreatmentStagesError,
     setServiceCreateTypes
 } from '@/app/utils/redux/services/serviceCreateFormSlice';
-import { DraggableAreaContainer } from '@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer';
-import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
-import { ImageInputPreviewFromIndexedDB } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB';
-import { resetServiceTypeCreateFormData, setServiceTypeCreateFormDataOnLink, setServiceTypeCreateFormInitData } from '@/app/utils/redux/services/serviceTypeCreateFormSlice';
-import { RootState } from '@/app/utils/redux/store';
+import { clear } from 'idb-keyval';
+import { createService } from '@/app/utils/redux/services/servicesSlice';
 import {
-    CreateServiceEmployeesFormData,
     CreateServiceFormData,
-    CreateServiceTreatmentStagesFormData,
     ServiceEmployeeFormData,
     ServiceFormDataEnum,
-    ServiceFormDataEnumType,
     ServiceFormDataUICheckboxesEnum,
     ServiceFormDataUICheckboxesType,
     ServiceFormDataUIModalsStatesEnum,
     ServiceHandleSubmitErrorIdType,
     ServiceHandleSubmitStringKeysType,
     ServiceModalsStatesType,
-    ServiceStringKeysType,
     ServiceTreatmentStageBasicType,
     ServiceTreatmentStageEnum,
-    ServiceTreatmentStageFormDataError,
     ServiceTypesEnum,
     ServiceTypeServiceFormData
 } from '@/app/types/data/services.type';
+import { DraggableAreaContainer } from '@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer';
+import { DraggableElementContainer } from '@/app/common_ui/animated_components/DraggableAreaContainers/DraggableElementContainer/DraggableElementContainer';
+import { FormInputError } from '@/app/types/data/form.type';
+import { fullfilled } from '@/app/services/response.service';
+import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
+import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
+import { ImageInputPreviewFromIndexedDB } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB';
+import { OrderedListServiceTypeInterface, useOrderedList } from '@/app/utils/hooks/admin/dragAndDrop/useOrderedList';
+import { parseOrderedArrayToRequest } from '@/app/services/order.service';
+import { resetServiceTypeCreateFormData, setServiceTypeCreateFormDataOnLink, setServiceTypeCreateFormInitData } from '@/app/utils/redux/services/serviceTypeCreateFormSlice';
+import { RootState } from '@/app/utils/redux/store';
 import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer';
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
-import { OrderedListServiceTypeInterface, useOrderedList } from '@/app/utils/hooks/admin/dragAndDrop/useOrderedList';
 import { useRouter } from 'next/navigation';
 import { useServiceFormHandleChange } from '@/app/utils/hooks/admin/serviceForm/useServiceFormHandleChange';
 import { useServiceFormSlice } from '@/app/utils/hooks/admin/serviceForm/useServiceFormSlice';
 import {
     addModalState,
     deleteModalState,
+    resetServiceUIFormData,
     setModalState,
     triggerServiceUICheckbox,
 } from '@/app/utils/redux/services/serviceFromUISlice';
@@ -57,13 +59,6 @@ import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable';
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine';
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink';
 import { EmployeeSearchbarWithTable } from '@/app/admin/(provider)/ui/Forms/services/create/EmployeeSearchbarWithTable/EmployeeSearchbarWithTable';
-import { DraggableElementContainer } from '@/app/common_ui/animated_components/DraggableAreaContainers/DraggableElementContainer/DraggableElementContainer';
-import { FormInputError } from '@/app/types/data/form.type';
-import { parseOrderedArrayToRequest } from '@/app/services/order.service';
-import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
-import { clear } from 'idb-keyval';
-import { fullfilled } from '@/app/services/response.service';
-import { createService } from '@/app/utils/redux/services/servicesSlice';
 
 
 const indexedDBStoreName = 'service_create_images'
@@ -111,9 +106,9 @@ export default function CreateServicesForm() {
         valueName: ServiceFormDataEnum.SERVICETYPES,
         sliceName: 'servicesCreateForm',
     }
-    // console.log('data:', data)
+    console.log('data:', data)
     // console.log('error.create:', error.create)
-    
+
     // console.log('errors:', errors)
     // console.log('ui data:', {
     // treatmentTypesCheckbox,
@@ -257,7 +252,7 @@ export default function CreateServicesForm() {
                 }
             }
             // VALIDATION FOR SERVICETTYPES VALUE
-            else if (serviceTypesCheckbox) {
+            if (serviceTypesCheckbox) {
                 if (entryKey === ServiceFormDataEnum.SERVICETYPESDESCRIPTION && serviceTypesDescriptionCheckbox) {
                     const value = entry[1] as string
 
@@ -292,7 +287,7 @@ export default function CreateServicesForm() {
                 }
             }
             // VALIDATION FOR TREATMENTSTAGES VALUES
-            else if (entryKey === ServiceFormDataEnum.TREATMENTSTAGES) {
+            if (entryKey === ServiceFormDataEnum.TREATMENTSTAGES) {
                 const values = entry[1] as ServiceTreatmentStageBasicType[]
 
                 values.forEach((stage, index) => {
@@ -323,7 +318,7 @@ export default function CreateServicesForm() {
                 })
             }
             // VALIDATION FOR EMPLOYEES VALUES
-            else if (entryKey === ServiceFormDataEnum.EMPLOYEES) {
+            if (entryKey === ServiceFormDataEnum.EMPLOYEES) {
                 const values = entry[1] as ServiceEmployeeFormData[]
 
                 if (!values.length) {
@@ -340,7 +335,7 @@ export default function CreateServicesForm() {
                 }
             }
             // VALIDATION FOR IMAGE
-            else if (entryKey === ServiceFormDataEnum.IMAGE) {
+            if (entryKey === ServiceFormDataEnum.IMAGE) {
                 const value = entry[1] as string
                 const message = 'Завантажте фото'
 
@@ -360,7 +355,6 @@ export default function CreateServicesForm() {
 
         // SCROLL TO ERROR INPUT
         if (errorsData.length) {
-            console.log(errorsData)
             // SCROLL TO INPUT
             if (errorsData[0].id === ServiceFormDataEnum.IMAGE) {
                 (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).labels?.[0].scrollIntoView({
@@ -391,13 +385,14 @@ export default function CreateServicesForm() {
         console.log('requestData: ', requestData)
 
         const response = await dispatch(createService(requestData))
-        // const isFulfilled = fullfilled(response.meta.requestStatus)
-        // if (isFulfilled) {
-        //     // CLEAR DATA
-        //     clear(getIndexedDBStoreForImages(indexedDBStoreName))
-        //     dispatch(resetServiceFromData())
-        //     router.push('./')
-        // }
+        const isFulfilled = fullfilled(response.meta.requestStatus)
+        if (isFulfilled) {
+            // CLEAR DATA
+            clear(getIndexedDBStoreForImages(indexedDBStoreName))
+            dispatch(resetServiceFromData())
+            dispatch(resetServiceUIFormData())
+            router.push('./')
+        }
     }
 
     return (

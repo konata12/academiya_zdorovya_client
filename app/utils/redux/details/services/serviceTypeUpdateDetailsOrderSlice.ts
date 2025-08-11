@@ -5,23 +5,26 @@ const initialState: ComponentOrderState = {
     order: []
 };
 
-const serviceTreatmentTypeUpdateDetailsOrderSlice = createSlice({
-    name: 'serviceTreatmentTypeUpdateDetailsOrder',
+const serviceTypeUpdateDetailsOrderSlice = createSlice({
+    name: 'serviceTypeUpdateDetailsOrder',
     initialState,
     reducers: {
-        addServiceTreatmentTypeUpdateDetailsComponent(state, action: {
+        setServiceTypeUpdateDetailsInitialDataOnLink(state, action: {payload: OrderComponent[]}) {
+            state.order = action.payload
+        },
+        addServiceTypeUpdateDetailsComponent(state, action: {
             payload: OrderComponent
         }) {
             state.order.push(action.payload)
         },
-        removeServiceTreatmentTypeUpdateDetailsComponent(state, action: {
+        removeServiceTypeUpdateDetailsComponent(state, action: {
             payload: string
         }) {
             state.order = state.order.filter(component => {
                 return component.data.orderId !== action.payload
             });
         },
-        updateServiceTreatmentTypeUpdateDetailsComponent(state, action: {
+        updateServiceTypeUpdateDetailsComponent(state, action: {
             payload: {
                 detailsComponent: OrderComponent,
                 index: number,
@@ -31,12 +34,12 @@ const serviceTreatmentTypeUpdateDetailsOrderSlice = createSlice({
 
             state.order[index] = action.payload.detailsComponent
         },
-        setServiceTreatmentTypeUpdateDetailsStateOrder(state, action: {
+        setServiceTypeUpdateDetailsStateOrder(state, action: {
             payload: OrderComponent[]
         }) {
             state.order = action.payload
         },
-        setServiceTreatmentTypeUpdateDetailsComponentError(state, action: {
+        setServiceTypeUpdateDetailsComponentError(state, action: {
             payload: {
                 error: DetailsFormDataErrorType,
                 index: number,
@@ -48,18 +51,19 @@ const serviceTreatmentTypeUpdateDetailsOrderSlice = createSlice({
         },
 
 
-        resetServiceTreatmentTypeUpdateDetailsComponentsOrder: () => initialState,
+        resetServiceTypeUpdateDetailsComponentsOrder: () => initialState,
     }
 })
 
 export const {
-    addServiceTreatmentTypeUpdateDetailsComponent,
-    removeServiceTreatmentTypeUpdateDetailsComponent,
-    updateServiceTreatmentTypeUpdateDetailsComponent,
-    setServiceTreatmentTypeUpdateDetailsStateOrder,
-    setServiceTreatmentTypeUpdateDetailsComponentError,
+    setServiceTypeUpdateDetailsInitialDataOnLink,
+    addServiceTypeUpdateDetailsComponent,
+    removeServiceTypeUpdateDetailsComponent,
+    updateServiceTypeUpdateDetailsComponent,
+    setServiceTypeUpdateDetailsStateOrder,
+    setServiceTypeUpdateDetailsComponentError,
 
-    resetServiceTreatmentTypeUpdateDetailsComponentsOrder,
-} = serviceTreatmentTypeUpdateDetailsOrderSlice.actions
+    resetServiceTypeUpdateDetailsComponentsOrder,
+} = serviceTypeUpdateDetailsOrderSlice.actions
 
-export default serviceTreatmentTypeUpdateDetailsOrderSlice.reducer
+export default serviceTypeUpdateDetailsOrderSlice.reducer

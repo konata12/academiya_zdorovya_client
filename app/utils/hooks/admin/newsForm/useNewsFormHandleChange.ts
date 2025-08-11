@@ -1,3 +1,4 @@
+import { renameFile, uniqFileNameAndKeepExtension } from "@/app/services/files.service"
 import { NewsDetailsOrderSliceNameType } from "@/app/types/data/details.type"
 import { NewsFormDataEnum, NewsFormDataEnumType } from "@/app/types/data/news.type"
 import { FormElements } from "@/app/types/ui/form_components/inputContainers.type"
@@ -58,7 +59,7 @@ export function useNewsFormHandleChange(
                 break;
 
             case NewsFormDataEnum.BACKGROUNDIMG:
-                const imageName = uuidv4()
+                const uniqName = uuidv4()
                 // REQUIRED ERROR HANDLING 
                 if (newValue.length > 0) dispatch(setFormError({
                     field: NewsFormDataEnum.BACKGROUNDIMG,
@@ -69,9 +70,14 @@ export function useNewsFormHandleChange(
                 if (oldValue) {
                     del(oldValue, store)
                 }
-                if (newFile && newFile[0]) set(imageName, newFile[0], store)
 
-                dispatch(setBackgroundImage(imageName))
+                if (newFile && newFile[0]) {
+                    const imageName = uniqFileNameAndKeepExtension(uniqName, newFile[0])
+                    const image = renameFile(newFile[0], imageName)
+
+                    set(imageName, image, store)
+                    dispatch(setBackgroundImage(imageName))
+                }
                 break;
         }
     }, [indexedDBStoreName, detailsOrderSliceName])

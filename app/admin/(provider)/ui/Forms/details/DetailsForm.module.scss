@@ -29,4 +29,15 @@
             outline: none;
         }
     }
+
+
+}
+
+// SUBMIT BUTTON
+.button.button.button {
+    outline: 2px $error-color solid;
+}
+.error.error.error {
+    top: 7px;
+    font-size: 28px;
 }

@@ -8,11 +8,7 @@ export function renameFile(file: File, newName: string): File {
 export function renameFileOrBlob(file: File | Blob, name: string): File {
     // FOR FILE NAME IS KEY FROM INDEXEDDB, FOR BLOB NAME IS FILE NAME FROM RESPONSE
     if (file instanceof File) {
-        // PARSE IMAGE NAME
-        const extension = file.type.split('/')[1]
-        const newName = `${name}.${extension}`
-        // COMBINE INDEXEDDB KEY, WITH FILE EXTENSION AND MAKE IT NEW FILES NAME
-        return renameFile(file, newName)
+        return file
     } else {
         const nameSplit = name.split('.')
         const extension = nameSplit[nameSplit.length - 1]
@@ -21,4 +17,9 @@ export function renameFileOrBlob(file: File | Blob, name: string): File {
             lastModified: Date.now()
         })
     }
+}
+
+export function uniqFileNameAndKeepExtension(name: string, file: File) {
+    const extension = file.type.split('/')[1]
+    return `${name}.${extension}`
 }

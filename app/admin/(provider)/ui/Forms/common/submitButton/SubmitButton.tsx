@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './SubmitButton.module.scss'
 import { ErrorResponse } from '@/app/types/data/response.type'
+import { FormInputError } from '@/app/types/data/form.type';
 
 interface Styles {
     container?: string;
@@ -9,7 +10,7 @@ interface Styles {
 }
 
 interface SubmitButtonProps {
-    error: ErrorResponse | null
+    error: ErrorResponse | FormInputError | null
     className?: Styles
     label?: string
 }

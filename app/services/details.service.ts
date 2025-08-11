@@ -114,10 +114,6 @@ export async function parseDetailsCreateRequestFormData(
                     const image = await get<File>(value, store);
                     if (!image) throw Error('Помилка при обробці зображень редактора');
 
-                    // PARSE IMAGE NAME
-                    const extension = image.type.split('/')[1]
-                    value = `${value}.${extension}`
-
                     // CREATE IMAGE
                     const requestImage = renameFile(image, value)
                     formData.append(`details_images`, requestImage);

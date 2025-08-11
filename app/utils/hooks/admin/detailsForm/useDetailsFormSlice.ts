@@ -23,13 +23,13 @@ import {
     updateServiceTypeCreateDetailsComponent
     } from '@/app/utils/redux/details/services/serviceTypeCreateDetailsOrderSlice';
 import {
-    addServiceTreatmentTypeUpdateDetailsComponent,
-    removeServiceTreatmentTypeUpdateDetailsComponent,
-    resetServiceTreatmentTypeUpdateDetailsComponentsOrder,
-    setServiceTreatmentTypeUpdateDetailsComponentError,
-    setServiceTreatmentTypeUpdateDetailsStateOrder,
-    updateServiceTreatmentTypeUpdateDetailsComponent
-    } from '@/app/utils/redux/details/services/serviceTreatmentTypeUpdateDetailsOrderSlice';
+    addServiceTypeUpdateDetailsComponent,
+    removeServiceTypeUpdateDetailsComponent,
+    resetServiceTypeUpdateDetailsComponentsOrder,
+    setServiceTypeUpdateDetailsComponentError,
+    setServiceTypeUpdateDetailsStateOrder,
+    updateServiceTypeUpdateDetailsComponent
+    } from '@/app/utils/redux/details/services/serviceTypeUpdateDetailsOrderSlice';
 import { DetailsOrderSliceNameType } from '@/app/types/data/details.type';
 import {
     resetNewsFromData,
@@ -48,13 +48,13 @@ import {
     setNewsUpdateFormTitle
     } from '@/app/utils/redux/news/newsUpdateFormSlice';
 import {
-    resetServiceTreatmentTypeUpdateFormData,
-    setServiceTreatmentTypeUpdateFormBackgroundImg,
-    setServiceTreatmentTypeUpdateFormDescription,
-    setServiceTreatmentTypeUpdateFormDetails,
-    setServiceTreatmentTypeUpdateFormError,
-    setServiceTreatmentTypeUpdateFormTitle
-    } from '@/app/utils/redux/services/serviceTreatmentTypeUpdateFormSlice';
+    resetServiceTypeUpdateFormData,
+    setServiceTypeUpdateFormBackgroundImg,
+    setServiceTypeUpdateFormDescription,
+    setServiceTypeUpdateFormDetails,
+    setServiceTypeUpdateFormError,
+    setServiceTypeUpdateFormTitle
+    } from '@/app/utils/redux/services/serviceTypeUpdateFormSlice';
 import {
     resetServiceTypeCreateFormData,
     setServiceTypeCreateFormBackgroundImg,
@@ -136,22 +136,22 @@ export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
             case "serviceTypeUpdateDetailsOrder":
                 return {
                     // DETAILS ORDER SLICE
-                    addDetailsComponent: addServiceTreatmentTypeUpdateDetailsComponent,
-                    removeDetailsComponent: removeServiceTreatmentTypeUpdateDetailsComponent,
-                    updateDetailsComponent: updateServiceTreatmentTypeUpdateDetailsComponent,
-                    setDetailsStateOrder: setServiceTreatmentTypeUpdateDetailsStateOrder,
-                    setDetailsComponentError: setServiceTreatmentTypeUpdateDetailsComponentError,
+                    addDetailsComponent: addServiceTypeUpdateDetailsComponent,
+                    removeDetailsComponent: removeServiceTypeUpdateDetailsComponent,
+                    updateDetailsComponent: updateServiceTypeUpdateDetailsComponent,
+                    setDetailsStateOrder: setServiceTypeUpdateDetailsStateOrder,
+                    setDetailsComponentError: setServiceTypeUpdateDetailsComponentError,
 
                     // FORM SLICE
-                    submitForm: setServiceTreatmentTypeUpdateFormDetails,
-                    setFormError: setServiceTreatmentTypeUpdateFormError,
-                    setTitle: setServiceTreatmentTypeUpdateFormTitle,
-                    setDescription: setServiceTreatmentTypeUpdateFormDescription,
-                    setBackgroundImage: setServiceTreatmentTypeUpdateFormBackgroundImg,
+                    submitForm: setServiceTypeUpdateFormDetails,
+                    setFormError: setServiceTypeUpdateFormError,
+                    setTitle: setServiceTypeUpdateFormTitle,
+                    setDescription: setServiceTypeUpdateFormDescription,
+                    setBackgroundImage: setServiceTypeUpdateFormBackgroundImg,
 
                     // RESET DATA
-                    resetDetailsComponentsOrder: resetServiceTreatmentTypeUpdateDetailsComponentsOrder,
-                    resetFromData: resetServiceTreatmentTypeUpdateFormData,
+                    resetDetailsComponentsOrder: resetServiceTypeUpdateDetailsComponentsOrder,
+                    resetFromData: resetServiceTypeUpdateFormData,
                 }
         }
     }, [orderSliceName])

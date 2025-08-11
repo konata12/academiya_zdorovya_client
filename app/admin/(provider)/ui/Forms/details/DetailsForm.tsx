@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './DetailsForm.module.scss';
 import { DraggableAreaContainerForDetails } from '@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainerForDetails';
 import { getIndexedDBStoreNameForDetailsImages } from '@/app/services/details.service';
@@ -34,6 +34,7 @@ import DetailsParagraphInput from '@/app/admin/(provider)/ui/Forms/details/input
 import DetailsQuouteInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsQuouteInput/DetailsQuouteInput';
 import DetailsListInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsListInput/DetailsListInput';
 import DetailsImageInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput';
+import { FormInputError } from '@/app/types/data/form.type';
 
 
 export default function DetailsForm({
@@ -46,6 +47,7 @@ export default function DetailsForm({
     // need for determining which details order slice to use
     orderSliceName,
 }: DetailsFromProps) {
+    const [submitError, setSubmitError] = useState<FormInputError>({ message: '' })
     const order = useAppSelector((state: RootState) => state[orderSliceName].order)
     console.log('order: ', order)
 
@@ -63,8 +65,11 @@ export default function DetailsForm({
         submitForm,
         setFormError,
     } = useDetailsFormSlice(orderSliceName)
-
     const imageStoreName = getIndexedDBStoreNameForDetailsImages(orderSliceName)
+
+    useEffect(() => {
+        if (order.length >= 1) setSubmitError({ message: '' })
+    }, [order])
 
     // FORM SUBMIT
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -221,6 +226,21 @@ export default function DetailsForm({
                 block: 'center'
             })
             return
+        }
+
+        // CHECK IF FORM IS EMPTY
+        const allData = [
+            ...titles,
+            ...paragraphs,
+            ...quoutes,
+            ...lists,
+            ...images
+        ]
+        if (!allData.length) {
+            setSubmitError({ message: 'Створіть дані' })
+            return
+        } else {
+            setSubmitError({ message: '' })
         }
 
         const parsedFormData: DetailsRedactorType = {
@@ -480,8 +500,12 @@ export default function DetailsForm({
             </DraggableAreaContainerForDetails>
 
             <SubmitButton
-                error={null}
+                error={submitError}
                 label='Підтвердити зміни'
+                className={{
+                    button: submitError.message ? styles.button : '',
+                    error: styles.error
+                }}
             />
         </form>
     )

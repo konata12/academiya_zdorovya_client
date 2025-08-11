@@ -18,7 +18,7 @@ import { TextareaContainer } from '@/app/common_ui/form_components/InputContaine
 import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
 import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
 import { useParams, useRouter } from 'next/navigation';
-import { useServiceTypeFormHandleChange } from '@/app/utils/hooks/admin/serviceForm/useServiceTreatmentTypeFormHandleChange';
+import { useServiceTypeFormHandleChange } from '@/app/utils/hooks/admin/serviceForm/useServiceTypeFormHandleChange';
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'

@@ -1,5 +1,5 @@
 import { DraggableComponent } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer"
-import { DetailsDataRenderElementBasicType, DetailsRedactorType } from "@/app/types/data/details.type"
+import { DetailsRedactorType } from "@/app/types/data/details.type"
 import { FormInputError } from "@/app/types/data/form.type"
 import { ErrorsResponses, Status } from "@/app/types/data/response.type"
 import { OrderElementBasicType } from "@/app/utils/hooks/admin/dragAndDrop/useOrderedList"
@@ -13,9 +13,21 @@ export interface Service {
     shortDescription: string
     image: string
 
-    treatmentStages: ServiceTreatmentStageBasicType[]
+    treatmentStages: ServiceTreatmentStageType[]
     mainDescription: string
     serviceTypesDescription: string | null
+    serviceTypes: ServiceTypeResponseData[] | null
+    employees: ServiceEmployeeResponseData[]
+}
+
+export interface ServiceTypeResponseData
+    extends ServiceType {
+    backgroundImg: string
+    details: DetailsRedactorType
+}
+export interface ServiceEmployeeResponseData
+    extends OrderElementBasicType {
+    id: number
 }
 
 // BASIC
@@ -24,7 +36,7 @@ export interface ServiceTreatmentStageBasicType {
     description: string
 }
 export interface ServiceTreatmentStageType
-    extends DetailsDataRenderElementBasicType,
+    extends OrderElementBasicType,
     ServiceTreatmentStageBasicType { }
 
 export interface ServiceTreatmentBasicType {
@@ -34,7 +46,7 @@ export interface ServiceTreatmentBasicType {
     details: DetailsRedactorType | null
 }
 export interface ServiceType
-    extends DetailsDataRenderElementBasicType,
+    extends OrderElementBasicType,
     ServiceTreatmentBasicType {
     id: number
 }
@@ -53,8 +65,8 @@ export type ServiceHandleSubmitStringKeysType = Exclude<ServiceStringKeysType, S
 
 // REDUX
 export interface ServiceInit {
-    service: Service[]
-    serviceIsModalOpen: boolean[]
+    services: Service[]
+    servicesIsModalOpen: boolean[]
     status: Status
     error: ErrorsResponses
 }
@@ -146,7 +158,7 @@ export interface CreateServiceEmployeesFormData
     extends OrderElementBasicType,
     ServiceEmployeeBasicType { }
 export interface UpdateServiceEmployeesFormData
-    extends CreateServiceEmployeesFormData{ }
+    extends CreateServiceEmployeesFormData { }
 
 // CREATE/UPDATE FORM DATA SLICE TYPES
 export type ServiceStringKeysType = ServiceFormDataEnum.TITLE

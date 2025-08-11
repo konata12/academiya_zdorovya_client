@@ -31,8 +31,7 @@ export const createNewsFormData = async (data: CreateNewsFormData) => {
                 const image = await get<File>(value, getIndexedDBStoreForImages(createStoreName))
 
                 if (!(image instanceof File)) throw Error('Помилка BACKGROUNDIMG при створенні новини зображення')
-                const parsedImage = renameFile(image, value + image.name)
-                formData.append(key, parsedImage)
+                formData.append(key, image)
             } else if (key === NewsRequstDataEnum.DETAILS) {
                 if (typeof value === 'string') throw Error('Помилка даних редактора')
                 await parseDetailsCreateRequestFormData(formData, value, createStoreName)
@@ -80,6 +79,7 @@ export const updateNewsFormData = async (data: CreateNewsFormData) => {
     }
 }
 
+// PARSE RESPONSE DATA
 export async function parseNewsResponse(news: News[]): Promise<News[]> {
     // CLEAR INDEXED DB DATA
     const store = getIndexedDBStoreForImages(storeName)

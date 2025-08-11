@@ -1,3 +1,5 @@
+@use '../../../../../../styles/variables' as *;
+
 .formErrorWrap {
     position: relative;
     width: 100%;
@@ -14,5 +16,6 @@
     .submit {
         margin-top: 48px;
         width: 100%;
+        transition: all $anim-time $slow;
     }
 }

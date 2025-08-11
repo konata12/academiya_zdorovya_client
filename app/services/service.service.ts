@@ -3,15 +3,17 @@ import {
     CreateServiceFormData,
     CreateServiceTreatmentStagesFormData,
     CreateServiceTypesFormData,
+    Service,
     ServiceEmployeesFormDataEnum,
     ServiceFormDataEnum,
     ServiceTreatmentStageEnum,
     ServiceTypesEnum,
 } from '@/app/types/data/services.type';
-import { get } from 'idb-keyval';
+import { clear, get } from 'idb-keyval';
 import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
-import { parseDetailsCreateRequestFormData } from '@/app/services/details.service';
+import { parseDetailsCreateRequestFormData, parseDetailsResponse } from '@/app/services/details.service';
 import { renameFile } from '@/app/services/files.service';
+import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from '@/app/services/response.service';
 
 const storeName = 'service_images'
 const createStoreName = 'service_create_images'
@@ -30,7 +32,8 @@ export const createServiceFormData = async (data: CreateServiceFormData) => {
 
                 if (!(image instanceof File)) throw Error('Помилка BACKGROUNDIMG при створенні послуги')
                 const parsedImage = renameFile(image, value + image.name)
-                formData.append(key, parsedImage)
+                formData.append(key, value)
+                formData.append(`service_${key}`, parsedImage)
             }
             else if (key === ServiceFormDataEnum.TREATMENTSTAGES) {
                 const typedValues = value as CreateServiceTreatmentStagesFormData[]
@@ -45,7 +48,6 @@ export const createServiceFormData = async (data: CreateServiceFormData) => {
             }
             else if (key === ServiceFormDataEnum.SERVICETYPES) {
                 const typedValues = value as CreateServiceTypesFormData[] | null
-                console.log('typedValues:', typedValues)
 
                 if (typedValues) {
                     await Promise.all(typedValues.map(async (typedValue, i) => {
@@ -68,9 +70,8 @@ export const createServiceFormData = async (data: CreateServiceFormData) => {
                                 const image = await get<File>(value, getIndexedDBStoreForImages(createStoreName))
 
                                 if (!(image instanceof File)) throw Error('Помилка BACKGROUNDIMG при створенні новини зображення')
-                                const parsedImage = renameFile(image, value + image.name)
                                 formData.append(`${key}[${i}][${typedKey}]`, value)
-                                formData.append(`backgroundImgs`, parsedImage)
+                                formData.append(`backgroundImgs`, image)
                             } else if (typedKey === ServiceTypesEnum.DETAILS) {
                                 if (typeof value === 'string' || typeof value === 'number') throw Error('Помилка даних редактора')
                                 await parseDetailsCreateRequestFormData(formData, value, createStoreName, `${key}[${i}]`)
@@ -121,4 +122,49 @@ export const createServiceFormData = async (data: CreateServiceFormData) => {
         console.error(error)
         throw Error('Error when parsing create details formData')
     }
+}
+
+// PARSE RESPONSE DATA
+export async function parseServiceResponse(service: Service[]): Promise<Service[]> {
+    // CLEAR INDEXED DB DATA
+    const store = getIndexedDBStoreForImages(storeName)
+    clear(store)
+
+    return await Promise.all(service.map(async (serviceData) => {
+        const {
+            image,
+            serviceTypes,
+            ...data
+        } = serviceData
+        let parsedServiceTypes = serviceTypes
+
+        const parsedImage = await getFileNameFromSignedURLAndSaveBlobInIndexedDB(image, store)
+        if (serviceTypes) {
+            parsedServiceTypes = await Promise.all(serviceTypes.map(async (type) => {
+                const {
+                    details,
+                    backgroundImg,
+                    ...data
+                } = type
+
+                let parsedBackgroungImg = await getFileNameFromSignedURLAndSaveBlobInIndexedDB(backgroundImg, store)
+
+                // PARSE DETAILS AND SAVE IMAGES IN INDEXEDDB
+                const parsedDetails = await parseDetailsResponse(details, store)
+
+                return {
+                    ...data,
+                    backgroundImg: parsedBackgroungImg,
+                    details: parsedDetails
+                }
+            }))
+        }
+
+        return {
+            ...data,
+            image: parsedImage,
+            serviceTypes: parsedServiceTypes
+        }
+    }))
+
 }

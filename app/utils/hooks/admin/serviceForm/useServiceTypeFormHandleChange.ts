@@ -1,4 +1,5 @@
-import {  ServiceTypeDetailsOrderSliceNameType } from "@/app/types/data/details.type"
+import { renameFile, uniqFileNameAndKeepExtension } from "@/app/services/files.service"
+import { ServiceTypeDetailsOrderSliceNameType } from "@/app/types/data/details.type"
 import { ServiceTypesEnum, ServiceTypesEnumType } from "@/app/types/data/services.type"
 import { FormElements } from "@/app/types/ui/form_components/inputContainers.type"
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice"
@@ -58,7 +59,7 @@ export function useServiceTypeFormHandleChange(
                 break;
 
             case ServiceTypesEnum.BACKGROUNDIMG:
-                const imageName = uuidv4()
+                const uniqName = uuidv4()
                 // REQUIRED ERROR HANDLING 
                 if (newValue.length > 0) dispatch(setFormError({
                     field: ServiceTypesEnum.BACKGROUNDIMG,
@@ -69,9 +70,14 @@ export function useServiceTypeFormHandleChange(
                 if (oldValue) {
                     del(oldValue, store)
                 }
-                if (newFile && newFile[0]) set(imageName, newFile[0], store)
 
-                dispatch(setBackgroundImage(imageName))
+                if (newFile && newFile[0]) {
+                    const imageName = uniqFileNameAndKeepExtension(uniqName, newFile[0])
+                    const image = renameFile(newFile[0], imageName)
+
+                    set(imageName, image, store)
+                    dispatch(setBackgroundImage(imageName))
+                }
                 break;
         }
     }, [indexedDBStoreName, detailsOrderSliceName])

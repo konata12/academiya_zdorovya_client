@@ -26,6 +26,7 @@ import { useCallback } from 'react';
 import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
 import { useIndexedDBStoreForDetailsImages } from '@/app/utils/hooks/admin/detailsForm/useIndexedDBStoreForDetailsImages';
 import { v4 as uuidv4 } from 'uuid';
+import { renameFile, uniqFileNameAndKeepExtension } from '@/app/services/files.service';
 
 
 interface HandleChangeProps<T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
@@ -97,15 +98,24 @@ export function useOrderedFormInput(orderSliceName: DetailsOrderSliceNameType) {
                     keyOfValueToChange = keyOfValueToChange as ImageFormDataEnumType
                     if (keyOfValueToChange === ImageFormDataEnum.IMAGE) {
                         // save image name to redux
-                        const imageName = uuidv4();
-                        (newComponentData.data as ImageFormData)[keyOfValueToChange] = imageName;
+                        const uniqName = uuidv4();
 
-                        // save image to indexedDB using name as key
+                        // delete old image from indexedDB
                         const oldImageName = (componentData.data as ImageFormData)[keyOfValueToChange];
                         if (oldImageName) {
                             del(oldImageName, store);
                         };
-                        set(imageName, newFile?.[0] || null, store)
+
+                        if (newFile && newFile[0]) {
+                            const imageName = uniqFileNameAndKeepExtension(uniqName, newFile[0]);
+                            const image = renameFile(newFile[0], imageName);
+
+                            // save image name to redux
+                            (newComponentData.data as ImageFormData)[keyOfValueToChange] = imageName;
+
+                            // save image to indexedDB using name as key
+                            set(imageName, image, store)
+                        }
                     } else if (keyOfValueToChange !== ImageFormDataEnum.SIZE) {
                         (newComponentData.data as ImageFormData)[keyOfValueToChange] = newValue
                     }

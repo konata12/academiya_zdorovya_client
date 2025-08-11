@@ -3,19 +3,16 @@ import { AxiosError } from 'axios';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
     CreateServiceFormData,
-    // CreateServiceFormData,
     Service,
-    ServiceFormData,
     ServiceInit,
-    // UpdateServiceFormData
 } from '@/app/types/data/services.type';
 import { ErrorResponse } from '@/app/types/data/response.type';
-import { createServiceFormData } from '@/app/services/service.service';
+import { createServiceFormData, parseServiceResponse } from '@/app/services/service.service';
 
 const initialState: ServiceInit = {
-    service: [],
+    services: [],
     // need for every new to have seperate state for ModalWindow of every new
-    serviceIsModalOpen: [],
+    servicesIsModalOpen: [],
     status: {
         getAll: null,
         getOne: null,
@@ -34,15 +31,15 @@ const initialState: ServiceInit = {
 
 const baseUrl = 'services'
 
-export const fetchService = createAsyncThunk('service/getAll', async (
+export const fetchServices = createAsyncThunk('service/getAll', async (
     _,
     { rejectWithValue }
 ) => {
     try {
         const response = await axiosInstance.get<Service[]>(`${baseUrl}`)
-        // const parsedService = await parseServiceResponse(response.data)
+        const parsedServices = await parseServiceResponse(response.data)
 
-        // return parsedService
+        return parsedServices
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
@@ -88,13 +85,18 @@ export const createService = createAsyncThunk('service/create', async (
         console.log('formData: ', Array.from(formData))
 
         const response = await axiosInstance.post<Service[]>(`${baseUrl}/admin/create`, formData)
+        const parsedServices = await parseServiceResponse(response.data)
         console.log(response)
-        return response.data
+        return parsedServices
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
+            let message = 'Unexpected server error'
+            if (error.response?.data.message) message = error.response?.data.message
+            if (Array.isArray(error.response?.data.message)) message = 'Many errors check console'
+
             const serializableError: ErrorResponse = {
-                message: error.response?.data.message || 'Unexpected server error',
+                message,
                 statusCode: error.status || 500
             }
             return rejectWithValue(serializableError)
@@ -165,10 +167,10 @@ const servicesSlice = createSlice({
     initialState,
     reducers: {
         openServiceModal(state, action: { payload: number }) {
-            state.serviceIsModalOpen[action.payload] = true
+            state.servicesIsModalOpen[action.payload] = true
         },
         closeServiceModal(state, action: { payload: number }) {
-            state.serviceIsModalOpen[action.payload] = false
+            state.servicesIsModalOpen[action.payload] = false
         },
 
         setServiceUpdateError(state) {
@@ -183,26 +185,26 @@ const servicesSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            // GET ALL NEWS
-            .addCase(fetchService.pending, (state) => {
+            // GET ALL SERVICES
+            .addCase(fetchServices.pending, (state) => {
                 state.status.getAll = "loading"
                 state.error.getAll = null
             })
-            .addCase(fetchService.fulfilled, (state, action: PayloadAction<Service[] | undefined>) => {
+            .addCase(fetchServices.fulfilled, (state, action: PayloadAction<Service[] | undefined>) => {
                 state.status.getAll = "succeeded"
                 if (action.payload) {
-                    state.service = action.payload
-                    state.serviceIsModalOpen = new Array(state.service.length).fill(false)
-                    state.error.delete = new Array(state.service.length).fill(null)
+                    state.services = action.payload
+                    state.servicesIsModalOpen = new Array(state.services.length).fill(false)
+                    state.error.delete = new Array(state.services.length).fill(null)
                 }
             })
-            .addCase(fetchService.rejected, (state, action) => {
+            .addCase(fetchServices.rejected, (state, action) => {
                 state.status.getAll = "failed"
-                state.service = []
+                state.services = []
                 state.error.getAll = action.payload as ErrorResponse
             })
 
-            // GET ONE NEWS
+            // GET ONE SERVICE
             .addCase(fetchOneService.pending, (state) => {
                 state.status.getOne = "loading"
                 state.error.getOne = null
@@ -210,8 +212,8 @@ const servicesSlice = createSlice({
             .addCase(fetchOneService.fulfilled, (state, action: PayloadAction<Service[] | undefined>) => {
                 state.status.getOne = "succeeded"
                 if (action.payload) {
-                    state.service = action.payload
-                    state.serviceIsModalOpen = new Array(state.service.length).fill(false)
+                    state.services = action.payload
+                    state.servicesIsModalOpen = new Array(state.services.length).fill(false)
                 }
             })
             .addCase(fetchOneService.rejected, (state, action) => {
@@ -219,20 +221,25 @@ const servicesSlice = createSlice({
                 state.error.getOne = action.payload as ErrorResponse
             })
 
-            // CREATE NEW
+            // CREATE SERVICE
             .addCase(createService.pending, (state) => {
                 state.status.create = "loading"
                 state.error.create = null
             })
-            .addCase(createService.fulfilled, (state) => {
+            .addCase(createService.fulfilled, (state, action: PayloadAction<Service[] | undefined>) => {
                 state.status.create = "succeeded"
+                if (action.payload) {
+                    state.services = action.payload
+                    state.servicesIsModalOpen = new Array(state.services.length).fill(false)
+                    state.error.delete = new Array(state.services.length).fill(null)
+                }
             })
             .addCase(createService.rejected, (state, action) => {
                 state.status.create = "failed"
                 state.error.create = action.payload as ErrorResponse
             })
 
-            // UPDATE NEW
+            // UPDATE SERVICE
             .addCase(updateService.pending, (state) => {
                 state.status.update = "loading"
                 state.error.update = null
@@ -245,33 +252,33 @@ const servicesSlice = createSlice({
                 state.error.update = action.payload as ErrorResponse
             })
 
-        // DELETE NEWS
-        // .addCase(deleteService.pending, (state, action: PayloadAction<number | undefined>) => {
-        //     state.status.delete = "loading"
-        //     const index = state.service.findIndex(service => service.id === action.payload)
-        //     if (index !== -1) {
-        //         state.error.delete[index] = null
-        //     }
-        // })
-        // .addCase(deleteService.fulfilled, (state, action: PayloadAction<number | undefined>) => {
-        //     state.status.delete = "succeeded"
-        //     const index = state.service.findIndex(service => service.id === action.payload)
-        //     if (index !== -1) {
-        //         state.service.splice(index, 1)
-        //         state.serviceIsModalOpen.splice(index, 1)
-        //         state.error.delete.splice(index, 1)
-        //     }
-        // })
-        // .addCase(deleteService.rejected, (state, action) => {
-        //     state.status.delete = "failed"
-        //     if (action.payload && typeof action.payload === 'object' && 'id' in action.payload) {
-        //         const error = action.payload as ErrorResponse;
-        //         const index = state.service.findIndex(service => service.id === error.id);
-        //         if (index !== -1) {
-        //             state.error.delete[index] = error;
-        //         }
-        //     }
-        // })
+            // DELETE SERVICE
+            .addCase(deleteService.pending, (state, action: PayloadAction<number | undefined>) => {
+                state.status.delete = "loading"
+                const index = state.services.findIndex(services => services.id === action.payload)
+                if (index !== -1) {
+                    state.error.delete[index] = null
+                }
+            })
+            .addCase(deleteService.fulfilled, (state, action: PayloadAction<number | undefined>) => {
+                state.status.delete = "succeeded"
+                const index = state.services.findIndex(services => services.id === action.payload)
+                if (index !== -1) {
+                    state.services.splice(index, 1)
+                    state.servicesIsModalOpen.splice(index, 1)
+                    state.error.delete.splice(index, 1)
+                }
+            })
+            .addCase(deleteService.rejected, (state, action) => {
+                state.status.delete = "failed"
+                if (action.payload && typeof action.payload === 'object' && 'id' in action.payload) {
+                    const error = action.payload as ErrorResponse;
+                    const index = state.services.findIndex(services => services.id === error.id);
+                    if (index !== -1) {
+                        state.error.delete[index] = error;
+                    }
+                }
+            })
     }
 })
 
