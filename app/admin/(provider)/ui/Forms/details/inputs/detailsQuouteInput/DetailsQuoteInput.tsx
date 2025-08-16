@@ -1,19 +1,19 @@
-import { DetailsFormDataEnum, QuouteError, QuouteFormComponentProps, QuouteFormData } from '@/app/types/data/details.type'
+import { DetailsFormDataEnum, QuoteFormComponentProps } from '@/app/types/data/details.type'
 import React from 'react'
 import styles from './DetailsQuouteInput.module.scss'
 import { useOrderedFormInput } from '@/app/utils/hooks/admin/detailsForm/useOrderedFormInput'
 import AutoResizingTextarea from '@/app/common_ui/form_components/basic_components/AutoResizingTextarea/AutoResizingTextarea'
 import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper'
 
-export default function DetailsQuouteInput({
+export default function DetailsQuoteInput({
     index,
     componentData,
     className,
     orderSliceName,
-}: QuouteFormComponentProps) {
+}: QuoteFormComponentProps) {
     const { handleChange } = useOrderedFormInput(orderSliceName)
     const { text, author } = componentData.data
-    const quouteErrors = componentData.error
+    const quoteErrors = componentData.error
 
     const handleChangeProps = {
         componentData,
@@ -22,16 +22,16 @@ export default function DetailsQuouteInput({
 
     return (
         <div
-            id={DetailsFormDataEnum.QUOUTES + index}
+            id={DetailsFormDataEnum.QUOTES + index}
             className={`${styles.container} ${className?.container}`}
         >
             <div className={`${styles.sideLine}`}></div>
             <ErrorWrapper
-                error={quouteErrors.text.message}
+                error={quoteErrors.text.message}
                 className={{ errorWrapper: styles.textErrorWrapper }}
             >
                 <AutoResizingTextarea
-                    className={`${styles.text} ${className?.quoute}`}
+                    className={`${styles.text} ${className?.quote || ''}`}
                     placeholder='Текст цитати'
                     padding={0}
                     minRows={1}
@@ -49,7 +49,7 @@ export default function DetailsQuouteInput({
             </ErrorWrapper>
 
             <ErrorWrapper
-                error={quouteErrors.author.message}
+                error={quoteErrors.author.message}
                 className={{ error: styles.authorError }}
             >
                 <input

@@ -9,6 +9,7 @@ import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from '@/app/services/r
 import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
 import { parseDetailsCreateRequestFormData, parseDetailsResponse, parseDetailsUpdateRequestFormData, transferDetailsRedactorTypeImagesBetweenIndexDBStores } from '@/app/services/details.service';
 import { renameFile, renameFileOrBlob } from '@/app/services/files.service';
+import { AppDBSchema, transferImageBetweenIndexDBStores } from '@/app/services/indexedDB.service';
 
 const storeName = 'news_images'
 const createStoreName = 'news_create_images'
@@ -107,11 +108,15 @@ export async function parseNewsResponse(news: News[]): Promise<News[]> {
 
 export async function transferNewsImagesBetweenIndexDBStores(
     news: News,
-    getStore: UseStore,
-    setStore: UseStore,
+    getStoreName: keyof AppDBSchema,
+    setStoreName: keyof AppDBSchema,
 ) {
-    const backgroundImg = await get<Blob | File>(news.backgroundImg, getStore)
-    await set(news.backgroundImg, backgroundImg, setStore)
+    await transferImageBetweenIndexDBStores(
+        news.backgroundImg,
+        getStoreName,
+        setStoreName,
+        'transferNewsImagesBetweenIndexDBStores',
+    )
 
-    transferDetailsRedactorTypeImagesBetweenIndexDBStores(news.details, getStore, setStore)
+    transferDetailsRedactorTypeImagesBetweenIndexDBStores(news.details, getStoreName, setStoreName)
 }

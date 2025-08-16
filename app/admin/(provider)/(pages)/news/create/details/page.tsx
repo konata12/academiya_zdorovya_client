@@ -23,7 +23,7 @@ export default function page() {
             <DetailsForm
                 titles={true}
                 paragraphs={true}
-                quoutes={true}
+                quotes={true}
                 lists={true}
                 images={true}
                 orderSliceName='newsCreateDetailsOrder'

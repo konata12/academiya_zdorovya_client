@@ -4,7 +4,7 @@ import React from 'react';
 import styles from './page.module.scss';
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
 import UpdateNewsForm from '@/app/admin/(provider)/ui/Forms/news/update/UpdateNewsForm'
-
+// todo add form change check before leaving page
 export default function page() {
 
     return (

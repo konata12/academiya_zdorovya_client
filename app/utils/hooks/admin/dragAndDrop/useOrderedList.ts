@@ -4,6 +4,7 @@ import { ServiceEmployeeFormData, ServiceFormDataEnum, ServiceTypeServiceFormDat
 import { setServiceCreateEmployees, setServiceCreateTypes } from '@/app/utils/redux/services/serviceCreateFormSlice';
 import { useAppDispatch } from '@/app/utils/redux/hooks';
 import { useCallback } from 'react';
+import { setServiceUpdateEmployees, setServiceUpdateTypes } from '@/app/utils/redux/services/serviceUpdateFormSlice';
 
 export interface OrderElementBasicType {
     order: number
@@ -12,12 +13,12 @@ export interface OrderElementBasicType {
 export interface OrderedListServiceEmployeeInterface {
     order: ServiceEmployeeFormData[],
     valueName: ServiceFormDataEnum.EMPLOYEES,
-    sliceName: 'servicesCreateForm',
+    sliceName: 'servicesCreateForm' | 'servicesUpdateForm',
 }
 export interface OrderedListServiceTypeInterface {
-    order: ServiceTypeServiceFormData[],
+    order: ServiceTypeServiceFormData[] | null,
     valueName: ServiceFormDataEnum.SERVICETYPES,
-    sliceName: 'servicesCreateForm',
+    sliceName: 'servicesCreateForm' | 'servicesUpdateForm',
 }
 export type DraggableComponentsDataType = OrderedListServiceEmployeeInterface
     | OrderedListServiceTypeInterface
@@ -41,6 +42,7 @@ export function useOrderedList() {
 
         if (!over) return
         if (active.id === over.id) return
+        if (!order) return
 
         // Find the actual items in the order array
         const activeItemIndex = order.findIndex(item => item.orderId === active.id)
@@ -58,6 +60,16 @@ export function useOrderedList() {
 
                     case ServiceFormDataEnum.EMPLOYEES:
                         dispatch(setServiceCreateEmployees(arrayMove(order, activeItemIndex, overItemIndex)))
+                        break;
+                }
+            case 'servicesUpdateForm':
+                switch (valueName) {
+                    case ServiceFormDataEnum.SERVICETYPES:
+                        dispatch(setServiceUpdateTypes(arrayMove(order, activeItemIndex, overItemIndex)))
+                        break;
+
+                    case ServiceFormDataEnum.EMPLOYEES:
+                        dispatch(setServiceUpdateEmployees(arrayMove(order, activeItemIndex, overItemIndex)))
                         break;
                 }
         }

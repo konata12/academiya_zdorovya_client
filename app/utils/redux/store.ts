@@ -19,6 +19,7 @@ import newsUpdateFormSlice from '@/app/utils/redux/news/newsUpdateFormSlice';
 import pricesCreateFormUiSlice from '@/app/utils/redux/prices/pricesCreateFormUiSlice';
 import pricesSlice from '@/app/utils/redux/prices/pricesSlice';
 import serviceCreateFormSlice from '@/app/utils/redux/services/serviceCreateFormSlice';
+import serviceUpdateFormSlice from '@/app/utils/redux/services/serviceUpdateFormSlice';
 import serviceFormUISlice from '@/app/utils/redux/services/serviceFromUISlice';
 import servicesSlice from '@/app/utils/redux/services/servicesSlice';
 import serviceTypeCreateDetailsOrderSlice from '@/app/utils/redux/details/services/serviceTypeCreateDetailsOrderSlice';
@@ -71,6 +72,7 @@ const rootReducer = combineReducers({
 
     // SERVICE CREATION
     serviceCreateForm: serviceCreateFormSlice,
+    serviceUpdateForm: serviceUpdateFormSlice,
     serviceTypeCreateForm: serviceTypeCreateFormSlice,
     serviceTypeUpdateForm: serviceTypeUpdateFormSlice,
     serviceTypeCreateDetailsOrder: serviceTypeCreateDetailsOrderSlice,

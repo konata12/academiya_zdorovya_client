@@ -13,7 +13,7 @@ import {
 } from '@/app/utils/redux/news/newsSlice';
 import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
 import { News } from '@/app/types/data/news.type';
-import { parseDetailsResponseToOrderComponent } from '@/app/services/details.service';
+import { parseDetailsResponseToOrderComponentArray } from '@/app/services/details.service';
 import { RootState } from '@/app/utils/redux/store';
 import { setAllNewsFormUpdateDataOnLink } from '@/app/utils/redux/news/newsUpdateFormSlice';
 import { setInitialDataOnLink } from '@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice';
@@ -64,15 +64,14 @@ export default function page() {
     }
     // LOAD DATA TO FORM AND ORDER SLICES AND LOAD IMAGES TO UPLOAD STORE
     const linkToUpdatePage = async (news: News) => {
-        const getStore = getIndexedDBStoreForImages(storeName)
         const setStore = getIndexedDBStoreForImages(updateStoreName)
         // CLEAR PREVIOUS NEWS UPDATE FORM DATA IMAGES
         await clear(setStore)
         // PARSE DETAILS TO REDUX TYPE
-        const parsedDetails = parseDetailsResponseToOrderComponent(news.details)
+        const parsedDetails = parseDetailsResponseToOrderComponentArray(news.details)
 
         // TRANSFER IMAGES TO ANOTHER STORE
-        await transferNewsImagesBetweenIndexDBStores(news, getStore, setStore)
+        await transferNewsImagesBetweenIndexDBStores(news, storeName, updateStoreName)
 
         // SET DATA TO UPDATE SLICES
         dispatch(resetNewsUpdateError())

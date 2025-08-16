@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { DetailsRedactorType } from '@/app/types/data/details.type';
-import { ServiceTreatmentBasicType, ServiceTypeFormData, ServiceTypesEnumType } from '@/app/types/data/services.type';
+import { ServiceTypeBasicType, ServiceTypeFormData, ServiceTypesEnumType } from '@/app/types/data/services.type';
 import { v4 as uuidv4 } from 'uuid';
 
 const initialState: ServiceTypeFormData = {
@@ -28,7 +28,7 @@ const serviceTypeCreateFormSlice = createSlice({
                 orderId: uuidv4()
             }
         },
-        setServiceTypeCreateFormDataOnLink(state, action: { payload: ServiceTreatmentBasicType }) {
+        setServiceTypeCreateFormDataOnLink(state, action: { payload: ServiceTypeBasicType }) {
             state.title = action.payload.title
             state.description = action.payload.description
             state.backgroundImg = action.payload.backgroundImg

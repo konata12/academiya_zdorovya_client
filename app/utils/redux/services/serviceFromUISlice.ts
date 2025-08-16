@@ -1,4 +1,4 @@
-import { ServiceFormDataUI, ServiceFormDataUICheckboxesType, ServiceFormDataUIModalsStatesEnum, ServiceModalsStatesType } from '@/app/types/data/services.type';
+import { ServiceFormData, ServiceFormDataUI, ServiceFormDataUICheckboxesType, ServiceFormDataUIModalsStatesEnum, ServiceModalsStatesType } from '@/app/types/data/services.type';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState: ServiceFormDataUI = {
@@ -10,6 +10,9 @@ const initialState: ServiceFormDataUI = {
     treatmentStagesModalIsOpen: [false],
     serviceTypesModalIsOpen: [],
     employeesModalIsOpen: [],
+
+    // UPDATING CACHING
+    updatingData: false
 }
 
 const serviceFormUISlice = createSlice({
@@ -26,22 +29,6 @@ const serviceFormUISlice = createSlice({
             const checkboxName = action.payload.checkboxName
             state[checkboxName] = action.payload.state
         },
-        // setCheckboxesDefaultValuesForUpdateForm(state, action: {
-        //     payload: {
-        //         instagram: string | null,
-        //         facebook: string | null,
-        //         X: string | null,
-        //         youtube: string | null,
-        //         achivements: string[],
-        //         backgroundImgColor: ServiceBackgroundImgColorType
-        //     }
-        // }) {
-        //     state.instagramCheckbox = !!action.payload.instagram
-        //     state.facebookCheckbox = !!action.payload.facebook
-        //     state.XCheckbox = !!action.payload.X
-        //     state.youtubeCheckbox = !!action.payload.youtube
-        //     state.achivementsCheckbox = !!action.payload.achivements.length
-        // },
 
         // MODALS
         setModalState(state, action: {
@@ -81,42 +68,33 @@ const serviceFormUISlice = createSlice({
                 state[modalName].splice(index, 1)
             }
         },
+        // UPDATING CACHING
+        setUpdatingState(state, action: {
+            payload: boolean
+        }) {
+            state.updatingData = action.payload
+        },
 
         resetServiceUIFormData: () => initialState,
 
         // INITIAL STATE
-        // setEmployeeUIFormValues(state, action: {
-        //     payload: Omit<EmployeeFormData, 'errors'>
-        // }) {
-        //     const {
-        //         workSpecialities,
-        //         achivements,
-        //     } = action.payload
+        setServiceUIFormValues(state, action: {
+            payload: ServiceFormData
+        }) {
+            const {
+                treatmentStages,
+                serviceTypesDescription,
+                serviceTypes,
+                employees,
+            } = action.payload
 
-        //     // SET CHECKBOCES
-        //     for (const key in action.payload) {
-        //         switch (key) {
-        //             case ServiceFormDataEnum.INSTAGRAM:
-        //             case ServiceFormDataEnum.FACEBOOK:
-        //             case ServiceFormDataEnum.X:
-        //             case ServiceFormDataEnum.YOUTUBE:
-        //                 const valueSoc = action.payload[key]
+            state.serviceTypesCheckbox = !!serviceTypes || !!serviceTypesDescription
+            state.serviceTypesDescriptionCheckbox = !!serviceTypesDescription
 
-        //                 state[`${key}Checkbox`] = !!valueSoc
-        //                 break;
-
-        //             case ServiceFormDataEnum.ACHIVEMENTS:
-        //                 const valueAch = action.payload[key]
-
-        //                 state[`${key}Checkbox`] = valueAch && !!valueAch.length ? true : false
-        //                 break;
-        //         }
-        //     }
-
-        //     // SET MODAL VALUES
-        //     state.workSpecialitysModalIsOpen = new Array(workSpecialities.length).fill(false)
-        //     if (achivements) state.achivementsModalIsOpen = new Array(achivements.length).fill(false)
-        // }
+            state.treatmentStagesModalIsOpen = Array(treatmentStages.length).fill(false)
+            state.serviceTypesModalIsOpen = Array(serviceTypes?.length || 0).fill(false)
+            state.employeesModalIsOpen = Array(employees.length).fill(false)
+        },
     }
 })
 
@@ -128,9 +106,11 @@ export const {
     setModalState,
     addModalState,
     deleteModalState,
+    // UPDATING CACHING
+    setUpdatingState,
     // INITIAL STATE
     resetServiceUIFormData,
-    // setEmployeeUIFormValues,
+    setServiceUIFormValues,
 } = serviceFormUISlice.actions
 
 export default serviceFormUISlice.reducer

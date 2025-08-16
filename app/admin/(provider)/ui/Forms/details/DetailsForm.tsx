@@ -1,512 +1,594 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import styles from './DetailsForm.module.scss';
-import { DraggableAreaContainerForDetails } from '@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainerForDetails';
-import { getIndexedDBStoreNameForDetailsImages } from '@/app/services/details.service';
-import { RootState } from '@/app/utils/redux/store';
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
-import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
-import { useOrderedForm } from '@/app/utils/hooks/admin/detailsForm/useOrderedForm';
-import { useRouter } from 'next/navigation';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useCallback, useEffect, useState } from "react";
+import styles from "./DetailsForm.module.scss";
+import { DraggableAreaContainerForDetails } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainerForDetails";
+import { getIndexedDBStoreNameForDetailsImages } from "@/app/services/details.service";
+import { RootState } from "@/app/utils/redux/store";
+import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
+import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
+import { useOrderedForm } from "@/app/utils/hooks/admin/detailsForm/useOrderedForm";
+import { usePathname, useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 import {
-    DescriptionImage,
-    DescriptionImageSize,
-    DescriptionList,
-    DescriptionParagraph,
-    DescriptionQuoute,
-    DescriptionTitle,
-    DetailsFormDataEnum,
-    DetailsFormDataEnumType,
-    DetailsFormDataErrorType,
-    DetailsFromProps,
-    DetailsRedactorType,
-    ImageError,
-    ListError,
-    OrderComponent,
-    QuouteError,
-} from '@/app/types/data/details.type';
+	DescriptionImage,
+	DescriptionImageSize,
+	DescriptionList,
+	DescriptionParagraph,
+	DescriptionQuote,
+	DescriptionTitle,
+	DetailsFormDataEnum,
+	DetailsFormDataEnumType,
+	DetailsFormDataErrorType,
+	DetailsFromProps,
+	DetailsRedactorType,
+	ImageError,
+	ListError,
+	OrderComponent,
+	QuoteError,
+} from "@/app/types/data/details.type";
 
-import DetailsTitleInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsTitleInput/DetailsTitleInput'
-import CreateDetailsInputBtn from '@/app/admin/(provider)/ui/Forms/details/createDetailsInputBtn/CreateDetailsInputBtn'
-import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
-import DetailsDraggableContainer from '@/app/admin/(provider)/ui/Forms/details/inputs/DetailsDraggableContainer';
-import DetailsParagraphInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsParagraphInput/DetailsParagraphInput';
-import DetailsQuouteInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsQuouteInput/DetailsQuouteInput';
-import DetailsListInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsListInput/DetailsListInput';
-import DetailsImageInput from '@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput';
-import { FormInputError } from '@/app/types/data/form.type';
-
+import DetailsTitleInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsTitleInput/DetailsTitleInput";
+import CreateDetailsInputBtn from "@/app/admin/(provider)/ui/Forms/details/createDetailsInputBtn/CreateDetailsInputBtn";
+import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
+import DetailsDraggableContainer from "@/app/admin/(provider)/ui/Forms/details/inputs/DetailsDraggableContainer";
+import DetailsParagraphInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsParagraphInput/DetailsParagraphInput";
+import DetailsQuoteInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsQuouteInput/DetailsQuoteInput";
+import DetailsListInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsListInput/DetailsListInput";
+import DetailsImageInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput";
+import { FormInputError } from "@/app/types/data/form.type";
+import { useServiceFormsDataCheckChange } from "@/app/utils/hooks/admin/serviceForm/useServiceFormsDataCheckChange";
 
 export default function DetailsForm({
-    titles,
-    paragraphs,
-    quoutes,
-    lists,
-    images,
+	titles,
+	paragraphs,
+	quotes,
+	lists,
+	images,
 
-    // need for determining which details order slice to use
-    orderSliceName,
+	// need for determining which details order slice to use
+	orderSliceName,
 }: DetailsFromProps) {
-    const [submitError, setSubmitError] = useState<FormInputError>({ message: '' })
-    const order = useAppSelector((state: RootState) => state[orderSliceName].order)
-    console.log('order: ', order)
+	const [submitError, setSubmitError] = useState<FormInputError>({
+		message: "",
+	});
+	const order = useAppSelector(
+		(state: RootState) => state[orderSliceName].order,
+	);
 
-    const router = useRouter()
-    const dispatch = useAppDispatch()
+	const router = useRouter();
+	const pathname = usePathname();
+	const dispatch = useAppDispatch();
+	const isCreatePage = pathname.includes("create");
 
-    const {
-        handleDragEnd,
-    } = useOrderedForm(orderSliceName)
-    const {
-        addDetailsComponent,
-        removeDetailsComponent,
-        setDetailsComponentError,
+	const { handleDragEnd } = useOrderedForm(orderSliceName);
+	const {
+		addDetailsComponent,
+		removeDetailsComponent,
+		setDetailsComponentError,
 
-        submitForm,
-        setFormError,
-    } = useDetailsFormSlice(orderSliceName)
-    const imageStoreName = getIndexedDBStoreNameForDetailsImages(orderSliceName)
+		submitForm,
+		setFormError,
+	} = useDetailsFormSlice(orderSliceName);
+	const imageStoreName =
+		getIndexedDBStoreNameForDetailsImages(orderSliceName);
 
-    useEffect(() => {
-        if (order.length >= 1) setSubmitError({ message: '' })
-    }, [order])
+	useEffect(() => {
+		if (order.length >= 1) setSubmitError({ message: "" });
+	}, [order]);
 
-    // FORM SUBMIT
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        const errorsData: {
-            error: DetailsFormDataErrorType,
-            id: string
-        }[] = []
+	// CHECK FORM CHANGED DATA BEFORE CHANGING PAGE
+	if (!isCreatePage) {
+		if (pathname.includes("serviceType")) useServiceFormsDataCheckChange();
+	}
 
-        const titles: DescriptionTitle[] = []
-        const paragraphs: DescriptionParagraph[] = []
-        const quoutes: DescriptionQuoute[] = []
-        const lists: DescriptionList[] = []
-        const images: DescriptionImage[] = []
+	// FORM SUBMIT
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const errorsData: {
+			error: DetailsFormDataErrorType;
+			id: string;
+		}[] = [];
 
-        order.forEach((orderComponent, index) => {
-            switch (orderComponent.type) {
-                case DetailsFormDataEnum.TITLES: {
-                    const title = orderComponent.data.title
+		const titles: DescriptionTitle[] = [];
+		const paragraphs: DescriptionParagraph[] = [];
+		const quotesSubmitData: DescriptionQuote[] = [];
+		const lists: DescriptionList[] = [];
+		const images: DescriptionImage[] = [];
 
-                    // VALIDATE
-                    if (!title.length) {
-                        const error = { title: { message: 'Заповніть заголовок' } }
-                        const id = DetailsFormDataEnum.TITLES + index
+		order.forEach((orderComponent, index) => {
+			switch (orderComponent.type) {
+				case DetailsFormDataEnum.TITLES: {
+					const title = orderComponent.data.title;
 
-                        dispatch(setDetailsComponentError({
-                            index,
-                            error,
-                        }))
+					// VALIDATE
+					if (!title.length) {
+						const error = {
+							title: { message: "Заповніть заголовок" },
+						};
+						const id = DetailsFormDataEnum.TITLES + index;
 
-                        errorsData.push({ error, id })
-                    }
+						dispatch(
+							setDetailsComponentError({
+								index,
+								error,
+							}),
+						);
 
-                    // PASS DATA
-                    titles.push({
-                        title,
-                        order: index
-                    })
-                    break;
-                }
-                case DetailsFormDataEnum.PARAGRAPHS: {
-                    const text = orderComponent.data.text
+						errorsData.push({ error, id });
+					}
 
-                    if (!text.length) {
-                        const error = { text: { message: 'Заповніть абзац' } }
-                        const id = DetailsFormDataEnum.PARAGRAPHS + index
+					// PASS DATA
+					titles.push({
+						title,
+						order: index,
+					});
+					break;
+				}
+				case DetailsFormDataEnum.PARAGRAPHS: {
+					const text = orderComponent.data.text;
 
-                        dispatch(setDetailsComponentError({
-                            index,
-                            error,
-                        }))
-                        errorsData.push({ error, id })
-                    }
+					if (!text.length) {
+						const error = { text: { message: "Заповніть абзац" } };
+						const id = DetailsFormDataEnum.PARAGRAPHS + index;
 
-                    paragraphs.push({
-                        text,
-                        order: index
-                    })
-                    break;
-                }
-                case DetailsFormDataEnum.QUOUTES: {
-                    const { text, author } = orderComponent.data
+						dispatch(
+							setDetailsComponentError({
+								index,
+								error,
+							}),
+						);
+						errorsData.push({ error, id });
+					}
 
-                    // Check if there are any errors
-                    if (!text.length || !author.length) {
-                        const error: QuouteError = {
-                            text: { message: !text.length ? 'Заповніть цитату' : '' },
-                            author: { message: !author.length ? 'Введіть автора' : '' },
-                        };
-                        const id = DetailsFormDataEnum.QUOUTES + index
+					paragraphs.push({
+						text,
+						order: index,
+					});
+					break;
+				}
+				case DetailsFormDataEnum.QUOTES: {
+					const { text, author } = orderComponent.data;
 
+					// Check if there are any errors
+					if (!text.length || !author.length) {
+						const error: QuoteError = {
+							text: {
+								message: !text.length ? "Заповніть цитату" : "",
+							},
+							author: {
+								message: !author.length ? "Введіть автора" : "",
+							},
+						};
+						const id = DetailsFormDataEnum.QUOTES + index;
 
-                        dispatch(setDetailsComponentError({
-                            index,
-                            error,
-                        }));
-                        errorsData.push({ error, id })
-                    }
+						dispatch(
+							setDetailsComponentError({
+								index,
+								error,
+							}),
+						);
+						errorsData.push({ error, id });
+					}
 
-                    quoutes.push({
-                        text,
-                        author,
-                        order: index
-                    })
-                    break;
-                }
-                case DetailsFormDataEnum.LISTS: {
-                    const { options, numerable } = orderComponent.data;
-                    const listErrors: ListError = {
-                        options: []
-                    };
+					quotesSubmitData.push({
+						text,
+						author,
+						order: index,
+					});
+					break;
+				}
+				case DetailsFormDataEnum.LISTS: {
+					const { options, numerable } = orderComponent.data;
+					const listErrors: ListError = {
+						options: [],
+					};
 
-                    // Check if there are any errors
-                    listErrors.options = orderComponent.data.options.map((option, i) => {
-                        return option.length
-                            ? { message: '' }
-                            : { message: 'Введіть пункт списку' }
-                    })
-                    const containsError = !!(listErrors.options.filter(optionMessage => optionMessage.message.length > 0).length)
-                    if (containsError) {
-                        dispatch(setDetailsComponentError({
-                            index,
-                            error: listErrors,
-                        }));
-                        errorsData.push({
-                            error: listErrors,
-                            id: DetailsFormDataEnum.LISTS + index
-                        })
-                    }
+					// Check if there are any errors
+					listErrors.options = orderComponent.data.options.map(
+						(option) => {
+							return option.length
+								? { message: "" }
+								: { message: "Введіть пункт списку" };
+						},
+					);
+					const containsError = !!listErrors.options.filter(
+						(optionMessage) => optionMessage.message.length > 0,
+					).length;
+					if (containsError) {
+						dispatch(
+							setDetailsComponentError({
+								index,
+								error: listErrors,
+							}),
+						);
+						errorsData.push({
+							error: listErrors,
+							id: DetailsFormDataEnum.LISTS + index,
+						});
+					}
 
-                    lists.push({
-                        options,
-                        numerable,
-                        order: index
-                    })
-                    break;
-                }
-                case DetailsFormDataEnum.IMAGES:
-                    const { image, description } = orderComponent.data
+					lists.push({
+						options,
+						numerable,
+						order: index,
+					});
+					break;
+				}
+				case DetailsFormDataEnum.IMAGES:
+					const { image, description } = orderComponent.data;
 
-                    // Check if there are any errors
-                    if ((!image || !image?.length) || !description.length) {
-                        const error: ImageError = {
-                            image: { message: (!image || !image?.length) ? 'Завантажте зображення' : '' },
-                            description: { message: !description.length ? 'Введіть опис' : '' },
-                        };
-                        const id = DetailsFormDataEnum.IMAGES + index
+					// Check if there are any errors
+					if (!image || !image?.length || !description.length) {
+						const error: ImageError = {
+							image: {
+								message:
+									!image || !image?.length
+										? "Завантажте зображення"
+										: "",
+							},
+							description: {
+								message: !description.length
+									? "Введіть опис"
+									: "",
+							},
+						};
+						const id = DetailsFormDataEnum.IMAGES + index;
 
-                        dispatch(setDetailsComponentError({
-                            index,
-                            error,
-                        }));
-                        errorsData.push({ error, id })
-                    }
+						dispatch(
+							setDetailsComponentError({
+								index,
+								error,
+							}),
+						);
+						errorsData.push({ error, id });
+					}
 
-                    images.push({
-                        image: image || '', //if image is empty or is null, there will be return of function after switch
-                        size: orderComponent.data.size,
-                        description: orderComponent.data.description,
-                        order: index
-                    })
-                    break;
+					images.push({
+						image: image || "", //if image is empty or is null, there will be return of function after switch
+						size: orderComponent.data.size,
+						description: orderComponent.data.description,
+						order: index,
+					});
+					break;
 
-                default:
-                    break;
-            }
-        })
+				default:
+					break;
+			}
+		});
 
-        // FORM VALIDATION
-        if (errorsData.length) {
-            // SCROLL TO INPUT
-            (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            })
-            return
-        }
+		// FORM VALIDATION
+		if (errorsData.length) {
+			// SCROLL TO INPUT
+			(
+				document.querySelector(
+					`#${errorsData[0].id}`,
+				) as HTMLInputElement
+			).scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+			});
+			return;
+		}
 
-        // CHECK IF FORM IS EMPTY
-        const allData = [
-            ...titles,
-            ...paragraphs,
-            ...quoutes,
-            ...lists,
-            ...images
-        ]
-        if (!allData.length) {
-            setSubmitError({ message: 'Створіть дані' })
-            return
-        } else {
-            setSubmitError({ message: '' })
-        }
+		// CHECK IF FORM IS EMPTY
+		const allData = [
+			...titles,
+			...paragraphs,
+			...quotesSubmitData,
+			...lists,
+			...images,
+		];
+		if (!allData.length) {
+			setSubmitError({ message: "Створіть дані" });
+			return;
+		} else {
+			setSubmitError({ message: "" });
+		}
 
-        const parsedFormData: DetailsRedactorType = {
-            titles,
-            paragraphs,
-            quoutes,
-            lists,
-            images
-        }
+		const parsedFormData: DetailsRedactorType = {
+			titles,
+			paragraphs,
+			quotes: quotesSubmitData,
+			lists,
+			images,
+		};
 
-        dispatch(submitForm(parsedFormData))
-        dispatch(setFormError({
-            field: 'details',
-            message: ''
-        }))
-        router.push('./')
-    }
+		dispatch(submitForm(parsedFormData));
+		dispatch(
+			setFormError({
+				field: "details",
+				message: "",
+			}),
+		);
+		router.push("./");
+	};
 
-    // INPUT METHODS
-    const createInput = useCallback(({
-        elementType,
-        listNumerable = false,
-        imageSize = 'big'
-    }: {
-        elementType: DetailsFormDataEnumType
-        listNumerable?: boolean
-        imageSize?: DescriptionImageSize
-    }) => {
-        const orderId = uuidv4()
-        let newComponent: OrderComponent
+	// INPUT METHODS
+	const createInput = useCallback(
+		({
+			elementType,
+			listNumerable = false,
+			imageSize = "big",
+		}: {
+			elementType: DetailsFormDataEnumType;
+			listNumerable?: boolean;
+			imageSize?: DescriptionImageSize;
+		}) => {
+			const orderId = uuidv4();
+			let newComponent: OrderComponent;
 
-        // create input
-        switch (elementType) {
-            case DetailsFormDataEnum.TITLES:
-                newComponent = {
-                    type: DetailsFormDataEnum.TITLES,
-                    data: {
-                        orderId,
-                        title: ''
-                    },
-                    error: {
-                        title: { message: '' }
-                    }
-                }
-                break;
+			// create input
+			switch (elementType) {
+				case DetailsFormDataEnum.TITLES:
+					newComponent = {
+						type: DetailsFormDataEnum.TITLES,
+						data: {
+							orderId,
+							title: "",
+						},
+						error: {
+							title: { message: "" },
+						},
+					};
+					break;
 
-            case DetailsFormDataEnum.PARAGRAPHS:
-                newComponent = {
-                    type: DetailsFormDataEnum.PARAGRAPHS,
-                    data: {
-                        orderId,
-                        text: '',
-                    },
-                    error: {
-                        text: { message: '' }
-                    }
-                }
-                break;
+				case DetailsFormDataEnum.PARAGRAPHS:
+					newComponent = {
+						type: DetailsFormDataEnum.PARAGRAPHS,
+						data: {
+							orderId,
+							text: "",
+						},
+						error: {
+							text: { message: "" },
+						},
+					};
+					break;
 
-            case DetailsFormDataEnum.QUOUTES:
-                newComponent = {
-                    type: DetailsFormDataEnum.QUOUTES,
-                    data: {
-                        orderId,
-                        text: '',
-                        author: '',
-                    },
-                    error: {
-                        text: { message: '' },
-                        author: { message: '' },
-                    }
-                }
-                break;
+				case DetailsFormDataEnum.QUOTES:
+					newComponent = {
+						type: DetailsFormDataEnum.QUOTES,
+						data: {
+							orderId,
+							text: "",
+							author: "",
+						},
+						error: {
+							text: { message: "" },
+							author: { message: "" },
+						},
+					};
+					break;
 
-            case DetailsFormDataEnum.LISTS:
-                newComponent = {
-                    type: DetailsFormDataEnum.LISTS,
-                    data: {
-                        orderId,
-                        options: [''],
-                        numerable: listNumerable
-                    },
-                    error: {
-                        options: [{ message: '' }]
-                    }
-                }
-                break;
+				case DetailsFormDataEnum.LISTS:
+					newComponent = {
+						type: DetailsFormDataEnum.LISTS,
+						data: {
+							orderId,
+							options: [""],
+							numerable: listNumerable,
+						},
+						error: {
+							options: [{ message: "" }],
+						},
+					};
+					break;
 
-            case DetailsFormDataEnum.IMAGES:
-                newComponent = {
-                    type: DetailsFormDataEnum.IMAGES,
-                    data: {
-                        orderId,
-                        size: imageSize,
-                        image: null,
-                        description: ''
-                    },
-                    error: {
-                        image: { message: '' },
-                        description: { message: '' },
-                    }
-                }
-                break;
+				case DetailsFormDataEnum.IMAGES:
+					newComponent = {
+						type: DetailsFormDataEnum.IMAGES,
+						data: {
+							orderId,
+							size: imageSize,
+							image: null,
+							description: "",
+						},
+						error: {
+							image: { message: "" },
+							description: { message: "" },
+						},
+					};
+					break;
 
-            default:
-                throw new Error(`Unknown element type: ${elementType}`);
-        }
+				default:
+					throw new Error(`Unknown element type: ${elementType}`);
+			}
 
-        // make input ordered
-        dispatch(addDetailsComponent(newComponent))
-    }, [])
+			// make input ordered
+			dispatch(addDetailsComponent(newComponent));
+		},
+		[],
+	);
 
-    const deleteInput = useCallback((
-        element: OrderComponent,
-    ) => {
-        // remove ordered component from redux
-        dispatch(removeDetailsComponent(element.data.orderId))
-    }, [])
+	const deleteInput = useCallback((element: OrderComponent) => {
+		// remove ordered component from redux
+		dispatch(removeDetailsComponent(element.data.orderId));
+	}, []);
 
-    const formInputsToRender = [
-        titles && {
-            label: 'Заголовок',
-            createInputHandler: () => createInput({ elementType: DetailsFormDataEnum.TITLES })
-        },
-        paragraphs && {
-            label: 'Абзац',
-            createInputHandler: () => createInput({ elementType: DetailsFormDataEnum.PARAGRAPHS })
-        },
-        quoutes && {
-            label: 'Цитата',
-            createInputHandler: () => createInput({ elementType: DetailsFormDataEnum.QUOUTES })
-        },
-        lists && {
-            label: 'Нумерований список',
-            createInputHandler: () => createInput({
-                elementType: DetailsFormDataEnum.LISTS,
-                listNumerable: true
-            })
-        },
-        lists && {
-            label: 'Маркований список',
-            createInputHandler: () => createInput({
-                elementType: DetailsFormDataEnum.LISTS,
-                listNumerable: false
-            })
-        },
-        images && {
-            label: 'Велика картинка',
-            createInputHandler: () => createInput({
-                elementType: DetailsFormDataEnum.IMAGES,
-                imageSize: 'big'
-            })
-        },
-        images && {
-            label: 'Мала картинка',
-            createInputHandler: () => createInput({
-                elementType: DetailsFormDataEnum.IMAGES,
-                imageSize: 'small'
-            })
-        },
-    ].filter((input) => !!input)
+	const formInputsToRender = [
+		titles && {
+			label: "Заголовок",
+			createInputHandler: () =>
+				createInput({ elementType: DetailsFormDataEnum.TITLES }),
+		},
+		paragraphs && {
+			label: "Абзац",
+			createInputHandler: () =>
+				createInput({ elementType: DetailsFormDataEnum.PARAGRAPHS }),
+		},
+		quotes && {
+			label: "Цитата",
+			createInputHandler: () =>
+				createInput({ elementType: DetailsFormDataEnum.QUOTES }),
+		},
+		lists && {
+			label: "Нумерований список",
+			createInputHandler: () =>
+				createInput({
+					elementType: DetailsFormDataEnum.LISTS,
+					listNumerable: true,
+				}),
+		},
+		lists && {
+			label: "Маркований список",
+			createInputHandler: () =>
+				createInput({
+					elementType: DetailsFormDataEnum.LISTS,
+					listNumerable: false,
+				}),
+		},
+		images && {
+			label: "Велика картинка",
+			createInputHandler: () =>
+				createInput({
+					elementType: DetailsFormDataEnum.IMAGES,
+					imageSize: "big",
+				}),
+		},
+		images && {
+			label: "Мала картинка",
+			createInputHandler: () =>
+				createInput({
+					elementType: DetailsFormDataEnum.IMAGES,
+					imageSize: "small",
+				}),
+		},
+	].filter((input) => !!input);
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <div className={styles.addInputsContainer}>
-                {formInputsToRender.length && formInputsToRender.map((input, i) => {
-                    return <CreateDetailsInputBtn
-                        key={i}
-                        label={input.label}
-                        handleFunction={() => { input.createInputHandler() }}
-                    />
-                })}
-            </div>
+	return (
+		<form onSubmit={handleSubmit}>
+			<div className={styles.addInputsContainer}>
+				{formInputsToRender.length &&
+					formInputsToRender.map((input, i) => {
+						return (
+							<CreateDetailsInputBtn
+								key={i}
+								label={input.label}
+								handleFunction={() => {
+									input.createInputHandler();
+								}}
+							/>
+						);
+					})}
+			</div>
 
-            <DraggableAreaContainerForDetails
-                handleDragEnd={handleDragEnd}
-                dndContextId='DetailsForm'
-                order={order}
-                droppableAreaClassName={styles.mainBody}
-            >
-                {order.map((element, index) => {
-                    return <DetailsDraggableContainer
-                        id={element.data.orderId}
-                        elementType={element.type}
-                        index={index}
-                        handleDelete={() => deleteInput(element)}
-                        key={index}
-                    >
-                        {(() => {
-                            const componentData = element.data
-                            const key = componentData.orderId
+			<DraggableAreaContainerForDetails
+				handleDragEnd={handleDragEnd}
+				dndContextId="DetailsForm"
+				order={order}
+				droppableAreaClassName={styles.mainBody}
+			>
+				{order.map((element, index) => {
+					return (
+						<DetailsDraggableContainer
+							id={element.data.orderId}
+							elementType={element.type}
+							index={index}
+							handleDelete={() => deleteInput(element)}
+							key={index}
+						>
+							{(() => {
+								const componentData = element.data;
+								const key = componentData.orderId;
 
-                            switch (element.type) {
-                                case DetailsFormDataEnum.TITLES:
-                                    return <DetailsTitleInput
-                                        key={key}
-                                        componentData={element}
-                                        index={index}
-                                        orderSliceName={orderSliceName}
-                                        className={styles.orderedComponent}
-                                    />
+								switch (element.type) {
+									case DetailsFormDataEnum.TITLES:
+										return (
+											<DetailsTitleInput
+												key={key}
+												componentData={element}
+												index={index}
+												orderSliceName={orderSliceName}
+												className={
+													styles.orderedComponent
+												}
+											/>
+										);
 
-                                case DetailsFormDataEnum.PARAGRAPHS:
-                                    return <DetailsParagraphInput
-                                        key={key}
-                                        componentData={element}
-                                        index={index}
-                                        orderSliceName={orderSliceName}
-                                        className={styles.orderedComponent}
-                                    />
+									case DetailsFormDataEnum.PARAGRAPHS:
+										return (
+											<DetailsParagraphInput
+												key={key}
+												componentData={element}
+												index={index}
+												orderSliceName={orderSliceName}
+												className={
+													styles.orderedComponent
+												}
+											/>
+										);
 
-                                case DetailsFormDataEnum.QUOUTES:
-                                    return <DetailsQuouteInput
-                                        key={key}
-                                        componentData={element}
-                                        index={index}
-                                        orderSliceName={orderSliceName}
-                                        className={{
-                                            quoute: styles.orderedComponent,
-                                            author: styles.orderedComponent,
-                                            container: styles.orderedComponent,
-                                        }}
-                                    />
+									case DetailsFormDataEnum.QUOTES:
+										return (
+											<DetailsQuoteInput
+												key={key}
+												componentData={element}
+												index={index}
+												orderSliceName={orderSliceName}
+												className={{
+													quote: styles.orderedComponent,
+													author: styles.orderedComponent,
+													container:
+														styles.orderedComponent,
+												}}
+											/>
+										);
 
-                                case DetailsFormDataEnum.LISTS:
-                                    return <DetailsListInput
-                                        key={key}
-                                        componentData={element}
-                                        index={index}
-                                        orderSliceName={orderSliceName}
-                                        className={{
-                                            option: styles.orderedComponent,
-                                            container: styles.orderedComponent,
-                                        }}
-                                    />
+									case DetailsFormDataEnum.LISTS:
+										return (
+											<DetailsListInput
+												key={key}
+												componentData={element}
+												index={index}
+												orderSliceName={orderSliceName}
+												className={{
+													option: styles.orderedComponent,
+													container:
+														styles.orderedComponent,
+												}}
+											/>
+										);
 
-                                case DetailsFormDataEnum.IMAGES:
-                                    return <DetailsImageInput
-                                        key={key}
-                                        componentData={element}
-                                        index={index}
-                                        orderSliceName={orderSliceName}
-                                        indexedDBStoreName={imageStoreName}
-                                        className={{
-                                            image: styles.orderedComponent,
-                                            description: styles.orderedComponent,
-                                            container: styles.orderedComponent,
-                                        }}
-                                    />
+									case DetailsFormDataEnum.IMAGES:
+										return (
+											<DetailsImageInput
+												key={key}
+												componentData={element}
+												index={index}
+												orderSliceName={orderSliceName}
+												indexedDBStoreName={
+													imageStoreName
+												}
+												className={{
+													image: styles.orderedComponent,
+													description:
+														styles.orderedComponent,
+													container:
+														styles.orderedComponent,
+												}}
+											/>
+										);
 
-                                default:
-                                    break;
-                            }
-                        })()}
-                    </DetailsDraggableContainer>
-                })}
-            </DraggableAreaContainerForDetails>
+									default:
+										break;
+								}
+							})()}
+						</DetailsDraggableContainer>
+					);
+				})}
+			</DraggableAreaContainerForDetails>
 
-            <SubmitButton
-                error={submitError}
-                label='Підтвердити зміни'
-                className={{
-                    button: submitError.message ? styles.button : '',
-                    error: styles.error
-                }}
-            />
-        </form>
-    )
+			<SubmitButton
+				error={submitError}
+				label={
+					pathname.includes("create")
+						? "Створити"
+						: "Підтвердити зміни"
+				}
+				className={{
+					button: submitError.message ? styles.button : "",
+					error: styles.error,
+				}}
+			/>
+		</form>
+	);
 }

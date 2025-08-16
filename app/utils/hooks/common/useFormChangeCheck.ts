@@ -3,7 +3,7 @@ import { setFormDefaultValuesNavigation } from "@/app/utils/redux/navigation/nav
 import _ from "lodash"
 import { useEffect, useRef, useState } from "react"
 
-export function useFormChangeCheck(oldValue: object | undefined, newValue: object) {
+export function useFormChangeCheck(oldValue: any, newValue: any) {
     const [formDefaultValues, setFormDefaultValues] = useState(true)
     const formDefaultValuesRef = useRef(formDefaultValues)
 
@@ -11,19 +11,17 @@ export function useFormChangeCheck(oldValue: object | undefined, newValue: objec
 
     // CHECK IF FORM DATA IS DEFAULT
     useEffect(() => {
-        if (oldValue) {
-            const equal = _.isEqual(newValue, oldValue)
-            setFormDefaultValues(equal)
-        }
+        const equal = _.isEqual(newValue, oldValue)
+        setFormDefaultValues(equal)
     }, [newValue, oldValue])
 
     // Update the ref whenever formDefaultValues changes
     useEffect(() => {
         formDefaultValuesRef.current = formDefaultValues
-        // update defultVelues state in redux
+        // update defaultValues state in redux
         dispatch(setFormDefaultValuesNavigation(formDefaultValuesRef.current))
 
-        // after leaving page set formDefaultValues in redix to initial
+        // after leaving page set formDefaultValues in redux to initial
         return () => {
             dispatch(setFormDefaultValuesNavigation(true))
         }

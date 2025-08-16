@@ -39,7 +39,6 @@ export default function layout({
     const router = useRouter()
     const pathname = usePathname()
     const isCreatePage = checkCreatePage(pathname)
-    console.log('employees: ', employees)
 
     useEffect(() => {
         dispatch(fetchEmployees())

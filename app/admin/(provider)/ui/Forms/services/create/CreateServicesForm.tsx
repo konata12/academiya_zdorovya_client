@@ -51,6 +51,7 @@ import {
     deleteModalState,
     resetServiceUIFormData,
     setModalState,
+    setServiceUIFormValues,
     triggerServiceUICheckbox,
 } from '@/app/utils/redux/services/serviceFromUISlice';
 import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton';
@@ -58,7 +59,7 @@ import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindo
 import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable';
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine';
 import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink';
-import { EmployeeSearchbarWithTable } from '@/app/admin/(provider)/ui/Forms/services/create/EmployeeSearchbarWithTable/EmployeeSearchbarWithTable';
+import { EmployeeSearchbarWithTable } from '@/app/admin/(provider)/ui/Forms/services/EmployeeSearchbarWithTable/EmployeeSearchbarWithTable';
 
 
 const indexedDBStoreName = 'service_create_images'
@@ -87,7 +88,6 @@ export default function CreateServicesForm() {
         setBasicValueError,
     } = useServiceFormSlice(indexedDBStoreName)
 
-
     // GET FORM VALUES FROM SLICE
     const {
         title,
@@ -100,24 +100,14 @@ export default function CreateServicesForm() {
         employees,
     } = data
 
+    // console.log('data: ', data)
+
     // HANDLE DRAG END PROPS DATA
     const serviceTypesDragData: OrderedListServiceTypeInterface = {
         order: serviceTypes,
         valueName: ServiceFormDataEnum.SERVICETYPES,
         sliceName: 'servicesCreateForm',
     }
-    console.log('data:', data)
-    // console.log('error.create:', error.create)
-
-    // console.log('errors:', errors)
-    // console.log('ui data:', {
-    // treatmentTypesCheckbox,
-    // treatmentTypesDescriptionCheckbox,
-
-    // treatmentStagesModalIsOpen,
-    //     treatmentTypesModalIsOpen,
-    //     employeesModalIsOpen,
-    // })
 
     // RESET ERRORS ON SOME VALUES ON THEIR CHANGE
     useEffect(() => {
@@ -127,6 +117,10 @@ export default function CreateServicesForm() {
             message
         }));
     }, [serviceTypes])
+
+    useEffect(() => {
+        dispatch(setServiceUIFormValues({ ...data, errors }))
+    }, [])
 
     // HANDLE ARRAY FIELDS
     const deleteTreatmentStage = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
@@ -163,9 +157,11 @@ export default function CreateServicesForm() {
     const linkToUpdateServiceType = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
         e.preventDefault()
 
-        const serviceType = serviceTypes[index]
-        dispatch(setServiceTypeCreateFormDataOnLink(serviceType))
-        router.push(`/admin/services/create/serviceType/${index}`)
+        if (serviceTypes) {
+            const serviceType = serviceTypes[index]
+            dispatch(setServiceTypeCreateFormDataOnLink(serviceType))
+            router.push(`/admin/services/create/serviceType/${index}`)
+        }
     }
     const deleteEmoployee = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
         e.preventDefault()
@@ -378,7 +374,7 @@ export default function CreateServicesForm() {
             mainDescription,
             serviceTypesDescription: serviceTypesCheckbox && serviceTypesDescriptionCheckbox
                 ? serviceTypesDescription : null,
-            serviceTypes: serviceTypesCheckbox ? parseOrderedArrayToRequest(serviceTypes) : null,
+            serviceTypes: serviceTypesCheckbox && serviceTypes ? parseOrderedArrayToRequest(serviceTypes) : null,
             employees: parseOrderedArrayToRequest(employees),
             image,
         }
@@ -593,7 +589,7 @@ export default function CreateServicesForm() {
                         })}
                     />
 
-                    {!!serviceTypes.length && <>
+                    {serviceTypes && !!serviceTypes.length && <>
                         <p className={`inputLabel ${styles.tableTitle}`}>
                             Таблиця видів послуги
                         </p>
@@ -677,7 +673,7 @@ export default function CreateServicesForm() {
 
                     <SafeLink
                         className={`btn blue xl ${styles.btn} ${errors.serviceTypes.message ? styles.error : ''}`}
-                        href={`/admin/services/create/serviceType/${serviceTypes.length}`}
+                        href={`/admin/services/create/serviceType/${serviceTypes ? serviceTypes.length : 0}`}
                         id={ServiceFormDataEnum.SERVICETYPES}
                         customHandleClick={(e) => addServiceType(e)}
                     >

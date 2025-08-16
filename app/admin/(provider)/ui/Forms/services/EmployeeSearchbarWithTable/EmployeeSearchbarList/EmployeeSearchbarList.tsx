@@ -8,6 +8,8 @@ import { ServiceEmployeeBasicType, ServiceFormDataUIModalsStatesEnum } from '@/a
 import { useAppDispatch } from '@/app/utils/redux/hooks';
 import { addServiceCreateEmployeesValue } from '@/app/utils/redux/services/serviceCreateFormSlice';
 import { addModalState } from '@/app/utils/redux/services/serviceFromUISlice';
+import { usePathname } from 'next/navigation';
+import { addServiceUpdateEmployeesValue } from '@/app/utils/redux/services/serviceUpdateFormSlice';
 
 
 interface EmployeeSearchbarListProps {
@@ -24,10 +26,11 @@ export function EmployeeSearchbarList({
     const [error, setError] = useState<ErrorResponse | null>(null)
 
     const dispatch = useAppDispatch()
+    const pathname = usePathname()
 
     useEffect(() => {
         fetchEmployees()
-    })
+    }, [])
 
     async function fetchEmployees() {
         if (result.length || error) return
@@ -50,9 +53,12 @@ export function EmployeeSearchbarList({
     }
 
     const addEmployee = (employee: ServiceEmployeeBasicType) => {
-        dispatch(addServiceCreateEmployeesValue(employee))
+        if (pathname.includes('create')) {
+            dispatch(addServiceCreateEmployeesValue(employee))
+        } else {
+            dispatch(addServiceUpdateEmployeesValue(employee))
+        }
         dispatch(addModalState({ modalName: ServiceFormDataUIModalsStatesEnum.EMPLOYEEMODALISOPEN }))
-
     }
     const errorUIMessage = (): string => {
         if (error?.statusCode === 500) return 'Помилка при отриманні працівників'
@@ -73,7 +79,7 @@ export function EmployeeSearchbarList({
                 Загрузка...
             </div>}
 
-            {error ? <div className={`${styles.line} ${styles.center} ${styles.error}`}>
+            {false ? <div className={`${styles.line} ${styles.center} ${styles.error}`}>
                 {errorUIMessage()}
             </div> : filteredEmployees.map((employee, i) => {
                 return (<button

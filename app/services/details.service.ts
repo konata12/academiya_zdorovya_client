@@ -5,24 +5,24 @@ import {
     UseStore
 } from 'idb-keyval';
 import {
-    DescriptionImage,
+    DescriptionImage, DescriptionList, DescriptionParagraph, DescriptionQuote, DescriptionTitle,
     DetailsFormDataEnum,
     DetailsOrderIndexedDBStoreNameType,
     DetailsOrderSliceNameType,
-    DetailsRedactorType,
+    DetailsRedactorType, ImageError,
     ImageFormData,
     ImageFormDataEnum,
-    ImageOrderComponent,
+    ImageOrderComponent, ListError,
     ListFormData,
     ListFormDataEnum,
     ListOrderComponent,
     OrderComponent,
     ParagraphFormData,
     ParagraphFormDataEnum,
-    ParagraphOrderComponent,
-    QuouteFormData,
-    QuouteFormDataEnum,
-    QuouteOrderComponent,
+    ParagraphOrderComponent, QuoteError,
+    QuoteFormData,
+    QuoteFormDataEnum,
+    QuoteOrderComponent,
     TitleFormData,
     TitleFormDataEnum,
     TitleOrderComponent
@@ -31,6 +31,7 @@ import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from '@/app/services/r
 import { renameFile, renameFileOrBlob } from '@/app/services/files.service';
 import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
 import { v4 as uuidv4 } from 'uuid';
+import { AppDBSchema, transferImageBetweenIndexDBStores } from '@/app/services/indexedDB.service';
 
 // INDEXED DB
 export function clearDetailsIndexDB(
@@ -64,13 +65,17 @@ export function getIndexedDBStoreNameForDetailsImages(orderSliceName: DetailsOrd
 }
 export async function transferDetailsRedactorTypeImagesBetweenIndexDBStores(
     details: DetailsRedactorType,
-    getStore: UseStore,
-    setStore: UseStore,
+    getStoreName: keyof AppDBSchema,
+    setStoreName: keyof AppDBSchema,
 ) {
     try {
         await Promise.all(details.images.map(async (image) => {
-            const loadedImg = await get<Blob | File>(image[ImageFormDataEnum.IMAGE], getStore)
-            await set(image[ImageFormDataEnum.IMAGE], loadedImg, setStore)
+            await transferImageBetweenIndexDBStores(
+                image[ImageFormDataEnum.IMAGE],
+                getStoreName,
+                setStoreName,
+                'transferDetailsRedactorTypeImagesBetweenIndexDBStores',
+            )
         }))
     } catch (error) {
         throw Error('Error when transfering details images from one store to another')
@@ -88,14 +93,14 @@ export async function parseDetailsCreateRequestFormData(
     let imagesCount = 0
     mainKey = mainKey ? mainKey : ''
 
-    // loop through titles, paragraphs, quoutes, lists, images
+    // loop through titles, paragraphs, quotes, lists, images
     for (const [key, arr] of Object.entries(details)) {
-        // loop through arrays titles, paragraphs, quoutes, lists, images
+        // loop through arrays titles, paragraphs, quotes, lists, images
         for (let index = 0; index < arr.length; index++) {
             const detailsValue = arr[index];
             const detailsValueArr = Object.entries(detailsValue);
 
-            // loop through key/value of every title, paragraph, quoute, list, image
+            // loop through key/value of every title, paragraph, quote, list, image
             for (const item of detailsValueArr) {
                 let [subKey, value] = item;
                 const formDataKey = `${mainKey}${mainKey ? '[details]' : 'details'}[${key}][${index}][${subKey}]`;
@@ -130,21 +135,23 @@ export async function parseDetailsUpdateRequestFormData(
     formData: FormData,
     details: DetailsRedactorType,
     storeName: DetailsOrderIndexedDBStoreNameType,
+    mainKey?: string
 ) {
     const store = getIndexedDBStoreForImages(storeName);
     let imagesCount = 0
+    mainKey = mainKey ? mainKey : ''
 
-    // loop through titles, paragraphs, quoutes, lists, images
+    // loop through titles, paragraphs, quotes, lists, images
     for (const [key, arr] of Object.entries(details)) {
-        // loop through arrays titles, paragraphs, quoutes, lists, images
+        // loop through arrays titles, paragraphs, quotes, lists, images
         for (let index = 0; index < arr.length; index++) {
             const detailsValue = arr[index];
             const detailsValueArr = Object.entries(detailsValue);
 
-            // loop through key/value of every title, paragraph, quoute, list, image
+            // loop through key/value of every title, paragraph, quote, list, image
             for (const item of detailsValueArr) {
                 let [subKey, value] = item;
-                const formDataKey = `details[${key}][${index}][${subKey}]`;
+                const formDataKey = `${mainKey}${mainKey ? '[details]' : 'details'}[${key}][${index}][${subKey}]`;
 
                 // ADD LIST OPTIONS TO FORMDATA
                 if (subKey === ListFormDataEnum.OPTIONS && value instanceof Array) {
@@ -192,7 +199,82 @@ export async function parseDetailsResponse(details: DetailsRedactorType, store: 
 }
 
 // OTHER
-export function parseDetailsResponseToOrderComponent(details: DetailsRedactorType): OrderComponent[] {
+export function parseOrderComponentArrayToDetailsRedactor(array: OrderComponent[]): DetailsRedactorType {
+    const titles: DescriptionTitle[] = []
+    const paragraphs: DescriptionParagraph[] = []
+    const quotesSubmitData: DescriptionQuote[] = []
+    const lists: DescriptionList[] = []
+    const images: DescriptionImage[] = []
+
+    array.forEach((orderComponent, index) => {
+        switch (orderComponent.type) {
+            case DetailsFormDataEnum.TITLES: {
+                const title = orderComponent.data.title
+
+                // PASS DATA
+                titles.push({
+                    title,
+                    order: index
+                })
+                break;
+            }
+            case DetailsFormDataEnum.PARAGRAPHS: {
+                const text = orderComponent.data.text
+
+                paragraphs.push({
+                    text,
+                    order: index
+                })
+                break;
+            }
+            case DetailsFormDataEnum.QUOTES: {
+                const { text, author } = orderComponent.data
+
+                quotesSubmitData.push({
+                    text,
+                    author,
+                    order: index
+                })
+                break;
+            }
+            case DetailsFormDataEnum.LISTS: {
+                const { options, numerable } = orderComponent.data;
+                const listErrors: ListError = {
+                    options: []
+                };
+
+                lists.push({
+                    options,
+                    numerable,
+                    order: index
+                })
+                break;
+            }
+            case DetailsFormDataEnum.IMAGES:
+                const { image, description } = orderComponent.data
+
+                images.push({
+                    image: image || '', //if image is empty or is null, there will be return of function after switch
+                    size: orderComponent.data.size,
+                    description: orderComponent.data.description,
+                    order: index
+                })
+                break;
+
+            default:
+                break;
+        }
+    })
+
+    return {
+        titles,
+        paragraphs,
+        quotes: quotesSubmitData,
+        lists,
+        images,
+}
+}
+export function parseDetailsResponseToOrderComponentArray(details: DetailsRedactorType): OrderComponent[] {
     const parsedTitles: TitleOrderComponent[] = details.titles.map((title) => {
         return {
             type: DetailsFormDataEnum.TITLES,
@@ -217,17 +299,17 @@ export function parseDetailsResponseToOrderComponent(details: DetailsRedactorTyp
             }
         }
     })
-    const parsedQuoutes: QuouteOrderComponent[] = details.quoutes.map((quoute): QuouteOrderComponent => {
+    const parsedQuotes: QuoteOrderComponent[] = details.quotes.map((quote): QuoteOrderComponent => {
         return {
-            type: DetailsFormDataEnum.QUOUTES,
+            type: DetailsFormDataEnum.QUOTES,
             data: {
-                [QuouteFormDataEnum.TEXT]: quoute[QuouteFormDataEnum.TEXT],
-                [QuouteFormDataEnum.AUTHOR]: quoute[QuouteFormDataEnum.AUTHOR],
-                orderId: `${quoute.order}`,
+                [QuoteFormDataEnum.TEXT]: quote[QuoteFormDataEnum.TEXT],
+                [QuoteFormDataEnum.AUTHOR]: quote[QuoteFormDataEnum.AUTHOR],
+                orderId: `${quote.order}`,
             },
             error: {
-                [QuouteFormDataEnum.TEXT]: { message: '' },
-                [QuouteFormDataEnum.AUTHOR]: { message: '' },
+                [QuoteFormDataEnum.TEXT]: { message: '' },
+                [QuoteFormDataEnum.AUTHOR]: { message: '' },
             }
         }
     })
@@ -265,7 +347,7 @@ export function parseDetailsResponseToOrderComponent(details: DetailsRedactorTyp
     return [
         ...parsedTitles,
         ...parsedParagraphs,
-        ...parsedQuoutes,
+        ...parsedQuotes,
         ...parsedLists,
         ...parsedImages,
     ].sort((a, b) => Number(a.data.orderId) - Number(b.data.orderId))
@@ -289,11 +371,11 @@ function convertOrderToOrderId(component: OrderComponent): OrderComponent {
                     orderId: uuidv4()
                 }
             };
-        case DetailsFormDataEnum.QUOUTES:
+        case DetailsFormDataEnum.QUOTES:
             return {
                 ...component,
                 data: {
-                    ...component.data as QuouteFormData,
+                    ...component.data as QuoteFormData,
                     orderId: uuidv4()
                 }
             };

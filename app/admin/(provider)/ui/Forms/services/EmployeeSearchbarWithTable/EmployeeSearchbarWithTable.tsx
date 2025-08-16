@@ -13,7 +13,7 @@ import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
 import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'
 import ModalWindow from '@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow';
 import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
-import { EmployeeSearchbarList } from '@/app/admin/(provider)/ui/Forms/services/create/EmployeeSearchbarWithTable/EmployeeSearchbarList/EmployeeSearchbarList';
+import { EmployeeSearchbarList } from '@/app/admin/(provider)/ui/Forms/services/EmployeeSearchbarWithTable/EmployeeSearchbarList/EmployeeSearchbarList';
 
 
 interface EmployeeSearchbarWithTableProps {
@@ -58,7 +58,6 @@ export function EmployeeSearchbarWithTable({
                     Виберіть лікаря
                 </label>
 
-                {/* <div className={styles.searchBar}> */}
                 <ErrorWrapper
                     error={error.message.length ? error.message : undefined}
                     className={{
@@ -92,7 +91,6 @@ export function EmployeeSearchbarWithTable({
                         </svg>
                     </button>
                 </ErrorWrapper>
-                {/* </div> */}
                 <EmployeeSearchbarList
                     showList={showList}
                     query={query}
@@ -113,6 +111,11 @@ export function EmployeeSearchbarWithTable({
                         droppableAreaClassName={styles.mainBody}
                     >
                         {employees.map((employee, i) => {
+                            const nameSurname = `${employee[ServiceEmployeesFormDataEnum.NAME]} ${employee[ServiceEmployeesFormDataEnum.SURNAME]}`
+                            const nameSurnameToRender = nameSurname.includes('undefined') 
+                                ? 'Не завантажило ПІ лікаря'
+                                : nameSurname
+
                             return <DraggableElementContainer
                                 key={i}
                                 id={employee.orderId}
@@ -122,7 +125,7 @@ export function EmployeeSearchbarWithTable({
                                     key={i}
                                 >
                                     <span>
-                                        {`${employee[ServiceEmployeesFormDataEnum.NAME]} ${employee[ServiceEmployeesFormDataEnum.SURNAME]}`}
+                                        {nameSurnameToRender}
                                     </span>
                                     <span>
                                         {employee[ServiceEmployeesFormDataEnum.POSITION]}

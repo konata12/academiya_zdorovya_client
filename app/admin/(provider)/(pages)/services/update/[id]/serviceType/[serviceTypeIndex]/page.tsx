@@ -2,8 +2,8 @@
 
 import React from 'react';
 import styles from './page.module.scss';
-import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
-import CreateServiceTypeForm from '@/app/admin/(provider)/ui/Forms/services/create/serviceType/CreateServiceTypeForm';
+import ServiceTypeForm from '@/app/admin/(provider)/ui/Forms/services/serviceType/ServiceTypeForm';
+import Link from "next/link";
 
 
 export default function page() {
@@ -12,17 +12,20 @@ export default function page() {
         <div className={styles.newsCreateFormPage}>
             <div className={styles.titleContainer}>
                 <p className={`title left md`}>
-                    Додати вид послуги
+                    Редагувати вид послуги
                 </p>
-                <SafeLink
+                <Link
                     className='btn blue md'
                     href='../'
                 >
                     Повернутись до послуг
-                </SafeLink>
+                </Link>
             </div>
             
-            <CreateServiceTypeForm />
+            <ServiceTypeForm
+                sliceName='serviceTypeUpdateForm'
+                detailsSliceName='serviceTypeUpdateDetailsOrder'
+            />
         </div>
     )
 }

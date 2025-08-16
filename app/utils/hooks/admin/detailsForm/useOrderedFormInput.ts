@@ -14,9 +14,9 @@ import {
     ParagraphError,
     ParagraphFormData,
     ParagraphFormDataEnumType,
-    QuouteError,
-    QuouteFormData,
-    QuouteFormDataEnumType,
+    QuoteError,
+    QuoteFormData,
+    QuoteFormDataEnumType,
     TitleError,
     TitleFormDataEnumType
 } from '@/app/types/data/details.type';
@@ -74,13 +74,13 @@ export function useOrderedFormInput(orderSliceName: DetailsOrderSliceNameType) {
                         (newComponentData.error as ParagraphError)[keyOfValueToChange].message = '';
                     }
                     break;
-                case DetailsFormDataEnum.QUOUTES:
-                    keyOfValueToChange = keyOfValueToChange as QuouteFormDataEnumType
-                    (newComponentData.data as QuouteFormData)[keyOfValueToChange] = newValue
+                case DetailsFormDataEnum.QUOTES:
+                    keyOfValueToChange = keyOfValueToChange as QuoteFormDataEnumType
+                    (newComponentData.data as QuoteFormData)[keyOfValueToChange] = newValue
 
                     // HANDLE ERROR
                     if (newValue.length) {
-                        (newComponentData.error as QuouteError)[keyOfValueToChange].message = '';
+                        (newComponentData.error as QuoteError)[keyOfValueToChange].message = '';
                     }
                     break;
                 case DetailsFormDataEnum.LISTS:

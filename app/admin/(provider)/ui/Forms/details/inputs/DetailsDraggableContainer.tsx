@@ -54,7 +54,7 @@ export default function DetailsDraggableContainer({
                 break;
 
             case DetailsFormDataEnum.PARAGRAPHS:
-            case DetailsFormDataEnum.QUOUTES:
+            case DetailsFormDataEnum.QUOTES:
             case DetailsFormDataEnum.LISTS:
             case DetailsFormDataEnum.IMAGES:
                 setBtnPositionAfterPadding(dafeultPadding)

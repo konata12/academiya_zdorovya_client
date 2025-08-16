@@ -49,7 +49,7 @@ export function DraggableAreaContainer<T extends DraggableComponentsDataType>({
             modifiers={[restrictToVerticalAxis, restrictToParentElement]}
         >
             <SortableContext
-                items={order.map((element) => element.orderId)}
+                items={order ? order.map((element) => element.orderId) : []}
                 strategy={verticalListSortingStrategy}
             >
                 {/* DROPPABLE AREA */}

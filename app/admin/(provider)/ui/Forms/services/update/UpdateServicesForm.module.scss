@@ -1,0 +1,121 @@
+@use '../../../../../../styles/variables' as *;
+@use '../../../../../../styles/mixins' as *;
+
+.createServiceForm {
+    display: flex;
+    flex-direction: column;
+    gap: 128px;
+
+    .minimalData {
+
+        .textareaContainer {
+            margin-top: 48px;
+        }
+
+        .imageSection {
+
+            .title {
+                margin: 64px 0;
+            }
+
+            .paragraph {
+                margin-bottom: 32px;
+            }
+        }
+    }
+
+    .treatmentStages {
+
+        .treatmentStagesContainer {
+
+            .inputContainer {
+                margin: 64px 0 0;
+            }
+
+            .buttonContainer {
+                margin: 0;
+            }
+
+            .inputOne {
+                margin: 48px 0;
+            }
+
+            .inputLabelTwo {
+                margin-bottom: 32px;
+            }
+
+            .inputTwo {
+                margin: 0;
+            }
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 32px;
+        }
+    }
+
+    .serviceTypes {
+
+        .mainBody {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+
+            .tableLineOptions {
+                margin-right: 14px;
+            }
+        }
+
+        .tableTitle {
+            margin: 64px 0 32px;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            margin-top: 32px;
+        }
+    }
+
+    .employees {
+
+        .tableTitle {
+            margin: 64px 0 32px;
+        }
+
+        .serachBarTitle {
+            margin: 64px 0 32px;
+        }
+    }
+
+    .preview {
+        margin-bottom: -128px;
+
+        .title {
+            margin-bottom: 64px;
+        }
+    }
+
+    .tableUnderText {
+        text-align: center;
+        @include rgba-text($text-color-black, 0.5);
+        font-size: 17px;
+        padding: 20px 0;
+    }
+
+    .dragReminder {
+        text-align: center;
+        color: $text-color-black;
+        font-size: 17px;
+        padding: 32px 0 0;
+    }
+
+    .error {
+        border-radius: $border-rad-5;
+        transition: all $anim-time $slow;
+        outline: 2px $error-color solid;
+
+        color: $error-color;
+    }
+}

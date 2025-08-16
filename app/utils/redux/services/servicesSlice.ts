@@ -1,17 +1,14 @@
 import axiosInstance from '@/app/utils/axios';
-import { AxiosError } from 'axios';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-    CreateServiceFormData,
-    Service,
-    ServiceInit,
-} from '@/app/types/data/services.type';
-import { ErrorResponse } from '@/app/types/data/response.type';
-import { createServiceFormData, parseServiceResponse } from '@/app/services/service.service';
+import {AxiosError} from 'axios';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {CreateServiceFormData, Service, ServiceInit, ServiceResponseData,} from '@/app/types/data/services.type';
+import {ErrorResponse} from '@/app/types/data/response.type';
+import {createServiceFormData, parseServiceResponse, updateServiceFormData} from '@/app/services/service.service';
+import {transferAndReplaceArrayOfImagesBetweenIndexDBStores} from '@/app/services/indexedDB.service';
 
 const initialState: ServiceInit = {
     services: [],
-    // need for every new to have seperate state for ModalWindow of every new
+    // need for every service to have separate state for ModalWindow of every service
     servicesIsModalOpen: [],
     status: {
         getAll: null,
@@ -36,10 +33,8 @@ export const fetchServices = createAsyncThunk('service/getAll', async (
     { rejectWithValue }
 ) => {
     try {
-        const response = await axiosInstance.get<Service[]>(`${baseUrl}`)
-        const parsedServices = await parseServiceResponse(response.data)
-
-        return parsedServices
+        const response = await axiosInstance.get<ServiceResponseData[]>(`${baseUrl}`)
+        return await parseServiceResponse(response.data)
     } catch (error) {
         if (error instanceof AxiosError) {
             console.log(error)
@@ -84,7 +79,7 @@ export const createService = createAsyncThunk('service/create', async (
         const formData = await createServiceFormData(data)
         console.log('formData: ', Array.from(formData))
 
-        const response = await axiosInstance.post<Service[]>(`${baseUrl}/admin/create`, formData)
+        const response = await axiosInstance.post<ServiceResponseData[]>(`${baseUrl}/admin/create`, formData)
         const parsedServices = await parseServiceResponse(response.data)
         console.log(response)
         return parsedServices
@@ -110,37 +105,52 @@ export const createService = createAsyncThunk('service/create', async (
     }
 })
 export const updateService = createAsyncThunk('service/update', async (
-    //     {
-    //     data,
-    //     id
-    // }: {
-    //     data: UpdateServiceFormData
-    //     id: string
-    //     }, { rejectWithValue }
+    {
+        oldImageNames,
+        newImageNames,
+        data,
+        id
+    }: {
+        oldImageNames: string[]
+        newImageNames: string[]
+        data: CreateServiceFormData
+        id: string
+    }, { rejectWithValue }
 ) => {
-    // try {
-    //     const formData = await updateServiceFormData(data)
-    //     console.log('formData: ', Array.from(formData))
+    try {
+        const formData = await updateServiceFormData(data)
+        console.log('oldImageNames: ', oldImageNames)
+        console.log('formData: ', Array.from(formData))
+        throw new Error('SSSSSSSSSSSSSSSSSSSSSSSSSS')
 
-    //     const response = await axiosInstance.put(`${baseUrl}/admin/update/${id}`, formData)
-    //     console.log(response)
-    //     return response.data
-    // } catch (error) {
-    //     if (error instanceof AxiosError) {
-    //         console.log(error)
-    //         const serializableError: ErrorResponse = {
-    //             message: error.response?.data.message || 'Unexpected server error',
-    //             statusCode: error.status || 500
-    //         }
-    //         return rejectWithValue(serializableError)
-    //     } else if (error instanceof Error) {
-    //         const serializableError: ErrorResponse = {
-    //             message: error.message,
-    //             statusCode: 500
-    //         }
-    //         return rejectWithValue(serializableError)
-    //     }
-    // }
+        const response = await axiosInstance.put(`${baseUrl}/admin/update/${id}`, formData)
+
+        await transferAndReplaceArrayOfImagesBetweenIndexDBStores(
+            newImageNames,
+            oldImageNames,
+            'service_update_images',
+            'service_images',
+            'updateService',
+        )
+
+        console.log(response)
+        return { data, id }
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            console.log(error)
+            const serializableError: ErrorResponse = {
+                message: error.response?.data.message || 'Unexpected server error',
+                statusCode: error.status || 500
+            }
+            return rejectWithValue(serializableError)
+        } else if (error instanceof Error) {
+            const serializableError: ErrorResponse = {
+                message: error.message,
+                statusCode: 500
+            }
+            return rejectWithValue(serializableError)
+        }
+    }
 })
 export const deleteService = createAsyncThunk('service/delete', async (
     id: number,
@@ -244,8 +254,17 @@ const servicesSlice = createSlice({
                 state.status.update = "loading"
                 state.error.update = null
             })
-            .addCase(updateService.fulfilled, (state) => {
+            .addCase(updateService.fulfilled, (state, action: PayloadAction<{
+                data: CreateServiceFormData;
+                id: string;
+            } | undefined>) => {
                 state.status.update = "succeeded"
+                if (action.payload) {
+                    const { data, id } = action.payload
+                    const index = state.services.findIndex(service => `${service.id}` === id)
+
+                    state.services[index] = {...data, id: +id}
+                }
             })
             .addCase(updateService.rejected, (state, action) => {
                 state.status.update = "failed"

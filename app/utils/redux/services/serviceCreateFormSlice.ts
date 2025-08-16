@@ -7,7 +7,7 @@ import {
     ServiceStringKeysType,
     ServiceTreatmentStageEnumType,
     ServiceTypeServiceFormData
-    } from '@/app/types/data/services.type';
+} from '@/app/types/data/services.type';
 import { createSlice } from '@reduxjs/toolkit';
 import { delMany } from 'idb-keyval';
 import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
@@ -25,7 +25,7 @@ const initialState: ServiceFormData = {
     }],
     mainDescription: '',
     serviceTypesDescription: null,
-    serviceTypes: [],
+    serviceTypes: null,
     employees: [],
     errors: {
         title: { message: '' },
@@ -86,14 +86,16 @@ const serviceCreateFormSlice = createSlice({
         // SERVICE TYPES
         deleteServiceCreateTypesValue(state, action: { payload: number }) {
             const index = action.payload
-            const imagesNames: string[] = [
-                state.serviceTypes[index].backgroundImg,
-                ...(state.serviceTypes[index].details.images.map(image => image[ImageFormDataEnum.IMAGE]))
-            ]
+            if (state.serviceTypes) {
+                const imagesNames: string[] = [
+                    state.serviceTypes[index].backgroundImg,
+                    ...(state.serviceTypes[index].details.images.map(image => image[ImageFormDataEnum.IMAGE]))
+                ]
 
-            state.serviceTypes.splice(index, 1)
-            const store = getIndexedDBStoreForImages(indexedDBStoreName)
-            delMany(imagesNames, store)
+                state.serviceTypes.splice(index, 1)
+                const store = getIndexedDBStoreForImages(indexedDBStoreName)
+                delMany(imagesNames, store)
+            }
         },
         setServiceCreateTypesValue(state, action: {
             payload: {
@@ -102,7 +104,7 @@ const serviceCreateFormSlice = createSlice({
             }
         }) {
             const { index, value } = action.payload
-            if (!isNaN(index)) state.serviceTypes[index] = value
+            if (!isNaN(index) && state.serviceTypes) state.serviceTypes[index] = value
         },
         setServiceCreateTypes(state, action: { payload: ServiceTypeServiceFormData[] }) {
             state.serviceTypes = action.payload

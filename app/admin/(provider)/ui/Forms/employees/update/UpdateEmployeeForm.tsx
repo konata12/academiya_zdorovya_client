@@ -89,7 +89,6 @@ export default function UpdateEmployeeFrom() {
     } = useEmployeeFormSlice(updateStoreName)
 
     const oldEmployee = employees.find(employee => `${employee.id}` === id)
-    // console.log('data:', data)
 
     // GET FORM VALUES FROM SLICE
     const {

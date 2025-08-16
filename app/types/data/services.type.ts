@@ -5,6 +5,8 @@ import { ErrorsResponses, Status } from "@/app/types/data/response.type"
 import { OrderElementBasicType } from "@/app/utils/hooks/admin/dragAndDrop/useOrderedList"
 
 export type ServiceFormIndexedDBType = "service_create_images" | 'service_update_images'
+export type ServiceTypesSliceNameType = "serviceTypeCreateForm" | 'serviceTypeUpdateForm'
+export type ServiceTypesDetailsSliceNameType = "serviceTypeCreateDetailsOrder" | 'serviceTypeUpdateDetailsOrder'
 
 
 export interface Service {
@@ -13,22 +15,28 @@ export interface Service {
     shortDescription: string
     image: string
 
-    treatmentStages: ServiceTreatmentStageType[]
+    treatmentStages: ServiceTreatmentStageBasicType[]
     mainDescription: string
     serviceTypesDescription: string | null
     serviceTypes: ServiceTypeResponseData[] | null
     employees: ServiceEmployeeResponseData[]
 }
+// RESPONSE DATA
+export interface ServiceResponseData
+    extends Service {
+    treatmentStages: ServiceTreatmentStageResponseData[]
+}
 
+export interface ServiceTreatmentStageResponseData
+    extends ServiceTreatmentStageType { }
 export interface ServiceTypeResponseData
     extends ServiceType {
     backgroundImg: string
     details: DetailsRedactorType
 }
 export interface ServiceEmployeeResponseData
-    extends OrderElementBasicType {
-    id: number
-}
+    extends OrderElementBasicType,
+    ServiceEmployeeBasicType { }
 
 // BASIC
 export interface ServiceTreatmentStageBasicType {
@@ -39,7 +47,7 @@ export interface ServiceTreatmentStageType
     extends OrderElementBasicType,
     ServiceTreatmentStageBasicType { }
 
-export interface ServiceTreatmentBasicType {
+export interface ServiceTypeBasicType {
     title: string
     description: string
     backgroundImg: string | null
@@ -47,9 +55,7 @@ export interface ServiceTreatmentBasicType {
 }
 export interface ServiceType
     extends OrderElementBasicType,
-    ServiceTreatmentBasicType {
-    id: number
-}
+    ServiceTypeBasicType { }
 export interface ServiceEmployeeBasicType {
     id: number
     name: string
@@ -57,7 +63,7 @@ export interface ServiceEmployeeBasicType {
     position: string
 }
 
-// HANDLESUBMIT 
+// HANDLE SUBMIT
 export type ServiceHandleSubmitErrorIdType = ServiceFormDataEnumType
     | `${ServiceFormDataEnum.TREATMENTSTAGES}_${ServiceTreatmentStageEnumType}_${number}`
 
@@ -82,7 +88,7 @@ export interface ServiceFormData {
     mainDescription: string
 
     serviceTypesDescription: string | null
-    serviceTypes: ServiceTypeServiceFormData[]
+    serviceTypes: ServiceTypeServiceFormData[] | null
     employees: ServiceEmployeeFormData[]
 
     errors: ServiceFormDataErrors
@@ -90,7 +96,7 @@ export interface ServiceFormData {
 
 export interface ServiceTypeServiceFormData
     extends DraggableComponent,
-    ServiceTreatmentBasicType {
+    ServiceTypeBasicType {
     backgroundImg: string
     details: DetailsRedactorType
 }
@@ -100,7 +106,7 @@ export interface ServiceEmployeeFormData
 // SERVICE TYPES FORM DATA
 export interface ServiceTypeFormData
     extends DraggableComponent,
-    ServiceTreatmentBasicType {
+    ServiceTypeBasicType {
     errors: {
         title: FormInputError
         description: FormInputError
@@ -138,6 +144,10 @@ export interface CreateServiceFormData {
     serviceTypes: CreateServiceTypesFormData[] | null
     employees: CreateServiceEmployeesFormData[]
 }
+export interface UpdateServiceFormData
+    extends CreateServiceFormData {
+    id: string
+}
 
 export interface CreateServiceTreatmentStagesFormData
     extends OrderElementBasicType,
@@ -145,7 +155,7 @@ export interface CreateServiceTreatmentStagesFormData
 
 export interface CreateServiceTypesFormData
     extends OrderElementBasicType,
-    ServiceTreatmentBasicType {
+    ServiceTypeBasicType {
     backgroundImg: string
     details: DetailsRedactorType
 }
@@ -155,8 +165,7 @@ export interface UpdateServiceTypesFormData
 }
 
 export interface CreateServiceEmployeesFormData
-    extends OrderElementBasicType,
-    ServiceEmployeeBasicType { }
+    extends ServiceEmployeeResponseData { }
 export interface UpdateServiceEmployeesFormData
     extends CreateServiceEmployeesFormData { }
 
@@ -179,7 +188,9 @@ export interface ServiceFormDataUIModalsStates {
 }
 export interface ServiceFormDataUI
     extends ServiceFormDataUICheckboxes,
-    ServiceFormDataUIModalsStates { }
+    ServiceFormDataUIModalsStates {
+    updatingData: boolean
+}
 
 // HOOKS
 export type ServiceFormHandleChangeField = Exclude<ServiceFormDataEnum, ServiceFormDataEnum.TREATMENTSTAGES>

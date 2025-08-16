@@ -31,6 +31,11 @@ export default function AutoResizingTextarea({
         }
     };
 
+    // Sync local state with prop changes
+    useEffect(() => {
+        setValue(propValue || '');
+    }, [propValue]);
+
     useEffect(() => {
         const textarea = internalRef.current;
         if (textarea) {

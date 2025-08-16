@@ -1,20 +1,23 @@
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks'
-import { setFormDefaultValuesNavigation } from '@/app/utils/redux/navigation/navigationSlice'
+import {useAppDispatch, useAppSelector} from '@/app/utils/redux/hooks'
+import {setFormDefaultValuesNavigation} from '@/app/utils/redux/navigation/navigationSlice'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import {useRouter} from 'next/navigation'
+import React from "react";
 
 export default function SafeLink({
-    href,
-    children,
-    className,
-    id,
-    customHandleClick
-}: {
+     href,
+     children,
+     className,
+     id,
+     customHandleClick,
+     confirmMessage = "Ви впевнені, що хочете покинути сторінку? Зміни не буде збережено."
+ }: {
     href: string
     children: React.ReactNode
     id?: string
     className?: string
     customHandleClick?: (e: any) => void
+    confirmMessage?: string
 }) {
     const router = useRouter()
     const dispatch = useAppDispatch()
@@ -33,7 +36,7 @@ export default function SafeLink({
             const currentUrl = window.location.href
             if (linkUrl === currentUrl) return
 
-            const confirmed = window.confirm("Ви впевнені, що хочете покинути сторінку? Зміни не буде збережено.");
+            const confirmed = window.confirm(confirmMessage);
             if (!confirmed) {
                 e.preventDefault(); // Prevents navigation
                 return;
