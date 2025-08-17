@@ -1,19 +1,16 @@
-'use client'
+"use client";
 
-import React from 'react'
-import styles from './page.module.scss'
-import UpdateServiceForm from '@/app/admin/(provider)/ui/Forms/services/update/UpdateServicesForm'
+import React from "react";
+import styles from "./page.module.scss";
+import UpdateServiceForm from "@/app/admin/(provider)/ui/Forms/services/update/UpdateServicesForm";
 
 export default function page() {
-
-    return (
-        <div className={styles.FormPage}>
-            <div className={styles.titleContainer}>
-                <p className={`title left md`}>
-                    Редагувати послугу
-                </p>
-            </div>
-            <UpdateServiceForm />
-        </div>
-    )
+	return (
+		<div className={styles.FormPage}>
+			<div className={styles.titleContainer}>
+				<p className={`title left md`}>Редагувати послугу</p>
+			</div>
+			<UpdateServiceForm />
+		</div>
+	);
 }

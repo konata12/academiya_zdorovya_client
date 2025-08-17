@@ -2,7 +2,10 @@
 
 import React, { useEffect } from "react";
 import styles from "./layout.module.scss";
-import { checkCreatePage, getUrlLastElement } from "@/app/services/navigation.service";
+import {
+	checkCreatePage,
+	getUrlLastElement,
+} from "@/app/services/navigation.service";
 import {
 	closeServiceModal,
 	deleteService as deleteServiceAction,
@@ -11,10 +14,9 @@ import {
 } from "@/app/utils/redux/services/servicesSlice";
 import { RootState } from "@/app/utils/redux/store";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
-import { usePathname } from "next/navigation";
 import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
 import CommonTable404 from "@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404";
 import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
@@ -31,11 +33,9 @@ export default function page({
 	const { services, servicesIsModalOpen, error, status } = useAppSelector(
 		(state: RootState) => state.services,
 	);
-	const order = useAppSelector((state: RootState) => state.serviceTypeUpdateDetailsOrder.order);
-	console.log("order123123123: ", order);
+	console.log("services: ", services);
 
 	const dispatch = useAppDispatch();
-	const router = useRouter();
 	const pathname = usePathname();
 	const isCreatePage = checkCreatePage(pathname);
 
@@ -95,7 +95,7 @@ export default function page({
 										<SafeLink
 											className={`btn blue sm ${getUrlLastElement(pathname) === `${service.id}` ? "disabled" : ""}`}
 											href={`/admin/services/update/${service.id}`}
-											customHandleClick={(e) =>
+											customHandleClick={() =>
 												dispatch(setUpdatingState(false))
 											}
 										>

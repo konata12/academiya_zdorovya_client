@@ -1,243 +1,255 @@
-import InputContainer from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer';
-import React from 'react';
-import styles from './CreateNewsForm.module.scss';
-import { clear } from 'idb-keyval';
-import { createNews } from '@/app/utils/redux/news/newsSlice';
-import { CreateNewsFormData, NewsFormDataEnum, NewsFormDataEnumType } from '@/app/types/data/news.type';
-import { ErrorWrapper } from '@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper';
-import { FormInputError } from '@/app/types/data/form.type';
-import { fullfilled } from '@/app/services/response.service';
-import { getIndexedDBStoreForImages } from '@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages';
-import { ImageInputContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer';
-import { ImageInputPreviewFromIndexedDB } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB';
-import { RootState } from '@/app/utils/redux/store';
-import { TextareaContainer } from '@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer';
-import { useAppDispatch, useAppSelector } from '@/app/utils/redux/hooks';
-import { useDetailsFormSlice } from '@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice';
-import { useNewsFormHandleChange } from '@/app/utils/hooks/admin/newsForm/useNewsFormHandleChange';
-import { useRouter } from 'next/navigation';
+import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
+import React from "react";
+import styles from "./CreateNewsForm.module.scss";
+import { clear } from "idb-keyval";
+import { createNews } from "@/app/utils/redux/news/newsSlice";
+import {
+	CreateNewsFormData,
+	NewsFormDataEnum,
+	NewsFormDataEnumType,
+} from "@/app/types/data/news.type";
+import { ErrorWrapper } from "@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper";
+import { FormInputError } from "@/app/types/data/form.type";
+import { fullfilled } from "@/app/services/response.service";
+import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
+import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
+import { ImageInputPreviewFromIndexedDB } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB";
+import { RootState } from "@/app/utils/redux/store";
+import { TextareaContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer";
+import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
+import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
+import { useNewsFormHandleChange } from "@/app/utils/hooks/admin/newsForm/useNewsFormHandleChange";
+import { useRouter } from "next/navigation";
 
-import CommonTable from '@/app/admin/(provider)/ui/Tables/Common/CommonTable'
-import TableLine from '@/app/admin/(provider)/ui/Tables/ListOption/TableLine'
-import SafeLink from '@/app/admin/(provider)/ui/Links/SafeLink/SafeLink'
-import SubmitButton from '@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton'
+import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
+import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
+import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
+import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
 
-
-const titles = ['Стан вмісту', 'Опції']
-const indexedDBStoreName = 'news_create_images'
-const detailsOrderSliceName = 'newsCreateDetailsOrder'
+const titles = ["Стан вмісту", "Опції"];
+const indexedDBStoreName = "news_create_images";
+const detailsOrderSliceName = "newsCreateDetailsOrder";
 
 export default function CreateNewsForm() {
-    const {
-        title,
-        description,
-        backgroundImg,
-        details,
-        errors,
-    } = useAppSelector((state: RootState) => state.newsCreateForm)
-    const { error } = useAppSelector((state: RootState) => state.news)
+	const { title, description, backgroundImg, details, errors } = useAppSelector(
+		(state: RootState) => state.newsCreateForm,
+	);
+	const { error } = useAppSelector((state: RootState) => state.news);
 
-    const router = useRouter()
-    const dispatch = useAppDispatch()
-    const handleChange = useNewsFormHandleChange(indexedDBStoreName, detailsOrderSliceName)
-    const {
-        setFormError,
-        resetDetailsComponentsOrder,
-        resetFromData,
-    } = useDetailsFormSlice(detailsOrderSliceName)
+	const router = useRouter();
+	const dispatch = useAppDispatch();
+	const handleChange = useNewsFormHandleChange(
+		indexedDBStoreName,
+		detailsOrderSliceName,
+	);
+	const { setFormError, resetDetailsComponentsOrder, resetFromData } =
+		useDetailsFormSlice(detailsOrderSliceName);
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        const errorsData: {
-            error: FormInputError,
-            id: NewsFormDataEnumType
-        }[] = []
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const errorsData: {
+			error: FormInputError;
+			id: NewsFormDataEnumType;
+		}[] = [];
 
-        // FORM VALIDATION
-        if (!title.length) {
-            dispatch(setFormError({
-                field: NewsFormDataEnum.TITLE,
-                message: 'Введіть повну назву'
-            }));
+		// FORM VALIDATION
+		if (!title.length) {
+			dispatch(
+				setFormError({
+					field: NewsFormDataEnum.TITLE,
+					message: "Введіть повну назву",
+				}),
+			);
 
-            errorsData.push({
-                id: NewsFormDataEnum.TITLE,
-                error: { message: 'Введіть повну назву' }
-            });
-        }
-        if (!description.length) {
-            dispatch(setFormError({
-                field: NewsFormDataEnum.DESCRIPTION,
-                message: 'Введіть опис'
-            }));
+			errorsData.push({
+				id: NewsFormDataEnum.TITLE,
+				error: { message: "Введіть повну назву" },
+			});
+		}
+		if (!description.length) {
+			dispatch(
+				setFormError({
+					field: NewsFormDataEnum.DESCRIPTION,
+					message: "Введіть опис",
+				}),
+			);
 
-            errorsData.push({
-                id: NewsFormDataEnum.DESCRIPTION,
-                error: { message: 'Введіть опис' }
-            });
-        }
-        if (!backgroundImg) {
-            dispatch(setFormError({
-                field: NewsFormDataEnum.BACKGROUNDIMG,
-                message: 'Добавте зображення'
-            }));
+			errorsData.push({
+				id: NewsFormDataEnum.DESCRIPTION,
+				error: { message: "Введіть опис" },
+			});
+		}
+		if (!backgroundImg) {
+			dispatch(
+				setFormError({
+					field: NewsFormDataEnum.BACKGROUNDIMG,
+					message: "Добавте зображення",
+				}),
+			);
 
-            // SCROLL TO INPUT
-            errorsData.push({
-                id: NewsFormDataEnum.BACKGROUNDIMG,
-                error: { message: 'Добавте зображення' }
-            });
-        }
-        if (!details) {
-            dispatch(setFormError({
-                field: NewsFormDataEnum.DETAILS,
-                message: 'Створіть вміст новини'
-            }));
+			// SCROLL TO INPUT
+			errorsData.push({
+				id: NewsFormDataEnum.BACKGROUNDIMG,
+				error: { message: "Добавте зображення" },
+			});
+		}
+		if (!details) {
+			dispatch(
+				setFormError({
+					field: NewsFormDataEnum.DETAILS,
+					message: "Створіть вміст новини",
+				}),
+			);
 
-            errorsData.push({
-                id: NewsFormDataEnum.DETAILS,
-                error: { message: 'Створіть вміст новини' }
-            });
-        }
+			errorsData.push({
+				id: NewsFormDataEnum.DETAILS,
+				error: { message: "Створіть вміст новини" },
+			});
+		}
 
-        // SCROLL TO ERROR INPUT
-        if (errorsData.length) {
-            console.log(errorsData)
-            // SCROLL TO INPUT
-            if (errorsData[0].id === NewsFormDataEnum.BACKGROUNDIMG) {
-                (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).labels?.[0].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                })
-            } else {
-                (document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                })
-            }
-            return
-        }
-        if (!details || !backgroundImg) return
+		// SCROLL TO ERROR INPUT
+		if (errorsData.length) {
+			console.log(errorsData);
+			// SCROLL TO INPUT
+			if (errorsData[0].id === NewsFormDataEnum.BACKGROUNDIMG) {
+				(
+					document.querySelector(
+						`#${errorsData[0].id}`,
+					) as HTMLInputElement
+				).labels?.[0].scrollIntoView({
+					behavior: "smooth",
+					block: "center",
+				});
+			} else {
+				(
+					document.querySelector(
+						`#${errorsData[0].id}`,
+					) as HTMLInputElement
+				).scrollIntoView({
+					behavior: "smooth",
+					block: "center",
+				});
+			}
+			return;
+		}
+		if (!details || !backgroundImg) return;
 
-        const data: CreateNewsFormData = {
-            title,
-            description,
-            backgroundImg,
-            details,
-        }
+		const data: CreateNewsFormData = {
+			title,
+			description,
+			backgroundImg,
+			details,
+		};
 
-        const response = await dispatch(createNews(data))
-        const isFulfilled = fullfilled(response.meta.requestStatus)
-        if (isFulfilled) {
-            // CLEAR DATA
-            clear(getIndexedDBStoreForImages(indexedDBStoreName))
-            dispatch(resetDetailsComponentsOrder())
-            dispatch(resetFromData())
-            router.push('./')
-        }
-    }
+		const response = await dispatch(createNews(data));
+		const isFulfilled = fullfilled(response.meta.requestStatus);
+		if (isFulfilled) {
+			// CLEAR DATA
+			clear(getIndexedDBStoreForImages(indexedDBStoreName));
+			dispatch(resetDetailsComponentsOrder());
+			dispatch(resetFromData());
+			router.push("./");
+		}
+	};
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <InputContainer
-                label="Повна назва новини"
-                inputId={NewsFormDataEnum.TITLE}
-                value={title}
-                error={errors[NewsFormDataEnum.TITLE]}
-                className={{
-                    inputContainer: styles.titleInputContainer
-                }}
-                changeEvent={(e) => handleChange({
-                    e,
-                    elementType: NewsFormDataEnum.TITLE,
-                })}
-            />
-            <TextareaContainer
-                label="Короткий опис новини"
-                inputId={NewsFormDataEnum.DESCRIPTION}
-                value={description}
-                error={errors[NewsFormDataEnum.DESCRIPTION]}
-                className={{
-                    inputContainer: styles.descriptionInputContainer
-                }}
-                minRows={4}
-                changeEvent={(e) => handleChange({
-                    e,
-                    elementType: NewsFormDataEnum.DESCRIPTION,
-                })}
-            />
+	return (
+		<form onSubmit={handleSubmit}>
+			<InputContainer
+				label="Повна назва новини"
+				inputId={NewsFormDataEnum.TITLE}
+				value={title}
+				error={errors[NewsFormDataEnum.TITLE]}
+				className={{
+					inputContainer: styles.titleInputContainer,
+				}}
+				changeEvent={(e) =>
+					handleChange({
+						e,
+						elementType: NewsFormDataEnum.TITLE,
+					})
+				}
+			/>
+			<TextareaContainer
+				label="Короткий опис новини"
+				inputId={NewsFormDataEnum.DESCRIPTION}
+				value={description}
+				error={errors[NewsFormDataEnum.DESCRIPTION]}
+				className={{
+					inputContainer: styles.descriptionInputContainer,
+				}}
+				minRows={4}
+				changeEvent={(e) =>
+					handleChange({
+						e,
+						elementType: NewsFormDataEnum.DESCRIPTION,
+					})
+				}
+			/>
 
-            <div className={styles.imageSection}>
-                <p className={`title sm left`}>
-                    Обгортка новини
-                </p>
-                <p className={`inputLabel ${styles.paragraph}`}>
-                    Завантажте фото
-                </p>
+			<div className={styles.imageSection}>
+				<p className={`title sm left`}>Обгортка новини</p>
+				<p className={`inputLabel ${styles.paragraph}`}>Завантажте фото</p>
 
-                <ImageInputContainer
-                    inputId={NewsFormDataEnum.BACKGROUNDIMG}
-                    changeEvent={(e) => handleChange({
-                        e,
-                        elementType: NewsFormDataEnum.BACKGROUNDIMG,
-                        oldValue: backgroundImg
-                    })}
-                >
-                    <ImageInputPreviewFromIndexedDB
-                        imageName={backgroundImg}
-                        indexedDBStoreName={indexedDBStoreName}
-                        error={errors[NewsFormDataEnum.BACKGROUNDIMG]}
-                    />
-                </ImageInputContainer>
-            </div>
+				<ImageInputContainer
+					inputId={NewsFormDataEnum.BACKGROUNDIMG}
+					changeEvent={(e) =>
+						handleChange({
+							e,
+							elementType: NewsFormDataEnum.BACKGROUNDIMG,
+							oldValue: backgroundImg,
+						})
+					}
+				>
+					<ImageInputPreviewFromIndexedDB
+						imageName={backgroundImg}
+						indexedDBStoreName={indexedDBStoreName}
+						error={errors[NewsFormDataEnum.BACKGROUNDIMG]}
+					/>
+				</ImageInputContainer>
+			</div>
 
-            <div className={styles.detailsSection}>
-                <p className={`title sm left ${styles.title}`}>
-                    Вміст новини
-                </p>
+			<div className={styles.detailsSection}>
+				<p className={`title sm left ${styles.title}`}>Вміст новини</p>
 
-                <ErrorWrapper
-                    error={errors.details.message.length ? errors.details.message : undefined}
-                    className={{
-                        errorWrapper: styles.detailsErrorWrap
-                    }}
-                >
-                    <CommonTable
-                        titles={titles}
-                        tableId={NewsFormDataEnum.DETAILS}
-                    >
-                        <TableLine>
-                            <span>
-                                Не створений
-                            </span>
+				<ErrorWrapper
+					error={
+						errors.details.message.length
+							? errors.details.message
+							: undefined
+					}
+					className={{
+						errorWrapper: styles.detailsErrorWrap,
+					}}
+				>
+					<CommonTable titles={titles} tableId={NewsFormDataEnum.DETAILS}>
+						<TableLine>
+							<span>Не створений</span>
 
-                            <SafeLink
-                                className={`btn blue sm`}
-                                href={`/admin/news/create/details`}
-                            >
-                                Створити вміст
-                            </SafeLink>
-                        </TableLine>
-                    </CommonTable>
-                </ErrorWrapper>
-            </div>
+							<SafeLink
+								className={`btn blue sm`}
+								href={`/admin/news/create/details`}
+							>
+								Створити вміст
+							</SafeLink>
+						</TableLine>
+					</CommonTable>
+				</ErrorWrapper>
+			</div>
 
-            <div className={styles.preview}>
-                <p className={`title sm left ${styles.title}`}>
-                    Попередній перегляд
-                </p>
+			<div className={styles.preview}>
+				<p className={`title sm left ${styles.title}`}>
+					Попередній перегляд
+				</p>
 
-                <SafeLink
-                    className={`btn blue sm`}
-                    href={`/admin/news/create/preview`}
-                >
-                    Дивитись сторінку новини
-                </SafeLink>
-            </div>
+				<SafeLink
+					className={`btn blue sm`}
+					href={`/admin/news/create/preview`}
+				>
+					Дивитись сторінку новини
+				</SafeLink>
+			</div>
 
-            <SubmitButton
-                error={error.create}
-            />
-        </form >
-    )
+			<SubmitButton error={error.create} />
+		</form>
+	);
 }

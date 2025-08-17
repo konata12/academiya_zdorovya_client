@@ -2,120 +2,120 @@
 
 .createEmployeeForm {
 
-    .inputs {
+  .inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 128px;
+
+    .mainInfo {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+
+      .fullName {
+        display: flex;
+        gap: 32px;
+      }
+    }
+
+    .socialMedia {
+
+      .socialMediaCheckboxes {
         display: flex;
         flex-direction: column;
-        gap: 128px;
-
-        .mainInfo {
-            display: flex;
-            flex-direction: column;
-            gap: 48px;
-
-            .fullName {
-                display: flex;
-                gap: 32px;
-            }
-        }
-
-        .socialMedia {
-
-            .socialMediaCheckboxes {
-                display: flex;
-                flex-direction: column;
-                gap: 48px;
-                width: 100%;
-                max-width: 498px;
-                margin-top: 64px;
-            }
-        }
-
-        .degree {
-            display: flex;
-            flex-direction: column;
-            gap: 64px;
-
-            .label {
-                display: none;
-            }
-
-            .textarea {
-                margin-top: 0;
-            }
-        }
-
-        .workSpecialities {
-
-            .label {
-                margin-bottom: 64px;
-            }
-
-            .workSpecialitiesContainer {
-                display: flex;
-                flex-direction: column;
-                gap: 64px;
-            }
-
-            .btn {
-                margin-top: 32px;
-                width: 100%;
-            }
-        }
-
-        .achivements {
-
-            .workSpecialitiesContainer {
-                display: flex;
-                flex-direction: column;
-                gap: 64px;
-                padding-top: 64px;
-            }
-
-            .btn {
-                margin-top: 32px;
-                width: 100%;
-            }
-        }
-
-        .image {
-
-            .sectionLabel {
-                margin-bottom: 64px;
-            }
-
-            .checkboxContainer {
-                margin-bottom: 48px;
-
-                .fullCheckbox {
-                    display: inline-block;
-                    margin-top: 32px;
-
-                    .checkbox {
-                        width: 190px;
-
-                        input {
-
-                            &:checked~span {
-
-                                i {
-                                    left: 170px;
-                                }
-                            }
-                        }
-                    }
-
-                    .checkboxLabels {
-                        display: flex;
-                        justify-content: space-between;
-                        margin-top: 16px;
-                        font-size: $pc-h6-fz;
-                    }
-                }
-            }
-
-            .inputLabel {
-                margin-bottom: 32px;
-            }
-        }
+        gap: 48px;
+        width: 100%;
+        max-width: 498px;
+        margin-top: 64px;
+      }
     }
+
+    .degree {
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+
+      .label {
+        display: none;
+      }
+
+      .textarea {
+        margin-top: 0;
+      }
+    }
+
+    .workSpecialities {
+
+      .label {
+        margin-bottom: 64px;
+      }
+
+      .workSpecialitiesContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+      }
+
+      .btn {
+        margin-top: 32px;
+        width: 100%;
+      }
+    }
+
+    .achivements {
+
+      .workSpecialitiesContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+        padding-top: 64px;
+      }
+
+      .btn {
+        margin-top: 32px;
+        width: 100%;
+      }
+    }
+
+    .image {
+
+      .sectionLabel {
+        margin-bottom: 64px;
+      }
+
+      .checkboxContainer {
+        margin-bottom: 48px;
+
+        .fullCheckbox {
+          display: inline-block;
+          margin-top: 32px;
+
+          .checkbox {
+            width: 190px;
+
+            input {
+
+              &:checked ~ span {
+
+                i {
+                  left: 170px;
+                }
+              }
+            }
+          }
+
+          .checkboxLabels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            font-size: $pc-h6-fz;
+          }
+        }
+      }
+
+      .inputLabel {
+        margin-bottom: 32px;
+      }
+    }
+  }
 }

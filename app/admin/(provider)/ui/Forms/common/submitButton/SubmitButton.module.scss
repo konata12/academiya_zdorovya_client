@@ -1,21 +1,21 @@
 @use '../../../../../../styles/variables' as *;
 
 .formErrorWrap {
-    position: relative;
+  position: relative;
+  width: 100%;
+
+  .formError {
+    position: absolute;
     width: 100%;
+    top: 0;
+    margin: 0;
 
-    .formError {
-        position: absolute;
-        width: 100%;
-        top: 0;
-        margin: 0;
+    text-align: center;
+  }
 
-        text-align: center;
-    }
-
-    .submit {
-        margin-top: 48px;
-        width: 100%;
-        transition: all $anim-time $slow;
-    }
+  .submit {
+    margin-top: 48px;
+    width: 100%;
+    transition: all $anim-time $slow;
+  }
 }

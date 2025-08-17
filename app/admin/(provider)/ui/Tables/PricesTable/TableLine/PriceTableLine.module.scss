@@ -1,38 +1,39 @@
 @use '../../../../../../styles/_variables.scss' as *;
 
 .tableLine {
-    width: 100%;
+  width: 100%;
+  display: flex;
+  border-bottom: 2px $disabled-color solid;
+
+  color: $text-color-black;
+  font-size: $price-table-table-line-fz;
+
+  &.dataLine {
+    padding: $prices-table-line-padding 0;
+  }
+
+  .titleColumn {
     display: flex;
-    border-bottom: 2px $disabled-color solid;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 218px;
+    width: 100%;
 
-    color: $text-color-black;
-    font-size: $price-table-table-line-fz;
+    word-wrap: break-word;
+  }
 
-    &.dataLine {
-        padding: $prices-table-line-padding 0;
+  .data {
+    display: flex;
+    flex-grow: 1;
+
+    .dataColumn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      padding: 0 6px;
+
+      text-align: center;
     }
-
-    .titleColumn {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        max-width: 218px;
-        width: 100%;
-
-        word-wrap: break-word;
-    }
-    .data {
-        display: flex;
-        flex-grow: 1;
-
-        .dataColumn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 1;
-            padding: 0 6px;
-
-            text-align: center;
-        }
-    }
+  }
 }

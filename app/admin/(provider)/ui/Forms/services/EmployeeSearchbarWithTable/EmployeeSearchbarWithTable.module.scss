@@ -3,100 +3,100 @@
 
 .employees {
 
-    .tableTitle {
-        margin: 64px 0 32px;
+  .tableTitle {
+    margin: 64px 0 32px;
+  }
+
+  .searchBarContainer {
+
+    .serachBarTitle {
+      display: inline-block;
+      width: 100%;
+      margin: 64px 0 32px;
     }
 
-    .searchBarContainer {
+    .searchBar {
+      position: relative;
+      margin-bottom: 10px;
+      border-radius: $pc-input-border-rad;
 
-        .serachBarTitle {
-            display: inline-block;
-            width: 100%;
-            margin: 64px 0 32px;
+      .magnifyingGlass {
+        position: absolute;
+        top: 50%;
+        left: 28px;
+        transform: translateY(-50%);
+      }
+
+      .input {
+        width: 100%;
+        padding-left: 58px;
+
+        &.on {
+          outline: 2px $primary-color solid;
+        }
+      }
+
+      .arrow {
+        position: absolute;
+        top: 50%;
+        right: 28px;
+        transform: translateY(-50%);
+
+        border: none;
+        outline: none;
+        background-color: transparent;
+        transition: all $slow $anim-time;
+
+        &.on {
+          transform: translateY(-50%) rotate(180deg); // Combine transforms
         }
 
-        .searchBar {
-            position: relative;
-            margin-bottom: 10px;
-            border-radius: $pc-input-border-rad;
+        .svg {
+          display: block;
+          transition: all $slow $anim-time;
 
-            .magnifyingGlass {
-                position: absolute;
-                top: 50%;
-                left: 28px;
-                transform: translateY(-50%);
+          path {
+            fill: $text-color-black;
+            stroke: $text-color-black;
+            stroke-width: 0.3;
+            transition: all $slow $anim-time;
+          }
+
+          &.on {
+            fill: $primary-color;
+            stroke: $primary-color;
+
+            path {
+              fill: $primary-color;
+              stroke: $primary-color;
             }
-
-            .input {
-                width: 100%;
-                padding-left: 58px;
-
-                &.on {
-                    outline: 2px $primary-color solid;
-                }
-            }
-
-            .arrow {
-                position: absolute;
-                top: 50%;
-                right: 28px;
-                transform: translateY(-50%);
-
-                border: none;
-                outline: none;
-                background-color: transparent;
-                transition: all $slow $anim-time;
-
-                &.on {
-                    transform: translateY(-50%) rotate(180deg); // Combine transforms
-                }
-
-                .svg {
-                    display: block;
-                    transition: all $slow $anim-time;
-
-                    path {
-                        fill: $text-color-black;
-                        stroke: $text-color-black;
-                        stroke-width: 0.3;
-                        transition: all $slow $anim-time;
-                    }
-
-                    &.on {
-                        fill: $primary-color;
-                        stroke: $primary-color;
-
-                        path {
-                            fill: $primary-color;
-                            stroke: $primary-color;
-                        }
-                    }
-                }
-            }
+          }
         }
+      }
     }
+  }
 
-    .mainBody {
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
+  .mainBody {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 
-        .tableLineOptions {
-            margin-right: 14px;
-        }
+    .tableLineOptions {
+      margin-right: 14px;
     }
+  }
 
-    .tableUnderText {
-        text-align: center;
-        @include rgba-text($text-color-black, 0.5);
-        font-size: 17px;
-        padding: 20px 0;
-    }
+  .tableUnderText {
+    text-align: center;
+    @include rgba-text($text-color-black, 0.5);
+    font-size: 17px;
+    padding: 20px 0;
+  }
 
-    .dragReminder {
-        text-align: center;
-        color: $text-color-black;
-        font-size: 17px;
-        padding: 32px 0 0;
-    }
+  .dragReminder {
+    text-align: center;
+    color: $text-color-black;
+    font-size: 17px;
+    padding: 32px 0 0;
+  }
 }

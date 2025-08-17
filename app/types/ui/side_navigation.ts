@@ -1,3 +1,3 @@
 export interface SideNavigationType {
-    sideNavigationOpen: boolean
+	sideNavigationOpen: boolean;
 }

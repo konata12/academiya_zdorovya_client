@@ -1,14 +1,14 @@
 @use '../../../../styles/variables' as *;
 
 .sideNav {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    clip-path: inset(-200px 0 -200px 0);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  clip-path: inset(-200px 0 -200px 0);
 }
 
 .empty {
-    max-width: 300px;
-    width: 100%;
-    color: transparent;
+  max-width: 300px;
+  width: 100%;
+  color: transparent;
 }

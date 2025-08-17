@@ -1,5 +1,5 @@
 import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import styles from "./ServiceTypeForm.module.scss";
 import { ErrorWrapper } from "@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper";
 import { FormInputError } from "@/app/types/data/form.type";
@@ -8,10 +8,10 @@ import { ImageInputPreviewFromIndexedDB } from "@/app/common_ui/form_components/
 import { parseDetailsResponseToOrderComponentArray } from "@/app/services/details.service";
 import { RootState } from "@/app/utils/redux/store";
 import {
+	ServiceTypesDetailsSliceNameType,
 	ServiceTypesEnum,
 	ServiceTypesEnumType,
 	ServiceTypeServiceFormData,
-	ServiceTypesDetailsSliceNameType,
 	ServiceTypesSliceNameType,
 } from "@/app/types/data/services.type";
 import { TextareaContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer";
@@ -34,8 +34,13 @@ interface ServiceTypeFormProps {
 
 const titles = ["Стан вмісту", "Опції"];
 
-export default function ServiceTypeForm({ sliceName, detailsSliceName }: ServiceTypeFormProps) {
-	const { orderId, errors, ...data } = useAppSelector((state: RootState) => state[sliceName]);
+export default function ServiceTypeForm({
+	sliceName,
+	detailsSliceName,
+}: ServiceTypeFormProps) {
+	const { orderId, errors, ...data } = useAppSelector(
+		(state: RootState) => state[sliceName],
+	);
 	const { services } = useAppSelector((state: RootState) => state.services);
 	const router = useRouter();
 	const pathname = usePathname();
@@ -46,25 +51,26 @@ export default function ServiceTypeForm({ sliceName, detailsSliceName }: Service
 	const dispatch = useAppDispatch();
 
 	const isCreatePage = pathname.includes("create");
-	const indexedDBStoreName = isCreatePage ? "service_create_images" : "service_update_images";
+	const indexedDBStoreName = isCreatePage
+		? "service_create_images"
+		: "service_update_images";
 	const { title, description, backgroundImg, details } = data;
-	const oldDetails = services.find((service) => `${service.id}` === id)?.serviceTypes?.[
-		+serviceTypeIndex
-	].details;
 
-	const handleChange = useServiceTypeFormHandleChange(indexedDBStoreName, detailsSliceName);
+	const handleChange = useServiceTypeFormHandleChange(
+		indexedDBStoreName,
+		detailsSliceName,
+	);
 	const { setServiceTypesValue, setServiceTypeDetailsInitialDataOnLink } =
 		useServiceTypeFormSlice(detailsSliceName);
 	const { setFormError } = useDetailsFormSlice(detailsSliceName);
 
 	// WHEN OPENING PAGE SET DETAILS SLICE DATA
-	// useEffect(() => {
-	// 	const parsedDetails = details
-	// 		? parseDetailsResponseToOrderComponentArray(details)
-	// 		: [];
-	// 	dispatch(setServiceTypeDetailsInitialDataOnLink(parsedDetails));
-	// }, []);
-	// useServiceTypeSetDetailsInitValue(detailsSliceName);
+	useEffect(() => {
+		const parsedDetails = details
+			? parseDetailsResponseToOrderComponentArray(details)
+			: [];
+		dispatch(setServiceTypeDetailsInitialDataOnLink(parsedDetails));
+	}, []);
 
 	// CHECK FORM CHANGED DATA BEFORE CHANGING PAGE
 	if (!isCreatePage) useServiceFormsDataCheckChange();
@@ -144,18 +150,22 @@ export default function ServiceTypeForm({ sliceName, detailsSliceName }: Service
 			// SCROLL TO INPUT
 			if (errorsData[0].id === ServiceTypesEnum.BACKGROUNDIMG) {
 				(
-					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
+					document.querySelector(
+						`#${errorsData[0].id}`,
+					) as HTMLInputElement
 				).labels?.[0].scrollIntoView({
 					behavior: "smooth",
 					block: "center",
 				});
 			} else {
-				(document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement).scrollIntoView(
-					{
-						behavior: "smooth",
-						block: "center",
-					},
-				);
+				(
+					document.querySelector(
+						`#${errorsData[0].id}`,
+					) as HTMLInputElement
+				).scrollIntoView({
+					behavior: "smooth",
+					block: "center",
+				});
 			}
 			return;
 		}
@@ -238,7 +248,11 @@ export default function ServiceTypeForm({ sliceName, detailsSliceName }: Service
 				<p className={`title sm left ${styles.title}`}>Вміст новини</p>
 
 				<ErrorWrapper
-					error={errors.details.message.length ? errors.details.message : undefined}
+					error={
+						errors.details.message.length
+							? errors.details.message
+							: undefined
+					}
 					className={{
 						errorWrapper: styles.detailsErrorWrap,
 					}}
@@ -254,16 +268,6 @@ export default function ServiceTypeForm({ sliceName, detailsSliceName }: Service
 							<Link
 								className={`btn blue sm`}
 								href={`${serviceTypeIndex}/details`}
-								onClick={() => {
-									if (oldDetails === details) {
-										const parsedDetails = details
-											? parseDetailsResponseToOrderComponentArray(details)
-											: [];
-										dispatch(
-											setServiceTypeDetailsInitialDataOnLink(parsedDetails),
-										);
-									}
-								}}
 							>
 								Створити вміст
 							</Link>
@@ -273,7 +277,9 @@ export default function ServiceTypeForm({ sliceName, detailsSliceName }: Service
 			</div>
 
 			<div className={styles.preview}>
-				<p className={`title sm left ${styles.title}`}>Попередній перегляд</p>
+				<p className={`title sm left ${styles.title}`}>
+					Попередній перегляд
+				</p>
 
 				<Link
 					className={`btn blue sm`}
@@ -283,7 +289,10 @@ export default function ServiceTypeForm({ sliceName, detailsSliceName }: Service
 				</Link>
 			</div>
 
-			<SubmitButton error={null} label={isCreatePage ? "Створити" : "Підтвердити зміни"} />
+			<SubmitButton
+				error={null}
+				label={isCreatePage ? "Створити" : "Підтвердити зміни"}
+			/>
 		</form>
 	);
 }

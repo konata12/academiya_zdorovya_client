@@ -29,6 +29,8 @@
  * @sass-export-section="box-shadow"
  */
 .links a {
-  color: #fff;
-  text-decoration: none;
-}/*# sourceMappingURL=Links.module.css.map */
+    color: #fff;
+    text-decoration: none;
+}
+
+/*# sourceMappingURL=Links.module.css.map */

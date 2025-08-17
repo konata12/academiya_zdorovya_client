@@ -2,138 +2,138 @@
 
 .form {
 
-    .addTitleBtn {
-        position: relative;
-        width: 100%;
-        margin-top: 32px;
+  .addTitleBtn {
+    position: relative;
+    width: 100%;
+    margin-top: 32px;
+  }
+
+  .optionalService {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: $background-color-primary;
+    margin-top: 64px;
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 32px;
     }
 
-    .optionalService {
-        position: relative;
-        z-index: 0;
+    .bottomShape {
+      position: relative;
+      z-index: -5;
+      background-color: transparent;
+    }
+
+    .bottom {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+
+      .input {
+        width: 100%;
+      }
+
+      .error {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+
+  .tableConfig {
+    position: relative;
+    z-index: 10;
+    padding: 96px 0 128px;
+    background-color: $background-color-primary;
+    transition: all $anim-time $slow;
+
+    &.move {
+      padding: 128px 0;
+    }
+
+    p {
+      text-align: left;
+      margin-bottom: 64px;
+    }
+
+    .checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+
+      max-width: 324px;
+      width: 100%;
+
+      .checkbox {
         display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        background-color: $background-color-primary;
-        margin-top: 64px;
+        justify-content: space-between;
+      }
+    }
+  }
 
-        .top {
-            display: flex;
-            justify-content: space-between;
-            padding-bottom: 32px;
-        }
+  .priceVariantsWrap {
+    position: relative;
+    z-index: 0;
 
-        .bottomShape {
-            position: relative;
-            z-index: -5;
-            background-color: transparent;
-        }
-
-        .bottom {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-
-            .input {
-                width: 100%;
-            }
-
-            .error {
-                width: 100%;
-                text-align: center;
-            }
-        }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .tableConfig {
-        position: relative;
-        z-index: 10;
-        padding: 96px 0 128px;
-        background-color: $background-color-primary;
-        transition: all $anim-time $slow;
+    .priceVariants {
+      position: relative;
+      z-index: -5;
 
-        &.move {
-            padding: 128px 0;
-        }
-
-        p {
-            text-align: left;
-            margin-bottom: 64px;
-        }
-
-        .checkboxes {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-
-            max-width: 324px;
-            width: 100%;
-
-            .checkbox {
-                display: flex;
-                justify-content: space-between;
-            }
-        }
-    }
-
-    .priceVariantsWrap {
-        position: relative;
+      .priceVariantsShape {
+        position: absolute;
+        top: 0;
         z-index: 0;
-
-        .top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .priceVariants {
-            position: relative;
-            z-index: -5;
-
-            .priceVariantsShape {
-                position: absolute;
-                top: 0;
-                z-index: 0;
-                width: 100%;
-                padding-top: 64px;
-
-                .addPriceVariantBtn {
-                    width: 100%;
-                    margin-top: 48px;
-                }
-            }
-        }
-    }
-
-    .resultLayout {
-        position: relative;
-        background-color: $background-color-primary;
-        margin-top: 128px;
-
-        .priceTable {
-            position: relative;
-            margin-top: 64px;
-        }
-    }
-
-    .formErrorWrap {
-        position: relative;
         width: 100%;
-        margin-top: 24px;
+        padding-top: 64px;
 
-        .formError {
-            position: absolute;
-            width: 100%;
-            top: -12px;
-            margin: 0;
-
-            text-align: center;
+        .addPriceVariantBtn {
+          width: 100%;
+          margin-top: 48px;
         }
-
-        .submit {
-            margin-top: 24px;
-            width: 100%;
-        }
+      }
     }
+  }
+
+  .resultLayout {
+    position: relative;
+    background-color: $background-color-primary;
+    margin-top: 128px;
+
+    .priceTable {
+      position: relative;
+      margin-top: 64px;
+    }
+  }
+
+  .formErrorWrap {
+    position: relative;
+    width: 100%;
+    margin-top: 24px;
+
+    .formError {
+      position: absolute;
+      width: 100%;
+      top: -12px;
+      margin: 0;
+
+      text-align: center;
+    }
+
+    .submit {
+      margin-top: 24px;
+      width: 100%;
+    }
+  }
 }

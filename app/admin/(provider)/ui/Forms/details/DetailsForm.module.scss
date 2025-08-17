@@ -1,43 +1,52 @@
 @use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
 @use '../../../../../styles/functions' as *;
 
+.warning {
+  font-size: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #e05a5a;
+  //@include rgba-text($text-color-black, 0.85)
+}
 .addInputsContainer {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    clip-path: inset(0);
-    padding: 0 24px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  clip-path: inset(0);
+  padding: 0 24px;
 }
 
 .mainBody {
-    display: flex;
-    flex-direction: column;
-    padding: 48px;
-    border-radius: 0px 0px 22px 22px;
-    background: $background-color-primary;
+  display: flex;
+  flex-direction: column;
+  padding: 48px;
+  border-radius: 0 0 22px 22px;
+  background: $background-color-primary;
 
-    box-shadow: 3px 7px 37px 0px rgba-color($black-bg-color, 0.12), 0px 0px 0px 0px rgba-color($black-bg-color, 0.08);
+  box-shadow: 3px 7px 37px 0 rgba-color($black-bg-color, 0.12), 0 0 0 0 rgba-color($black-bg-color, 0.08);
 
-    .orderedComponent {
-        width: 100%;
-        background-color: transparent;
-        border: none;
-        color: $text-color-black;
+  .orderedComponent {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    color: $text-color-black;
 
-        &:focus-visible {
-            border: none;
-            outline: none;
-        }
+    &:focus-visible {
+      border: none;
+      outline: none;
     }
+  }
 
 
 }
 
 // SUBMIT BUTTON
 .button.button.button {
-    outline: 2px $error-color solid;
+  outline: 2px $error-color solid;
 }
+
 .error.error.error {
-    top: 7px;
-    font-size: 28px;
+  top: 7px;
+  font-size: 28px;
 }

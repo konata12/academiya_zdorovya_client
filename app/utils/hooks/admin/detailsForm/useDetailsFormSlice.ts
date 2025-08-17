@@ -1,160 +1,164 @@
 import {
-    addDetailsComponent as addNewsDetailsComponent,
-    removeDetailsComponent as removeNewsDetailsComponent,
-    resetDetailsComponentsOrder as resetNewsDetailsComponentsOrder,
-    setDetailsComponentError as setNewsDetailsComponentError,
-    setDetailsStateOrder as setNewsDetailsStateOrder,
-    updateDetailsComponent as updateNewsDetailsComponent
-    } from '@/app/utils/redux/details/news/newsCreateDetailsOrderSlice';
+	addDetailsComponent as addNewsDetailsComponent,
+	removeDetailsComponent as removeNewsDetailsComponent,
+	resetDetailsComponentsOrder as resetNewsDetailsComponentsOrder,
+	setDetailsComponentError as setNewsDetailsComponentError,
+	setDetailsStateOrder as setNewsDetailsStateOrder,
+	updateDetailsComponent as updateNewsDetailsComponent,
+} from "@/app/utils/redux/details/news/newsCreateDetailsOrderSlice";
 import {
-    addDetailsComponent as addNewsUpdateDetailsComponent,
-    removeDetailsComponent as removeNewsUpdateDetailsComponent,
-    resetDetailsComponentsOrder as resetNewsUpdateDetailsComponentsOrder,
-    setDetailsComponentError as setNewsUpdateDetailsComponentError,
-    setDetailsStateOrder as setNewsUpdateDetailsStateOrder,
-    updateDetailsComponent as updateNewsUpdateDetailsComponent
-    } from '@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice';
+	addDetailsComponent as addNewsUpdateDetailsComponent,
+	removeDetailsComponent as removeNewsUpdateDetailsComponent,
+	resetDetailsComponentsOrder as resetNewsUpdateDetailsComponentsOrder,
+	setDetailsComponentError as setNewsUpdateDetailsComponentError,
+	setDetailsStateOrder as setNewsUpdateDetailsStateOrder,
+	updateDetailsComponent as updateNewsUpdateDetailsComponent,
+} from "@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice";
 import {
-    addServiceTypeCreateDetailsComponent,
-    removeServiceTypeCreateDetailsComponent,
-    resetServiceTypeCreateDetailsComponentsOrder,
-    setServiceTypeCreateDetailsComponentError,
-    setServiceTypeCreateDetailsStateOrder,
-    updateServiceTypeCreateDetailsComponent
-    } from '@/app/utils/redux/details/services/serviceTypeCreateDetailsOrderSlice';
+	addServiceTypeCreateDetailsComponent,
+	removeServiceTypeCreateDetailsComponent,
+	resetServiceTypeCreateDetailsComponentsOrder,
+	setServiceTypeCreateDetailsComponentError,
+	setServiceTypeCreateDetailsStateOrder,
+	updateServiceTypeCreateDetailsComponent,
+} from "@/app/utils/redux/details/services/serviceTypeCreateDetailsOrderSlice";
 import {
-    addServiceTypeUpdateDetailsComponent,
-    removeServiceTypeUpdateDetailsComponent,
-    resetServiceTypeUpdateDetailsComponentsOrder,
-    setServiceTypeUpdateDetailsComponentError,
-    setServiceTypeUpdateDetailsStateOrder,
-    updateServiceTypeUpdateDetailsComponent
-    } from '@/app/utils/redux/details/services/serviceTypeUpdateDetailsOrderSlice';
-import { DetailsOrderSliceNameType } from '@/app/types/data/details.type';
+	addServiceTypeUpdateDetailsComponent,
+	removeServiceTypeUpdateDetailsComponent,
+	resetServiceTypeUpdateDetailsComponentsOrder,
+	setServiceTypeUpdateDetailsComponentError,
+	setServiceTypeUpdateDetailsStateOrder,
+	updateServiceTypeUpdateDetailsComponent,
+} from "@/app/utils/redux/details/services/serviceTypeUpdateDetailsOrderSlice";
+import { DetailsOrderSliceNameType } from "@/app/types/data/details.type";
 import {
-    resetNewsFromData,
-    setNewsFormBackgroundImage,
-    setNewsFormDescription,
-    setNewsFormDetails,
-    setNewsFormError,
-    setNewsFormTitle
-    } from '@/app/utils/redux/news/newsCreateFormSlice';
+	resetNewsFromData,
+	setNewsFormBackgroundImage,
+	setNewsFormDescription,
+	setNewsFormDetails,
+	setNewsFormError,
+	setNewsFormTitle,
+} from "@/app/utils/redux/news/newsCreateFormSlice";
 import {
-    resetNewsUpdateFromData,
-    setNewsUpdateFormBackgroundImage,
-    setNewsUpdateFormDescription,
-    setNewsUpdateFormDetails,
-    setNewsUpdateFormError,
-    setNewsUpdateFormTitle
-    } from '@/app/utils/redux/news/newsUpdateFormSlice';
+	resetNewsUpdateFromData,
+	setNewsUpdateFormBackgroundImage,
+	setNewsUpdateFormDescription,
+	setNewsUpdateFormDetails,
+	setNewsUpdateFormError,
+	setNewsUpdateFormTitle,
+} from "@/app/utils/redux/news/newsUpdateFormSlice";
 import {
-    resetServiceTypeUpdateFormData,
-    setServiceTypeUpdateFormBackgroundImg,
-    setServiceTypeUpdateFormDescription,
-    setServiceTypeUpdateFormDetails,
-    setServiceTypeUpdateFormError,
-    setServiceTypeUpdateFormTitle
-    } from '@/app/utils/redux/services/serviceTypeUpdateFormSlice';
+	resetServiceTypeUpdateFormData,
+	setServiceTypeUpdateFormBackgroundImg,
+	setServiceTypeUpdateFormDescription,
+	setServiceTypeUpdateFormDetails,
+	setServiceTypeUpdateFormError,
+	setServiceTypeUpdateFormTitle,
+} from "@/app/utils/redux/services/serviceTypeUpdateFormSlice";
 import {
-    resetServiceTypeCreateFormData,
-    setServiceTypeCreateFormBackgroundImg,
-    setServiceTypeCreateFormDescription,
-    setServiceTypeCreateFormDetails,
-    setServiceTypeCreateFormError,
-    setServiceTypeCreateFormTitle
-    } from '@/app/utils/redux/services/serviceTypeCreateFormSlice';
-import { useMemo } from 'react';
-
+	resetServiceTypeCreateFormData,
+	setServiceTypeCreateFormBackgroundImg,
+	setServiceTypeCreateFormDescription,
+	setServiceTypeCreateFormDetails,
+	setServiceTypeCreateFormError,
+	setServiceTypeCreateFormTitle,
+} from "@/app/utils/redux/services/serviceTypeCreateFormSlice";
+import { useMemo } from "react";
 
 export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
-    const actions = useMemo(() => {
-        switch (orderSliceName) {
-            // NEWS
-            case "newsCreateDetailsOrder":
-                return {
-                    // DETAILS ORDER SLICE
-                    addDetailsComponent: addNewsDetailsComponent,
-                    removeDetailsComponent: removeNewsDetailsComponent,
-                    updateDetailsComponent: updateNewsDetailsComponent,
-                    setDetailsStateOrder: setNewsDetailsStateOrder,
-                    setDetailsComponentError: setNewsDetailsComponentError,
+	const actions = useMemo(() => {
+		switch (orderSliceName) {
+			// NEWS
+			case "newsCreateDetailsOrder":
+				return {
+					// DETAILS ORDER SLICE
+					addDetailsComponent: addNewsDetailsComponent,
+					removeDetailsComponent: removeNewsDetailsComponent,
+					updateDetailsComponent: updateNewsDetailsComponent,
+					setDetailsStateOrder: setNewsDetailsStateOrder,
+					setDetailsComponentError: setNewsDetailsComponentError,
 
-                    // FORM SLICE
-                    submitForm: setNewsFormDetails,
-                    setFormError: setNewsFormError,
-                    setTitle: setNewsFormTitle,
-                    setDescription: setNewsFormDescription,
-                    setBackgroundImage: setNewsFormBackgroundImage,
+					// FORM SLICE
+					submitForm: setNewsFormDetails,
+					setFormError: setNewsFormError,
+					setTitle: setNewsFormTitle,
+					setDescription: setNewsFormDescription,
+					setBackgroundImage: setNewsFormBackgroundImage,
 
-                    // RESET DATA
-                    resetDetailsComponentsOrder: resetNewsDetailsComponentsOrder,
-                    resetFromData: resetNewsFromData,
-                }
-            case "newsUpdateDetailsOrder":
-                return {
-                    // DETAILS ORDER SLICE
-                    addDetailsComponent: addNewsUpdateDetailsComponent,
-                    removeDetailsComponent: removeNewsUpdateDetailsComponent,
-                    updateDetailsComponent: updateNewsUpdateDetailsComponent,
-                    setDetailsStateOrder: setNewsUpdateDetailsStateOrder,
-                    setDetailsComponentError: setNewsUpdateDetailsComponentError,
+					// RESET DATA
+					resetDetailsComponentsOrder: resetNewsDetailsComponentsOrder,
+					resetFromData: resetNewsFromData,
+				};
+			case "newsUpdateDetailsOrder":
+				return {
+					// DETAILS ORDER SLICE
+					addDetailsComponent: addNewsUpdateDetailsComponent,
+					removeDetailsComponent: removeNewsUpdateDetailsComponent,
+					updateDetailsComponent: updateNewsUpdateDetailsComponent,
+					setDetailsStateOrder: setNewsUpdateDetailsStateOrder,
+					setDetailsComponentError: setNewsUpdateDetailsComponentError,
 
-                    // FORM SLICE
-                    submitForm: setNewsUpdateFormDetails,
-                    setFormError: setNewsUpdateFormError,
-                    setTitle: setNewsUpdateFormTitle,
-                    setDescription: setNewsUpdateFormDescription,
-                    setBackgroundImage: setNewsUpdateFormBackgroundImage,
+					// FORM SLICE
+					submitForm: setNewsUpdateFormDetails,
+					setFormError: setNewsUpdateFormError,
+					setTitle: setNewsUpdateFormTitle,
+					setDescription: setNewsUpdateFormDescription,
+					setBackgroundImage: setNewsUpdateFormBackgroundImage,
 
-                    // RESET DATA
-                    resetDetailsComponentsOrder: resetNewsUpdateDetailsComponentsOrder,
-                    resetFromData: resetNewsUpdateFromData,
-                }
-            
-            // SERVICES
-            case "serviceTypeCreateDetailsOrder":
-                return {
-                    // DETAILS ORDER SLICE
-                    addDetailsComponent: addServiceTypeCreateDetailsComponent,
-                    removeDetailsComponent: removeServiceTypeCreateDetailsComponent,
-                    updateDetailsComponent: updateServiceTypeCreateDetailsComponent,
-                    setDetailsStateOrder: setServiceTypeCreateDetailsStateOrder,
-                    setDetailsComponentError: setServiceTypeCreateDetailsComponentError,
+					// RESET DATA
+					resetDetailsComponentsOrder:
+						resetNewsUpdateDetailsComponentsOrder,
+					resetFromData: resetNewsUpdateFromData,
+				};
 
-                    // FORM SLICE
-                    submitForm: setServiceTypeCreateFormDetails,
-                    setFormError: setServiceTypeCreateFormError,
-                    setTitle: setServiceTypeCreateFormTitle,
-                    setDescription: setServiceTypeCreateFormDescription,
-                    setBackgroundImage: setServiceTypeCreateFormBackgroundImg,
+			// SERVICES
+			case "serviceTypeCreateDetailsOrder":
+				return {
+					// DETAILS ORDER SLICE
+					addDetailsComponent: addServiceTypeCreateDetailsComponent,
+					removeDetailsComponent: removeServiceTypeCreateDetailsComponent,
+					updateDetailsComponent: updateServiceTypeCreateDetailsComponent,
+					setDetailsStateOrder: setServiceTypeCreateDetailsStateOrder,
+					setDetailsComponentError:
+						setServiceTypeCreateDetailsComponentError,
 
-                    // RESET DATA
-                    resetDetailsComponentsOrder: resetServiceTypeCreateDetailsComponentsOrder,
-                    resetFromData: resetServiceTypeCreateFormData,
-                }
+					// FORM SLICE
+					submitForm: setServiceTypeCreateFormDetails,
+					setFormError: setServiceTypeCreateFormError,
+					setTitle: setServiceTypeCreateFormTitle,
+					setDescription: setServiceTypeCreateFormDescription,
+					setBackgroundImage: setServiceTypeCreateFormBackgroundImg,
 
-            case "serviceTypeUpdateDetailsOrder":
-                return {
-                    // DETAILS ORDER SLICE
-                    addDetailsComponent: addServiceTypeUpdateDetailsComponent,
-                    removeDetailsComponent: removeServiceTypeUpdateDetailsComponent,
-                    updateDetailsComponent: updateServiceTypeUpdateDetailsComponent,
-                    setDetailsStateOrder: setServiceTypeUpdateDetailsStateOrder,
-                    setDetailsComponentError: setServiceTypeUpdateDetailsComponentError,
+					// RESET DATA
+					resetDetailsComponentsOrder:
+						resetServiceTypeCreateDetailsComponentsOrder,
+					resetFromData: resetServiceTypeCreateFormData,
+				};
 
-                    // FORM SLICE
-                    submitForm: setServiceTypeUpdateFormDetails,
-                    setFormError: setServiceTypeUpdateFormError,
-                    setTitle: setServiceTypeUpdateFormTitle,
-                    setDescription: setServiceTypeUpdateFormDescription,
-                    setBackgroundImage: setServiceTypeUpdateFormBackgroundImg,
+			case "serviceTypeUpdateDetailsOrder":
+				return {
+					// DETAILS ORDER SLICE
+					addDetailsComponent: addServiceTypeUpdateDetailsComponent,
+					removeDetailsComponent: removeServiceTypeUpdateDetailsComponent,
+					updateDetailsComponent: updateServiceTypeUpdateDetailsComponent,
+					setDetailsStateOrder: setServiceTypeUpdateDetailsStateOrder,
+					setDetailsComponentError:
+						setServiceTypeUpdateDetailsComponentError,
 
-                    // RESET DATA
-                    resetDetailsComponentsOrder: resetServiceTypeUpdateDetailsComponentsOrder,
-                    resetFromData: resetServiceTypeUpdateFormData,
-                }
-        }
-    }, [orderSliceName])
+					// FORM SLICE
+					submitForm: setServiceTypeUpdateFormDetails,
+					setFormError: setServiceTypeUpdateFormError,
+					setTitle: setServiceTypeUpdateFormTitle,
+					setDescription: setServiceTypeUpdateFormDescription,
+					setBackgroundImage: setServiceTypeUpdateFormBackgroundImg,
 
-    return actions
+					// RESET DATA
+					resetDetailsComponentsOrder:
+						resetServiceTypeUpdateDetailsComponentsOrder,
+					resetFromData: resetServiceTypeUpdateFormData,
+				};
+		}
+	}, [orderSliceName]);
+
+	return actions;
 }

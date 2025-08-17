@@ -1,34 +1,34 @@
 @use '../../../../styles/variables' as *;
 
 .isLogged {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    text-align: center;
-    color: $text-color-black;
-    font-size: $pc-h1-fz;
+  text-align: center;
+  color: $text-color-black;
+  font-size: $pc-h1-fz;
 }
 
 .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+
+  .form {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
+    flex-direction: column;
+    width: 632px;
 
-    .form {
-        display: flex;
-        flex-direction: column;
-        width: 632px;
-
-        .login {
-            margin-bottom: 24px;
-        }
-
-        .btn {
-            margin-top: 64px;
-        }
+    .login {
+      margin-bottom: 24px;
     }
+
+    .btn {
+      margin-top: 64px;
+    }
+  }
 }

@@ -2,20 +2,20 @@
 @use '../../../../../../styles/functions' as *;
 
 .container {
-    position: relative;
-    display: flex;
-    border-radius: $border-rad-8;
-    padding-top: 64px;
+  position: relative;
+  display: flex;
+  border-radius: $border-rad-8;
+  padding-top: 64px;
 
-    &.titleNotForstInOrder {
-        padding-top: 128px;
-    }
+  &.titleNotForstInOrder {
+    padding-top: 128px;
+  }
 
-    &:first-child {
-        padding-top: 0;
-    }
+  &:first-child {
+    padding-top: 0;
+  }
 
-    .deleteBtn {
-        left: -30px;
-    }
+  .deleteBtn {
+    left: -30px;
+  }
 }

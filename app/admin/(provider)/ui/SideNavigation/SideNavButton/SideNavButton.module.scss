@@ -2,48 +2,48 @@
 @use '../../../../../styles/mixins' as *;
 
 .link {
-    position: relative;
-    border-left: 2px solid $disabled-color;
-    padding: $admin-side-nav-padding-vert $admin-side-nav-padding-horz;
-    transition: all $anim-time $slow;
+  position: relative;
+  border-left: 2px solid $disabled-color;
+  padding: $admin-side-nav-padding-vert $admin-side-nav-padding-horz;
+  transition: all $anim-time $slow;
 
-    @include rgba-text($text-color-black, 0.5);
-    font-size: $admin-side-nav-fz;
-    text-decoration: none;
-    white-space: nowrap;
+  @include rgba-text($text-color-black, 0.5);
+  font-size: $admin-side-nav-fz;
+  text-decoration: none;
+  white-space: nowrap;
 
-    &.active {
-        pointer-events: none;
-        color: $primary-color;
-
-        .sideLine {
-            top: 0;
-            height: 100%;
-            border-radius: 4px;
-            background-color: $primary-color;
-            box-shadow: -2px 0px 12px 0px $primary-color, 10px 0px 22px 0px $primary-color-active;
-        }
-    }
-
-    &:hover {
-        color: $text-color-black;
-
-        .sideLine {
-            transform: scaleX(2) translateX(0.5px);
-            top: 0;
-            height: 100%;
-            box-shadow: 2px 0px 22px 0px rgba(77, 104, 237, 164);
-        }
-    }
+  &.active {
+    pointer-events: none;
+    color: $primary-color;
 
     .sideLine {
-        position: absolute;
-        top: 10%;
-        left: -2px;
-        width: 2px;
-        height: 80%;
-        border-radius: 0px 4px 4px 0px;
-        background-color: $disabled-color;
-        transition: all $anim-time $slow;
+      top: 0;
+      height: 100%;
+      border-radius: 4px;
+      background-color: $primary-color;
+      box-shadow: -2px 0px 12px 0px $primary-color, 10px 0px 22px 0px $primary-color-active;
     }
+  }
+
+  &:hover {
+    color: $text-color-black;
+
+    .sideLine {
+      transform: scaleX(2) translateX(0.5px);
+      top: 0;
+      height: 100%;
+      box-shadow: 2px 0px 22px 0px rgba(77, 104, 237, 164);
+    }
+  }
+
+  .sideLine {
+    position: absolute;
+    top: 10%;
+    left: -2px;
+    width: 2px;
+    height: 80%;
+    border-radius: 0px 4px 4px 0px;
+    background-color: $disabled-color;
+    transition: all $anim-time $slow;
+  }
 }

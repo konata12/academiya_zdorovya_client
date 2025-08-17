@@ -2,32 +2,32 @@
 @use '../../../../../../../styles/functions' as *;
 
 .list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  .option {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+    margin-left: 24px;
+    font-size: $details-from-list-fz;
 
-    .option {
-        width: 100%;
-        margin-left: 24px;
-        font-size: $details-from-list-fz;
-
-        &.numerable {
-            display: flex;
-            gap: 5px;
-            list-style-type: none;
-            margin-left: 0px;
-        }
-
-        .input {
-            display: block;
-            width: 100%;
-            font-size: $details-from-list-fz;
-        }
+    &.numerable {
+      display: flex;
+      gap: 5px;
+      list-style-type: none;
+      margin-left: 0px;
     }
+
+    .input {
+      display: block;
+      width: 100%;
+      font-size: $details-from-list-fz;
+    }
+  }
 }
 
 .error.error {
-    font-size: 14px;
-    top: -20px;
+  font-size: 14px;
+  top: -20px;
 }

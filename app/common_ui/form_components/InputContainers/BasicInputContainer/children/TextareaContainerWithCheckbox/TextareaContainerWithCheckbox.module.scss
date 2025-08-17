@@ -1,39 +1,39 @@
 @use '../../../../../../styles/variables' as *;
 
 .inputContainer {
-    position: relative;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .checkboxContainer {
     display: flex;
-    flex-direction: column;
-    width: 100%;
+    justify-content: space-between;
+  }
 
-    .checkboxContainer {
-        display: flex;
-        justify-content: space-between;
+  .absoluteContainer {
+
+    .input {
+      width: 100%;
+      pointer-events: none;
+      opacity: 0;
+      margin-top: 32px;
+
+      transition: all $anim-time $slow;
+
+      &.active {
+        pointer-events: auto;
+        opacity: 1;
+      }
     }
 
-    .absoluteContainer {
+    .error {
+      width: 100%;
+      border-radius: $border-rad-5;
 
-        .input {
-            width: 100%;
-            pointer-events: none;
-            opacity: 0;
-            margin-top: 32px;
-
-            transition: all $anim-time $slow;
-
-            &.active {
-                pointer-events: auto;
-                opacity: 1;
-            }
-        }
-
-        .error {
-            width: 100%;
-            border-radius: $border-rad-5;
-
-            color: $error-color;
-            text-align: center;
-            font-size: $pc-h6-fz;
-        }
+      color: $error-color;
+      text-align: center;
+      font-size: $pc-h6-fz;
     }
+  }
 }

@@ -7,13 +7,17 @@ import { useFormChangeCheck } from "@/app/utils/hooks/common/useFormChangeCheck"
 import { parseOrderComponentArrayToDetailsRedactor } from "@/app/services/details.service";
 
 export function useServiceFormsDataCheckChange() {
-	const { errors, ...data } = useAppSelector((state: RootState) => state.serviceUpdateForm);
+	const { errors, ...data } = useAppSelector(
+		(state: RootState) => state.serviceUpdateForm,
+	);
 	const {
 		orderId,
 		errors: serviceTypeErrors,
 		...newServiceTypeData
 	} = useAppSelector((state: RootState) => state.serviceTypeUpdateForm);
-	const order = useAppSelector((state: RootState) => state.serviceTypeUpdateDetailsOrder.order);
+	const order = useAppSelector(
+		(state: RootState) => state.serviceTypeUpdateDetailsOrder.order,
+	);
 	const { services } = useAppSelector((state: RootState) => state.services);
 	const { id, serviceTypeIndex } = useParams<{
 		id: string;
@@ -24,11 +28,16 @@ export function useServiceFormsDataCheckChange() {
 	const oldService = services.find((service) => `${service.id}` === id);
 
 	// FIRSTLY CHECK IF SERVICE TYPE DETAILS FORM DATA CHANGED
-	const oldServiceTypeDetails = oldService?.serviceTypes?.[+serviceTypeIndex].details;
-	const parsedNewServiceTypeDetails = parseOrderComponentArrayToDetailsRedactor(order);
-	const serviceTypeDetailsIsEqual = _.isEqual(parsedNewServiceTypeDetails, oldServiceTypeDetails);
-	// console.log('oldServiceTypeDetails:', oldServiceTypeDetails)
-	// console.log('parsedNewServiceTypeDetails:', parsedNewServiceTypeDetails)
+	const oldServiceTypeDetails =
+		oldService?.serviceTypes?.[+serviceTypeIndex]?.details;
+	const parsedNewServiceTypeDetails =
+		parseOrderComponentArrayToDetailsRedactor(order);
+	const serviceTypeDetailsIsEqual = _.isEqual(
+		parsedNewServiceTypeDetails,
+		oldServiceTypeDetails,
+	);
+	console.log("oldServiceTypeDetails:", oldServiceTypeDetails);
+	console.log("parsedNewServiceTypeDetails:", parsedNewServiceTypeDetails);
 
 	// THEN CHECK IF SERVICE TYPE DETAILS FORM DATA CHANGED
 	const oldServiceType = oldService?.serviceTypes?.[+serviceTypeIndex];
@@ -38,8 +47,8 @@ export function useServiceFormsDataCheckChange() {
 	};
 	const serviceTypeIsEqual = _.isEqual(parsedNewServiceType, oldServiceType);
 
-	// console.log('serviceTypeIsEqual:', serviceTypeIsEqual)
-	// console.log('serviceTypeDetailsIsEqual:', serviceTypeDetailsIsEqual)
+	console.log("serviceTypeIsEqual:", serviceTypeIsEqual);
+	console.log("serviceTypeDetailsIsEqual:", serviceTypeDetailsIsEqual);
 	if (!serviceTypeDetailsIsEqual) {
 		console.log(1);
 		useFormChangeCheck(oldServiceTypeDetails, parsedNewServiceTypeDetails);

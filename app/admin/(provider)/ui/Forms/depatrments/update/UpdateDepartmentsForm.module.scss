@@ -1,21 +1,21 @@
 @use '../../../../../../styles/variables' as *;
 
 .form {
-    width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+
+  .line {
     display: flex;
-    flex-direction: column;
-    gap: 48px;
+    gap: 32px;
+  }
 
-    .line {
-        display: flex;
-        gap: 32px;
-    }
+  .submitBtn.submitBtn {
+    margin-top: 0;
+  }
 
-    .submitBtn.submitBtn {
-        margin-top: 0;
-    }
-
-    .submitError.submitError {
-        top: -30px;
-    }
+  .submitError.submitError {
+    top: -30px;
+  }
 }

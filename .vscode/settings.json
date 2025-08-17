@@ -1,7 +1,7 @@
 {
-    "typescript.preferences.importModuleSpecifier": "non-relative",
-    "javascript.preferences.importModuleSpecifier": "non-relative",
-    "path-autocomplete.pathMappings": {
-        "@": "${workspaceFolder}/"
-    }
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "path-autocomplete.pathMappings": {
+    "@": "${workspaceFolder}/"
+  }
 }

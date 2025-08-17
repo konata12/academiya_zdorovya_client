@@ -1,6 +1,7 @@
 export default function Departments_select_skeleton() {
-    
-    return <>
-        <p>Loading...</p>
-    </>
+	return (
+		<>
+			<p>Loading...</p>
+		</>
+	);
 }

@@ -1,35 +1,35 @@
-import { ErrorResponse, ErrorsResponses, Status } from "@/app/types/data/response.type"
+import { ErrorsResponses, Status } from "@/app/types/data/response.type";
 
 export interface Department {
-    id: number
-    city: string
-    hotline: string
-    address: string
-    googleMapUrl: string
-    googleMapReviewsUrl: string
+	id: number;
+	city: string;
+	hotline: string;
+	address: string;
+	googleMapUrl: string;
+	googleMapReviewsUrl: string;
 }
 
 export interface DepartmentsInit {
-    departments: Department[]
-    departmentsIsModalOpen: boolean[]
-    status: Status
-    error: ErrorsResponses
+	departments: Department[];
+	departmentsIsModalOpen: boolean[];
+	status: Status;
+	error: ErrorsResponses;
 }
 
 export interface DepartmentsFormData {
-    city: string
-    hotline: string
-    address: string
-    googleMapUrl: string
-    googleMapReviewsUrl: string
+	city: string;
+	hotline: string;
+	address: string;
+	googleMapUrl: string;
+	googleMapReviewsUrl: string;
 }
 
 export enum DepartmentsFormDataEnum {
-    CITY = 'city',
-    HOTLINE = 'hotline',
-    ADDRESS ='address',
-    GOOGLEMAPURSL ='googleMapUrl',
-    GOOGLEMAPREVIEWSURL = 'googleMapReviewsUrl',
+	CITY = "city",
+	HOTLINE = "hotline",
+	ADDRESS = "address",
+	GOOGLEMAPURSL = "googleMapUrl",
+	GOOGLEMAPREVIEWSURL = "googleMapReviewsUrl",
 }
 
-export type DepartmentsDefaultFormData = Partial<DepartmentsFormData>
+export type DepartmentsDefaultFormData = Partial<DepartmentsFormData>;

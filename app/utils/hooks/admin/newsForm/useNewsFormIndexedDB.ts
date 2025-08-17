@@ -4,17 +4,16 @@ import { del, UseStore } from "idb-keyval";
 import { useCallback } from "react";
 
 export function useNewsFormIndexedDB(store: UseStore) {
+	const clearNewsFormDataIndexedDB = useCallback(
+		(backgroundImg: string | null, details: DetailsRedactorType | null) => {
+			if (backgroundImg) del(backgroundImg, store);
 
-    const clearNewsFormDataIndexedDB = useCallback((
-        backgroundImg: string | null,
-        details: DetailsRedactorType | null,
-    ) => {
-        if (backgroundImg) del(backgroundImg, store)
-        
-        clearDetailsIndexDB(details, store)
-    }, [store])
+			clearDetailsIndexDB(details, store);
+		},
+		[store],
+	);
 
-    return {
-        clearNewsFromDataIndexedDB: clearNewsFormDataIndexedDB
-    }
+	return {
+		clearNewsFromDataIndexedDB: clearNewsFormDataIndexedDB,
+	};
 }

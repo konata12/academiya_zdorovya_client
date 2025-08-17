@@ -1,87 +1,87 @@
-import { ErrorsResponses, Status } from "@/app/types/data/response.type"
+import { ErrorsResponses, Status } from "@/app/types/data/response.type";
 
 // GENERAL TYPES
 export interface Price extends PriceFormData {
-    id: number
+	id: number;
 }
 export interface Titles extends TitlesFormData {
-    id: number
+	id: number;
 }
 export interface PriceSection {
-    id: number
-    titles: Titles[]
-    optionalService: string | null
-    prices: Price[]
+	id: number;
+	titles: Titles[];
+	optionalService: string | null;
+	prices: Price[];
 }
 export interface PriceSectionInit {
-    priceSections: PriceSection[]
-    priceSectionsIsModalOpen: boolean[]
-    status: Status
-    error: ErrorsResponses
+	priceSections: PriceSection[];
+	priceSectionsIsModalOpen: boolean[];
+	status: Status;
+	error: ErrorsResponses;
 }
 
 // FORM DATA
 interface TitlesFormData {
-    text: string
-    priceNearTitle?: string
+	text: string;
+	priceNearTitle?: string;
 }
 export interface PriceFormData {
-    title: string
-    titleDescription?: string
-    meetingsCount?: string
-    meetingsDuration?: string
-    meetingPrice?: string
-    coursePrice?: string
+	title: string;
+	titleDescription?: string;
+	meetingsCount?: string;
+	meetingsDuration?: string;
+	meetingPrice?: string;
+	coursePrice?: string;
 }
 export interface PriceSectionFormData {
-    titles: TitlesFormData[]
-    optionalService?: string
-    prices?: PriceFormData[]
+	titles: TitlesFormData[];
+	optionalService?: string;
+	prices?: PriceFormData[];
 }
 
 // PRICE FORM UI TYPES
 export interface PriceSectionUI {
-    addTitlePriceCheckbox: boolean[]
+	addTitlePriceCheckbox: boolean[];
 
-    optionalServiceCheckbox: boolean
-    optionalServiceInputHeight: number
+	optionalServiceCheckbox: boolean;
+	optionalServiceInputHeight: number;
 
-    priceVariantsHeight: number
-    addPriceVariantCheckbox: boolean[]
-    priceVariantsCheckbox: boolean
-    meetingsCountCheckbox: boolean
-    meetingDurationCheckbox: boolean
-    meetingPriceCheckbox: boolean
-    meetingsTotalPriceCheckbox: boolean
+	priceVariantsHeight: number;
+	addPriceVariantCheckbox: boolean[];
+	priceVariantsCheckbox: boolean;
+	meetingsCountCheckbox: boolean;
+	meetingDurationCheckbox: boolean;
+	meetingPriceCheckbox: boolean;
+	meetingsTotalPriceCheckbox: boolean;
 }
 // PRICE TABLE UI TYPES
-export type PriceTableColumnData = string | undefined
+export type PriceTableColumnData = string | undefined;
 export interface PriceTableData {
-    [PriceVariantOptionsEnum.COUNT]: PriceTableColumnData[]
-    [PriceVariantOptionsEnum.DURATION]: PriceTableColumnData[]
-    [PriceVariantOptionsEnum.PRICE]: PriceTableColumnData[]
-    [PriceVariantOptionsEnum.TOTALPRICE]: PriceTableColumnData[]
+	[PriceVariantOptionsEnum.COUNT]: PriceTableColumnData[];
+	[PriceVariantOptionsEnum.DURATION]: PriceTableColumnData[];
+	[PriceVariantOptionsEnum.PRICE]: PriceTableColumnData[];
+	[PriceVariantOptionsEnum.TOTALPRICE]: PriceTableColumnData[];
 }
 export interface PriceTableColumnsData {
-    columnsData: PriceTableData
-    columnsNumber: number
+	columnsData: PriceTableData;
+	columnsNumber: number;
 }
 
 // ENUMS
 export enum PriceTitleEnum {
-    TEXT = 'text',
-    PRICENEARTITLE = 'priceNearTitle',
+	TEXT = "text",
+	PRICENEARTITLE = "priceNearTitle",
 }
 export enum PriceVariantOptionsEnum {
-    TITLE = 'title',
-    TITLEDESCRIPTION = 'titleDescription',
-    COUNT = 'meetingsCount',
-    DURATION = 'meetingsDuration',
-    PRICE = 'meetingPrice',
-    TOTALPRICE = 'coursePrice',
+	TITLE = "title",
+	TITLEDESCRIPTION = "titleDescription",
+	COUNT = "meetingsCount",
+	DURATION = "meetingsDuration",
+	PRICE = "meetingPrice",
+	TOTALPRICE = "coursePrice",
 }
 export enum PriceSectionEnum {
-    OPTIONALSERVICE = 'optionalService'
+	OPTIONALSERVICE = "optionalService",
 }
 
 // export type DepartmentsDefaultFormData = Partial<DepartmentsFormData>

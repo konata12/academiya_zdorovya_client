@@ -1,11 +1,11 @@
 @use '../../styles/variables' as *;
 
 .layout {
-    height: 100vh;
+  height: 100vh;
 
-    .layoutContainer {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
+  .layoutContainer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
 }

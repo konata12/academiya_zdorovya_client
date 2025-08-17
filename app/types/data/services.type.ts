@@ -1,243 +1,248 @@
-import { DraggableComponent } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer"
-import { DetailsRedactorType } from "@/app/types/data/details.type"
-import { FormInputError } from "@/app/types/data/form.type"
-import { ErrorsResponses, Status } from "@/app/types/data/response.type"
-import { OrderElementBasicType } from "@/app/utils/hooks/admin/dragAndDrop/useOrderedList"
+import { DraggableComponent } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer";
+import { DetailsRedactorType } from "@/app/types/data/details.type";
+import { FormInputError } from "@/app/types/data/form.type";
+import { ErrorsResponses, Status } from "@/app/types/data/response.type";
+import { OrderElementBasicType } from "@/app/utils/hooks/admin/dragAndDrop/useOrderedList";
 
-export type ServiceFormIndexedDBType = "service_create_images" | 'service_update_images'
-export type ServiceTypesSliceNameType = "serviceTypeCreateForm" | 'serviceTypeUpdateForm'
-export type ServiceTypesDetailsSliceNameType = "serviceTypeCreateDetailsOrder" | 'serviceTypeUpdateDetailsOrder'
-
+export type ServiceFormIndexedDBType =
+	| "service_create_images"
+	| "service_update_images";
+export type ServiceTypesSliceNameType =
+	| "serviceTypeCreateForm"
+	| "serviceTypeUpdateForm";
+export type ServiceTypesDetailsSliceNameType =
+	| "serviceTypeCreateDetailsOrder"
+	| "serviceTypeUpdateDetailsOrder";
 
 export interface Service {
-    id: number
-    title: string
-    shortDescription: string
-    image: string
+	id: number;
+	title: string;
+	shortDescription: string;
+	image: string;
 
-    treatmentStages: ServiceTreatmentStageBasicType[]
-    mainDescription: string
-    serviceTypesDescription: string | null
-    serviceTypes: ServiceTypeResponseData[] | null
-    employees: ServiceEmployeeResponseData[]
+	treatmentStages: ServiceTreatmentStageBasicType[];
+	mainDescription: string;
+	serviceTypesDescription: string | null;
+	serviceTypes: ServiceTypeResponseData[] | null;
+	employees: ServiceEmployeeResponseData[];
 }
 // RESPONSE DATA
-export interface ServiceResponseData
-    extends Service {
-    treatmentStages: ServiceTreatmentStageResponseData[]
+export interface ServiceResponseData extends Service {
+	treatmentStages: ServiceTreatmentStageResponseData[];
 }
 
 export interface ServiceTreatmentStageResponseData
-    extends ServiceTreatmentStageType { }
-export interface ServiceTypeResponseData
-    extends ServiceType {
-    backgroundImg: string
-    details: DetailsRedactorType
+	extends ServiceTreatmentStageType {}
+export interface ServiceTypeResponseData extends ServiceType {
+	backgroundImg: string;
+	details: DetailsRedactorType;
 }
 export interface ServiceEmployeeResponseData
-    extends OrderElementBasicType,
-    ServiceEmployeeBasicType { }
+	extends OrderElementBasicType,
+		ServiceEmployeeBasicType {}
 
 // BASIC
 export interface ServiceTreatmentStageBasicType {
-    title: string
-    description: string
+	title: string;
+	description: string;
 }
 export interface ServiceTreatmentStageType
-    extends OrderElementBasicType,
-    ServiceTreatmentStageBasicType { }
+	extends OrderElementBasicType,
+		ServiceTreatmentStageBasicType {}
 
 export interface ServiceTypeBasicType {
-    title: string
-    description: string
-    backgroundImg: string | null
-    details: DetailsRedactorType | null
+	title: string;
+	description: string;
+	backgroundImg: string | null;
+	details: DetailsRedactorType | null;
 }
-export interface ServiceType
-    extends OrderElementBasicType,
-    ServiceTypeBasicType { }
+export interface ServiceType extends OrderElementBasicType, ServiceTypeBasicType {}
 export interface ServiceEmployeeBasicType {
-    id: number
-    name: string
-    surname: string
-    position: string
+	id: number;
+	name: string;
+	surname: string;
+	position: string;
 }
 
 // HANDLE SUBMIT
-export type ServiceHandleSubmitErrorIdType = ServiceFormDataEnumType
-    | `${ServiceFormDataEnum.TREATMENTSTAGES}_${ServiceTreatmentStageEnumType}_${number}`
+export type ServiceHandleSubmitErrorIdType =
+	| ServiceFormDataEnumType
+	| `${ServiceFormDataEnum.TREATMENTSTAGES}_${ServiceTreatmentStageEnumType}_${number}`;
 
-export type ServiceHandleSubmitStringKeysType = Exclude<ServiceStringKeysType, ServiceFormDataEnum.IMAGE | ServiceFormDataEnum.SERVICETYPESDESCRIPTION>
+export type ServiceHandleSubmitStringKeysType = Exclude<
+	ServiceStringKeysType,
+	ServiceFormDataEnum.IMAGE | ServiceFormDataEnum.SERVICETYPESDESCRIPTION
+>;
 
 // REDUX
 export interface ServiceInit {
-    services: Service[]
-    servicesIsModalOpen: boolean[]
-    status: Status
-    error: ErrorsResponses
+	services: Service[];
+	servicesIsModalOpen: boolean[];
+	status: Status;
+	error: ErrorsResponses;
 }
-
 
 // FORM DATA
 export interface ServiceFormData {
-    title: string
-    shortDescription: string
-    image: string
+	title: string;
+	shortDescription: string;
+	image: string;
 
-    treatmentStages: ServiceTreatmentStageBasicType[]
-    mainDescription: string
+	treatmentStages: ServiceTreatmentStageBasicType[];
+	mainDescription: string;
 
-    serviceTypesDescription: string | null
-    serviceTypes: ServiceTypeServiceFormData[] | null
-    employees: ServiceEmployeeFormData[]
+	serviceTypesDescription: string | null;
+	serviceTypes: ServiceTypeServiceFormData[] | null;
+	employees: ServiceEmployeeFormData[];
 
-    errors: ServiceFormDataErrors
+	errors: ServiceFormDataErrors;
 }
 
 export interface ServiceTypeServiceFormData
-    extends DraggableComponent,
-    ServiceTypeBasicType {
-    backgroundImg: string
-    details: DetailsRedactorType
+	extends DraggableComponent,
+		ServiceTypeBasicType {
+	backgroundImg: string;
+	details: DetailsRedactorType;
 }
 export interface ServiceEmployeeFormData
-    extends DraggableComponent, ServiceEmployeeBasicType { }
+	extends DraggableComponent,
+		ServiceEmployeeBasicType {}
 
 // SERVICE TYPES FORM DATA
 export interface ServiceTypeFormData
-    extends DraggableComponent,
-    ServiceTypeBasicType {
-    errors: {
-        title: FormInputError
-        description: FormInputError
-        backgroundImg: FormInputError
-        details: FormInputError
-    }
+	extends DraggableComponent,
+		ServiceTypeBasicType {
+	errors: {
+		title: FormInputError;
+		description: FormInputError;
+		backgroundImg: FormInputError;
+		details: FormInputError;
+	};
 }
 
 // FORM DATA ERROR TYPES
 export interface ServiceFormDataErrors {
-    title: FormInputError
-    shortDescription: FormInputError
-    image: FormInputError
-    treatmentStages: ServiceTreatmentStageFormDataError[]
-    mainDescription: FormInputError
-    serviceTypesDescription: FormInputError
-    serviceTypes: FormInputError
-    employees: FormInputError
+	title: FormInputError;
+	shortDescription: FormInputError;
+	image: FormInputError;
+	treatmentStages: ServiceTreatmentStageFormDataError[];
+	mainDescription: FormInputError;
+	serviceTypesDescription: FormInputError;
+	serviceTypes: FormInputError;
+	employees: FormInputError;
 }
 export interface ServiceTreatmentStageFormDataError {
-    title: FormInputError
-    description: FormInputError
+	title: FormInputError;
+	description: FormInputError;
 }
 
 // CREATE/UPDATE FORM DATA TYPES
 export interface CreateServiceFormData {
-    title: string
-    shortDescription: string
-    image: string
+	title: string;
+	shortDescription: string;
+	image: string;
 
-    treatmentStages: CreateServiceTreatmentStagesFormData[]
-    mainDescription: string
+	treatmentStages: CreateServiceTreatmentStagesFormData[];
+	mainDescription: string;
 
-    serviceTypesDescription: string | null
-    serviceTypes: CreateServiceTypesFormData[] | null
-    employees: CreateServiceEmployeesFormData[]
+	serviceTypesDescription: string | null;
+	serviceTypes: CreateServiceTypesFormData[] | null;
+	employees: CreateServiceEmployeesFormData[];
 }
-export interface UpdateServiceFormData
-    extends CreateServiceFormData {
-    id: string
+export interface UpdateServiceFormData extends CreateServiceFormData {
+	id: string;
 }
 
 export interface CreateServiceTreatmentStagesFormData
-    extends OrderElementBasicType,
-    ServiceTreatmentStageBasicType { }
+	extends OrderElementBasicType,
+		ServiceTreatmentStageBasicType {}
 
 export interface CreateServiceTypesFormData
-    extends OrderElementBasicType,
-    ServiceTypeBasicType {
-    backgroundImg: string
-    details: DetailsRedactorType
+	extends OrderElementBasicType,
+		ServiceTypeBasicType {
+	backgroundImg: string;
+	details: DetailsRedactorType;
 }
-export interface UpdateServiceTypesFormData
-    extends CreateServiceTypesFormData {
-    id: number
+export interface UpdateServiceTypesFormData extends CreateServiceTypesFormData {
+	id: number;
 }
 
 export interface CreateServiceEmployeesFormData
-    extends ServiceEmployeeResponseData { }
+	extends ServiceEmployeeResponseData {}
 export interface UpdateServiceEmployeesFormData
-    extends CreateServiceEmployeesFormData { }
+	extends CreateServiceEmployeesFormData {}
 
 // CREATE/UPDATE FORM DATA SLICE TYPES
-export type ServiceStringKeysType = ServiceFormDataEnum.TITLE
-    | ServiceFormDataEnum.SHORTDESCRIPTION
-    | ServiceFormDataEnum.IMAGE
-    | ServiceFormDataEnum.MAINDESCRIPTION
-    | ServiceFormDataEnum.SERVICETYPESDESCRIPTION
+export type ServiceStringKeysType =
+	| ServiceFormDataEnum.TITLE
+	| ServiceFormDataEnum.SHORTDESCRIPTION
+	| ServiceFormDataEnum.IMAGE
+	| ServiceFormDataEnum.MAINDESCRIPTION
+	| ServiceFormDataEnum.SERVICETYPESDESCRIPTION;
 
 // UI FORM DATA
 export interface ServiceFormDataUICheckboxes {
-    serviceTypesCheckbox: boolean
-    serviceTypesDescriptionCheckbox: boolean
+	serviceTypesCheckbox: boolean;
+	serviceTypesDescriptionCheckbox: boolean;
 }
 export interface ServiceFormDataUIModalsStates {
-    treatmentStagesModalIsOpen: boolean[]
-    serviceTypesModalIsOpen: boolean[]
-    employeesModalIsOpen: boolean[]
+	treatmentStagesModalIsOpen: boolean[];
+	serviceTypesModalIsOpen: boolean[];
+	employeesModalIsOpen: boolean[];
 }
 export interface ServiceFormDataUI
-    extends ServiceFormDataUICheckboxes,
-    ServiceFormDataUIModalsStates {
-    updatingData: boolean
+	extends ServiceFormDataUICheckboxes,
+		ServiceFormDataUIModalsStates {
+	updatingData: boolean;
 }
 
 // HOOKS
-export type ServiceFormHandleChangeField = Exclude<ServiceFormDataEnum, ServiceFormDataEnum.TREATMENTSTAGES>
-    | `${ServiceFormDataEnum.TREATMENTSTAGES}_${ServiceTreatmentStageEnumType}`
+export type ServiceFormHandleChangeField =
+	| Exclude<ServiceFormDataEnum, ServiceFormDataEnum.TREATMENTSTAGES>
+	| `${ServiceFormDataEnum.TREATMENTSTAGES}_${ServiceTreatmentStageEnumType}`;
 
 // ENUMS
 export enum ServiceFormDataEnum {
-    TITLE = 'title',
-    SHORTDESCRIPTION = 'shortDescription',
-    IMAGE = 'image',
-    TREATMENTSTAGES = 'treatmentStages',
-    MAINDESCRIPTION = 'mainDescription',
-    SERVICETYPESDESCRIPTION = 'serviceTypesDescription',
-    SERVICETYPES = 'serviceTypes',
-    EMPLOYEES = 'employees',
+	TITLE = "title",
+	SHORTDESCRIPTION = "shortDescription",
+	IMAGE = "image",
+	TREATMENTSTAGES = "treatmentStages",
+	MAINDESCRIPTION = "mainDescription",
+	SERVICETYPESDESCRIPTION = "serviceTypesDescription",
+	SERVICETYPES = "serviceTypes",
+	EMPLOYEES = "employees",
 }
 export enum ServiceTreatmentStageEnum {
-    TITLE = 'title',
-    DESCRIPTION = 'description',
+	TITLE = "title",
+	DESCRIPTION = "description",
 }
 export enum ServiceTypesEnum {
-    TITLE = 'title',
-    DESCRIPTION = 'description',
-    BACKGROUNDIMG = 'backgroundImg',
-    DETAILS = 'details',
+	TITLE = "title",
+	DESCRIPTION = "description",
+	BACKGROUNDIMG = "backgroundImg",
+	DETAILS = "details",
 }
 
 export enum ServiceFormDataUICheckboxesEnum {
-    SERVICETYPESCHECKBOX = 'serviceTypesCheckbox',
-    SERVICETYPESDESCRIPTIONCHECKBOX = 'serviceTypesDescriptionCheckbox',
+	SERVICETYPESCHECKBOX = "serviceTypesCheckbox",
+	SERVICETYPESDESCRIPTIONCHECKBOX = "serviceTypesDescriptionCheckbox",
 }
 export enum ServiceFormDataUIModalsStatesEnum {
-    TREATMENTSTAGESMODALISOPEN = 'treatmentStagesModalIsOpen',
-    SERVICETYPESMODALISOPEN = 'serviceTypesModalIsOpen',
-    EMPLOYEEMODALISOPEN = 'employeesModalIsOpen',
+	TREATMENTSTAGESMODALISOPEN = "treatmentStagesModalIsOpen",
+	SERVICETYPESMODALISOPEN = "serviceTypesModalIsOpen",
+	EMPLOYEEMODALISOPEN = "employeesModalIsOpen",
 }
 
 export enum ServiceEmployeesFormDataEnum {
-    ID = 'id',
-    NAME = 'name',
-    SURNAME = 'surname',
-    POSITION = 'position',
+	ID = "id",
+	NAME = "name",
+	SURNAME = "surname",
+	POSITION = "position",
 }
 
 // ENUM TYPES
-export type ServiceFormDataEnumType = `${ServiceFormDataEnum}`
-export type ServiceTreatmentStageEnumType = `${ServiceTreatmentStageEnum}`
-export type ServiceTypesEnumType = `${ServiceTypesEnum}`
-export type ServiceFormDataUICheckboxesType = `${ServiceFormDataUICheckboxesEnum}`
-export type ServiceModalsStatesType = `${ServiceFormDataUIModalsStatesEnum}`
+export type ServiceFormDataEnumType = `${ServiceFormDataEnum}`;
+export type ServiceTreatmentStageEnumType = `${ServiceTreatmentStageEnum}`;
+export type ServiceTypesEnumType = `${ServiceTypesEnum}`;
+export type ServiceFormDataUICheckboxesType = `${ServiceFormDataUICheckboxesEnum}`;
+export type ServiceModalsStatesType = `${ServiceFormDataUIModalsStatesEnum}`;

@@ -1,19 +1,19 @@
 @use '../../../../styles/variables' as *;
 
 .inputContainer {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .error {
+    position: absolute;
+    bottom: -28px;
     width: 100%;
+    border-radius: $border-rad-5;
 
-    .error {
-        position: absolute;
-        bottom: -28px;
-        width: 100%;
-        border-radius: $border-rad-5;
-
-        color: $error-color;
-        text-align: center;
-        font-size: $pc-h6-fz;
-    }
+    color: $error-color;
+    text-align: center;
+    font-size: $pc-h6-fz;
+  }
 }

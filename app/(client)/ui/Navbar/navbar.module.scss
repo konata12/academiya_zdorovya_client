@@ -1,26 +1,26 @@
 @use '../../../styles/variables' as *;
 
 .navbar {
-    background-color: $black-bg-color;
-    color: white;
+  background-color: $black-bg-color;
+  color: white;
 
-    .container {
-        display: flex;
+  .container {
+    display: flex;
 
-        .logo {
+    .logo {
 
-        }
-    
-        .departments {
-    
-        }
-    
-        .links {
-    
-        }
-    
-        .btn {
-            
-        }
     }
+
+    .departments {
+
+    }
+
+    .links {
+
+    }
+
+    .btn {
+
+    }
+  }
 }

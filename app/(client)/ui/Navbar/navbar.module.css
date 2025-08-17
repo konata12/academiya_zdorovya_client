@@ -29,9 +29,12 @@
  * @sass-export-section="box-shadow"
  */
 .navbar {
-  background-color: #000;
-  color: white;
+    background-color: #000;
+    color: white;
 }
+
 .navbar .container {
-  display: flex;
-}/*# sourceMappingURL=navbar.module.css.map */
+    display: flex;
+}
+
+/*# sourceMappingURL=navbar.module.css.map */

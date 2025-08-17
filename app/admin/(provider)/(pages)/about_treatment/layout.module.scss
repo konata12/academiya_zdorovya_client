@@ -1,13 +1,15 @@
 @use '../../../../styles/variables' as *;
 
 .deleteError {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
+
 .deleteButtonError.deleteButtonError {
-    outline: 2px solid $error-color;
-    color: $error-color;
+  outline: 2px solid $error-color;
+  color: $error-color;
 }
+
 .addButton {
-    width: 100%;
-    margin-top: 32px;
+  width: 100%;
+  margin-top: 32px;
 }

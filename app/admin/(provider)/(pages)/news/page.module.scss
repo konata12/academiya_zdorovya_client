@@ -1,23 +1,23 @@
 @use '../../../../styles/variables' as *;
 
 .sectionTitle {
-    margin-bottom: 32px;
+  margin-bottom: 32px;
 }
 
 .tableLineOptions {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    .starBtn {
-        cursor: pointer;
-        background-color: transparent;
-        border: none;
-        outline: none;
-        display: inline-block;
-    }
+  .starBtn {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    display: inline-block;
+  }
 }
 
 .addButton {
-    width: 100%;
-    margin-top: 32px;
+  width: 100%;
+  margin-top: 32px;
 }

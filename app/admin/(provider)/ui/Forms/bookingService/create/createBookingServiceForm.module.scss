@@ -1,12 +1,13 @@
 .form {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 
-    .submitBtn.submitBtn {
-        margin-top: 0;
-    }
-    .submitError.submitError {
-        top: -30px;
-    }
+  .submitBtn.submitBtn {
+    margin-top: 0;
+  }
+
+  .submitError.submitError {
+    top: -30px;
+  }
 }

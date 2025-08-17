@@ -1,87 +1,87 @@
 @use '../../../../../../styles/variables' as *;
 
 .priceVariantShape {
-    position: relative;
-    z-index: 0;
+  position: relative;
+  z-index: 0;
 }
 
 .priceVariantWrap {
-    z-index: 5;
-    position: relative;
-    top: 0;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 48px;
+  z-index: 5;
+  position: relative;
+  top: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
 
-    &.additional {
-        padding-top: 64px;
+  &.additional {
+    padding-top: 64px;
+  }
+
+  .additionalTitle {
+    width: 100%;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .titleWrap {
+    display: flex;
+    gap: 32px;
+    width: 100%;
+
+    .title {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      flex-grow: 1;
+
+      max-width: 498px;
+      width: 100%;
     }
 
-    .additionalTitle {
-        width: 100%;
-        margin-bottom: 12px;
+    .descriptionNearTitle {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      flex-grow: 1;
+
+      .top {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-    }
+      }
 
-    .titleWrap {
+      .input {
+        pointer-events: none;
+        opacity: 0;
+
+        transition: all $anim-time $slow;
+
+        &.active {
+          pointer-events: auto;
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .variantOptions {
+    display: flex;
+    width: 100%;
+    gap: 32px;
+
+    .variant {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      flex-grow: 1;
+
+      .input {
         display: flex;
-        gap: 32px;
+        max-width: none;
         width: 100%;
-
-        .title {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-            flex-grow: 1;
-
-            max-width: 498px;
-            width: 100%;
-        }
-
-        .descriptionNearTitle {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-            flex-grow: 1;
-
-            .top {
-                display: flex;
-                justify-content: space-between;
-            }
-
-            .input {
-                pointer-events: none;
-                opacity: 0;
-
-                transition: all $anim-time $slow;
-
-                &.active {
-                    pointer-events: auto;
-                    opacity: 1;
-                }
-            }
-        }
+      }
     }
-
-    .variantOptions {
-        display: flex;
-        width: 100%;
-        gap: 32px;
-
-        .variant {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-            flex-grow: 1;
-
-            .input {
-                display: flex;
-                max-width: none;
-                width: 100%;
-            }
-        }
-    }
+  }
 }

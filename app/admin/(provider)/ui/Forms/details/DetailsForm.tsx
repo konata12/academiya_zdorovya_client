@@ -50,9 +50,7 @@ export default function DetailsForm({
 	const [submitError, setSubmitError] = useState<FormInputError>({
 		message: "",
 	});
-	const order = useAppSelector(
-		(state: RootState) => state[orderSliceName].order,
-	);
+	const order = useAppSelector((state: RootState) => state[orderSliceName].order);
 
 	const router = useRouter();
 	const pathname = usePathname();
@@ -68,8 +66,7 @@ export default function DetailsForm({
 		submitForm,
 		setFormError,
 	} = useDetailsFormSlice(orderSliceName);
-	const imageStoreName =
-		getIndexedDBStoreNameForDetailsImages(orderSliceName);
+	const imageStoreName = getIndexedDBStoreNameForDetailsImages(orderSliceName);
 
 	useEffect(() => {
 		if (order.length >= 1) setSubmitError({ message: "" });
@@ -226,9 +223,7 @@ export default function DetailsForm({
 										: "",
 							},
 							description: {
-								message: !description.length
-									? "Введіть опис"
-									: "",
+								message: !description.length ? "Введіть опис" : "",
 							},
 						};
 						const id = DetailsFormDataEnum.IMAGES + index;
@@ -259,9 +254,7 @@ export default function DetailsForm({
 		if (errorsData.length) {
 			// SCROLL TO INPUT
 			(
-				document.querySelector(
-					`#${errorsData[0].id}`,
-				) as HTMLInputElement
+				document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 			).scrollIntoView({
 				behavior: "smooth",
 				block: "center",
@@ -456,6 +449,10 @@ export default function DetailsForm({
 
 	return (
 		<form onSubmit={handleSubmit}>
+			<p className={styles.warning}>
+				Зміни редактора буде збережено тільки після натискання кнопки
+				"Створити/Підтвердити зміни"
+			</p>
 			<div className={styles.addInputsContainer}>
 				{formInputsToRender.length &&
 					formInputsToRender.map((input, i) => {
@@ -498,9 +495,7 @@ export default function DetailsForm({
 												componentData={element}
 												index={index}
 												orderSliceName={orderSliceName}
-												className={
-													styles.orderedComponent
-												}
+												className={styles.orderedComponent}
 											/>
 										);
 
@@ -511,9 +506,7 @@ export default function DetailsForm({
 												componentData={element}
 												index={index}
 												orderSliceName={orderSliceName}
-												className={
-													styles.orderedComponent
-												}
+												className={styles.orderedComponent}
 											/>
 										);
 
@@ -555,9 +548,7 @@ export default function DetailsForm({
 												componentData={element}
 												index={index}
 												orderSliceName={orderSliceName}
-												indexedDBStoreName={
-													imageStoreName
-												}
+												indexedDBStoreName={imageStoreName}
 												className={{
 													image: styles.orderedComponent,
 													description:
@@ -580,9 +571,7 @@ export default function DetailsForm({
 			<SubmitButton
 				error={submitError}
 				label={
-					pathname.includes("create")
-						? "Створити"
-						: "Підтвердити зміни"
+					pathname.includes("create") ? "Створити" : "Підтвердити зміни"
 				}
 				className={{
 					button: submitError.message ? styles.button : "",

@@ -1,36 +1,37 @@
 @use '../../../../../../../styles/variables' as *;
 
 .tableLine {
+  width: 100%;
+  display: flex;
+  gap: 6px;
+
+  color: $text-color-black;
+  font-size: $price-table-table-line-fz;
+
+  &.dataLine {
+    padding: $prices-table-line-padding 0;
+  }
+
+  .titleColumn {
+    max-width: 218px;
     width: 100%;
+
+    text-align: left;
+  }
+
+  .data {
     display: flex;
-    gap: 6px;
+    flex-grow: 1;
 
-    color: $text-color-black;
-    font-size: $price-table-table-line-fz;
+    .dataColumn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      padding: 0 6px;
 
-    &.dataLine {
-        padding: $prices-table-line-padding 0;
+      text-align: center;
+      text-wrap: wrap;
     }
-
-    .titleColumn {
-        max-width: 218px;
-        width: 100%;
-
-        text-align: left;
-    }
-    .data {
-        display: flex;
-        flex-grow: 1;
-
-        .dataColumn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 1;
-            padding: 0 6px;
-
-            text-align: center;
-            text-wrap: wrap;
-        }
-    }
+  }
 }

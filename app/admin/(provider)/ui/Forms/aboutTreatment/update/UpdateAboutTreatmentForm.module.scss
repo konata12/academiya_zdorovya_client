@@ -1,44 +1,45 @@
 @use '../../../../../../styles/variables' as *;
 
 .form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 
-    .treatmentTypes {
-        margin-top: 128px;
+  .treatmentTypes {
+    margin-top: 128px;
 
-        .treatmentType {
-            display: flex;
-            flex-direction: column;
-            margin-top: 64px;
+    .treatmentType {
+      display: flex;
+      flex-direction: column;
+      margin-top: 64px;
 
-            .top {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-            .treatmentTypeInput {
-                width: 100%;
-                margin-top: 48px;
-            }
-        }
-
-        .addType {
-            margin-top: 32px;
-            width: 100%;
-        }
+      .treatmentTypeInput {
+        width: 100%;
+        margin-top: 48px;
+      }
     }
 
-    .addPhoto {
-        margin-top: 128px;
-
-        .title {
-            margin-bottom: 64px;
-        }
-        .label {
-            margin-bottom: 32px;
-        }
+    .addType {
+      margin-top: 32px;
+      width: 100%;
     }
+  }
+
+  .addPhoto {
+    margin-top: 128px;
+
+    .title {
+      margin-bottom: 64px;
+    }
+
+    .label {
+      margin-bottom: 32px;
+    }
+  }
 }

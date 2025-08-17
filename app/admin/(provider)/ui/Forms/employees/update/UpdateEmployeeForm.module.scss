@@ -2,184 +2,184 @@
 
 .createEmployeeForm {
 
-    .inputs {
+  .inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 128px;
+
+    .mainInfo {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+
+      .fullName {
+        display: flex;
+        gap: 32px;
+      }
+    }
+
+    .socialMedia {
+
+      .socialMediaCheckboxes {
         display: flex;
         flex-direction: column;
-        gap: 128px;
-
-        .mainInfo {
-            display: flex;
-            flex-direction: column;
-            gap: 48px;
-
-            .fullName {
-                display: flex;
-                gap: 32px;
-            }
-        }
-
-        .socialMedia {
-
-            .socialMediaCheckboxes {
-                display: flex;
-                flex-direction: column;
-                gap: 48px;
-                width: 100%;
-                max-width: 498px;
-                margin-top: 64px;
-            }
-        }
-
-        .degree {
-            display: flex;
-            flex-direction: column;
-            gap: 64px;
-
-            .label {
-                display: none;
-            }
-
-            .textarea {
-                margin-top: 0;
-            }
-        }
-
-        .workSpecialities {
-
-            .label {
-                margin-bottom: 64px;
-            }
-
-            .workSpecialitiesContainer {
-                display: flex;
-                flex-direction: column;
-                gap: 64px;
-            }
-
-            .btn {
-                margin-top: 32px;
-                width: 100%;
-            }
-        }
-
-        .achivements {
-
-            .workSpecialitiesContainer {
-                display: flex;
-                flex-direction: column;
-                gap: 64px;
-                padding-top: 64px;
-            }
-
-            .btn {
-                margin-top: 32px;
-                width: 100%;
-            }
-        }
-
-        .image {
-
-            .sectionLabel {
-                margin-bottom: 64px;
-            }
-
-            .checkboxContainer {
-                margin-bottom: 48px;
-
-                .fullCheckbox {
-                    display: inline-block;
-                    margin-top: 32px;
-
-                    .checkbox {
-                        width: 190px;
-
-                        input {
-
-                            &:checked~span {
-
-                                i {
-                                    left: 170px;
-                                }
-                            }
-                        }
-                    }
-
-                    .checkboxLabels {
-                        display: flex;
-                        justify-content: space-between;
-                        margin-top: 16px;
-                        font-size: $pc-h6-fz;
-                    }
-                }
-            }
-
-            .inputLabel {
-                margin-bottom: 32px;
-            }
-
-            .imagePreview {
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-
-                .errorMessage {
-                    position: absolute;
-                    top: 0;
-                    left: 50%;
-                    transform: translateX(-50%);
-                }
-
-                .images {
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    align-items: flex-end;
-                    gap: 32px;
-                    width: 100%;
-                    padding-top: 80px;
-
-                    .imageContainer {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: flex-end;
-                        width: 100%;
-                        border-radius: $background-pattern-border-rad;
-                        clip-path: inset(0 0 0 0 round $background-pattern-border-rad);
-                        background-size: cover;
-                        background-position: center;
-                        background-repeat: no-repeat;
-                        transition: all $anim-time $slow;
-
-                        &.blue {
-                            background-image: url('/images/bg_blue_employee.jpg');
-                        }
-
-                        &.grey {
-                            background-image: url('/images/bg_grey_employee.jpg');
-                        }
-
-                        &.small {
-                            max-width: 256px;
-                            height: 256px;
-                        }
-
-                        &.big {
-                            max-width: 346px;
-                            height: 346px;
-                        }
-
-                        &.error {
-                            box-shadow: inset 0 0 0 3px $error-color;
-                        }
-                    }
-                }
-
-                .caption {
-                    margin-top: 32px;
-                }
-            }
-        }
+        gap: 48px;
+        width: 100%;
+        max-width: 498px;
+        margin-top: 64px;
+      }
     }
+
+    .degree {
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+
+      .label {
+        display: none;
+      }
+
+      .textarea {
+        margin-top: 0;
+      }
+    }
+
+    .workSpecialities {
+
+      .label {
+        margin-bottom: 64px;
+      }
+
+      .workSpecialitiesContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+      }
+
+      .btn {
+        margin-top: 32px;
+        width: 100%;
+      }
+    }
+
+    .achivements {
+
+      .workSpecialitiesContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+        padding-top: 64px;
+      }
+
+      .btn {
+        margin-top: 32px;
+        width: 100%;
+      }
+    }
+
+    .image {
+
+      .sectionLabel {
+        margin-bottom: 64px;
+      }
+
+      .checkboxContainer {
+        margin-bottom: 48px;
+
+        .fullCheckbox {
+          display: inline-block;
+          margin-top: 32px;
+
+          .checkbox {
+            width: 190px;
+
+            input {
+
+              &:checked ~ span {
+
+                i {
+                  left: 170px;
+                }
+              }
+            }
+          }
+
+          .checkboxLabels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            font-size: $pc-h6-fz;
+          }
+        }
+      }
+
+      .inputLabel {
+        margin-bottom: 32px;
+      }
+
+      .imagePreview {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+
+        .errorMessage {
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
+        .images {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: flex-end;
+          gap: 32px;
+          width: 100%;
+          padding-top: 80px;
+
+          .imageContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            width: 100%;
+            border-radius: $background-pattern-border-rad;
+            clip-path: inset(0 0 0 0 round $background-pattern-border-rad);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: all $anim-time $slow;
+
+            &.blue {
+              background-image: url('/images/bg_blue_employee.jpg');
+            }
+
+            &.grey {
+              background-image: url('/images/bg_grey_employee.jpg');
+            }
+
+            &.small {
+              max-width: 256px;
+              height: 256px;
+            }
+
+            &.big {
+              max-width: 346px;
+              height: 346px;
+            }
+
+            &.error {
+              box-shadow: inset 0 0 0 3px $error-color;
+            }
+          }
+        }
+
+        .caption {
+          margin-top: 32px;
+        }
+      }
+    }
+  }
 }

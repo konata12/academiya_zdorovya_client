@@ -3,298 +3,298 @@
 @use './functions' as *;
 
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 
-    font-family: $main-font;
+  font-family: $main-font;
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    background-color: $background-color-primary;
+  background-color: $background-color-primary;
 
-    font-family: $main-font;
-    font-weight: $font-weight-reg;
+  font-family: $main-font;
+  font-weight: $font-weight-reg;
 }
 
 .container {
-    margin: auto;
-    padding: 0 24px;
+  margin: auto;
+  padding: 0 24px;
 
-    @include respond-to(s) {
-        max-width: 375px;
-    }
+  @include respond-to(s) {
+    max-width: 375px;
+  }
 
-    @include respond-to(m) {
-        max-width: 744px;
-    }
+  @include respond-to(m) {
+    max-width: 744px;
+  }
 
-    @include respond-to(l) {
-        max-width: 1440px;
-    }
+  @include respond-to(l) {
+    max-width: 1440px;
+  }
 }
 
 .title {
-    text-align: center;
-    font-weight: $font-weight-med;
-    color: $text-color-black;
+  text-align: center;
+  font-weight: $font-weight-med;
+  color: $text-color-black;
 
-    &.left {
-        text-align: left;
-    }
+  &.left {
+    text-align: left;
+  }
 
-    &.lg {
-        font-size: $pc-h1-fz;
-        margin-bottom: 64px;
-    }
+  &.lg {
+    font-size: $pc-h1-fz;
+    margin-bottom: 64px;
+  }
 
-    &.md {
-        font-size: $pc-h2-fz;
-    }
+  &.md {
+    font-size: $pc-h2-fz;
+  }
 
-    &.sm {
-        font-size: $pc-h3-fz;
-    }
+  &.sm {
+    font-size: $pc-h3-fz;
+  }
 
-    &.xs {
-        font-size: $pc-h5-fz;
-    }
+  &.xs {
+    font-size: $pc-h5-fz;
+  }
 }
 
 .inputLabel {
-    color: $text-color-black;
-    font-size: $pc-h5-fz;
-    font-weight: $font-weight-med;
+  color: $text-color-black;
+  font-size: $pc-h5-fz;
+  font-weight: $font-weight-med;
 }
 
 .input {
-    background-color: $disabled-color;
+  background-color: $disabled-color;
+  border: none;
+  border-radius: $pc-input-border-rad;
+  padding: $pc-input-padding-h $pc-input-padding-w;
+
+  font-size: $pc-t1-fz;
+  color: $text-color-black;
+
+  // Override autofill styles for WebKit browsers (Chrome, Safari)
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px $disabled-color inset; // Match the background color
+    -webkit-text-fill-color: $text-color-black; // Match the text color
+    transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s; // Prevent color change
+  }
+
+  // Override autofill styles for Firefox
+  &:-moz-autofill,
+  &:-moz-autofill:hover,
+  &:-moz-autofill:focus,
+  &:-moz-autofill:active {
+    background-color: $disabled-color !important; // Match the background color
+    color: $text-color-black !important; // Match the text color
+  }
+
+  &:focus-visible {
     border: none;
-    border-radius: $pc-input-border-rad;
-    padding: $pc-input-padding-h $pc-input-padding-w;
+    outline: none;
+    background-color: $disabled-color;
+  }
 
-    font-size: $pc-t1-fz;
-    color: $text-color-black;
+  &::placeholder {
+    @include rgba-text($text-color-black, 0.5)
+  }
 
-    // Override autofill styles for WebKit browsers (Chrome, Safari)
-    &:-webkit-autofill,
-    &:-webkit-autofill:hover,
-    &:-webkit-autofill:focus,
-    &:-webkit-autofill:active {
-        -webkit-box-shadow: 0 0 0 1000px $disabled-color inset; // Match the background color
-        -webkit-text-fill-color: $text-color-black; // Match the text color
-        transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s; // Prevent color change
-    }
-
-    // Override autofill styles for Firefox
-    &:-moz-autofill,
-    &:-moz-autofill:hover,
-    &:-moz-autofill:focus,
-    &:-moz-autofill:active {
-        background-color: $disabled-color !important; // Match the background color
-        color: $text-color-black !important; // Match the text color
-    }
+  &.wrong {
+    outline: 2px solid $error-color;
 
     &:focus-visible {
-        border: none;
-        outline: none;
-        background-color: $disabled-color;
+      outline: 2px solid $error-color;
+      background-color: $disabled-color;
     }
-
-    &::placeholder {
-        @include rgba-text($text-color-black, 0.5)
-    }
-
-    &.wrong {
-        outline: 2px solid $error-color;
-
-        &:focus-visible {
-            outline: 2px solid $error-color;
-            background-color: $disabled-color;
-        }
-    }
+  }
 }
 
 .btn {
-    cursor: pointer;
-    border: none;
-    transition: all $anim-time $slow;
-    display: inline-block;
+  cursor: pointer;
+  border: none;
+  transition: all $anim-time $slow;
+  display: inline-block;
 
-    font-weight: $font-weight-reg;
-    text-align: center;
-    text-decoration: none;
+  font-weight: $font-weight-reg;
+  text-align: center;
+  text-decoration: none;
 
-    &.blue {
+  &.blue {
 
-        background-color: $primary-color;
-        color: $text-color-white;
+    background-color: $primary-color;
+    color: $text-color-white;
+
+    &:hover {
+      color: $secondary-color;
+      box-shadow: $shadow-size $primary-color-active;
+    }
+
+    &.xxl {
+      border-radius: $pc-btn-border-rad-xxl;
+      padding: $pc-btn-padding-xl;
+
+      font-weight: $font-weight-med;
+      font-size: $pc-btn-fz-xl;
+    }
+
+    &.xl {
+      border-radius: $pc-btn-border-rad-xl;
+      padding: $pc-btn-padding-xl;
+
+      font-weight: $font-weight-med;
+      font-size: $pc-btn-fz-xl;
+    }
+
+    &.lg {
+      border-radius: $pc-btn-border-rad-lg;
+      padding: $pc-btn-padding-lg;
+
+      font-weight: $font-weight-med;
+      font-size: $pc-btn-fz-lg;
+    }
+
+    &.md {
+      border-radius: $pc-btn-border-rad-md;
+      padding: $pc-btn-padding-md;
+
+      font-size: $pc-btn-fz-md-blue;
+    }
+
+    &.sm {
+      border-radius: $pc-btn-border-rad-sm;
+      padding: $pc-btn-padding-md;
+
+      font-size: $pc-btn-fz-md-blue;
+    }
+
+    &.xs {
+      border-radius: $pc-btn-border-rad-sm;
+      padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
+
+      font-size: $pc-btn-fz-sm-blue;
+    }
+  }
+
+  &.yellow {
+
+    background-color: $secondary-color;
+    color: $text-color-black;
+
+    &:hover {
+      color: $primary-color;
+      box-shadow: $shadow-size $secondary-color;
+    }
+
+    &.xxl {
+      border-radius: $pc-btn-border-rad-xxl;
+      padding: $pc-btn-padding-xl;
+
+      font-weight: $font-weight-med;
+      font-size: $pc-btn-fz-xl;
+
+      &.brown {
+        color: $secondary-color;
+        outline: 2px solid $secondary-color;
+        background-color: rgba(47, 48, 53, 0.32);
 
         &:hover {
-            color: $secondary-color;
-            box-shadow: $shadow-size $primary-color-active;
+          background-color: rgba(81, 82, 28, 0.64);
         }
-
-        &.xxl {
-            border-radius: $pc-btn-border-rad-xxl;
-            padding: $pc-btn-padding-xl;
-
-            font-weight: $font-weight-med;
-            font-size: $pc-btn-fz-xl;
-        }
-
-        &.xl {
-            border-radius: $pc-btn-border-rad-xl;
-            padding: $pc-btn-padding-xl;
-
-            font-weight: $font-weight-med;
-            font-size: $pc-btn-fz-xl;
-        }
-
-        &.lg {
-            border-radius: $pc-btn-border-rad-lg;
-            padding: $pc-btn-padding-lg;
-
-            font-weight: $font-weight-med;
-            font-size: $pc-btn-fz-lg;
-        }
-
-        &.md {
-            border-radius: $pc-btn-border-rad-md;
-            padding: $pc-btn-padding-md;
-
-            font-size: $pc-btn-fz-md-blue;
-        }
-
-        &.sm {
-            border-radius: $pc-btn-border-rad-sm;
-            padding: $pc-btn-padding-md;
-
-            font-size: $pc-btn-fz-md-blue;
-        }
-
-        &.xs {
-            border-radius: $pc-btn-border-rad-sm;
-            padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
-
-            font-size: $pc-btn-fz-sm-blue;
-        }
+      }
     }
 
-    &.yellow {
+    &.sm {
+      border-radius: $pc-btn-border-rad-sm;
+      padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
 
-        background-color: $secondary-color;
-        color: $text-color-black;
+      font-size: $pc-btn-fz-sm-yellow;
+    }
+  }
 
-        &:hover {
-            color: $primary-color;
-            box-shadow: $shadow-size $secondary-color;
-        }
+  &.gray {
+    background-color: $disabled-color;
+    @include rgba-text($text-color-black, 0.5);
 
-        &.xxl {
-            border-radius: $pc-btn-border-rad-xxl;
-            padding: $pc-btn-padding-xl;
-
-            font-weight: $font-weight-med;
-            font-size: $pc-btn-fz-xl;
-
-            &.brown {
-                color: $secondary-color;
-                outline: 2px solid $secondary-color;
-                background-color: rgba(47, 48, 53, 0.32);
-
-                &:hover {
-                    background-color: rgba(81, 82, 28, 0.64);
-                }
-            }
-        }
-
-        &.sm {
-            border-radius: $pc-btn-border-rad-sm;
-            padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
-
-            font-size: $pc-btn-fz-sm-yellow;
-        }
+    &:hover {
+      color: $text-color-black;
+      box-shadow: $shadow-size rgba(141, 152, 203, 0.64);
     }
 
-    &.gray {
-        background-color: $disabled-color;
-        @include rgba-text($text-color-black, 0.5);
+    &.xxl {
+      border-radius: $pc-btn-border-rad-xxl;
+      padding: $pc-btn-padding-xl;
 
-        &:hover {
-            color: $text-color-black;
-            box-shadow: $shadow-size rgba(141, 152, 203, 0.64);
-        }
-
-        &.xxl {
-            border-radius: $pc-btn-border-rad-xxl;
-            padding: $pc-btn-padding-xl;
-
-            font-weight: $font-weight-med;
-            font-size: $pc-btn-fz-xl;
-        }
-
-        &.xl {
-            border-radius: $pc-btn-border-rad-xl;
-            padding: $pc-btn-padding-xl;
-
-            font-weight: $font-weight-med;
-            font-size: $pc-btn-fz-xl;
-        }
-
-        &.md {
-            border-radius: $pc-btn-border-rad-md;
-            padding: $pc-btn-padding-md;
-
-            font-size: $pc-btn-fz-md-gray;
-        }
-
-        &.sm {
-            border-radius: $pc-btn-border-rad-sm;
-            padding: $pc-btn-padding-md;
-
-            font-size: $pc-btn-fz-md-gray;
-        }
+      font-weight: $font-weight-med;
+      font-size: $pc-btn-fz-xl;
     }
 
-    &.cancel {
-        margin: $pc-cancel-btn-padding 0;
-        background-color: $text-color-white;
+    &.xl {
+      border-radius: $pc-btn-border-rad-xl;
+      padding: $pc-btn-padding-xl;
 
-        color: $text-color-black;
-        font-size: $pc-h6-fz;
-        font-weight: $font-weight-med;
+      font-weight: $font-weight-med;
+      font-size: $pc-btn-fz-xl;
     }
 
-    &.disabled {
-        background-color: $disabled-color;
-        @include rgba-text($text-color-black, 0.5);
-        pointer-events: none;
+    &.md {
+      border-radius: $pc-btn-border-rad-md;
+      padding: $pc-btn-padding-md;
+
+      font-size: $pc-btn-fz-md-gray;
     }
+
+    &.sm {
+      border-radius: $pc-btn-border-rad-sm;
+      padding: $pc-btn-padding-md;
+
+      font-size: $pc-btn-fz-md-gray;
+    }
+  }
+
+  &.cancel {
+    margin: $pc-cancel-btn-padding 0;
+    background-color: $text-color-white;
+
+    color: $text-color-black;
+    font-size: $pc-h6-fz;
+    font-weight: $font-weight-med;
+  }
+
+  &.disabled {
+    background-color: $disabled-color;
+    @include rgba-text($text-color-black, 0.5);
+    pointer-events: none;
+  }
 }
 
 // for form input errors
 .error {
-    margin-top: 12px;
-    border-radius: $border-rad-5;
-    transition: all $anim-time $slow;
+  margin-top: 12px;
+  border-radius: $border-rad-5;
+  transition: all $anim-time $slow;
 
-    color: $error-color;
-    text-align: center;
-    font-size: $pc-h6-fz;
+  color: $error-color;
+  text-align: center;
+  font-size: $pc-h6-fz;
 }
 
 // for displaying in common table that
 // there are no more elemetns or error happened
 .fetchError {
-    text-align: center;
-    font-size: $pc-h5-fz;
-    font-weight: $font-weight-med;
-    color: $text-color-black;
+  text-align: center;
+  font-size: $pc-h5-fz;
+  font-weight: $font-weight-med;
+  color: $text-color-black;
 }
 
 // SERVICE CLASSES
 .fw {
-    width: 100%;
+  width: 100%;
 }

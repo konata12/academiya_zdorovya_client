@@ -1,26 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    formDefaultValues: true,
-    formName: 'не вказано'
-}
+	formDefaultValues: true,
+};
 
 const navigationSlice = createSlice({
-    name: 'navigation',
-    initialState,
-    reducers: {
-        setFormDefaultValuesNavigation(state, action: { payload: boolean }) {
-            state.formDefaultValues = action.payload
-        },
-        setFormNameNavigation(state, action: { payload: string }) {
-            state.formName = action.payload
-        }
-    }
-})
+	name: "navigation",
+	initialState,
+	reducers: {
+		setFormDefaultValuesNavigation(state, action: { payload: boolean }) {
+			state.formDefaultValues = action.payload;
+		},
+	},
+});
 
-export const {
-    setFormDefaultValuesNavigation,
-    setFormNameNavigation
-} = navigationSlice.actions
+export const { setFormDefaultValuesNavigation } = navigationSlice.actions;
 
-export default navigationSlice.reducer
+export default navigationSlice.reducer;
