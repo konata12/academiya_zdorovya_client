@@ -20,7 +20,7 @@ import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/Su
 import { ErrorWrapper } from "@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper";
 import { FormInputError } from "@/app/types/data/form.type";
 import { setNewsUpdateError, updateNews } from "@/app/utils/redux/news/newsSlice";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
 import _ from "lodash";
@@ -41,10 +41,7 @@ export default function UpdateNewsForm() {
 	const pathname = usePathname();
 	const { id } = useParams<{ id: string }>();
 	const dispatch = useAppDispatch();
-	const handleChange = useNewsFormHandleChange(
-		indexedDBStoreName,
-		detailsOrderSliceName,
-	);
+	const handleChange = useNewsFormHandleChange(indexedDBStoreName, detailsOrderSliceName);
 	const { setFormError, resetDetailsComponentsOrder, resetFromData } =
 		useDetailsFormSlice(detailsOrderSliceName);
 
@@ -116,18 +113,14 @@ export default function UpdateNewsForm() {
 			// SCROLL TO INPUT
 			if (errorsData[0].id === NewsFormDataEnum.BACKGROUNDIMG) {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).labels?.[0].scrollIntoView({
 					behavior: "smooth",
 					block: "center",
 				});
 			} else {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).scrollIntoView({
 					behavior: "smooth",
 					block: "center",
@@ -166,7 +159,7 @@ export default function UpdateNewsForm() {
 				id,
 			}),
 		);
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 		if (isFulfilled) {
 			// CLEAR DATA
 			clear(getIndexedDBStoreForImages("news_update_images"));
@@ -237,11 +230,7 @@ export default function UpdateNewsForm() {
 				<p className={`title sm left ${styles.title}`}>Вміст новини</p>
 
 				<ErrorWrapper
-					error={
-						errors.details.message.length
-							? errors.details.message
-							: undefined
-					}
+					error={errors.details.message.length ? errors.details.message : undefined}
 					className={{
 						errorWrapper: styles.detailsErrorWrap,
 					}}
@@ -250,10 +239,7 @@ export default function UpdateNewsForm() {
 						<TableLine>
 							<span>Не створений</span>
 
-							<SafeLink
-								className={`btn blue sm`}
-								href={`${pathname}/details`}
-							>
+							<SafeLink className={`btn blue sm`} href={`${pathname}/details`}>
 								Створити вміст
 							</SafeLink>
 						</TableLine>
@@ -262,14 +248,9 @@ export default function UpdateNewsForm() {
 			</div>
 
 			<div className={styles.preview}>
-				<p className={`title sm left ${styles.title}`}>
-					Попередній перегляд
-				</p>
+				<p className={`title sm left ${styles.title}`}>Попередній перегляд</p>
 
-				<SafeLink
-					className={`btn blue sm`}
-					href={`/admin/news/create/preview`}
-				>
+				<SafeLink className={`btn blue sm`} href={`/admin/news/create/preview`}>
 					Дивитись сторінку новини
 				</SafeLink>
 			</div>

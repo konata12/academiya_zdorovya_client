@@ -32,7 +32,7 @@ import {
 import { DraggableAreaContainer } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer";
 import { DraggableElementContainer } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableElementContainer/DraggableElementContainer";
 import { FormInputError } from "@/app/types/data/form.type";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
 import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
 import { ImageInputPreviewFromIndexedDB } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB";
@@ -70,9 +70,7 @@ const indexedDBStoreName = "service_create_images";
 const serviceTypesTableTitles = ["Види послуг", "Опції"];
 
 export default function CreateServicesForm() {
-	const { errors, ...data } = useAppSelector(
-		(state: RootState) => state.serviceCreateForm,
-	);
+	const { errors, ...data } = useAppSelector((state: RootState) => state.serviceCreateForm);
 	const anus = useAppSelector((state: RootState) => state.serviceUpdateForm);
 	const {
 		serviceTypesCheckbox,
@@ -127,10 +125,7 @@ export default function CreateServicesForm() {
 	}, []);
 
 	// HANDLE ARRAY FIELDS
-	const deleteTreatmentStage = (
-		e: React.MouseEvent<HTMLButtonElement>,
-		index: number,
-	) => {
+	const deleteTreatmentStage = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
 		e.preventDefault();
 
 		if (treatmentStages.length > 1) {
@@ -138,8 +133,7 @@ export default function CreateServicesForm() {
 			dispatch(
 				deleteModalState({
 					index,
-					modalName:
-						ServiceFormDataUIModalsStatesEnum.TREATMENTSTAGESMODALISOPEN,
+					modalName: ServiceFormDataUIModalsStatesEnum.TREATMENTSTAGESMODALISOPEN,
 				}),
 			);
 		}
@@ -149,15 +143,11 @@ export default function CreateServicesForm() {
 		dispatch(addServiceCreateTreatmentStagesValue());
 		dispatch(
 			addModalState({
-				modalName:
-					ServiceFormDataUIModalsStatesEnum.TREATMENTSTAGESMODALISOPEN,
+				modalName: ServiceFormDataUIModalsStatesEnum.TREATMENTSTAGESMODALISOPEN,
 			}),
 		);
 	};
-	const deteleServiceType = (
-		e: React.MouseEvent<HTMLButtonElement>,
-		index: number,
-	) => {
+	const deteleServiceType = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
 		e.preventDefault();
 
 		dispatch(deleteServiceCreateTypesValue(index));
@@ -190,10 +180,7 @@ export default function CreateServicesForm() {
 			router.push(`/admin/services/create/serviceType/${index}`);
 		}
 	};
-	const deleteEmoployee = (
-		e: React.MouseEvent<HTMLButtonElement>,
-		index: number,
-	) => {
+	const deleteEmoployee = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
 		e.preventDefault();
 
 		dispatch(deleteServiceCreateEmployeesValue(index));
@@ -251,9 +238,7 @@ export default function CreateServicesForm() {
 		entries.forEach((entry) => {
 			const entryKey = entry[0];
 			// VALIDATION FOR STRING VALUES
-			if (
-				stringFields.includes(entryKey as ServiceHandleSubmitStringKeysType)
-			) {
+			if (stringFields.includes(entryKey as ServiceHandleSubmitStringKeysType)) {
 				const key = entry[0] as ServiceHandleSubmitStringKeysType;
 				const value = entry[1] as string;
 
@@ -407,18 +392,14 @@ export default function CreateServicesForm() {
 			// SCROLL TO INPUT
 			if (errorsData[0].id === ServiceFormDataEnum.IMAGE) {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).labels?.[0].scrollIntoView({
 					behavior: "smooth",
 					block: "center",
 				});
 			} else {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).scrollIntoView({
 					behavior: "smooth",
 					block: "center",
@@ -449,7 +430,7 @@ export default function CreateServicesForm() {
 		console.log("requestData: ", requestData);
 
 		const response = await dispatch(createService(requestData));
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 		if (isFulfilled) {
 			// CLEAR DATA
 			clear(getIndexedDBStoreForImages(indexedDBStoreName));
@@ -495,12 +476,8 @@ export default function CreateServicesForm() {
 				/>
 
 				<div className={styles.imageSection}>
-					<p className={`title sm left ${styles.title}`}>
-						Обгортка новини
-					</p>
-					<p className={`inputLabel ${styles.paragraph}`}>
-						Завантажте фото
-					</p>
+					<p className={`title sm left ${styles.title}`}>Обгортка новини</p>
+					<p className={`inputLabel ${styles.paragraph}`}>Завантажте фото</p>
 
 					<ImageInputContainer
 						inputId={ServiceFormDataEnum.IMAGE}
@@ -533,26 +510,20 @@ export default function CreateServicesForm() {
 									labelTwo="Короткий опис етапу"
 									inputIdOne={`${ServiceFormDataEnum.TREATMENTSTAGES}_${ServiceTreatmentStageEnum.TITLE}`}
 									inputIdTwo={`${ServiceFormDataEnum.TREATMENTSTAGES}_${ServiceTreatmentStageEnum.DESCRIPTION}`}
-									valueOne={
-										treatmentStage[
-											ServiceTreatmentStageEnum.TITLE
-										]
-									}
+									valueOne={treatmentStage[ServiceTreatmentStageEnum.TITLE]}
 									valueTwo={
-										treatmentStage[
-											ServiceTreatmentStageEnum.DESCRIPTION
-										]
+										treatmentStage[ServiceTreatmentStageEnum.DESCRIPTION]
 									}
 									index={i}
 									errorOne={
-										errors[ServiceFormDataEnum.TREATMENTSTAGES][
-											i
-										][ServiceTreatmentStageEnum.TITLE]
+										errors[ServiceFormDataEnum.TREATMENTSTAGES][i][
+											ServiceTreatmentStageEnum.TITLE
+										]
 									}
 									errorTwo={
-										errors[ServiceFormDataEnum.TREATMENTSTAGES][
-											i
-										][ServiceTreatmentStageEnum.DESCRIPTION]
+										errors[ServiceFormDataEnum.TREATMENTSTAGES][i][
+											ServiceTreatmentStageEnum.DESCRIPTION
+										]
 									}
 									className={{
 										buttonContainer: styles.buttonContainer,
@@ -678,8 +649,7 @@ export default function CreateServicesForm() {
 						changeEvent={(e) =>
 							handleChange({
 								e,
-								elementType:
-									ServiceFormDataEnum.SERVICETYPESDESCRIPTION,
+								elementType: ServiceFormDataEnum.SERVICETYPESDESCRIPTION,
 							})
 						}
 					/>
@@ -705,12 +675,7 @@ export default function CreateServicesForm() {
 											>
 												<TableLine>
 													<span>
-														{
-															serviceType[
-																ServiceTypesEnum
-																	.TITLE
-															]
-														}
+														{serviceType[ServiceTypesEnum.TITLE]}
 													</span>
 
 													{serviceTypesModalIsOpen[i] && (
@@ -729,10 +694,7 @@ export default function CreateServicesForm() {
 															</button>
 															<button
 																onClick={(e) => {
-																	deteleServiceType(
-																		e,
-																		i,
-																	);
+																	deteleServiceType(e, i);
 																}}
 																className={`btn blue lg`}
 															>
@@ -741,11 +703,7 @@ export default function CreateServicesForm() {
 														</ModalWindow>
 													)}
 
-													<span
-														className={
-															styles.tableLineOptions
-														}
-													>
+													<span className={styles.tableLineOptions}>
 														<button
 															onClick={() =>
 																setModalWindowState(
@@ -762,10 +720,7 @@ export default function CreateServicesForm() {
 														<button
 															className={`btn blue sm`}
 															onClick={(e) =>
-																linkToUpdateServiceType(
-																	e,
-																	i,
-																)
+																linkToUpdateServiceType(e, i)
 															}
 														>
 															Змінити
@@ -777,13 +732,11 @@ export default function CreateServicesForm() {
 									})}
 								</DraggableAreaContainer>
 
-								<p className={styles.tableUnderText}>
-									Порядок збережено
-								</p>
+								<p className={styles.tableUnderText}>Порядок збережено</p>
 							</CommonTable>
 							<p className={styles.dragReminder}>
-								Затисніть та переміщуйте послуги, щоб отримати
-								бажаний порядок послуг*
+								Затисніть та переміщуйте послуги, щоб отримати бажаний порядок
+								послуг*
 							</p>
 						</>
 					)}
@@ -818,14 +771,9 @@ export default function CreateServicesForm() {
 			/>
 
 			<div className={styles.preview}>
-				<p className={`title sm left ${styles.title}`}>
-					Попередній перегляд
-				</p>
+				<p className={`title sm left ${styles.title}`}>Попередній перегляд</p>
 
-				<SafeLink
-					className={`btn blue sm`}
-					href={`/admin/services/create/preview`}
-				>
+				<SafeLink className={`btn blue sm`} href={`/admin/services/create/preview`}>
 					Дивитись сторінку послуги
 				</SafeLink>
 			</div>

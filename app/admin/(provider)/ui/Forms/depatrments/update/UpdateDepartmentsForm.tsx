@@ -21,16 +21,14 @@ import {
 import { isEqual } from "lodash";
 import HookFormInputContainer from "@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm";
 import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 import { useFormChangeCheck } from "@/app/utils/hooks/common/useFormChangeCheck";
 
 export default function UpdateDepartmentForm() {
 	const [formDefaultValues, setFormDefaultValues] = useState(true);
 	const formDefaultValuesRef = useRef(formDefaultValues);
 
-	const { departments, error } = useAppSelector(
-		(state: RootState) => state.departments,
-	);
+	const { departments, error } = useAppSelector((state: RootState) => state.departments);
 
 	const dispatch = useAppDispatch();
 	const router = useRouter();
@@ -78,7 +76,7 @@ export default function UpdateDepartmentForm() {
 			}
 
 			const response = await dispatch(updateDepartmentAction({ data, id }));
-			const isFulfilled = fullfilled(response.meta.requestStatus);
+			const isFulfilled = fulfilled(response.meta.requestStatus);
 			if (isFulfilled) {
 				dispatch(updateDepartmentInState({ data, id }));
 				router.push("/admin/departments");
@@ -86,10 +84,7 @@ export default function UpdateDepartmentForm() {
 		}
 	};
 
-	const checkIsEqual = (
-		formData: DepartmentsDefaultFormData,
-		department: Department,
-	) => {
+	const checkIsEqual = (formData: DepartmentsDefaultFormData, department: Department) => {
 		const { id, ...departmentWithoutId } = department;
 		return isEqual(formData, departmentWithoutId);
 	};
@@ -136,12 +131,10 @@ export default function UpdateDepartmentForm() {
 					register={register}
 					errors={errors}
 					registerOptions={{
-						required:
-							"Посилання на відділення в гугл картах обов'язкове",
+						required: "Посилання на відділення в гугл картах обов'язкове",
 						pattern: {
 							value: GOOGLE_MAPS_URL,
-							message:
-								"Повинно бути посилання на відділення в гугл картах",
+							message: "Повинно бути посилання на відділення в гугл картах",
 						},
 					}}
 				/>

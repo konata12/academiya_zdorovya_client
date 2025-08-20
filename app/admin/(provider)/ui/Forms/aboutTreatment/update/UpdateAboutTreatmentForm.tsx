@@ -20,7 +20,7 @@ import {
 	updateAboutTreatment,
 } from "@/app/utils/redux/about_treatment/aboutTreatmentSlice";
 import { FormInputError } from "@/app/types/data/form.type";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 import { RootState } from "@/app/utils/redux/store";
 import { useAboutTreatmentFormHandleChange } from "@/app/utils/hooks/admin/aboutTreatmentForm/useAboutTreatmentFormHandleChange";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
@@ -200,18 +200,14 @@ export default function UpdateAboutTreatmentForm() {
 			// SCROLL TO INPUT
 			if (errorsData[0].id === AboutTreatmentEnum.IMG) {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).labels?.[0].scrollIntoView({
 					behavior: "smooth",
 					block: "center",
 				});
 			} else {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).scrollIntoView({
 					behavior: "smooth",
 					block: "center",
@@ -243,7 +239,7 @@ export default function UpdateAboutTreatmentForm() {
 				id,
 			}),
 		);
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 		if (isFulfilled) {
 			// CLEAR DATA
 			clear(getIndexedDBStoreForImages(updateStoreName));
@@ -297,8 +293,7 @@ export default function UpdateAboutTreatmentForm() {
 								changeEvent={(e) =>
 									handleChange({
 										e,
-										elementType:
-											AboutTreatmentEnum.TREATMENTTYPES,
+										elementType: AboutTreatmentEnum.TREATMENTTYPES,
 										arrIndex: i,
 									})
 								}
@@ -337,9 +332,7 @@ export default function UpdateAboutTreatmentForm() {
 			</div>
 
 			<div className={styles.addPhoto}>
-				<p className={`title left sm ${styles.title}`}>
-					Фото для детального варіанту
-				</p>
+				<p className={`title left sm ${styles.title}`}>Фото для детального варіанту</p>
 				<p className={`inputLabel ${styles.label}`}>
 					{"Завантажте фото (без фону, в форматі:  .png)"}
 				</p>

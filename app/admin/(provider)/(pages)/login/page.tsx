@@ -6,7 +6,7 @@ import styles from "./Login.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { login } from "@/app/utils/redux/auth/authSlice";
 import { RootState } from "@/app/utils/redux/store";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 
 export default function Login() {
 	const [userName, setUserName] = useState("");
@@ -19,7 +19,7 @@ export default function Login() {
 	const formSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const response = await dispatch(login({ userName, password }));
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 
 		if (isFulfilled) {
 			router.push("/admin/departments");
@@ -52,12 +52,8 @@ export default function Login() {
 							onChange={(e) => setPassword(e.target.value)}
 							required
 						/>
-						{error.login && (
-							<p className="error">{error.login.message}</p>
-						)}
-						<button className={`btn blue xl ${styles.btn}`}>
-							Увійти
-						</button>
+						{error.login && <p className="error">{error.login.message}</p>}
+						<button className={`btn blue xl ${styles.btn}`}>Увійти</button>
 					</form>
 				</div>
 			)}

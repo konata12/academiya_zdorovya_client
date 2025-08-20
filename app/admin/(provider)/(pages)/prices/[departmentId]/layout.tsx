@@ -5,12 +5,11 @@ import {
 	checkCreatePage,
 	checkUpdatePage,
 	getUrlLastElement,
-	getUrlOrderElement,
 } from "@/app/services/navigation.service";
 import { fetchOneDepartment } from "@/app/utils/redux/departments/departmentsSlice";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import styles from "./layout.module.scss";
 import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
@@ -23,7 +22,8 @@ import {
 } from "@/app/utils/redux/prices/pricesSlice";
 import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
 import ModalWindow from "@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
+import CommonTable404 from "@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404";
 
 const titles = ["Послуга", "Опції"];
 
@@ -32,19 +32,19 @@ export default function page({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { departments, error } = useAppSelector(
+	const { departments, error: departmentError } = useAppSelector(
 		(state: RootState) => state.departments,
 	);
-	const { priceSections, priceSectionsIsModalOpen } = useAppSelector(
+	const { priceSections, priceSectionsIsModalOpen, status, error } = useAppSelector(
 		(state: RootState) => state.prices,
 	);
 
 	const dispatch = useAppDispatch();
 	const pathname = usePathname();
 
+	const { departmentId } = useParams<{ departmentId: string }>();
 	const isCreatePage = checkCreatePage(pathname);
 	const isUpdatePage = checkUpdatePage(pathname);
-	const departmentId = getUrlOrderElement(pathname, 3);
 	const department = departments.find((department) => {
 		return `${department.id}` === departmentId;
 	});
@@ -64,7 +64,7 @@ export default function page({
 
 	const deletePriceSection = async (id: number, i: number) => {
 		const response = await dispatch(deletePriceSectionAction(id));
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 
 		if (isFulfilled) {
 			dispatch(deletePriceSectionFromState(id));
@@ -86,10 +86,7 @@ export default function page({
 				<p className={`title lg ${styles.title}`}>
 					{department?.city}, {department?.address}
 				</p>
-				<SafeLink
-					className={`btn blue md ${styles.backBtn}`}
-					href="/admin/prices"
-				>
+				<SafeLink className={`btn blue md ${styles.backBtn}`} href="/admin/prices">
 					Назад
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -111,11 +108,11 @@ export default function page({
 			</div>
 			<CommonTable titles={titles}>
 				{!priceSections.length ? (
-					<p className="fetchError">
-						{error.getAll?.statusCode === 404 || !error.delete
-							? "Немає послуг з розцінками"
-							: "Виникла помилка"}
-					</p>
+					<CommonTable404
+						error={error}
+						status={status}
+						notFoundMessage="Немає послуг з розцінками"
+					/>
 				) : (
 					priceSections.map((priceSection, i) => (
 						<TableLine key={priceSection.id}>
@@ -151,7 +148,7 @@ export default function page({
 								</button>
 								<SafeLink
 									className={`btn blue sm ${getUrlLastElement(pathname) === `${priceSection.id}` && isUpdatePage ? "disabled" : ""}`}
-									href={`/admin/prices/${departmentId}/update`}
+									href={`/admin/prices/${departmentId}/update/${priceSection.id}`}
 								>
 									Змінити
 								</SafeLink>

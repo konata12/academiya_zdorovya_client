@@ -2,17 +2,14 @@
 
 import React, { useEffect } from "react";
 import styles from "./layout.module.scss";
-import {
-	checkCreatePage,
-	getUrlLastElement,
-} from "@/app/services/navigation.service";
+import { checkCreatePage, getUrlLastElement } from "@/app/services/navigation.service";
 import {
 	closeEmployeesModal,
 	deleteEmployee as deleteEmployeeAction,
 	fetchEmployees,
 	openEmployeesModal,
 } from "@/app/utils/redux/employees/employeesSlice";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 import { RootState } from "@/app/utils/redux/store";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { usePathname, useRouter } from "next/navigation";
@@ -45,7 +42,7 @@ export default function layout({
 
 	const deleteEmployee = async (id: number) => {
 		const response = await dispatch(deleteEmployeeAction(id));
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 		if (isFulfilled) router.push("/admin/employees");
 	};
 

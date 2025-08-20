@@ -11,7 +11,5 @@ export function useServiceFormChangeCheck(
 		oldService,
 		newService,
 	);
-	console.log("oldService", oldData);
-	console.log("newService", newData);
 	useFormChangeCheck(oldData, newData);
 }

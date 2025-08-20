@@ -43,7 +43,7 @@ import {
 	UpdateEmployeeRequestIsEuqalCheck,
 } from "@/app/types/data/employees.type";
 import { FormInputError } from "@/app/types/data/form.type";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
 import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
 import { RootState } from "@/app/utils/redux/store";
@@ -65,9 +65,7 @@ const storeName = "employee_images";
 const updateStoreName = "employee_update_images";
 
 export default function UpdateEmployeeFrom() {
-	const { errors, ...data } = useAppSelector(
-		(state: RootState) => state.employeeUpdateForm,
-	);
+	const { errors, ...data } = useAppSelector((state: RootState) => state.employeeUpdateForm);
 	const {
 		instagramCheckbox,
 		facebookCheckbox,
@@ -78,9 +76,7 @@ export default function UpdateEmployeeFrom() {
 		workSpecialitysModalIsOpen,
 		achivementsModalIsOpen,
 	} = useAppSelector((state: RootState) => state.employeesFormUI);
-	const { employees, error } = useAppSelector(
-		(state: RootState) => state.employees,
-	);
+	const { employees, error } = useAppSelector((state: RootState) => state.employees);
 
 	const router = useRouter();
 	const { id } = useParams<{ id: string }>();
@@ -110,23 +106,15 @@ export default function UpdateEmployeeFrom() {
 	// CHECK IF DATA CHANGED
 	let oldData: UpdateEmployeeRequestIsEuqalCheck | undefined = undefined;
 	if (oldEmployee) {
-		const {
-			id,
-			instagram,
-			facebook,
-			X,
-			youtube,
-			achivements,
-			...oldEmployeeData
-		} = oldEmployee;
+		const { id, instagram, facebook, X, youtube, achivements, ...oldEmployeeData } =
+			oldEmployee;
 		oldData = {
 			...oldEmployeeData,
 			instagram: instagram && instagramCheckbox ? instagram : undefined,
 			facebook: facebook && facebookCheckbox ? facebook : undefined,
 			X: X && XCheckbox ? X : undefined,
 			youtube: youtube && youtubeCheckbox ? youtube : undefined,
-			achivements:
-				achivements && achivementsCheckbox ? achivements : undefined,
+			achivements: achivements && achivementsCheckbox ? achivements : undefined,
 		};
 	}
 
@@ -184,10 +172,7 @@ export default function UpdateEmployeeFrom() {
 		dispatch(triggerEmployeeUICheckbox({ checkboxName, state }));
 	};
 	// HANDLE ARRAY FIELDS
-	const deleteWorkSpeciality = (
-		e: React.MouseEvent<HTMLButtonElement>,
-		index: number,
-	) => {
+	const deleteWorkSpeciality = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
 		e.preventDefault();
 
 		if (workSpecialities.length > 1) {
@@ -200,23 +185,17 @@ export default function UpdateEmployeeFrom() {
 			dispatch(
 				deleteModalState({
 					index,
-					modalName:
-						EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN,
+					modalName: EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN,
 				}),
 			);
 		}
 	};
 	const addWorkSpeciality = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		dispatch(
-			addEmployeeUpdateStringArrayValue(
-				EmployeesFormDataEnum.WORKSPECIALITIES,
-			),
-		);
+		dispatch(addEmployeeUpdateStringArrayValue(EmployeesFormDataEnum.WORKSPECIALITIES));
 		dispatch(
 			addModalState({
-				modalName:
-					EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN,
+				modalName: EmployeesFormDataUIModalsStatesEnum.WORKSPECIALITYSMODALISOPEN,
 			}),
 		);
 	};
@@ -231,21 +210,17 @@ export default function UpdateEmployeeFrom() {
 			dispatch(
 				deleteModalState({
 					index,
-					modalName:
-						EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN,
+					modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN,
 				}),
 			);
 		}
 	};
 	const addAchivement = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		dispatch(
-			addEmployeeUpdateStringArrayValue(EmployeesFormDataEnum.ACHIVEMENTS),
-		);
+		dispatch(addEmployeeUpdateStringArrayValue(EmployeesFormDataEnum.ACHIVEMENTS));
 		dispatch(
 			addModalState({
-				modalName:
-					EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN,
+				modalName: EmployeesFormDataUIModalsStatesEnum.ACHIVEMENTSISMODALISOPEN,
 			}),
 		);
 	};
@@ -298,9 +273,7 @@ export default function UpdateEmployeeFrom() {
 		entries.forEach((entry) => {
 			const entryKey = entry[0];
 			// VALIDATION FOR STRING VALUES
-			if (
-				stringFields.includes(entryKey as EmployeeStringKeysWithoutImageType)
-			) {
+			if (stringFields.includes(entryKey as EmployeeStringKeysWithoutImageType)) {
 				const key = entry[0] as EmployeeStringKeysWithoutImageType;
 				const value = entry[1] as string;
 
@@ -321,8 +294,7 @@ export default function UpdateEmployeeFrom() {
 							message = "Короткий опис обов'язковий";
 							break;
 						case EmployeesFormDataEnum.DEGREE:
-							message =
-								"Інформація про освіту та практику обов'язкова";
+							message = "Інформація про освіту та практику обов'язкова";
 							break;
 					}
 
@@ -341,8 +313,7 @@ export default function UpdateEmployeeFrom() {
 			}
 			// VALIDATION FOR SOCIAL MEDIA VALUES (only if checkbox is checked)
 			else if (
-				(entryKey === EmployeesFormDataEnum.INSTAGRAM &&
-					instagramCheckbox) ||
+				(entryKey === EmployeesFormDataEnum.INSTAGRAM && instagramCheckbox) ||
 				(entryKey === EmployeesFormDataEnum.FACEBOOK && facebookCheckbox) ||
 				(entryKey === EmployeesFormDataEnum.X && XCheckbox) ||
 				(entryKey === EmployeesFormDataEnum.YOUTUBE && youtubeCheckbox)
@@ -368,8 +339,7 @@ export default function UpdateEmployeeFrom() {
 			// VALIDATION FOR STRING ARRAY VALUES
 			else if (
 				entryKey === EmployeesFormDataEnum.WORKSPECIALITIES ||
-				(entryKey === EmployeesFormDataEnum.ACHIVEMENTS &&
-					achivementsCheckbox)
+				(entryKey === EmployeesFormDataEnum.ACHIVEMENTS && achivementsCheckbox)
 			) {
 				const values = entry[1] as string[];
 				let message: string = "Введіть напрямок діяльності";
@@ -432,18 +402,14 @@ export default function UpdateEmployeeFrom() {
 			// SCROLL TO INPUT
 			if (errorsData[0].id === EmployeesFormDataEnum.IMAGE) {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).labels?.[0].scrollIntoView({
 					behavior: "smooth",
 					block: "center",
 				});
 			} else {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).scrollIntoView({
 					behavior: "smooth",
 					block: "center",
@@ -484,7 +450,7 @@ export default function UpdateEmployeeFrom() {
 				id,
 			}),
 		);
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 		if (isFulfilled) {
 			// CLEAR DATA
 			clear(getIndexedDBStoreForImages(updateStoreName));
@@ -678,20 +644,14 @@ export default function UpdateEmployeeFrom() {
 								<div key={i}>
 									<InputContainerWithDeleteBtn
 										label={`Напрямок ${i + 1}`}
-										inputId={
-											EmployeesFormDataEnum.WORKSPECIALITIES
-										}
+										inputId={EmployeesFormDataEnum.WORKSPECIALITIES}
 										value={speciality}
 										index={i}
 										error={
-											errors[
-												EmployeesFormDataEnum
-													.WORKSPECIALITIES
-											][i]
+											errors[EmployeesFormDataEnum.WORKSPECIALITIES][i]
 										}
 										className={{
-											inputContainer:
-												styles.surnameInputContainer,
+											inputContainer: styles.surnameInputContainer,
 										}}
 										handleDelete={() => {
 											setModalWindowState(
@@ -765,16 +725,13 @@ export default function UpdateEmployeeFrom() {
 										<div key={i}>
 											<InputContainerWithDeleteBtn
 												label={`Напрямок ${i + 1}`}
-												inputId={
-													EmployeesFormDataEnum.ACHIVEMENTS
-												}
+												inputId={EmployeesFormDataEnum.ACHIVEMENTS}
 												value={achivement}
 												index={i}
 												error={
-													errors[
-														EmployeesFormDataEnum
-															.ACHIVEMENTS
-													][i]
+													errors[EmployeesFormDataEnum.ACHIVEMENTS][
+														i
+													]
 												}
 												className={{
 													inputContainer:
@@ -844,8 +801,7 @@ export default function UpdateEmployeeFrom() {
 						<div className={styles.fullCheckbox}>
 							<Checkbox
 								isChecked={
-									backgroundImgColor ===
-									EmployeesBackgroundImgColorEnum.BLUE
+									backgroundImgColor === EmployeesBackgroundImgColorEnum.BLUE
 								}
 								handleFunction={() => {
 									const newColor =
@@ -853,11 +809,7 @@ export default function UpdateEmployeeFrom() {
 										EmployeesBackgroundImgColorEnum.BLUE
 											? EmployeesBackgroundImgColorEnum.GREY
 											: EmployeesBackgroundImgColorEnum.BLUE;
-									dispatch(
-										setEmployeeUpdateBackgroundImgColor(
-											newColor,
-										),
-									);
+									dispatch(setEmployeeUpdateBackgroundImgColor(newColor));
 								}}
 								className={{
 									label: styles.checkbox,

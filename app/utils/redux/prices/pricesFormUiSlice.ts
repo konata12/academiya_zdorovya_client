@@ -1,23 +1,21 @@
-import { PriceSectionUI } from "@/app/types/data/prices.type";
+import { PriceFormDataWithoutError, PriceSectionUI } from "@/app/types/data/prices.type";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: PriceSectionUI = {
 	addTitlePriceCheckbox: [false],
 
 	optionalServiceCheckbox: false,
-	optionalServiceInputHeight: 0,
 
-	priceVariantsHeight: 0,
-	addPriceVariantCheckbox: [false],
+	addPriceVariantDescriptionCheckbox: [],
 	priceVariantsCheckbox: false,
-	meetingsCountCheckbox: false,
+	meetingCountCheckbox: false,
 	meetingDurationCheckbox: false,
 	meetingPriceCheckbox: false,
-	meetingsTotalPriceCheckbox: false,
+	meetingTotalPriceCheckbox: false,
 };
 
-const pricesCreateFormUiSlice = createSlice({
-	name: "pricesCreateFormUi",
+const pricesFormUiSlice = createSlice({
+	name: "pricesFormUi",
 	initialState,
 	reducers: {
 		// TITLES
@@ -47,14 +45,8 @@ const pricesCreateFormUiSlice = createSlice({
 		triggerOptionalServiceCheckbox(state, action: { payload: boolean }) {
 			state.optionalServiceCheckbox = action.payload;
 		},
-		setOptionalServiceInputHeight(state, action: { payload: number }) {
-			state.optionalServiceInputHeight = action.payload;
-		},
 
 		// PRICE VARIANTS
-		setPriceVariantsHeight(state, action: { payload: number }) {
-			state.priceVariantsHeight = action.payload;
-		},
 		triggerPriceVariantsDescriptionCheckbox(
 			state,
 			action: {
@@ -64,7 +56,7 @@ const pricesCreateFormUiSlice = createSlice({
 				};
 			},
 		) {
-			state.addPriceVariantCheckbox[action.payload.index] =
+			state.addPriceVariantDescriptionCheckbox[action.payload.index] =
 				action.payload.state;
 		},
 
@@ -72,7 +64,7 @@ const pricesCreateFormUiSlice = createSlice({
 			state.priceVariantsCheckbox = action.payload;
 		},
 		triggerMeetingsCountCheckbox(state, action: { payload: boolean }) {
-			state.meetingsCountCheckbox = action.payload;
+			state.meetingCountCheckbox = action.payload;
 		},
 		triggerMeetingDurationCheckbox(state, action: { payload: boolean }) {
 			state.meetingDurationCheckbox = action.payload;
@@ -81,17 +73,46 @@ const pricesCreateFormUiSlice = createSlice({
 			state.meetingPriceCheckbox = action.payload;
 		},
 		triggerMeetingsTotalPriceCheckbox(state, action: { payload: boolean }) {
-			state.meetingsTotalPriceCheckbox = action.payload;
+			state.meetingTotalPriceCheckbox = action.payload;
 		},
 
 		createPriceVariant(state) {
-			state.addPriceVariantCheckbox.push(false);
+			const newIndex = state.addPriceVariantDescriptionCheckbox.length;
+			state.addPriceVariantDescriptionCheckbox[newIndex] = false;
 		},
 		deletePriceVariant(state, action: { payload: number }) {
 			const index = action.payload;
-			if (state.addPriceVariantCheckbox.length > 1) {
-				state.addPriceVariantCheckbox.splice(index, 1);
+			if (state.addPriceVariantDescriptionCheckbox.length > 1) {
+				state.addPriceVariantDescriptionCheckbox.splice(index, 1);
 			}
+		},
+
+		// SET DATA
+		setPricesUIFromData(
+			state,
+			action: {
+				payload: PriceFormDataWithoutError;
+			},
+		) {
+			const { titles, optionalService, prices } = action.payload;
+			return {
+				addTitlePriceCheckbox: titles.map((title) => {
+					return !!title.priceNearTitle;
+				}),
+
+				optionalServiceCheckbox: !!optionalService,
+
+				addPriceVariantDescriptionCheckbox: prices
+					? prices.map((price) => {
+							return !!price.titleDescription;
+						})
+					: [],
+				priceVariantsCheckbox: !!prices,
+				meetingCountCheckbox: !!prices?.[0].meetingCount,
+				meetingDurationCheckbox: !!prices?.[0].meetingDuration,
+				meetingPriceCheckbox: !!prices?.[0].meetingPrice,
+				meetingTotalPriceCheckbox: !!prices?.[0].coursePrice,
+			};
 		},
 	},
 });
@@ -103,9 +124,7 @@ export const {
 	deletePriceSectionTitle,
 	// OPTIONAL SERVICE
 	triggerOptionalServiceCheckbox,
-	setOptionalServiceInputHeight,
 	// PRICE VARIANTS
-	setPriceVariantsHeight,
 	triggerPriceVariantsCheckbox,
 	triggerPriceVariantsDescriptionCheckbox,
 	triggerMeetingsCountCheckbox,
@@ -114,6 +133,7 @@ export const {
 	triggerMeetingsTotalPriceCheckbox,
 	createPriceVariant,
 	deletePriceVariant,
-} = pricesCreateFormUiSlice.actions;
+	setPricesUIFromData,
+} = pricesFormUiSlice.actions;
 
-export default pricesCreateFormUiSlice.reducer;
+export default pricesFormUiSlice.reducer;

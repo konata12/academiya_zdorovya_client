@@ -11,7 +11,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
 import { createDepartment as createDepartmentAction } from "@/app/utils/redux/departments/departmentsSlice";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 import HookFormInputContainer from "@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm";
 import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
 
@@ -27,7 +27,7 @@ export default function CreateDepartmentForm() {
 
 	const createDepartment: SubmitHandler<DepartmentsFormData> = async (data) => {
 		const response = await dispatch(createDepartmentAction(data));
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 		if (isFulfilled) router.push("/admin/departments");
 	};
 
@@ -73,12 +73,10 @@ export default function CreateDepartmentForm() {
 					register={register}
 					errors={errors}
 					registerOptions={{
-						required:
-							"Посилання на відділення в гугл картах обов'язкове",
+						required: "Посилання на відділення в гугл картах обов'язкове",
 						pattern: {
 							value: GOOGLE_MAPS_URL,
-							message:
-								"Повинно бути посилання на відділення в гугл картах",
+							message: "Повинно бути посилання на відділення в гугл картах",
 						},
 					}}
 				/>

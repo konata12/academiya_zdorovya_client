@@ -24,9 +24,7 @@ export const componentHeightAnimationVariants = (height: number): Variants => {
 		}, // Exit state (hidden)
 	};
 };
-export const componentVisibilityAndHeightAnimationVariants = (
-	height: number,
-): Variants => {
+export const componentVisibilityAndHeightAnimationVariants = (height: number): Variants => {
 	return {
 		hidden: {
 			height: 0,
@@ -45,8 +43,7 @@ export const componentVisibilityAndHeightAnimationVariants = (
 export const errorAnimationVariants = componentVisibleAnimationVariants;
 
 // ABOUT TREATMENT CREATE FORM
-export const aboutTreatmentTitleVariants =
-	componentVisibilityAndHeightAnimationVariants;
+export const aboutTreatmentTitleVariants = componentVisibilityAndHeightAnimationVariants;
 
 // PRICE SECTION CREATE FORM
 export const priceSectionTitleVariants = componentHeightAnimationVariants;
@@ -56,5 +53,4 @@ export const priceFieldsVariants = componentVisibleAnimationVariants;
 
 // COMPONENTS
 // COMMON UI
-export const AnimatePresenseWithDynamicHeightVariants =
-	componentHeightAnimationVariants;
+export const AnimatePresenseWithDynamicHeightVariants = componentHeightAnimationVariants;

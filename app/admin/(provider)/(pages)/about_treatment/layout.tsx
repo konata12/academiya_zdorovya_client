@@ -3,10 +3,7 @@
 import React, { useEffect } from "react";
 import styles from "./layout.module.scss";
 import TableLine from "./../../ui/Tables/ListOption/TableLine";
-import {
-	checkCreatePage,
-	getUrlLastElement,
-} from "@/app/services/navigation.service";
+import { checkCreatePage, getUrlLastElement } from "@/app/services/navigation.service";
 import {
 	closeAboutTreatmentsModal,
 	deleteAboutTreatment as deleteAboutTreatmentAction,
@@ -21,7 +18,7 @@ import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
 import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
 import CommonTable404 from "@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404";
 import DeleteModalWindow from "@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 
 const titles = ["Послуга", "Опції"];
 
@@ -30,8 +27,9 @@ export default function WhatWeTreat({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { aboutTreatments, aboutTreatmentsIsModalOpen, error, status } =
-		useAppSelector((state: RootState) => state.aboutTreatment);
+	const { aboutTreatments, aboutTreatmentsIsModalOpen, error, status } = useAppSelector(
+		(state: RootState) => state.aboutTreatment,
+	);
 
 	const dispatch = useAppDispatch();
 	const router = useRouter();
@@ -44,7 +42,7 @@ export default function WhatWeTreat({
 
 	const deleteAboutTreatment = async (id: number) => {
 		const response = await dispatch(deleteAboutTreatmentAction(id));
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 		if (isFulfilled) router.push("/admin/about_treatment");
 	};
 	const openModalWindow = (i: number) => {

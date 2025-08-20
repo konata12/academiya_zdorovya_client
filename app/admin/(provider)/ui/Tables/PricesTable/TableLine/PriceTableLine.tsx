@@ -33,7 +33,7 @@ export default function PriceTableLine({
 							className={styles.dataColumn}
 							style={{ width: 100 / columnsNumber + "%" }}
 						>
-							{pricing.meetingsCount}
+							{pricing.meetingCount}
 						</div>
 					)}
 				{!!columnsData[PriceVariantOptionsEnum.DURATION].length &&
@@ -42,7 +42,7 @@ export default function PriceTableLine({
 							className={styles.dataColumn}
 							style={{ width: 100 / columnsNumber + "%" }}
 						>
-							{pricing.meetingsDuration}
+							{pricing.meetingDuration}
 						</div>
 					)}
 				{!!columnsData[PriceVariantOptionsEnum.PRICE].length &&

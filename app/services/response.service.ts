@@ -1,8 +1,8 @@
 import { ParsingResponseErrorsEnum } from "@/app/types/data/response.type";
 import { set, UseStore } from "idb-keyval";
 
-// CHECK IF ASYNC THUNK FULLFILLED
-export const fullfilled = (type: string) => {
+// CHECK IF ASYNC THUNK FULFILLED
+export const fulfilled = (type: string) => {
 	return type === "fulfilled";
 };
 

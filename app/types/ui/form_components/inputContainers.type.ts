@@ -17,7 +17,7 @@ export type ChangeEvent<T extends FormElements> = (e: React.ChangeEvent<T>) => v
 // CONTAINER PROPS
 export interface HookFormInputContainerBasicProps<T extends Record<string, any>> {
 	children?: React.ReactNode;
-	className?: Styles;
+	className?: InputContainerBasicStyles;
 	label: string;
 	name: Path<T>; // This ensures the name is a key of T
 	errors: FieldErrors<T>;
@@ -74,7 +74,7 @@ export interface InputContainerBasicProps {
 	inputId: string;
 	error?: FormInputError;
 	children?: React.ReactNode;
-	className?: Styles;
+	className?: InputContainerBasicStyles;
 }
 export interface InputContainer
 	extends InputContainerBasicProps,
@@ -151,17 +151,17 @@ export interface ImageInputPreviewFromIndexedDBProps {
 }
 
 // STYLES
-export interface Styles {
+export interface InputContainerBasicStyles {
 	inputContainer?: string;
 	inputLabel?: string;
 	error?: string;
 }
 
 // STYLES CHILDREN
-interface InputContainerStyles extends Styles {
+export interface InputContainerStyles extends InputContainerBasicStyles {
 	input?: string;
 }
-interface TextareaContainerStyles extends Styles {
+interface TextareaContainerStyles extends InputContainerBasicStyles {
 	textarea?: string;
 }
 interface FormElementWithCheckboxStyles extends InputContainerStyles {

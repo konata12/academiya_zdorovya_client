@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./layout.module.scss";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 import { refreshTokens } from "@/app/utils/redux/auth/authSlice";
 import { RootState } from "@/app/utils/redux/store";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
@@ -19,17 +19,13 @@ export default function Admin({
 	children: React.ReactNode;
 }>) {
 	const { accessToken } = useAppSelector((state: RootState) => state.auth);
-	const { formDefaultValues } = useAppSelector(
-		(state: RootState) => state.navigation,
-	);
-	console.log("formDefaultValues:", formDefaultValues);
 
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 
 	const refreshTokensAndCheckIsLogin = async () => {
 		const response = await dispatch(refreshTokens());
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 		if (!isFulfilled) router.push("/admin/login");
 	};
 

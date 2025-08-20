@@ -1,38 +1,28 @@
 import { useAppDispatch } from "@/app/utils/redux/hooks";
 import { setFormDefaultValuesNavigation } from "@/app/utils/redux/navigation/navigationSlice";
 import _ from "lodash";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 export function useFormChangeCheck(oldValue: any, newValue: any) {
-	const [formDefaultValues, setFormDefaultValues] = useState(true);
-	const formDefaultValuesRef = useRef(formDefaultValues);
-
 	const dispatch = useAppDispatch();
 	const pathname = usePathname();
+	const isFormDefaultRef = useRef(true);
 
-	// CHECK IF FORM DATA IS DEFAULT
+	// Memoized function to update both ref and Redux state
+	const updateFormState = useCallback((isDefault: boolean) => {
+		isFormDefaultRef.current = isDefault;
+		dispatch(setFormDefaultValuesNavigation(isDefault));
+	}, [dispatch]);
+
+	// Combined effect for form comparison and pathname changes
 	useEffect(() => {
-		const equal = _.isEqual(newValue, oldValue);
-		setFormDefaultValues(equal);
-	}, [newValue, oldValue]);
+		const valuesAreEqual = _.isEqual(newValue, oldValue);
+		updateFormState(valuesAreEqual);
 
-	// Update the ref whenever formDefaultValues changes
-	useEffect(() => {
-		formDefaultValuesRef.current = formDefaultValues;
-		// update defaultValues state in redux
-		dispatch(setFormDefaultValuesNavigation(formDefaultValuesRef.current));
-
-		// after leaving page set formDefaultValues in redux to initial
-		return () => {
-			dispatch(setFormDefaultValuesNavigation(true));
-		};
-	}, [formDefaultValues]);
-
-	// CREATE QUIT PAGE LISTENERS
-	useEffect(() => {
+		// Setup beforeunload listener
 		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-			if (!formDefaultValuesRef.current) {
+			if (!isFormDefaultRef.current) {
 				e.preventDefault();
 				e.returnValue = "";
 			}
@@ -42,12 +32,8 @@ export function useFormChangeCheck(oldValue: any, newValue: any) {
 
 		return () => {
 			window.removeEventListener("beforeunload", handleBeforeUnload);
+			// Reset to default when dependencies change or unmount
+			updateFormState(true);
 		};
-	}, []);
-
-	// ✅ Reset navigation state when URL changes
-	useEffect(() => {
-		// when pathname changes → reset redux value
-		dispatch(setFormDefaultValuesNavigation(true));
-	}, [pathname, dispatch]);
+	}, [newValue, oldValue, pathname, updateFormState]);
 }

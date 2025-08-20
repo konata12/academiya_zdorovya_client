@@ -14,7 +14,7 @@ import {
 import { useMemo } from "react";
 
 export function useServiceFormSlice(indexedDBStoreName: ServiceFormIndexedDBType) {
-	const actions = useMemo(() => {
+	return useMemo(() => {
 		switch (indexedDBStoreName) {
 			case "service_create_images":
 				return {
@@ -35,6 +35,4 @@ export function useServiceFormSlice(indexedDBStoreName: ServiceFormIndexedDBType
 				};
 		}
 	}, [indexedDBStoreName]);
-
-	return actions;
 }

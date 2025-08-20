@@ -1,577 +1,108 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import styles from "./priceFormVariant.module.scss";
 import { useAppDispatch } from "@/app/utils/redux/hooks";
 import {
-	deletePriceVariant as deletePriceVariantAction,
+	deletePriceVariant,
 	triggerPriceVariantsDescriptionCheckbox,
-} from "@/app/utils/redux/prices/pricesCreateFormUiSlice";
-import Checkbox from "@/app/admin/(provider)/ui/Checkbox/Checkbox";
+} from "@/app/utils/redux/prices/pricesFormUiSlice";
 import {
-	PriceSectionFormData,
+	PriceFormData,
+	PriceFormDataPricesErrorType,
+	PriceFormUICheckboxEnum,
+	PriceSectionEnum,
+	PricesFromSliceNameType,
 	PriceVariantOptionsEnum,
+	PriceVariantOptionsEnumType,
 } from "@/app/types/data/prices.type";
-import { FieldErrors, UseFieldArrayRemove, UseFormRegister } from "react-hook-form";
+import PriceFormVariantTitleDescriptionInputs from "@/app/admin/(provider)/ui/Forms/pricesForms/priceVariant/PriceFormVariantTitleDescriptionInputs/PriceFormVariantTitleDescriptionInputs";
+import { usePricesFormSlice } from "@/app/utils/hooks/admin/pricesForm/usePricesFormSlice";
+import { FormElements } from "@/app/types/ui/form_components/inputContainers.type";
+import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
 
 interface PriceFormVariant {
-	showOptions: boolean[];
-	includePriceVariants: boolean;
-	priceVariantDescription: boolean;
+	sliceName: PricesFromSliceNameType;
+	tableConfigValues: PriceFormData;
+	tableConfigCheckboxes: TableConfigCheckboxes[];
+	priceVariantDescriptionIsChecked: boolean;
+	priceData: PriceFormData;
+	errors: PriceFormDataPricesErrorType;
 	index: number;
-	register: UseFormRegister<PriceSectionFormData>;
-	errors: FieldErrors<PriceSectionFormData>;
-	removePriceVariantFromForm: UseFieldArrayRemove;
+}
+interface TableConfigCheckboxes {
+	label: string;
+	handleCheckboxToggle: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	handleChange: (e: ChangeEvent<FormElements>, index: number) => void;
+	isChecked: boolean;
+	checkboxId: PriceFormUICheckboxEnum;
+	id: Exclude<
+		PriceVariantOptionsEnumType,
+		PriceVariantOptionsEnum.TITLE | PriceVariantOptionsEnum.TITLEDESCRIPTION
+	>;
 }
 
 export default function PriceFormVariant({
-	showOptions,
-	includePriceVariants,
-	priceVariantDescription,
-	index,
-	register,
+	sliceName,
+	tableConfigValues,
+	tableConfigCheckboxes,
+	priceVariantDescriptionIsChecked,
+	priceData,
 	errors,
-	removePriceVariantFromForm,
+	index,
 }: PriceFormVariant) {
-	// const [height, setHeight] = useState(0)
 	const dispatch = useAppDispatch();
-	// const priceVariantRef = useRef<HTMLDivElement | null>(null)
-
-	// useEffect(() => {
-	//     setHeight(priceVariantRef.current?.scrollHeight || 0)
-	// })
+	const { deletePricesPriceValue } = usePricesFormSlice(sliceName);
 
 	const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const state = e.target.checked;
 		dispatch(triggerPriceVariantsDescriptionCheckbox({ index, state }));
 	};
-	const deletePriceVariant = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const deleteHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		removePriceVariantFromForm(index);
-		dispatch(deletePriceVariantAction(index));
+		dispatch(deletePricesPriceValue(index));
+		dispatch(deletePriceVariant(index));
 	};
-
-	// console.log(height)
 
 	return (
 		<>
-			{/* {!index ? (<div
-                className={`${styles.priceVariantWrap} ${index ? styles.additional : ''}`}
-            >
-                <div className={styles.additionalTitle}>
-                    <span className='title xs'>
-                        Рядок {index + 1}
-                    </span>
-                    {!!index && <button
-                        onClick={deletePriceVariant}
-                        className={`btn blue sm`}
-                    >
-                        Видалити
-                    </button>}
-                </div>
-
-                <div className={styles.titleWrap}>
-                    <div className={styles.title}>
-                        <label
-                            className={`inputLabel`}
-                            htmlFor={`optionName_${index}`}
-                        >
-                            Назва опції
-                        </label>
-                        <input
-                            className={`input`}
-                            type="text"
-                            id={`optionName_${index}`}
-                            {...register(`prices.${index}.${PriceVariantOptionsEnum.TITLE}`, {
-                                required: "Якщо вибрали рядок ціни, то введіть назву",
-                            })}
-                        />
-                        {errors.prices?.[index]?.[PriceVariantOptionsEnum.TITLE]
-                            && includePriceVariants
-                            && (
-                                <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.TITLE]?.message}</p>
-                            )}
-                    </div>
-
-                    <div className={styles.descriptionNearTitle}>
-                        <div className={styles.top}>
-                            <label
-                                className={`inputLabel`}
-                                htmlFor={`optional_description_${index}`}
-                            >
-                                {`Опис, пишіть в душках (опціонально*)`}
-                            </label>
-                            <Checkbox
-                                handleFunction={handleCheckbox}
-                                isChecked={priceVariantDescription}
-                                elemId={`optional_description_${index}`}
-                            />
-                        </div>
-                        <input
-                            className={`input ${styles.input} ${priceVariantDescription ? styles.active : ''}`}
-                            type="text"
-                            {...register(`prices.${index}.${PriceVariantOptionsEnum.TITLEDESCRIPTION}`, {
-                                required: priceVariantDescription ? "Якщо добавили опис, то введіть його" : false,
-                            })}
-                        />
-                        {errors.prices?.[index]?.[PriceVariantOptionsEnum.TITLEDESCRIPTION]
-                            && includePriceVariants
-                            && priceVariantDescription
-                            && (
-                                <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.TITLEDESCRIPTION]?.message}</p>
-                            )}
-                    </div>
-                </div>
-
-                <div className={styles.variantOptions}>
-                    {showOptions[0] && <div className={styles.variant}>
-                        <label
-                            className={`inputLabel`}
-                            htmlFor={`${PriceVariantOptionsEnum.COUNT}_${index}`}
-                        >
-                            Кількість занять
-                        </label>
-                        <input
-                            className={`input ${styles.input}`}
-                            type="text"
-                            id={`${PriceVariantOptionsEnum.COUNT}_${index}`}
-                            {...register(`prices.${index}.${PriceVariantOptionsEnum.COUNT}`)}
-                        />
-                        {errors.prices?.[index]?.[PriceVariantOptionsEnum.COUNT]
-                            && includePriceVariants
-                            && (
-                                <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.COUNT]?.message}</p>
-                            )}
-                    </div>}
-                    {showOptions[1] && <div className={styles.variant}>
-                        <label
-                            className={`inputLabel`}
-                            htmlFor={`${PriceVariantOptionsEnum.DURATION}_${index}`}
-                        >
-                            Тривалість заняття
-                        </label>
-                        <input
-                            className={`input ${styles.input}`}
-                            type="text"
-                            id={`${PriceVariantOptionsEnum.DURATION}_${index}`}
-                            {...register(`prices.${index}.${PriceVariantOptionsEnum.DURATION}`)}
-                        />
-                        {errors.prices?.[index]?.[PriceVariantOptionsEnum.DURATION]
-                            && includePriceVariants
-                            && (
-                                <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.DURATION]?.message}</p>
-                            )}
-                    </div>}
-                    {showOptions[2] && <div className={styles.variant}>
-                        <label
-                            className={`inputLabel`}
-                            htmlFor={`${PriceVariantOptionsEnum.PRICE}_${index}`}
-                        >
-                            Ціна за 1 заняття
-                        </label>
-                        <input
-                            className={`input ${styles.input}`}
-                            type="text"
-                            id={`${PriceVariantOptionsEnum.PRICE}_${index}`}
-                            {...register(`prices.${index}.${PriceVariantOptionsEnum.PRICE}`)}
-                        />
-                        {errors.prices?.[index]?.[PriceVariantOptionsEnum.PRICE]
-                            && includePriceVariants
-                            && (
-                                <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.PRICE]?.message}</p>
-                            )}
-                    </div>}
-                    {showOptions[3] && <div className={styles.variant}>
-                        <label
-                            className={`inputLabel`}
-                            htmlFor={`${PriceVariantOptionsEnum.TOTALPRICE}_${index}`}
-                        >
-                            Ціна за весь курс
-                        </label>
-                        <input
-                            className={`input ${styles.input}`}
-                            type="text"
-                            id={`${PriceVariantOptionsEnum.TOTALPRICE}_${index}`}
-                            {...register(`prices.${index}.${PriceVariantOptionsEnum.TOTALPRICE}`)}
-                        />
-                        {errors.prices?.[index]?.[PriceVariantOptionsEnum.TOTALPRICE]
-                            && includePriceVariants
-                            && (
-                                <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.TOTALPRICE]?.message}</p>
-                            )}
-                    </div>}
-                </div>
-            </div>) : (<motion.div
-                className={styles.priceVariantShape}
-                variants={priceSectionPriceVariantVariants(height)}
-                initial='hidden'
-                animate='visible'
-                exit='exit'
-                transition={basicAnimation}
-            >
-                <motion.div
-                    className={`${styles.priceVariantWrap} ${index ? styles.additional : ''}`}
-                    ref={priceVariantRef}
-                    variants={componentVisibleAnimationVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit='exit'
-                    transition={basicAnimation}
-                >
-                    <div className={styles.additionalTitle}>
-                        <span className='title xs'>
-                            Рядок {index + 1}
-                        </span>
-                        {!!index && <button
-                            onClick={deletePriceVariant}
-                            className={`btn blue sm`}
-                        >
-                            Видалити
-                        </button>}
-                    </div>
-
-                    <div className={styles.titleWrap}>
-                        <div className={styles.title}>
-                            <label
-                                className={`inputLabel`}
-                                htmlFor={`optionName_${index}`}
-                            >
-                                Назва опції
-                            </label>
-                            <input
-                                className={`input`}
-                                type="text"
-                                id={`optionName_${index}`}
-                                {...register(`prices.${index}.${PriceVariantOptionsEnum.TITLE}`, {
-                                    required: "Якщо вибрали рядок ціни, то введіть назву",
-                                })}
-                            />
-                            {errors.prices?.[index]?.[PriceVariantOptionsEnum.TITLE]
-                                && includePriceVariants
-                                && (
-                                    <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.TITLE]?.message}</p>
-                                )}
-                        </div>
-
-                        <div className={styles.descriptionNearTitle}>
-                            <div className={styles.top}>
-                                <label
-                                    className={`inputLabel`}
-                                    htmlFor={`optional_description_${index}`}
-                                >
-                                    {`Опис, пишіть в душках (опціонально*)`}
-                                </label>
-                                <Checkbox
-                                    handleFunction={handleCheckbox}
-                                    isChecked={priceVariantDescription}
-                                    elemId={`optional_description_${index}`}
-                                />
-                            </div>
-                            <input
-                                className={`input ${styles.input} ${priceVariantDescription ? styles.active : ''}`}
-                                type="text"
-                                {...register(`prices.${index}.${PriceVariantOptionsEnum.TITLEDESCRIPTION}`, {
-                                    required: priceVariantDescription ? "Якщо добавили опис, то введіть його" : false,
-                                })}
-                            />
-                            {errors.prices?.[index]?.[PriceVariantOptionsEnum.TITLEDESCRIPTION]
-                                && includePriceVariants
-                                && priceVariantDescription
-                                && (
-                                    <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.TITLEDESCRIPTION]?.message}</p>
-                                )}
-                        </div>
-                    </div>
-
-                    <div className={styles.variantOptions}>
-                        {showOptions[0] && <div className={styles.variant}>
-                            <label
-                                className={`inputLabel`}
-                                htmlFor={`${PriceVariantOptionsEnum.COUNT}_${index}`}
-                            >
-                                Кількість занять
-                            </label>
-                            <input
-                                className={`input ${styles.input}`}
-                                type="text"
-                                id={`${PriceVariantOptionsEnum.COUNT}_${index}`}
-                                {...register(`prices.${index}.${PriceVariantOptionsEnum.COUNT}`)}
-                            />
-                            {errors.prices?.[index]?.[PriceVariantOptionsEnum.COUNT]
-                                && includePriceVariants
-                                && (
-                                    <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.COUNT]?.message}</p>
-                                )}
-                        </div>}
-                        {showOptions[1] && <div className={styles.variant}>
-                            <label
-                                className={`inputLabel`}
-                                htmlFor={`${PriceVariantOptionsEnum.DURATION}_${index}`}
-                            >
-                                Тривалість заняття
-                            </label>
-                            <input
-                                className={`input ${styles.input}`}
-                                type="text"
-                                id={`${PriceVariantOptionsEnum.DURATION}_${index}`}
-                                {...register(`prices.${index}.${PriceVariantOptionsEnum.DURATION}`)}
-                            />
-                            {errors.prices?.[index]?.[PriceVariantOptionsEnum.DURATION]
-                                && includePriceVariants
-                                && (
-                                    <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.DURATION]?.message}</p>
-                                )}
-                        </div>}
-                        {showOptions[2] && <div className={styles.variant}>
-                            <label
-                                className={`inputLabel`}
-                                htmlFor={`${PriceVariantOptionsEnum.PRICE}_${index}`}
-                            >
-                                Ціна за 1 заняття
-                            </label>
-                            <input
-                                className={`input ${styles.input}`}
-                                type="text"
-                                id={`${PriceVariantOptionsEnum.PRICE}_${index}`}
-                                {...register(`prices.${index}.${PriceVariantOptionsEnum.PRICE}`)}
-                            />
-                            {errors.prices?.[index]?.[PriceVariantOptionsEnum.PRICE]
-                                && includePriceVariants
-                                && (
-                                    <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.PRICE]?.message}</p>
-                                )}
-                        </div>}
-                        {showOptions[3] && <div className={styles.variant}>
-                            <label
-                                className={`inputLabel`}
-                                htmlFor={`${PriceVariantOptionsEnum.TOTALPRICE}_${index}`}
-                            >
-                                Ціна за весь курс
-                            </label>
-                            <input
-                                className={`input ${styles.input}`}
-                                type="text"
-                                id={`${PriceVariantOptionsEnum.TOTALPRICE}_${index}`}
-                                {...register(`prices.${index}.${PriceVariantOptionsEnum.TOTALPRICE}`)}
-                            />
-                            {errors.prices?.[index]?.[PriceVariantOptionsEnum.TOTALPRICE]
-                                && includePriceVariants
-                                && (
-                                    <p className="error">{errors.prices?.[index]?.[PriceVariantOptionsEnum.TOTALPRICE]?.message}</p>
-                                )}
-                        </div>}
-                    </div>
-                </motion.div>
-            </motion.div>)} */}
-			<div
-				className={`${styles.priceVariantWrap} ${index ? styles.additional : ""}`}
-				// ref={priceVariantRef}
-			>
+			<div className={`${styles.priceVariantWrap} ${index ? styles.additional : ""}`}>
 				<div className={styles.additionalTitle}>
 					<span className="title xs">Рядок {index + 1}</span>
 					{!!index && (
-						<button
-							onClick={deletePriceVariant}
-							className={`btn blue sm`}
-						>
+						<button onClick={deleteHandler} className={`btn blue sm`}>
 							Видалити
 						</button>
 					)}
 				</div>
 
-				<div className={styles.titleWrap}>
-					<div className={styles.title}>
-						<label
-							className={`inputLabel`}
-							htmlFor={`optionName_${index}`}
-						>
-							Назва опції
-						</label>
-						<input
-							className={`input`}
-							type="text"
-							id={`optionName_${index}`}
-							{...register(
-								`prices.${index}.${PriceVariantOptionsEnum.TITLE}`,
-								{
-									required:
-										"Якщо вибрали рядок ціни, то введіть назву",
-								},
-							)}
-						/>
-						{errors.prices?.[index]?.[PriceVariantOptionsEnum.TITLE] &&
-							includePriceVariants && (
-								<p className="error">
-									{
-										errors.prices?.[index]?.[
-											PriceVariantOptionsEnum.TITLE
-										]?.message
-									}
-								</p>
-							)}
-					</div>
-
-					<div className={styles.descriptionNearTitle}>
-						<div className={styles.top}>
-							<label
-								className={`inputLabel`}
-								htmlFor={`optional_description_${index}`}
-							>
-								{`Опис, пишіть в душках (опціонально*)`}
-							</label>
-							<Checkbox
-								handleFunction={handleCheckbox}
-								isChecked={priceVariantDescription}
-								elemId={`optional_description_${index}`}
-							/>
-						</div>
-						<input
-							className={`input ${styles.input} ${priceVariantDescription ? styles.active : ""}`}
-							type="text"
-							{...register(
-								`prices.${index}.${PriceVariantOptionsEnum.TITLEDESCRIPTION}`,
-								{
-									required: priceVariantDescription
-										? "Якщо добавили опис, то введіть його"
-										: false,
-								},
-							)}
-						/>
-						{errors.prices?.[index]?.[
-							PriceVariantOptionsEnum.TITLEDESCRIPTION
-						] &&
-							includePriceVariants &&
-							priceVariantDescription && (
-								<p className="error">
-									{
-										errors.prices?.[index]?.[
-											PriceVariantOptionsEnum.TITLEDESCRIPTION
-										]?.message
-									}
-								</p>
-							)}
-					</div>
-				</div>
+				<PriceFormVariantTitleDescriptionInputs
+					isChecked={priceVariantDescriptionIsChecked}
+					sliceName={sliceName}
+					index={index}
+					titleValue={priceData[PriceVariantOptionsEnum.TITLE]}
+					descriptionValue={priceData[PriceVariantOptionsEnum.TITLEDESCRIPTION]}
+					titleError={errors[PriceVariantOptionsEnum.TITLE]}
+					descriptionError={errors[PriceVariantOptionsEnum.TITLEDESCRIPTION]}
+				/>
 
 				<div className={styles.variantOptions}>
-					{showOptions[0] && (
-						<div className={styles.variant}>
-							<label
-								className={`inputLabel`}
-								htmlFor={`${PriceVariantOptionsEnum.COUNT}_${index}`}
-							>
-								Кількість занять
-							</label>
-							<input
-								className={`input ${styles.input}`}
-								type="text"
-								id={`${PriceVariantOptionsEnum.COUNT}_${index}`}
-								{...register(
-									`prices.${index}.${PriceVariantOptionsEnum.COUNT}`,
-								)}
-							/>
-							{errors.prices?.[index]?.[
-								PriceVariantOptionsEnum.COUNT
-							] &&
-								includePriceVariants && (
-									<p className="error">
-										{
-											errors.prices?.[index]?.[
-												PriceVariantOptionsEnum.COUNT
-											]?.message
-										}
-									</p>
-								)}
-						</div>
-					)}
-					{showOptions[1] && (
-						<div className={styles.variant}>
-							<label
-								className={`inputLabel`}
-								htmlFor={`${PriceVariantOptionsEnum.DURATION}_${index}`}
-							>
-								Тривалість заняття
-							</label>
-							<input
-								className={`input ${styles.input}`}
-								type="text"
-								id={`${PriceVariantOptionsEnum.DURATION}_${index}`}
-								{...register(
-									`prices.${index}.${PriceVariantOptionsEnum.DURATION}`,
-								)}
-							/>
-							{errors.prices?.[index]?.[
-								PriceVariantOptionsEnum.DURATION
-							] &&
-								includePriceVariants && (
-									<p className="error">
-										{
-											errors.prices?.[index]?.[
-												PriceVariantOptionsEnum.DURATION
-											]?.message
-										}
-									</p>
-								)}
-						</div>
-					)}
-					{showOptions[2] && (
-						<div className={styles.variant}>
-							<label
-								className={`inputLabel`}
-								htmlFor={`${PriceVariantOptionsEnum.PRICE}_${index}`}
-							>
-								Ціна за 1 заняття
-							</label>
-							<input
-								className={`input ${styles.input}`}
-								type="text"
-								id={`${PriceVariantOptionsEnum.PRICE}_${index}`}
-								{...register(
-									`prices.${index}.${PriceVariantOptionsEnum.PRICE}`,
-								)}
-							/>
-							{errors.prices?.[index]?.[
-								PriceVariantOptionsEnum.PRICE
-							] &&
-								includePriceVariants && (
-									<p className="error">
-										{
-											errors.prices?.[index]?.[
-												PriceVariantOptionsEnum.PRICE
-											]?.message
-										}
-									</p>
-								)}
-						</div>
-					)}
-					{showOptions[3] && (
-						<div className={styles.variant}>
-							<label
-								className={`inputLabel`}
-								htmlFor={`${PriceVariantOptionsEnum.TOTALPRICE}_${index}`}
-							>
-								Ціна за весь курс
-							</label>
-							<input
-								className={`input ${styles.input}`}
-								type="text"
-								id={`${PriceVariantOptionsEnum.TOTALPRICE}_${index}`}
-								{...register(
-									`prices.${index}.${PriceVariantOptionsEnum.TOTALPRICE}`,
-								)}
-							/>
-							{errors.prices?.[index]?.[
-								PriceVariantOptionsEnum.TOTALPRICE
-							] &&
-								includePriceVariants && (
-									<p className="error">
-										{
-											errors.prices?.[index]?.[
-												PriceVariantOptionsEnum.TOTALPRICE
-											]?.message
-										}
-									</p>
-								)}
-						</div>
-					)}
+					{tableConfigCheckboxes.map((input, i) => {
+						return (
+							input.isChecked && (
+								<InputContainer
+									key={i}
+									label={input.label}
+									value={tableConfigValues[input.id] || ""}
+									inputId={`${PriceSectionEnum.PRICES}_${input.id}_${index}`}
+									error={errors[input.id]}
+									className={{
+										inputContainer: styles.variant,
+										input: styles.input,
+									}}
+									changeEvent={(e) => input.handleChange(e, index)}
+								/>
+							)
+						);
+					})}
 				</div>
 			</div>
 		</>

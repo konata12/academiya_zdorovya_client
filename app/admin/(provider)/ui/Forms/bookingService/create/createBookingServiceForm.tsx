@@ -1,6 +1,6 @@
 "use client";
 
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 import { createBookingService } from "@/app/utils/redux/booking_services/bookingServicesSlice";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { useRouter } from "next/navigation";
@@ -18,10 +18,8 @@ export default function CreateBookingServiceForm() {
 
 	const formSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		const response = await dispatch(
-			createBookingService({ name: bookingServiceName }),
-		);
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const response = await dispatch(createBookingService({ name: bookingServiceName }));
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 
 		if (isFulfilled) {
 			router.push("/admin/booking_services");

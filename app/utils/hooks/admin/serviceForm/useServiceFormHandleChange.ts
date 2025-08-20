@@ -41,7 +41,7 @@ export function useServiceFormHandleChange(
 		ServiceFormDataEnum.SERVICETYPESDESCRIPTION,
 	];
 
-	const handleChange = useCallback(
+	return useCallback(
 		<T extends FormElements>({
 			e,
 			elementType,
@@ -124,6 +124,4 @@ export function useServiceFormHandleChange(
 		},
 		[indexedDBStoreName],
 	);
-
-	return handleChange;
 }

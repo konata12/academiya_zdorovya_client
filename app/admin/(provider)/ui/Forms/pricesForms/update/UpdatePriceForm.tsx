@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ChangeEvent, useEffect } from "react";
-import styles from "./CreatePriceForm.module.scss";
+import styles from "./UpdatePriceForm.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
 import PriceFormTitleInput from "@/app/admin/(provider)/ui/Forms/pricesForms/title/PriceFormTitleInput";
@@ -25,7 +25,7 @@ import {
 	PriceVariantOptionsEnum,
 	TitlesFormData,
 } from "@/app/types/data/prices.type";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenseWithDynamicHeight";
 import { usePricesFormHandleChange } from "@/app/utils/hooks/admin/pricesForm/usePricesFormHandleChange";
 import { usePricesFormSlice } from "@/app/utils/hooks/admin/pricesForm/usePricesFormSlice";
@@ -36,19 +36,22 @@ import PriceFormVariant from "@/app/admin/(provider)/ui/Forms/pricesForms/priceV
 import { FormElements } from "@/app/types/ui/form_components/inputContainers.type";
 import PricesTable from "@/app/admin/(provider)/ui/Tables/PricesTable/PricesTable";
 import { FormInputError } from "@/app/types/data/form.type";
-import { fulfilled } from "@/app/services/response.service";
-import { createPriceSection } from "@/app/utils/redux/prices/pricesSlice";
 import { parsePriceSectionFormDataToPriceSectionCreateFormData } from "@/app/services/prices.service";
+import { setPricesUpdateFromInitData } from "@/app/utils/redux/prices/pricesUpdateFormSlice";
+import { usePriceFormChangeCheck } from "@/app/utils/hooks/admin/pricesForm/usePriceFormChangeCheck";
+import { fulfilled } from "@/app/services/response.service";
+import { updatePriceSection } from "@/app/utils/redux/prices/pricesSlice";
 
-const sliceName = "pricesCreateForm";
+const sliceName = "pricesUpdateForm";
 
-export default function CreatePriceForm() {
+export default function UpdatePriceForm() {
 	const { errors, ...data } = useAppSelector((state: RootState) => state[sliceName]);
 	const uiData = useAppSelector((state: RootState) => state.pricesFormUI);
-	const { error } = useAppSelector((state: RootState) => state.prices);
+	const { priceSections, error } = useAppSelector((state: RootState) => state.prices);
 	console.log("data:", data);
 
 	const dispatch = useAppDispatch();
+	const pathname = usePathname();
 	const router = useRouter();
 	const handleChange = usePricesFormHandleChange(sliceName);
 	const {
@@ -60,7 +63,9 @@ export default function CreatePriceForm() {
 		resetPricesFromData,
 	} = usePricesFormSlice(sliceName);
 
-	const { departmentId } = useParams<{ departmentId: string }>();
+	const { departmentId, id } = useParams<{ departmentId: string; id: string }>();
+	const oldPriceSection = priceSections.find((priceSection) => `${priceSection.id}` === id);
+
 	const { titles, optionalService, prices } = data;
 	const {
 		// TITLES
@@ -85,8 +90,13 @@ export default function CreatePriceForm() {
 	];
 
 	useEffect(() => {
-		dispatch(setPricesUIFromData(data));
-	}, []);
+		if (oldPriceSection) {
+			const { id, ...oldData } = oldPriceSection;
+			dispatch(setPricesUpdateFromInitData(oldData));
+			dispatch(setPricesUIFromData(oldData));
+		}
+	}, [priceSections]);
+	usePriceFormChangeCheck(oldPriceSection, data);
 
 	// FORM SUBMIT
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -175,7 +185,7 @@ export default function CreatePriceForm() {
 						id: PriceSectionEnum.PRICES,
 						error: { message },
 					});
-				} else if (priceVariantsCheckbox) {
+				} else {
 					if (!values) return;
 					values.forEach((value, index) => {
 						if (!value.title) {
@@ -272,7 +282,6 @@ export default function CreatePriceForm() {
 
 		// SCROLL TO ERROR INPUT
 		console.log("errorsData", errorsData);
-
 		if (errorsData.length) {
 			// SCROLL TO INPUT
 			(
@@ -290,13 +299,11 @@ export default function CreatePriceForm() {
 		);
 		console.log("submit data:", requestData);
 
-		const response = await dispatch(
-			createPriceSection({ data: requestData, departmentId }),
-		);
+		const response = await dispatch(updatePriceSection({ data: requestData, id }));
 		const isFulfilled = fulfilled(response.meta.requestStatus);
 		if (isFulfilled) {
 			dispatch(resetPricesFromData());
-			router.push("./");
+			router.push("../");
 		}
 	};
 
@@ -523,11 +530,11 @@ export default function CreatePriceForm() {
 			</div>
 
 			<div className={styles.formErrorWrap}>
-				{error.create && (
-					<p className={`error ${styles.formError}`}>{error.create.message}</p>
+				{error.update && (
+					<p className={`error ${styles.formError}`}>{error.update.message}</p>
 				)}
 				<button className={`btn blue xl ${styles.submit}`} type="submit">
-					Створити
+					Підтвердити зміни
 				</button>
 			</div>
 		</form>

@@ -16,7 +16,7 @@ import newsCreateFormSlice from "@/app/utils/redux/news/newsCreateFormSlice";
 import newsSlice from "@/app/utils/redux/news/newsSlice";
 import newsUpdateDetailsOrderSlice from "@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice";
 import newsUpdateFormSlice from "@/app/utils/redux/news/newsUpdateFormSlice";
-import pricesCreateFormUiSlice from "@/app/utils/redux/prices/pricesCreateFormUiSlice";
+import pricesFormUiSlice from "@/app/utils/redux/prices/pricesFormUiSlice";
 import pricesSlice from "@/app/utils/redux/prices/pricesSlice";
 import serviceCreateFormSlice from "@/app/utils/redux/services/serviceCreateFormSlice";
 import serviceUpdateFormSlice from "@/app/utils/redux/services/serviceUpdateFormSlice";
@@ -39,6 +39,8 @@ import {
 	REGISTER,
 	REHYDRATE,
 } from "redux-persist";
+import pricesCreateFormSlice from "@/app/utils/redux/prices/pricesCreateFormSlice";
+import pricesUpdateFormSlice from "@/app/utils/redux/prices/pricesUpdateFormSlice";
 
 // REDUCERS
 
@@ -52,7 +54,7 @@ const rootReducer = combineReducers({
 	navigation: navigationSlice,
 	// UI
 	aboutTreatmentsFormUI: aboutTreatmentsFormUISlice,
-	pricesCreateFormUI: pricesCreateFormUiSlice,
+	pricesFormUI: pricesFormUiSlice,
 	employeesFormUI: employeesFormUISlice,
 	serviceFormUI: serviceFormUISlice,
 
@@ -77,6 +79,10 @@ const rootReducer = combineReducers({
 	serviceTypeUpdateForm: serviceTypeUpdateFormSlice,
 	serviceTypeCreateDetailsOrder: serviceTypeCreateDetailsOrderSlice,
 	serviceTypeUpdateDetailsOrder: serviceTypeUpdateDetailsOrderSlice,
+
+	// PRICES CREATION
+	pricesCreateForm: pricesCreateFormSlice,
+	pricesUpdateForm: pricesUpdateFormSlice,
 
 	// API
 	auth: authSlice,

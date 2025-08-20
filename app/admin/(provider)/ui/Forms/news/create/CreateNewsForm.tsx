@@ -10,7 +10,7 @@ import {
 } from "@/app/types/data/news.type";
 import { ErrorWrapper } from "@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper";
 import { FormInputError } from "@/app/types/data/form.type";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
 import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
 import { ImageInputPreviewFromIndexedDB } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB";
@@ -38,10 +38,7 @@ export default function CreateNewsForm() {
 
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const handleChange = useNewsFormHandleChange(
-		indexedDBStoreName,
-		detailsOrderSliceName,
-	);
+	const handleChange = useNewsFormHandleChange(indexedDBStoreName, detailsOrderSliceName);
 	const { setFormError, resetDetailsComponentsOrder, resetFromData } =
 		useDetailsFormSlice(detailsOrderSliceName);
 
@@ -113,18 +110,14 @@ export default function CreateNewsForm() {
 			// SCROLL TO INPUT
 			if (errorsData[0].id === NewsFormDataEnum.BACKGROUNDIMG) {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).labels?.[0].scrollIntoView({
 					behavior: "smooth",
 					block: "center",
 				});
 			} else {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).scrollIntoView({
 					behavior: "smooth",
 					block: "center",
@@ -142,7 +135,7 @@ export default function CreateNewsForm() {
 		};
 
 		const response = await dispatch(createNews(data));
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 		if (isFulfilled) {
 			// CLEAR DATA
 			clear(getIndexedDBStoreForImages(indexedDBStoreName));
@@ -212,11 +205,7 @@ export default function CreateNewsForm() {
 				<p className={`title sm left ${styles.title}`}>Вміст новини</p>
 
 				<ErrorWrapper
-					error={
-						errors.details.message.length
-							? errors.details.message
-							: undefined
-					}
+					error={errors.details.message.length ? errors.details.message : undefined}
 					className={{
 						errorWrapper: styles.detailsErrorWrap,
 					}}
@@ -237,14 +226,9 @@ export default function CreateNewsForm() {
 			</div>
 
 			<div className={styles.preview}>
-				<p className={`title sm left ${styles.title}`}>
-					Попередній перегляд
-				</p>
+				<p className={`title sm left ${styles.title}`}>Попередній перегляд</p>
 
-				<SafeLink
-					className={`btn blue sm`}
-					href={`/admin/news/create/preview`}
-				>
+				<SafeLink className={`btn blue sm`} href={`/admin/news/create/preview`}>
 					Дивитись сторінку новини
 				</SafeLink>
 			</div>

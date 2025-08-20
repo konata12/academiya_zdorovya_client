@@ -23,7 +23,7 @@ import {
 import { clear } from "idb-keyval";
 import { createAboutTreatment as createAboutTreatmentAction } from "@/app/utils/redux/about_treatment/aboutTreatmentSlice";
 import { FormInputError } from "@/app/types/data/form.type";
-import { fullfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/response.service";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
 import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
 import { RootState } from "@/app/utils/redux/store";
@@ -149,18 +149,14 @@ export default function CreateAboutTreatmentForm() {
 			// SCROLL TO INPUT
 			if (errorsData[0].id === AboutTreatmentEnum.IMG) {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).labels?.[0].scrollIntoView({
 					behavior: "smooth",
 					block: "center",
 				});
 			} else {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).scrollIntoView({
 					behavior: "smooth",
 					block: "center",
@@ -178,7 +174,7 @@ export default function CreateAboutTreatmentForm() {
 		console.log("data: ", data);
 
 		const response = await dispatch(createAboutTreatmentAction(data));
-		const isFulfilled = fullfilled(response.meta.requestStatus);
+		const isFulfilled = fulfilled(response.meta.requestStatus);
 		if (isFulfilled) {
 			// CLEAR DATA
 			clear(getIndexedDBStoreForImages(indexedDBStoreName));
@@ -232,8 +228,7 @@ export default function CreateAboutTreatmentForm() {
 								changeEvent={(e) =>
 									handleChange({
 										e,
-										elementType:
-											AboutTreatmentEnum.TREATMENTTYPES,
+										elementType: AboutTreatmentEnum.TREATMENTTYPES,
 										arrIndex: i,
 									})
 								}
@@ -272,9 +267,7 @@ export default function CreateAboutTreatmentForm() {
 			</div>
 
 			<div className={styles.addPhoto}>
-				<p className={`title left sm ${styles.title}`}>
-					Фото для детального варіанту
-				</p>
+				<p className={`title left sm ${styles.title}`}>Фото для детального варіанту</p>
 				<p className={`inputLabel ${styles.label}`}>
 					{"Завантажте фото (без фону, в форматі:  .png)"}
 				</p>
