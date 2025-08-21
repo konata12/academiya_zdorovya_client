@@ -9,9 +9,13 @@ export type NewsDetailsOrderSliceNameType =
 export type ServiceTypeDetailsOrderSliceNameType =
 	| "serviceTypeCreateDetailsOrder"
 	| "serviceTypeUpdateDetailsOrder";
+export type LegalInformationDetailsOrderSliceNameType =
+	| "privacyPolicyUpdateDetailsOrder"
+	| "publicOfferUpdateDetailsOrder";
 export type DetailsOrderSliceNameType =
 	| NewsDetailsOrderSliceNameType
-	| ServiceTypeDetailsOrderSliceNameType;
+	| ServiceTypeDetailsOrderSliceNameType
+	| LegalInformationDetailsOrderSliceNameType;
 
 export type ServiceDetailsOrderIndexedDBStoreNameType =
 	| "service_create_images"
@@ -21,7 +25,8 @@ export type NewsDetailsOrderIndexedDBStoreNameType =
 	| "news_update_images";
 export type DetailsOrderIndexedDBStoreNameType =
 	| NewsDetailsOrderIndexedDBStoreNameType
-	| ServiceDetailsOrderIndexedDBStoreNameType;
+	| ServiceDetailsOrderIndexedDBStoreNameType
+	| "no_images";
 
 export interface DetailsDataRenderElementBasicType extends OrderElementBasicType {}
 
@@ -62,7 +67,7 @@ export type QuoteFormDataEnumType = `${QuoteFormDataEnum}`;
 export type ListFormDataEnumType = `${ListFormDataEnum}`;
 export type ImageFormDataEnumType = `${ImageFormDataEnum}`;
 
-export type ComponentsFormDataEnum =
+export type ComponentsFormDataEnumType =
 	| TitleFormDataEnumType
 	| ParagraphFormDataEnumType
 	| QuoteFormDataEnumType
@@ -149,9 +154,7 @@ export interface DetailsTitleFormComponentProps
 	componentData: TitleOrderComponent;
 }
 
-export interface ParagraphFormComponentProps
-	extends StyledComponent,
-		HandleChangeComponent {
+export interface ParagraphFormComponentProps extends StyledComponent, HandleChangeComponent {
 	componentData: ParagraphOrderComponent;
 }
 

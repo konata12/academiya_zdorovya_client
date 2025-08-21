@@ -36,6 +36,7 @@ import DetailsListInput from "@/app/admin/(provider)/ui/Forms/details/inputs/det
 import DetailsImageInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput";
 import { FormInputError } from "@/app/types/data/form.type";
 import { useServiceFormsDataCheckChange } from "@/app/utils/hooks/admin/serviceForm/useServiceFormsDataCheckChange";
+import { fulfilled } from "@/app/services/response.service";
 
 export default function DetailsForm({
 	titles,
@@ -51,6 +52,7 @@ export default function DetailsForm({
 		message: "",
 	});
 	const order = useAppSelector((state: RootState) => state[orderSliceName].order);
+	console.log("order", order);
 
 	const router = useRouter();
 	const pathname = usePathname();
@@ -65,6 +67,8 @@ export default function DetailsForm({
 
 		submitForm,
 		setFormError,
+
+		updateData,
 	} = useDetailsFormSlice(orderSliceName);
 	const imageStoreName = getIndexedDBStoreNameForDetailsImages(orderSliceName);
 
@@ -72,13 +76,14 @@ export default function DetailsForm({
 		if (order.length >= 1) setSubmitError({ message: "" });
 	}, [order]);
 
+	// todo add check for news and legal_information forms
 	// CHECK FORM CHANGED DATA BEFORE CHANGING PAGE
 	if (!isCreatePage) {
 		if (pathname.includes("serviceType")) useServiceFormsDataCheckChange();
 	}
 
 	// FORM SUBMIT
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const errorsData: {
 			error: DetailsFormDataErrorType;
@@ -180,13 +185,11 @@ export default function DetailsForm({
 					};
 
 					// Check if there are any errors
-					listErrors.options = orderComponent.data.options.map(
-						(option) => {
-							return option.length
-								? { message: "" }
-								: { message: "Введіть пункт списку" };
-						},
-					);
+					listErrors.options = orderComponent.data.options.map((option) => {
+						return option.length
+							? { message: "" }
+							: { message: "Введіть пункт списку" };
+					});
 					const containsError = !!listErrors.options.filter(
 						(optionMessage) => optionMessage.message.length > 0,
 					).length;
@@ -218,9 +221,7 @@ export default function DetailsForm({
 						const error: ImageError = {
 							image: {
 								message:
-									!image || !image?.length
-										? "Завантажте зображення"
-										: "",
+									!image || !image?.length ? "Завантажте зображення" : "",
 							},
 							description: {
 								message: !description.length ? "Введіть опис" : "",
@@ -263,13 +264,7 @@ export default function DetailsForm({
 		}
 
 		// CHECK IF FORM IS EMPTY
-		const allData = [
-			...titles,
-			...paragraphs,
-			...quotesSubmitData,
-			...lists,
-			...images,
-		];
+		const allData = [...titles, ...paragraphs, ...quotesSubmitData, ...lists, ...images];
 		if (!allData.length) {
 			setSubmitError({ message: "Створіть дані" });
 			return;
@@ -285,13 +280,26 @@ export default function DetailsForm({
 			images,
 		};
 
-		dispatch(submitForm(parsedFormData));
-		dispatch(
-			setFormError({
-				field: "details",
-				message: "",
-			}),
-		);
+		// TRANSFER DETAILS DATA TO ANOTHER FORM IF IT IS CONNECTED
+		if (submitForm) dispatch(submitForm(parsedFormData));
+		if (setFormError) {
+			dispatch(
+				setFormError({
+					field: "details",
+					message: "",
+				}),
+			);
+		}
+		// DIRECTLY SEND REQUEST TO UPDATE DATA
+		if (updateData) {
+			const response = await dispatch(updateData(parsedFormData));
+			const isFulfilled = fulfilled(response.meta.requestStatus);
+			if (!isFulfilled) {
+				setSubmitError({ message: "Помилка " });
+				return;
+			} else {
+			}
+		}
 		router.push("./");
 	};
 
@@ -400,8 +408,7 @@ export default function DetailsForm({
 	const formInputsToRender = [
 		titles && {
 			label: "Заголовок",
-			createInputHandler: () =>
-				createInput({ elementType: DetailsFormDataEnum.TITLES }),
+			createInputHandler: () => createInput({ elementType: DetailsFormDataEnum.TITLES }),
 		},
 		paragraphs && {
 			label: "Абзац",
@@ -410,8 +417,7 @@ export default function DetailsForm({
 		},
 		quotes && {
 			label: "Цитата",
-			createInputHandler: () =>
-				createInput({ elementType: DetailsFormDataEnum.QUOTES }),
+			createInputHandler: () => createInput({ elementType: DetailsFormDataEnum.QUOTES }),
 		},
 		lists && {
 			label: "Нумерований список",
@@ -520,8 +526,7 @@ export default function DetailsForm({
 												className={{
 													quote: styles.orderedComponent,
 													author: styles.orderedComponent,
-													container:
-														styles.orderedComponent,
+													container: styles.orderedComponent,
 												}}
 											/>
 										);
@@ -535,8 +540,7 @@ export default function DetailsForm({
 												orderSliceName={orderSliceName}
 												className={{
 													option: styles.orderedComponent,
-													container:
-														styles.orderedComponent,
+													container: styles.orderedComponent,
 												}}
 											/>
 										);
@@ -551,10 +555,8 @@ export default function DetailsForm({
 												indexedDBStoreName={imageStoreName}
 												className={{
 													image: styles.orderedComponent,
-													description:
-														styles.orderedComponent,
-													container:
-														styles.orderedComponent,
+													description: styles.orderedComponent,
+													container: styles.orderedComponent,
 												}}
 											/>
 										);
@@ -570,9 +572,7 @@ export default function DetailsForm({
 
 			<SubmitButton
 				error={submitError}
-				label={
-					pathname.includes("create") ? "Створити" : "Підтвердити зміни"
-				}
+				label={pathname.includes("create") ? "Створити" : "Підтвердити зміни"}
 				className={{
 					button: submitError.message ? styles.button : "",
 					error: styles.error,

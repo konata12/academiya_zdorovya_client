@@ -1,0 +1,11 @@
+.titles.titles span:nth-child(1),
+.list.list span:nth-child(1) {
+	flex-grow: 3;
+}
+
+.titles.titles span:nth-child(2),
+.list.list span:nth-child(2),
+.titles.titles span:nth-child(3),
+.list.list span:nth-child(3) {
+	flex-grow: 2;
+}

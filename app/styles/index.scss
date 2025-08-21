@@ -116,6 +116,7 @@ body {
   }
 }
 
+//BUTTONS
 .btn {
   cursor: pointer;
   border: none;
@@ -272,6 +273,13 @@ body {
     @include rgba-text($text-color-black, 0.5);
     pointer-events: none;
   }
+}
+.backBtn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+
+	height: max-content;
 }
 
 // for form input errors

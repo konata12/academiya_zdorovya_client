@@ -495,10 +495,6 @@ export default function UpdateServiceForm() {
 			return;
 		}
 
-		console.log(
-			"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-		);
-
 		// SET ARRAY OF NAMES OF OLD IMAGES
 		const oldImageNames: string[] = [];
 		if (oldData?.image) oldImageNames.push(oldData.image);

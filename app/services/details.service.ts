@@ -37,10 +37,7 @@ import {
 } from "@/app/services/indexedDB.service";
 
 // INDEXED DB
-export function clearDetailsIndexDB(
-	details: DetailsRedactorType | null,
-	store: UseStore,
-) {
+export function clearDetailsIndexDB(details: DetailsRedactorType | null, store: UseStore) {
 	details?.images.forEach((image) => del(image[ImageFormDataEnum.IMAGE], store));
 }
 export function getIndexedDBStoreNameForDetailsImages(
@@ -60,6 +57,10 @@ export function getIndexedDBStoreNameForDetailsImages(
 			break;
 		case "serviceTypeUpdateDetailsOrder":
 			store = "service_update_images";
+			break;
+		case "privacyPolicyUpdateDetailsOrder":
+		case "publicOfferUpdateDetailsOrder":
+			store = "no_images";
 			break;
 
 		default:
@@ -85,9 +86,7 @@ export async function transferDetailsRedactorTypeImagesBetweenIndexDBStores(
 			}),
 		);
 	} catch (error) {
-		throw Error(
-			"Error when transfering details images from one store to another",
-		);
+		throw Error("Error when transfering details images from one store to another");
 	}
 }
 
@@ -124,13 +123,9 @@ export async function parseDetailsCreateRequestFormData(
 				}
 
 				// ADD IMAGE TO FORMDATA
-				if (
-					subKey === ImageFormDataEnum.IMAGE &&
-					typeof value === "string"
-				) {
+				if (subKey === ImageFormDataEnum.IMAGE && typeof value === "string") {
 					const image = await get<File>(value, store);
-					if (!image)
-						throw Error("Помилка при обробці зображень редактора");
+					if (!image) throw Error("Помилка при обробці зображень редактора");
 
 					// CREATE IMAGE
 					const requestImage = renameFile(image, value);
@@ -176,13 +171,9 @@ export async function parseDetailsUpdateRequestFormData(
 				}
 
 				// ADD IMAGE TO FORMDATA
-				if (
-					subKey === ImageFormDataEnum.IMAGE &&
-					typeof value === "string"
-				) {
+				if (subKey === ImageFormDataEnum.IMAGE && typeof value === "string") {
 					const image = await get<File | Blob>(value, store);
-					if (!image)
-						throw Error("Помилка при обробці зображень редактора");
+					if (!image) throw Error("Помилка при обробці зображень редактора");
 
 					// PARSE IMAGE
 					let requestImage: File = renameFileOrBlob(image, value);
@@ -205,10 +196,7 @@ export async function parseDetailsResponse(
 	const parsedImages: DescriptionImage[] = await Promise.all(
 		images.map(async (imageData) => {
 			const { image, ...data } = imageData;
-			let name = await getFileNameFromSignedURLAndSaveBlobInIndexedDB(
-				image,
-				store,
-			);
+			let name = await getFileNameFromSignedURLAndSaveBlobInIndexedDB(image, store);
 
 			return {
 				...data,
@@ -316,21 +304,18 @@ export function parseDetailsResponseToOrderComponentArray(
 			},
 		};
 	});
-	const parsedParagraphs: ParagraphOrderComponent[] = details.paragraphs.map(
-		(paragraph) => {
-			return {
-				type: DetailsFormDataEnum.PARAGRAPHS,
-				data: {
-					[ParagraphFormDataEnum.TEXT]:
-						paragraph[ParagraphFormDataEnum.TEXT],
-					orderId: `${paragraph.order}`,
-				},
-				error: {
-					[ParagraphFormDataEnum.TEXT]: { message: "" },
-				},
-			};
-		},
-	);
+	const parsedParagraphs: ParagraphOrderComponent[] = details.paragraphs.map((paragraph) => {
+		return {
+			type: DetailsFormDataEnum.PARAGRAPHS,
+			data: {
+				[ParagraphFormDataEnum.TEXT]: paragraph[ParagraphFormDataEnum.TEXT],
+				orderId: `${paragraph.order}`,
+			},
+			error: {
+				[ParagraphFormDataEnum.TEXT]: { message: "" },
+			},
+		};
+	});
 	const parsedQuotes: QuoteOrderComponent[] = details.quotes.map(
 		(quote): QuoteOrderComponent => {
 			return {
@@ -348,6 +333,7 @@ export function parseDetailsResponseToOrderComponentArray(
 		},
 	);
 	const parsedLists: ListOrderComponent[] = details.lists.map((list) => {
+		console.log("list[ListFormDataEnum.OPTIONS]", list[ListFormDataEnum.OPTIONS]);
 		return {
 			type: DetailsFormDataEnum.LISTS,
 			data: {
@@ -356,21 +342,19 @@ export function parseDetailsResponseToOrderComponentArray(
 				orderId: `${list.order}`,
 			},
 			error: {
-				[ListFormDataEnum.OPTIONS]: list[ListFormDataEnum.OPTIONS].map(
-					(option) => {
-						return { message: "" };
-					},
-				),
+				[ListFormDataEnum.OPTIONS]: list[ListFormDataEnum.OPTIONS].map((option) => {
+					return { message: "" };
+				}),
 			},
 		};
 	});
+	console.log("parsedLists", parsedLists);
 	const parsedImages: ImageOrderComponent[] = details.images.map((image) => {
 		return {
 			type: DetailsFormDataEnum.IMAGES,
 			data: {
 				[ImageFormDataEnum.IMAGE]: image[ImageFormDataEnum.IMAGE],
-				[ImageFormDataEnum.DESCRIPTION]:
-					image[ImageFormDataEnum.DESCRIPTION],
+				[ImageFormDataEnum.DESCRIPTION]: image[ImageFormDataEnum.DESCRIPTION],
 				[ImageFormDataEnum.SIZE]: image[ImageFormDataEnum.SIZE],
 				orderId: `${image.order}`,
 			},

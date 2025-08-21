@@ -28,7 +28,7 @@ import CommonTable404 from "@/app/admin/(provider)/ui/Tables/Common/CommonTable4
 import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
 import DeleteModalWindow from "@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow";
 
-const titles = ["Назва", "Дата публікування ", "Опції"];
+const titles = ["Назва", "Дата публікування", "Опції"];
 const storeName = "news_images";
 const updateStoreName = "news_update_images";
 
@@ -64,16 +64,10 @@ export default function page() {
 		// CLEAR PREVIOUS NEWS UPDATE FORM DATA IMAGES
 		await clear(setStore);
 		// PARSE DETAILS TO REDUX TYPE
-		const parsedDetails = parseDetailsResponseToOrderComponentArray(
-			news.details,
-		);
+		const parsedDetails = parseDetailsResponseToOrderComponentArray(news.details);
 
 		// TRANSFER IMAGES TO ANOTHER STORE
-		await transferNewsImagesBetweenIndexDBStores(
-			news,
-			storeName,
-			updateStoreName,
-		);
+		await transferNewsImagesBetweenIndexDBStores(news, storeName, updateStoreName);
 
 		// SET DATA TO UPDATE SLICES
 		dispatch(resetNewsUpdateError());
@@ -87,10 +81,6 @@ export default function page() {
 			<p className={`title lg`}>Новини</p>
 
 			<div className={styles.allNews}>
-				{/* <p className={`title xs left ${styles.sectionTitle}`}>
-                    Усі новини
-                </p> */}
-
 				<CommonTable titles={titles}>
 					{!news.length ? (
 						<CommonTable404
@@ -154,11 +144,7 @@ export default function page() {
 										>
 											<path
 												d="M18.3323 6.08008C19.0323 6.08008 19.6589 6.53696 19.8989 7.2214C20.1389 7.90585 19.9423 8.67541 19.4073 9.14445L15.4656 12.492L17.0956 17.6687C17.319 18.3688 17.0923 19.1401 16.5306 19.5918C15.9673 20.0417 15.1956 20.073 14.604 19.6717L10.0157 16.5569L5.50243 19.7064C5.22077 19.9027 4.89744 20 4.57411 20C4.22245 20 3.86912 19.8853 3.57412 19.6543C3.00746 19.2131 2.7708 18.4452 2.98413 17.7434L4.55078 12.5059L0.589156 9.14618C0.0558293 8.67541 -0.139167 7.90758 0.102497 7.22314C0.34416 6.54043 0.969152 6.0853 1.66748 6.0853H6.66575L8.43573 1.1309C8.67906 0.451663 9.30239 0 9.99738 0C10.6924 0 11.3157 0.449926 11.559 1.1309L13.329 6.0853H18.3289L18.3323 6.08008Z"
-												fill={
-													news.isBannerNews
-														? "#004BAE"
-														: "none"
-												}
+												fill={news.isBannerNews ? "#004BAE" : "none"}
 												stroke="#004BAE"
 												strokeWidth="2"
 											/>

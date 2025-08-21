@@ -1,5 +1,5 @@
 import {
-	ComponentsFormDataEnum,
+	ComponentsFormDataEnumType,
 	DetailsFormDataEnum,
 	DetailsOrderSliceNameType,
 	ImageError,
@@ -26,10 +26,7 @@ import { useCallback } from "react";
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
 import { useIndexedDBStoreForDetailsImages } from "@/app/utils/hooks/admin/detailsForm/useIndexedDBStoreForDetailsImages";
 import { v4 as uuidv4 } from "uuid";
-import {
-	renameFile,
-	uniqFileNameAndKeepExtension,
-} from "@/app/services/files.service";
+import { renameFile, uniqFileNameAndKeepExtension } from "@/app/services/files.service";
 
 interface HandleChangeProps<
 	T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
@@ -37,7 +34,7 @@ interface HandleChangeProps<
 	e: React.ChangeEvent<T>;
 	componentData: OrderComponent;
 	index: number;
-	keyOfValueToChange: ComponentsFormDataEnum;
+	keyOfValueToChange: ComponentsFormDataEnumType;
 	optionIndex?: number;
 }
 
@@ -56,8 +53,7 @@ export function useOrderedFormInput(orderSliceName: DetailsOrderSliceNameType) {
 			optionIndex,
 		}: HandleChangeProps<T>) => {
 			const newValue = e.target.value;
-			const newFile =
-				(e as React.ChangeEvent<HTMLInputElement>).target.files || null;
+			const newFile = (e as React.ChangeEvent<HTMLInputElement>).target.files || null;
 			const newComponentData = structuredClone(componentData);
 
 			switch (newComponentData.type) {
@@ -67,17 +63,14 @@ export function useOrderedFormInput(orderSliceName: DetailsOrderSliceNameType) {
 
 					// HANDLE ERROR
 					if (newValue.length) {
-						(newComponentData.error as TitleError)[
-							keyOfValueToChange
-						].message = "";
+						(newComponentData.error as TitleError)[keyOfValueToChange].message =
+							"";
 					}
 					break;
 				case DetailsFormDataEnum.PARAGRAPHS:
-					keyOfValueToChange =
-						keyOfValueToChange as ParagraphFormDataEnumType;
-					(newComponentData.data as ParagraphFormData)[
-						keyOfValueToChange
-					] = newValue;
+					keyOfValueToChange = keyOfValueToChange as ParagraphFormDataEnumType;
+					(newComponentData.data as ParagraphFormData)[keyOfValueToChange] =
+						newValue;
 
 					// HANDLE ERROR
 					if (newValue.length) {
@@ -88,14 +81,12 @@ export function useOrderedFormInput(orderSliceName: DetailsOrderSliceNameType) {
 					break;
 				case DetailsFormDataEnum.QUOTES:
 					keyOfValueToChange = keyOfValueToChange as QuoteFormDataEnumType;
-					(newComponentData.data as QuoteFormData)[keyOfValueToChange] =
-						newValue;
+					(newComponentData.data as QuoteFormData)[keyOfValueToChange] = newValue;
 
 					// HANDLE ERROR
 					if (newValue.length) {
-						(newComponentData.error as QuoteError)[
-							keyOfValueToChange
-						].message = "";
+						(newComponentData.error as QuoteError)[keyOfValueToChange].message =
+							"";
 					}
 					break;
 				case DetailsFormDataEnum.LISTS:
@@ -110,9 +101,9 @@ export function useOrderedFormInput(orderSliceName: DetailsOrderSliceNameType) {
 
 						// HANDLE ERROR
 						if (newValue.length) {
-							(newComponentData.error as ListError)[
-								keyOfValueToChange
-							][optionIndex].message = "";
+							(newComponentData.error as ListError)[keyOfValueToChange][
+								optionIndex
+							].message = "";
 						}
 					}
 					break;
@@ -138,27 +129,21 @@ export function useOrderedFormInput(orderSliceName: DetailsOrderSliceNameType) {
 							const image = renameFile(newFile[0], imageName);
 
 							// save image name to redux
-							(newComponentData.data as ImageFormData)[
-								keyOfValueToChange
-							] = imageName;
+							(newComponentData.data as ImageFormData)[keyOfValueToChange] =
+								imageName;
 
 							// save image to indexedDB using name as key
 							set(imageName, image, store);
 						}
 					} else if (keyOfValueToChange !== ImageFormDataEnum.SIZE) {
-						(newComponentData.data as ImageFormData)[
-							keyOfValueToChange
-						] = newValue;
+						(newComponentData.data as ImageFormData)[keyOfValueToChange] =
+							newValue;
 					}
 
 					// HANDLE ERROR
-					if (
-						newValue.length &&
-						keyOfValueToChange !== ImageFormDataEnum.SIZE
-					) {
-						(newComponentData.error as ImageError)[
-							keyOfValueToChange
-						].message = "";
+					if (newValue.length && keyOfValueToChange !== ImageFormDataEnum.SIZE) {
+						(newComponentData.error as ImageError)[keyOfValueToChange].message =
+							"";
 					}
 					break;
 			}

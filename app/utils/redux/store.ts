@@ -41,6 +41,9 @@ import {
 } from "redux-persist";
 import pricesCreateFormSlice from "@/app/utils/redux/prices/pricesCreateFormSlice";
 import pricesUpdateFormSlice from "@/app/utils/redux/prices/pricesUpdateFormSlice";
+import legalInformationSlice from "@/app/utils/redux/legal_information/legalInformationSlice";
+import publicOfferUpdateDetailsOrderSlice from "@/app/utils/redux/details/legal_information/publicOfferUpdateDetailsOrderSlice";
+import privacyPolicyUpdateDetailsOrderSlice from "@/app/utils/redux/details/legal_information/privacyPolicyUpdateDetailsOrderSlice";
 
 // REDUCERS
 
@@ -66,6 +69,10 @@ const rootReducer = combineReducers({
 	employeeCreateForm: employeeCreateFormSlice,
 	employeeUpdateForm: employeeUpdateFormSlice,
 
+	// LEGAL INFORMATION CREATION
+	privacyPolicyUpdateDetailsOrder: privacyPolicyUpdateDetailsOrderSlice,
+	publicOfferUpdateDetailsOrder: publicOfferUpdateDetailsOrderSlice,
+
 	// NEWS CREATION
 	newsCreateForm: newsCreateFormSlice,
 	newsUpdateForm: newsUpdateFormSlice,
@@ -90,6 +97,7 @@ const rootReducer = combineReducers({
 	bookingServices: bookingServicesSlice,
 	departments: departmentsSlice,
 	employees: employeesSlice,
+	legalInformation: legalInformationSlice,
 	prices: pricesSlice,
 	news: newsSlice,
 	services: servicesSlice,

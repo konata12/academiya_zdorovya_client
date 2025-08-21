@@ -14,7 +14,7 @@ type Route = {
 export const routes: Route[] = [
 	{ label: "Відділення", path: "/admin/departments" },
 	{ label: "Наповнення відділення", path: "/admin/fill_departments" },
-	{ label: "Юридична інформація", path: "/admin/law_info" },
+	{ label: "Юридична інформація", path: "/admin/legal_information", checkRender: true },
 	{ label: "Що лікуємо", path: "/admin/about_treatment" },
 	{ label: "Лікарі", path: "/admin/employees" },
 	{ label: "Послуги для запису", path: "/admin/booking_services" },
@@ -23,7 +23,7 @@ export const routes: Route[] = [
 	{ label: "Відгуки", path: "/admin/reviews" },
 	{ label: "Новини", path: "/admin/news", checkRender: true },
 ];
-const notRenderRoutes = ["create", "update"];
+const notRenderRoutes = ["create", "update", "privacyPolicy", "publicOffer"];
 
 export default function SideNavigation() {
 	const { accessToken } = useAppSelector((state: RootState) => state.auth);

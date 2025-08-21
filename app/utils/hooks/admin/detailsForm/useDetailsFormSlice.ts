@@ -30,7 +30,7 @@ import {
 	setServiceTypeUpdateDetailsStateOrder,
 	updateServiceTypeUpdateDetailsComponent,
 } from "@/app/utils/redux/details/services/serviceTypeUpdateDetailsOrderSlice";
-import { DetailsOrderSliceNameType } from "@/app/types/data/details.type";
+import { DetailsOrderSliceNameType, DetailsRedactorType } from "@/app/types/data/details.type";
 import {
 	resetNewsFromData,
 	setNewsFormBackgroundImage,
@@ -64,9 +64,26 @@ import {
 	setServiceTypeCreateFormTitle,
 } from "@/app/utils/redux/services/serviceTypeCreateFormSlice";
 import { useMemo } from "react";
+import {
+	addPrivacyPolicyDetailsComponent,
+	removePrivacyPolicyDetailsComponent,
+	resetPrivacyPolicyDetailsComponentsOrder,
+	setPrivacyPolicyDetailsComponentError,
+	setPrivacyPolicyDetailsStateOrder,
+	updatePrivacyPolicyDetailsComponent,
+} from "@/app/utils/redux/details/legal_information/privacyPolicyUpdateDetailsOrderSlice";
+import { updateLegalInformation } from "@/app/utils/redux/legal_information/legalInformationSlice";
+import {
+	addPublicOfferDetailsComponent,
+	removePublicOfferDetailsComponent,
+	resetPublicOfferDetailsComponentsOrder,
+	setPublicOfferDetailsComponentError,
+	setPublicOfferDetailsStateOrder,
+	updatePublicOfferDetailsComponent,
+} from "@/app/utils/redux/details/legal_information/publicOfferUpdateDetailsOrderSlice";
 
 export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
-	const actions = useMemo(() => {
+	return useMemo(() => {
 		switch (orderSliceName) {
 			// NEWS
 			case "newsCreateDetailsOrder":
@@ -106,8 +123,7 @@ export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
 					setBackgroundImage: setNewsUpdateFormBackgroundImage,
 
 					// RESET DATA
-					resetDetailsComponentsOrder:
-						resetNewsUpdateDetailsComponentsOrder,
+					resetDetailsComponentsOrder: resetNewsUpdateDetailsComponentsOrder,
 					resetFromData: resetNewsUpdateFromData,
 				};
 
@@ -119,8 +135,7 @@ export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
 					removeDetailsComponent: removeServiceTypeCreateDetailsComponent,
 					updateDetailsComponent: updateServiceTypeCreateDetailsComponent,
 					setDetailsStateOrder: setServiceTypeCreateDetailsStateOrder,
-					setDetailsComponentError:
-						setServiceTypeCreateDetailsComponentError,
+					setDetailsComponentError: setServiceTypeCreateDetailsComponentError,
 
 					// FORM SLICE
 					submitForm: setServiceTypeCreateFormDetails,
@@ -130,11 +145,9 @@ export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
 					setBackgroundImage: setServiceTypeCreateFormBackgroundImg,
 
 					// RESET DATA
-					resetDetailsComponentsOrder:
-						resetServiceTypeCreateDetailsComponentsOrder,
+					resetDetailsComponentsOrder: resetServiceTypeCreateDetailsComponentsOrder,
 					resetFromData: resetServiceTypeCreateFormData,
 				};
-
 			case "serviceTypeUpdateDetailsOrder":
 				return {
 					// DETAILS ORDER SLICE
@@ -142,8 +155,7 @@ export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
 					removeDetailsComponent: removeServiceTypeUpdateDetailsComponent,
 					updateDetailsComponent: updateServiceTypeUpdateDetailsComponent,
 					setDetailsStateOrder: setServiceTypeUpdateDetailsStateOrder,
-					setDetailsComponentError:
-						setServiceTypeUpdateDetailsComponentError,
+					setDetailsComponentError: setServiceTypeUpdateDetailsComponentError,
 
 					// FORM SLICE
 					submitForm: setServiceTypeUpdateFormDetails,
@@ -153,12 +165,42 @@ export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
 					setBackgroundImage: setServiceTypeUpdateFormBackgroundImg,
 
 					// RESET DATA
-					resetDetailsComponentsOrder:
-						resetServiceTypeUpdateDetailsComponentsOrder,
+					resetDetailsComponentsOrder: resetServiceTypeUpdateDetailsComponentsOrder,
 					resetFromData: resetServiceTypeUpdateFormData,
+				};
+			case "privacyPolicyUpdateDetailsOrder":
+				return {
+					// DETAILS ORDER SLICE
+					addDetailsComponent: addPrivacyPolicyDetailsComponent,
+					removeDetailsComponent: removePrivacyPolicyDetailsComponent,
+					updateDetailsComponent: updatePrivacyPolicyDetailsComponent,
+					setDetailsStateOrder: setPrivacyPolicyDetailsStateOrder,
+					setDetailsComponentError: setPrivacyPolicyDetailsComponentError,
+
+					// RESET DATA
+					resetDetailsComponentsOrder: resetPrivacyPolicyDetailsComponentsOrder,
+
+					// todo create slice and implement this method in details form
+					// MAKE REQUEST
+					updateData: (data: DetailsRedactorType) =>
+						updateLegalInformation({ data, field: "privacyPolicy" }),
+				};
+			case "publicOfferUpdateDetailsOrder":
+				return {
+					// DETAILS ORDER SLICE
+					addDetailsComponent: addPublicOfferDetailsComponent,
+					removeDetailsComponent: removePublicOfferDetailsComponent,
+					updateDetailsComponent: updatePublicOfferDetailsComponent,
+					setDetailsStateOrder: setPublicOfferDetailsStateOrder,
+					setDetailsComponentError: setPublicOfferDetailsComponentError,
+
+					// RESET DATA
+					resetDetailsComponentsOrder: resetPublicOfferDetailsComponentsOrder,
+
+					// MAKE REQUEST
+					updateData: (data: DetailsRedactorType) =>
+						updateLegalInformation({ data, field: "publicOffer" }),
 				};
 		}
 	}, [orderSliceName]);
-
-	return actions;
 }
