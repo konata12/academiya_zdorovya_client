@@ -26,6 +26,8 @@ import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDeta
 import _ from "lodash";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
 import { clear } from "idb-keyval";
+import Link from "next/link";
+import { useCheckIfNewsUpdateFormDataChanged } from "@/app/utils/hooks/admin/serviceForm/useCheckIfNewsUpdateFormDataChanged";
 
 const titles = ["Стан вмісту", "Опції"];
 const indexedDBStoreName = "news_update_images";
@@ -45,6 +47,8 @@ export default function UpdateNewsForm() {
 	const { setFormError, resetDetailsComponentsOrder, resetFromData } =
 		useDetailsFormSlice(detailsOrderSliceName);
 
+	useCheckIfNewsUpdateFormDataChanged();
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const errorsData: {
@@ -53,58 +57,60 @@ export default function UpdateNewsForm() {
 		}[] = [];
 
 		// FORM VALIDATION
-		if (!title.length) {
-			dispatch(
-				setFormError({
-					field: NewsFormDataEnum.TITLE,
-					message: "Введіть повну назву",
-				}),
-			);
+		if (setFormError) {
+			if (!title.length) {
+				dispatch(
+					setFormError({
+						field: NewsFormDataEnum.TITLE,
+						message: "Введіть повну назву",
+					}),
+				);
 
-			errorsData.push({
-				id: NewsFormDataEnum.TITLE,
-				error: { message: "Введіть повну назву" },
-			});
-		}
-		if (!description.length) {
-			dispatch(
-				setFormError({
-					field: NewsFormDataEnum.DESCRIPTION,
-					message: "Введіть опис",
-				}),
-			);
+				errorsData.push({
+					id: NewsFormDataEnum.TITLE,
+					error: { message: "Введіть повну назву" },
+				});
+			}
+			if (!description.length) {
+				dispatch(
+					setFormError({
+						field: NewsFormDataEnum.DESCRIPTION,
+						message: "Введіть опис",
+					}),
+				);
 
-			errorsData.push({
-				id: NewsFormDataEnum.DESCRIPTION,
-				error: { message: "Введіть опис" },
-			});
-		}
-		if (!backgroundImg) {
-			dispatch(
-				setFormError({
-					field: NewsFormDataEnum.BACKGROUNDIMG,
-					message: "Добавте зображення",
-				}),
-			);
+				errorsData.push({
+					id: NewsFormDataEnum.DESCRIPTION,
+					error: { message: "Введіть опис" },
+				});
+			}
+			if (!backgroundImg) {
+				dispatch(
+					setFormError({
+						field: NewsFormDataEnum.BACKGROUNDIMG,
+						message: "Добавте зображення",
+					}),
+				);
 
-			// SCROLL TO INPUT
-			errorsData.push({
-				id: NewsFormDataEnum.BACKGROUNDIMG,
-				error: { message: "Добавте зображення" },
-			});
-		}
-		if (!details) {
-			dispatch(
-				setFormError({
-					field: NewsFormDataEnum.DETAILS,
-					message: "Створіть вміст новини",
-				}),
-			);
+				// SCROLL TO INPUT
+				errorsData.push({
+					id: NewsFormDataEnum.BACKGROUNDIMG,
+					error: { message: "Добавте зображення" },
+				});
+			}
+			if (!details) {
+				dispatch(
+					setFormError({
+						field: NewsFormDataEnum.DETAILS,
+						message: "Створіть вміст новини",
+					}),
+				);
 
-			errorsData.push({
-				id: NewsFormDataEnum.DETAILS,
-				error: { message: "Створіть вміст новини" },
-			});
+				errorsData.push({
+					id: NewsFormDataEnum.DETAILS,
+					error: { message: "Створіть вміст новини" },
+				});
+			}
 		}
 
 		// FORM VALIDATION
@@ -141,14 +147,15 @@ export default function UpdateNewsForm() {
 		const oldNews = news.find((news) => `${news.id}` === id);
 		let oldData: CreateNewsFormData | undefined = undefined;
 		if (oldNews) {
-			const { id, createdAt, ...oldNewsData } = oldNews;
+			const { id, createdAt, isBannerNews, ...oldNewsData } = oldNews;
 			oldData = oldNewsData;
 		}
 
-		const dataIsEuqal = _.isEqual(data, oldData);
+		const dataIsEqual = _.isEqual(data, oldData);
+		console.log("DATA", data, oldData);
 
 		// IF DATA HASN'T CHANGED SET ERROR AND RETURN
-		if (dataIsEuqal) {
+		if (dataIsEqual) {
 			dispatch(setNewsUpdateError());
 			return;
 		}
@@ -164,7 +171,7 @@ export default function UpdateNewsForm() {
 			// CLEAR DATA
 			clear(getIndexedDBStoreForImages("news_update_images"));
 			dispatch(resetDetailsComponentsOrder());
-			dispatch(resetFromData());
+			if (resetFromData) dispatch(resetFromData());
 			router.push("../");
 		}
 	};
@@ -239,9 +246,9 @@ export default function UpdateNewsForm() {
 						<TableLine>
 							<span>Не створений</span>
 
-							<SafeLink className={`btn blue sm`} href={`${pathname}/details`}>
+							<Link className={`btn blue sm`} href={`${pathname}/details`}>
 								Створити вміст
-							</SafeLink>
+							</Link>
 						</TableLine>
 					</CommonTable>
 				</ErrorWrapper>

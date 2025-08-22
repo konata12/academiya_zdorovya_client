@@ -69,7 +69,7 @@ export default function CreateDepartmentForm() {
 				/>
 				<HookFormInputContainer<DepartmentsFormData>
 					label="Посилання на гугл карти"
-					name={DepartmentsFormDataEnum.GOOGLEMAPURSL}
+					name={DepartmentsFormDataEnum.GOOGLEMAPURL}
 					register={register}
 					errors={errors}
 					registerOptions={{

@@ -6,7 +6,7 @@ import { RootState } from "@/app/utils/redux/store";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
 import { useOrderedForm } from "@/app/utils/hooks/admin/detailsForm/useOrderedForm";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import {
 	DescriptionImage,
@@ -37,6 +37,7 @@ import DetailsImageInput from "@/app/admin/(provider)/ui/Forms/details/inputs/de
 import { FormInputError } from "@/app/types/data/form.type";
 import { useServiceFormsDataCheckChange } from "@/app/utils/hooks/admin/serviceForm/useServiceFormsDataCheckChange";
 import { fulfilled } from "@/app/services/response.service";
+import { checkIfDetailsFormDataChanged } from "@/app/utils/hooks/admin/detailsForm/useCheckIfDetailsFormDataChanged";
 
 export default function DetailsForm({
 	titles,
@@ -56,8 +57,18 @@ export default function DetailsForm({
 
 	const router = useRouter();
 	const pathname = usePathname();
+	const { id, serviceTypeIndex } = useParams<{
+		id: string | undefined;
+		serviceTypeIndex: string | undefined;
+	}>();
 	const dispatch = useAppDispatch();
 	const isCreatePage = pathname.includes("create");
+	const formDataIsEqualToOldData = checkIfDetailsFormDataChanged({
+		order,
+		orderSliceName,
+		id,
+		serviceTypeIndex,
+	});
 
 	const { handleDragEnd } = useOrderedForm(orderSliceName);
 	const {
@@ -76,7 +87,6 @@ export default function DetailsForm({
 		if (order.length >= 1) setSubmitError({ message: "" });
 	}, [order]);
 
-	// todo add check for news and legal_information forms
 	// CHECK FORM CHANGED DATA BEFORE CHANGING PAGE
 	if (!isCreatePage) {
 		if (pathname.includes("serviceType")) useServiceFormsDataCheckChange();
@@ -279,6 +289,12 @@ export default function DetailsForm({
 			lists,
 			images,
 		};
+
+		// CHECK IF DATA CHANGED
+		if (formDataIsEqualToOldData) {
+			setSubmitError({ message: "Дані ті самі, спочатку змініть значення" });
+			return;
+		}
 
 		// TRANSFER DETAILS DATA TO ANOTHER FORM IF IT IS CONNECTED
 		if (submitForm) dispatch(submitForm(parsedFormData));

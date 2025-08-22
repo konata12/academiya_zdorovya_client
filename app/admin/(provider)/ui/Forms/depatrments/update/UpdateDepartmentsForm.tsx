@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./UpdateDepartmentsForm.module.scss";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
 import { GOOGLE_MAPS_URL, PHONE_NUMBER } from "@/app/utils/regex";
@@ -22,12 +22,9 @@ import { isEqual } from "lodash";
 import HookFormInputContainer from "@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm";
 import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
 import { fulfilled } from "@/app/services/response.service";
-import { useFormChangeCheck } from "@/app/utils/hooks/common/useFormChangeCheck";
+import { useCheckIfDepartmentFormDataChanged } from "@/app/utils/hooks/admin/departmentForm/useCheckIfDepartmentFormDataChanged";
 
 export default function UpdateDepartmentForm() {
-	const [formDefaultValues, setFormDefaultValues] = useState(true);
-	const formDefaultValuesRef = useRef(formDefaultValues);
-
 	const { departments, error } = useAppSelector((state: RootState) => state.departments);
 
 	const dispatch = useAppDispatch();
@@ -35,7 +32,7 @@ export default function UpdateDepartmentForm() {
 
 	const { id } = useParams(); // get departments id from url
 	const department = departments.find((department) => {
-		if (id) return department.id === +id;
+		if (id) return `${department.id}` === id;
 	});
 
 	const {
@@ -62,15 +59,15 @@ export default function UpdateDepartmentForm() {
 		}
 	}, [department, reset]);
 
-	// CHECK IF FORM DATA IS DEFAULT
-	useFormChangeCheck(department, formValues);
+	// CHECK IF FORM DATA IS CHANGED
+	const formHasDefaultValues = useCheckIfDepartmentFormDataChanged(formValues);
 
 	const updateDepartment: SubmitHandler<DepartmentsFormData> = async (data) => {
 		const id = `${department?.id}`;
 		// CHECK IF DATA UPDATED
 		if (department) {
 			//  IF NOT UPDATED NOT ALLOW REQUEST
-			if (formDefaultValues) {
+			if (formHasDefaultValues) {
 				dispatch(setUpdateError());
 				return;
 			}
@@ -127,7 +124,7 @@ export default function UpdateDepartmentForm() {
 				/>
 				<HookFormInputContainer<DepartmentsFormData>
 					label="Посилання на гугл карти"
-					name={DepartmentsFormDataEnum.GOOGLEMAPURSL}
+					name={DepartmentsFormDataEnum.GOOGLEMAPURL}
 					register={register}
 					errors={errors}
 					registerOptions={{

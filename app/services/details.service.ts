@@ -333,7 +333,6 @@ export function parseDetailsResponseToOrderComponentArray(
 		},
 	);
 	const parsedLists: ListOrderComponent[] = details.lists.map((list) => {
-		console.log("list[ListFormDataEnum.OPTIONS]", list[ListFormDataEnum.OPTIONS]);
 		return {
 			type: DetailsFormDataEnum.LISTS,
 			data: {
@@ -348,7 +347,6 @@ export function parseDetailsResponseToOrderComponentArray(
 			},
 		};
 	});
-	console.log("parsedLists", parsedLists);
 	const parsedImages: ImageOrderComponent[] = details.images.map((image) => {
 		return {
 			type: DetailsFormDataEnum.IMAGES,

@@ -180,7 +180,6 @@ export function useDetailsFormSlice(orderSliceName: DetailsOrderSliceNameType) {
 					// RESET DATA
 					resetDetailsComponentsOrder: resetPrivacyPolicyDetailsComponentsOrder,
 
-					// todo create slice and implement this method in details form
 					// MAKE REQUEST
 					updateData: (data: DetailsRedactorType) =>
 						updateLegalInformation({ data, field: "privacyPolicy" }),

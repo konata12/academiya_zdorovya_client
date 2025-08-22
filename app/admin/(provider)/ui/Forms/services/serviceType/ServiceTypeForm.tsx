@@ -56,10 +56,7 @@ export default function ServiceTypeForm({
 		: "service_update_images";
 	const { title, description, backgroundImg, details } = data;
 
-	const handleChange = useServiceTypeFormHandleChange(
-		indexedDBStoreName,
-		detailsSliceName,
-	);
+	const handleChange = useServiceTypeFormHandleChange(indexedDBStoreName, detailsSliceName);
 	const { setServiceTypesValue, setServiceTypeDetailsInitialDataOnLink } =
 		useServiceTypeFormSlice(detailsSliceName);
 	const { setFormError } = useDetailsFormSlice(detailsSliceName);
@@ -90,58 +87,60 @@ export default function ServiceTypeForm({
 		}[] = [];
 
 		// FORM VALIDATION
-		if (!title.length) {
-			dispatch(
-				setFormError({
-					field: ServiceTypesEnum.TITLE,
-					message: "Введіть повну назву",
-				}),
-			);
+		if (setFormError) {
+			if (!title.length) {
+				dispatch(
+					setFormError({
+						field: ServiceTypesEnum.TITLE,
+						message: "Введіть повну назву",
+					}),
+				);
 
-			errorsData.push({
-				id: ServiceTypesEnum.TITLE,
-				error: { message: "Введіть повну назву" },
-			});
-		}
-		if (!description.length) {
-			dispatch(
-				setFormError({
-					field: ServiceTypesEnum.DESCRIPTION,
-					message: "Введіть опис",
-				}),
-			);
+				errorsData.push({
+					id: ServiceTypesEnum.TITLE,
+					error: { message: "Введіть повну назву" },
+				});
+			}
+			if (!description.length) {
+				dispatch(
+					setFormError({
+						field: ServiceTypesEnum.DESCRIPTION,
+						message: "Введіть опис",
+					}),
+				);
 
-			errorsData.push({
-				id: ServiceTypesEnum.DESCRIPTION,
-				error: { message: "Введіть опис" },
-			});
-		}
-		if (!backgroundImg) {
-			dispatch(
-				setFormError({
-					field: ServiceTypesEnum.BACKGROUNDIMG,
-					message: "Добавте зображення",
-				}),
-			);
+				errorsData.push({
+					id: ServiceTypesEnum.DESCRIPTION,
+					error: { message: "Введіть опис" },
+				});
+			}
+			if (!backgroundImg) {
+				dispatch(
+					setFormError({
+						field: ServiceTypesEnum.BACKGROUNDIMG,
+						message: "Добавте зображення",
+					}),
+				);
 
-			// SCROLL TO INPUT
-			errorsData.push({
-				id: ServiceTypesEnum.BACKGROUNDIMG,
-				error: { message: "Добавте зображення" },
-			});
-		}
-		if (!details) {
-			dispatch(
-				setFormError({
-					field: ServiceTypesEnum.DETAILS,
-					message: "Створіть вміст послуги",
-				}),
-			);
+				// SCROLL TO INPUT
+				errorsData.push({
+					id: ServiceTypesEnum.BACKGROUNDIMG,
+					error: { message: "Добавте зображення" },
+				});
+			}
+			if (!details) {
+				dispatch(
+					setFormError({
+						field: ServiceTypesEnum.DETAILS,
+						message: "Створіть вміст послуги",
+					}),
+				);
 
-			errorsData.push({
-				id: ServiceTypesEnum.DETAILS,
-				error: { message: "Створіть вміст послуги" },
-			});
+				errorsData.push({
+					id: ServiceTypesEnum.DETAILS,
+					error: { message: "Створіть вміст послуги" },
+				});
+			}
 		}
 
 		// SCROLL TO ERROR INPUT
@@ -150,18 +149,14 @@ export default function ServiceTypeForm({
 			// SCROLL TO INPUT
 			if (errorsData[0].id === ServiceTypesEnum.BACKGROUNDIMG) {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).labels?.[0].scrollIntoView({
 					behavior: "smooth",
 					block: "center",
 				});
 			} else {
 				(
-					document.querySelector(
-						`#${errorsData[0].id}`,
-					) as HTMLInputElement
+					document.querySelector(`#${errorsData[0].id}`) as HTMLInputElement
 				).scrollIntoView({
 					behavior: "smooth",
 					block: "center",
@@ -248,11 +243,7 @@ export default function ServiceTypeForm({
 				<p className={`title sm left ${styles.title}`}>Вміст новини</p>
 
 				<ErrorWrapper
-					error={
-						errors.details.message.length
-							? errors.details.message
-							: undefined
-					}
+					error={errors.details.message.length ? errors.details.message : undefined}
 					className={{
 						errorWrapper: styles.detailsErrorWrap,
 					}}
@@ -277,9 +268,7 @@ export default function ServiceTypeForm({
 			</div>
 
 			<div className={styles.preview}>
-				<p className={`title sm left ${styles.title}`}>
-					Попередній перегляд
-				</p>
+				<p className={`title sm left ${styles.title}`}>Попередній перегляд</p>
 
 				<Link
 					className={`btn blue sm`}

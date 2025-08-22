@@ -28,7 +28,7 @@ export enum DepartmentsFormDataEnum {
 	CITY = "city",
 	HOTLINE = "hotline",
 	ADDRESS = "address",
-	GOOGLEMAPURSL = "googleMapUrl",
+	GOOGLEMAPURL = "googleMapUrl",
 	GOOGLEMAPREVIEWSURL = "googleMapReviewsUrl",
 }
 
