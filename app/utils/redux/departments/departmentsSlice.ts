@@ -15,6 +15,7 @@ const initialState: DepartmentsInit = {
 
 	status: {
 		getAll: null,
+		getAllWithRelations: null,
 		getOne: null,
 		create: null,
 		delete: null,
@@ -22,6 +23,7 @@ const initialState: DepartmentsInit = {
 	},
 	error: {
 		getAll: null,
+		getAllWithRelations: null,
 		getOne: null,
 		create: null,
 		delete: [],
@@ -42,8 +44,26 @@ export const fetchDepartments = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
+					statusCode: error.status || 500,
+				};
+				return rejectWithValue(serializableError);
+			}
+		}
+	},
+);
+export const fetchDepartmentsWithRelations = createAsyncThunk(
+	"departments/fetchDepartmentsWithRelations",
+	async (_, { rejectWithValue }) => {
+		try {
+			const response = await axiosInstance.get<Department[]>(`${baseUrl}/withRelations`);
+			console.log(response);
+			return response.data;
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				console.log(error);
+				const serializableError: ErrorResponse = {
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -56,17 +76,14 @@ export const fetchOneDepartment = createAsyncThunk(
 	"departments/getOne",
 	async (id: string, { rejectWithValue }) => {
 		try {
-			const response = await axiosInstance.get<Department[]>(
-				`${baseUrl}/admin/${id}`,
-			);
+			const response = await axiosInstance.get<Department[]>(`${baseUrl}/admin/${id}`);
 			// console.log(response)
 			return response.data;
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -88,8 +105,7 @@ export const createDepartment = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -118,8 +134,7 @@ export const updateDepartment = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -139,8 +154,7 @@ export const deleteDepartment = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 					id,
 				};
@@ -203,15 +217,35 @@ const departmentsSlice = createSlice({
 						state.departmentsIsModalOpen = new Array(
 							state.departments.length,
 						).fill(false);
-						state.error.delete = new Array(
-							state.departments.length,
-						).fill(null);
+						state.error.delete = new Array(state.departments.length).fill(null);
 					}
 				},
 			)
 			.addCase(fetchDepartments.rejected, (state, action) => {
 				state.status.getAll = "failed";
 				state.error.getAll = action.payload as ErrorResponse;
+			})
+			// GET ALL DEPARTMENTS WITH RELATIONS
+			.addCase(fetchDepartmentsWithRelations.pending, (state) => {
+				state.status.getAllWithRelations = "loading";
+				state.error.getAllWithRelations = null;
+			})
+			.addCase(
+				fetchDepartmentsWithRelations.fulfilled,
+				(state, action: PayloadAction<Department[] | undefined>) => {
+					state.status.getAllWithRelations = "succeeded";
+					if (action.payload) {
+						state.departments = action.payload;
+						state.departmentsIsModalOpen = new Array(
+							state.departments.length,
+						).fill(false);
+						state.error.delete = new Array(state.departments.length).fill(null);
+					}
+				},
+			)
+			.addCase(fetchDepartmentsWithRelations.rejected, (state, action) => {
+				state.status.getAllWithRelations = "failed";
+				state.error.getAllWithRelations = action.payload as ErrorResponse;
 			})
 
 			// GET ONE DEPARTMENTS

@@ -30,7 +30,7 @@ export default function UpdateDepartmentForm() {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 
-	const { id } = useParams(); // get departments id from url
+	const { id } = useParams();
 	const department = departments.find((department) => {
 		if (id) return `${department.id}` === id;
 	});

@@ -4,12 +4,8 @@ import { FormInputError } from "@/app/types/data/form.type";
 import { ErrorsResponses, Status } from "@/app/types/data/response.type";
 import { OrderElementBasicType } from "@/app/utils/hooks/admin/dragAndDrop/useOrderedList";
 
-export type ServiceFormIndexedDBType =
-	| "service_create_images"
-	| "service_update_images";
-export type ServiceTypesSliceNameType =
-	| "serviceTypeCreateForm"
-	| "serviceTypeUpdateForm";
+export type ServiceFormIndexedDBType = "service_create_images" | "service_update_images";
+export type ServiceTypesSliceNameType = "serviceTypeCreateForm" | "serviceTypeUpdateForm";
 export type ServiceTypesDetailsSliceNameType =
 	| "serviceTypeCreateDetailsOrder"
 	| "serviceTypeUpdateDetailsOrder";
@@ -31,8 +27,7 @@ export interface ServiceResponseData extends Service {
 	treatmentStages: ServiceTreatmentStageResponseData[];
 }
 
-export interface ServiceTreatmentStageResponseData
-	extends ServiceTreatmentStageType {}
+export interface ServiceTreatmentStageResponseData extends ServiceTreatmentStageType {}
 export interface ServiceTypeResponseData extends ServiceType {
 	backgroundImg: string;
 	details: DetailsRedactorType;
@@ -98,9 +93,7 @@ export interface ServiceFormData {
 	errors: ServiceFormDataErrors;
 }
 
-export interface ServiceTypeServiceFormData
-	extends DraggableComponent,
-		ServiceTypeBasicType {
+export interface ServiceTypeServiceFormData extends DraggableComponent, ServiceTypeBasicType {
 	backgroundImg: string;
 	details: DetailsRedactorType;
 }
@@ -109,9 +102,7 @@ export interface ServiceEmployeeFormData
 		ServiceEmployeeBasicType {}
 
 // SERVICE TYPES FORM DATA
-export interface ServiceTypeFormData
-	extends DraggableComponent,
-		ServiceTypeBasicType {
+export interface ServiceTypeFormData extends DraggableComponent, ServiceTypeBasicType {
 	errors: {
 		title: FormInputError;
 		description: FormInputError;
@@ -167,10 +158,8 @@ export interface UpdateServiceTypesFormData extends CreateServiceTypesFormData {
 	id: number;
 }
 
-export interface CreateServiceEmployeesFormData
-	extends ServiceEmployeeResponseData {}
-export interface UpdateServiceEmployeesFormData
-	extends CreateServiceEmployeesFormData {}
+export interface CreateServiceEmployeesFormData extends ServiceEmployeeResponseData {}
+export interface UpdateServiceEmployeesFormData extends CreateServiceEmployeesFormData {}
 
 // CREATE/UPDATE FORM DATA SLICE TYPES
 export type ServiceStringKeysType =
@@ -246,3 +235,9 @@ export type ServiceTreatmentStageEnumType = `${ServiceTreatmentStageEnum}`;
 export type ServiceTypesEnumType = `${ServiceTypesEnum}`;
 export type ServiceFormDataUICheckboxesType = `${ServiceFormDataUICheckboxesEnum}`;
 export type ServiceModalsStatesType = `${ServiceFormDataUIModalsStatesEnum}`;
+
+// DEPARTMENT
+export type ServicesDataNotIncludedInDepartmentSelectionType = Exclude<
+	ServiceFormDataEnumType,
+	"id" | ServiceFormDataEnum.TITLE
+>;

@@ -13,22 +13,17 @@ export default function Header() {
 
 	return (
 		<div className={`${styles.header}`}>
-			<div
-				className={`container ${styles.container} ${isLoginPage && styles.login}`}
-			>
+			<div className={`container ${styles.container} ${isLoginPage && styles.login}`}>
 				<div className={styles.logo}>
 					<Image src={logo} alt="logo" />
 				</div>
 
 				<div className={styles.links}>
-					<NavLink
-						url="/admin/departments"
-						urlsForActive={urlsForRedactive}
-					>
+					<NavLink url="/admin/departments" urlsForActive={urlsForRedactive}>
 						Редактор сайту
 					</NavLink>
 					<NavLink url="/admin/bookings">Записи на прийом(число)</NavLink>{" "}
-					{/* must load from database amount of appointments */}
+					{/* todo must load from database amount of appointments */}
 				</div>
 			</div>
 		</div>

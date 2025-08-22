@@ -7,7 +7,7 @@ import UpdateServiceForm from "@/app/admin/(provider)/ui/Forms/services/update/U
 export default function page() {
 	return (
 		<div className={styles.FormPage}>
-			<div className={styles.titleContainer}>
+			<div className="titleContainerWithReturnBtn">
 				<p className={`title left md`}>Редагувати послугу</p>
 			</div>
 			<UpdateServiceForm />

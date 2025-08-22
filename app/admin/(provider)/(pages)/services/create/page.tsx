@@ -7,7 +7,7 @@ import CreateServicesForm from "@/app/admin/(provider)/ui/Forms/services/create/
 export default function page() {
 	return (
 		<div className={styles.FormPage}>
-			<div className={styles.titleContainer}>
+			<div className="titleContainerWithReturnBtn">
 				<p className={`title left md`}>Додати послугу</p>
 			</div>
 			<CreateServicesForm />

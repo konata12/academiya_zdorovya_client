@@ -1,9 +1,7 @@
 import { FormInputError } from "@/app/types/data/form.type";
 import { ErrorsResponses, Status } from "@/app/types/data/response.type";
 
-export type EmployeeFormIndexedDBType =
-	| "employee_create_images"
-	| "employee_update_images";
+export type EmployeeFormIndexedDBType = "employee_create_images" | "employee_update_images";
 // GENERAL TYPES
 export interface Employee {
 	id: number;
@@ -173,3 +171,12 @@ export enum EmployeesFormDataUIModalsStatesEnum {
 	WORKSPECIALITYSMODALISOPEN = "workSpecialitysModalIsOpen",
 	ACHIVEMENTSISMODALISOPEN = "achivementsModalIsOpen",
 }
+
+// DEPARTMENT
+export type EmployeesDataNotIncludedInDepartmentSelectionType = Exclude<
+	EmployeesFormDataEnumType,
+	| "id"
+	| EmployeesFormDataEnum.NAME
+	| EmployeesFormDataEnum.SURNAME
+	| EmployeesFormDataEnum.POSITION
+>;

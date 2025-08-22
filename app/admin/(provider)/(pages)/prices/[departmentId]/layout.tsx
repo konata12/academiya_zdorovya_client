@@ -87,7 +87,7 @@ export default function page({
 				<p className={`title lg ${styles.title}`}>
 					{department?.city}, {department?.address}
 				</p>
-				<SafeLink className={`btn blue md backBtn`} href="/admin/prices">
+				<SafeLink className={`btn blue md returnBtn`} href="/admin/prices">
 					Назад
 					<RightArrow />
 				</SafeLink>

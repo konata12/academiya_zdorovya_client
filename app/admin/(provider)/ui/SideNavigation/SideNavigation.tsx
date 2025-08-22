@@ -2,7 +2,7 @@ import { useAppSelector } from "@/app/utils/redux/hooks";
 import styles from "./SideNavigation.module.scss";
 import SideNavButton from "@/app/admin/(provider)/ui/SideNavigation/SideNavButton/SideNavButton";
 import { RootState } from "@/app/utils/redux/store";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useCallback } from "react";
 
 type Route = {
@@ -13,7 +13,7 @@ type Route = {
 
 export const routes: Route[] = [
 	{ label: "Відділення", path: "/admin/departments" },
-	{ label: "Наповнення відділення", path: "/admin/fill_departments" },
+	{ label: "Наповнення відділення", path: "/admin/departments_content", checkRender: true },
 	{ label: "Юридична інформація", path: "/admin/legal_information", checkRender: true },
 	{ label: "Що лікуємо", path: "/admin/about_treatment" },
 	{ label: "Лікарі", path: "/admin/employees" },
@@ -29,6 +29,8 @@ export default function SideNavigation() {
 	const { accessToken } = useAppSelector((state: RootState) => state.auth);
 
 	const pathname = usePathname();
+	const { id } = useParams<{ id: string | undefined }>();
+
 	const pathArray = pathname.split("/");
 	const isLoginPage = pathArray[2] === "login";
 
@@ -48,6 +50,10 @@ export default function SideNavigation() {
 				route.path === "/admin/services" &&
 				!pathname.includes("serviceType")
 			) {
+				return false;
+			}
+			// ELSE IF DETAILS CONTENT PAGE
+			else if (route && pathname.includes("/admin/departments_content") && id) {
 				return false;
 			}
 

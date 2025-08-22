@@ -2,16 +2,15 @@
 
 import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
 import React from "react";
-import styles from "./page.module.scss";
 import DetailsForm from "@/app/admin/(provider)/ui/Forms/details/DetailsForm";
 import { RightArrow } from "@/app/common_ui/images/RightArrow";
 
 export default function page() {
 	return (
 		<div>
-			<div className={styles.titleContainer}>
+			<div className="titleContainerWithReturnBtn">
 				<p className={`title left md`}>Публічна оферта</p>
-				<SafeLink className="btn blue md backBtn" href="./">
+				<SafeLink className="btn blue md returnBtn" href="./">
 					Назад
 					<RightArrow />
 				</SafeLink>
