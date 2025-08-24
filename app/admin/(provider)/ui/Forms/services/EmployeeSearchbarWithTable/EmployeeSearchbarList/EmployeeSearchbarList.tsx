@@ -19,10 +19,7 @@ interface EmployeeSearchbarListProps {
 	query: string;
 }
 
-export function EmployeeSearchbarList({
-	showList,
-	query,
-}: EmployeeSearchbarListProps) {
+export function EmployeeSearchbarList({ showList, query }: EmployeeSearchbarListProps) {
 	const [result, setResult] = useState<ServiceEmployeeBasicType[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<ErrorResponse | null>(null);
@@ -39,7 +36,7 @@ export function EmployeeSearchbarList({
 		try {
 			setLoading(true);
 			const response = await axiosInstance.get<ServiceEmployeeBasicType[]>(
-				`employees/admin/getForService`,
+				`employees/admin/getBasicData`,
 			);
 			setResult(response.data);
 			setLoading(false);
@@ -48,8 +45,7 @@ export function EmployeeSearchbarList({
 			if (error instanceof AxiosError) {
 				console.error(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				setError(serializableError);
@@ -75,9 +71,7 @@ export function EmployeeSearchbarList({
 		return error?.message || "Помилка при отриманні працівників";
 	};
 
-	const filteredEmployees = result.filter((employee) =>
-		employee.name.includes(query),
-	);
+	const filteredEmployees = result.filter((employee) => employee.name.includes(query));
 
 	return (
 		<AnimatePresenseWithDynamicHeight
@@ -86,11 +80,9 @@ export function EmployeeSearchbarList({
 				absoluteContainer: styles.container,
 			}}
 		>
-			{loading && (
-				<div className={`${styles.line} ${styles.center}`}>Загрузка...</div>
-			)}
+			{loading && <div className={`${styles.line} ${styles.center}`}>Загрузка...</div>}
 
-			{false ? (
+			{error ? (
 				<div className={`${styles.line} ${styles.center} ${styles.error}`}>
 					{errorUIMessage()}
 				</div>

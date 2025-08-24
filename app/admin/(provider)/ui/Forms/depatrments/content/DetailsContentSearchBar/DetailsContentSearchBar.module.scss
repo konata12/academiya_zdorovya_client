@@ -1,0 +1,70 @@
+@use '../../../../../../../styles/variables' as *;
+
+.searchBarContainer {
+
+	.serachBarTitle {
+		display: inline-block;
+		width: 100%;
+		margin: 64px 0 32px;
+	}
+
+	.searchBar {
+		position: relative;
+		margin-bottom: 10px;
+		border-radius: $pc-input-border-rad;
+
+		.magnifyingGlass {
+			position: absolute;
+			top: 50%;
+			left: 28px;
+			transform: translateY(-50%);
+		}
+
+		.input {
+			width: 100%;
+			padding-left: 58px;
+
+			&.on {
+				outline: 2px $primary-color solid;
+			}
+		}
+
+		.arrow {
+			position: absolute;
+			top: 50%;
+			right: 28px;
+			transform: translateY(-50%);
+
+			border: none;
+			outline: none;
+			background-color: transparent;
+			transition: all $slow $anim-time;
+
+			&.on {
+				transform: translateY(-50%) rotate(180deg); // Combine transforms
+			}
+
+			.svg {
+				display: block;
+				transition: all $slow $anim-time;
+
+				path {
+					fill: $text-color-black;
+					stroke: $text-color-black;
+					stroke-width: 0.3;
+					transition: all $slow $anim-time;
+				}
+
+				&.on {
+					fill: $primary-color;
+					stroke: $primary-color;
+
+					path {
+						fill: $primary-color;
+						stroke: $primary-color;
+					}
+				}
+			}
+		}
+	}
+}

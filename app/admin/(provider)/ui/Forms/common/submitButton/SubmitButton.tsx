@@ -13,12 +13,16 @@ interface SubmitButtonProps {
 	error: ErrorResponse | FormInputError | null;
 	className?: Styles;
 	label?: string;
+	type?: "button" | "reset" | "submit";
+	onClick?: () => void;
 }
 
 export default function SubmitButton({
 	error,
 	className,
 	label = "Створити",
+	type = "submit",
+	onClick,
 }: SubmitButtonProps) {
 	return (
 		<div className={`${styles.formErrorWrap} ${className?.container}`}>
@@ -29,7 +33,8 @@ export default function SubmitButton({
 			)}
 			<button
 				className={`btn blue xl ${styles.submit} ${className?.button}`}
-				type="submit"
+				type={type}
+				onClick={onClick}
 			>
 				{label}
 			</button>

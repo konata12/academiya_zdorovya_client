@@ -40,16 +40,6 @@ export const componentVisibilityAndHeightAnimationVariants = (height: number): V
 		}, // Exit state (hidden)
 	};
 };
-export const errorAnimationVariants = componentVisibleAnimationVariants;
-
-// ABOUT TREATMENT CREATE FORM
-export const aboutTreatmentTitleVariants = componentVisibilityAndHeightAnimationVariants;
-
-// PRICE SECTION CREATE FORM
-export const priceSectionTitleVariants = componentHeightAnimationVariants;
-export const priceSectionPriceVariantVariants = componentHeightAnimationVariants;
-export const optionalServiceVariants = componentVisibleAnimationVariants;
-export const priceFieldsVariants = componentVisibleAnimationVariants;
 
 // COMPONENTS
 // COMMON UI

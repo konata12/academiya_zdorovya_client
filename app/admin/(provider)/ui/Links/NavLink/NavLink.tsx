@@ -24,10 +24,7 @@ export default function NavLink({
 
 	return (
 		<div className={`${styles.link} ${isActive ? styles.active : ""}`}>
-			<SafeLink
-				className={`${styles.url} ${isActive ? styles.active : ""}`}
-				href={url}
-			>
+			<SafeLink className={`${styles.url} ${isActive ? styles.active : ""}`} href={url}>
 				{children}
 			</SafeLink>
 			<div className={`${styles.bottom}`}></div>

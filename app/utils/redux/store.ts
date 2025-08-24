@@ -44,6 +44,7 @@ import pricesUpdateFormSlice from "@/app/utils/redux/prices/pricesUpdateFormSlic
 import legalInformationSlice from "@/app/utils/redux/legal_information/legalInformationSlice";
 import publicOfferUpdateDetailsOrderSlice from "@/app/utils/redux/details/legal_information/publicOfferUpdateDetailsOrderSlice";
 import privacyPolicyUpdateDetailsOrderSlice from "@/app/utils/redux/details/legal_information/privacyPolicyUpdateDetailsOrderSlice";
+import departmentsContentFormSlice from "@/app/utils/redux/departments/departmentsContentFormSlice";
 
 // REDUCERS
 
@@ -64,6 +65,9 @@ const rootReducer = combineReducers({
 	// ABOUT TREATMENT CREATION
 	aboutTreatmentCreateForm: aboutTreatmentCreateFormSlice,
 	aboutTreatmentUpdateForm: aboutTreatmentUpdateFormSlice,
+
+	// DEPARTMENT CONTENT CREATION
+	departmentsContentForm: departmentsContentFormSlice,
 
 	// EMPLOYEE CREATION
 	employeeCreateForm: employeeCreateFormSlice,

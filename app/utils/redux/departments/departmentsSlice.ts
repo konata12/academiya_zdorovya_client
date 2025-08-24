@@ -1,7 +1,11 @@
 import {
 	Department,
+	DepartmentContentTableDataType,
+	DepartmentsBookingService,
+	DepartmentsEmployee,
 	DepartmentsFormData,
 	DepartmentsInit,
+	DepartmentsService,
 } from "@/app/types/data/departments.type";
 import { ErrorResponse } from "@/app/types/data/response.type";
 import axiosInstance from "@/app/utils/axios";
@@ -194,6 +198,20 @@ const departmentsSlice = createSlice({
 				...action.payload.data,
 			};
 		},
+		updateDepartmentInStateContent(
+			state,
+			action: {
+				payload: { id: string; data: DepartmentContentTableDataType };
+			},
+		) {
+			const { id, data } = action.payload;
+			const index = state.departments.findIndex(
+				(department) => id === `${department.id}`,
+			);
+			state.departments[index].bookingServices = data.bookingServices;
+			state.departments[index].employees = data.employees;
+			state.departments[index].services = data.services;
+		},
 		setUpdateError(state) {
 			state.error.update = {
 				message: "Дані ті самі, спочатку змініть значення",
@@ -235,11 +253,24 @@ const departmentsSlice = createSlice({
 				(state, action: PayloadAction<Department[] | undefined>) => {
 					state.status.getAllWithRelations = "succeeded";
 					if (action.payload) {
-						state.departments = action.payload;
-						state.departmentsIsModalOpen = new Array(
-							state.departments.length,
-						).fill(false);
-						state.error.delete = new Array(state.departments.length).fill(null);
+						state.departments = action.payload.map((department) => {
+							const { bookingServices, employees, services, ...otherData } =
+								department;
+
+							return {
+								...otherData,
+								bookingServices:
+									setOptionalValue<DepartmentsBookingService>(
+										bookingServices,
+									),
+								employees: setOptionalValue<DepartmentsEmployee>(employees),
+								services: setOptionalValue<DepartmentsService>(services),
+							};
+						});
+						state.departmentsIsModalOpen = new Array(action.payload.length).fill(
+							false,
+						);
+						state.error.delete = new Array(action.payload.length).fill(null);
 					}
 				},
 			)
@@ -356,6 +387,12 @@ export const {
 	closeDepartmentsModal,
 	setUpdateError,
 	updateDepartmentInState,
+	updateDepartmentInStateContent,
 } = departmentsSlice.actions;
 
 export default departmentsSlice.reducer;
+
+// OTHER
+function setOptionalValue<T>(arr: T[] | undefined): T[] | undefined {
+	return arr ? (arr.length ? arr : undefined) : arr;
+}

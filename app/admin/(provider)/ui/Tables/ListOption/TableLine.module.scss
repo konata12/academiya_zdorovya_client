@@ -1,33 +1,37 @@
 @use '../../../../../styles/_variables.scss' as *;
 
 .option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 
-  width: 100%;
-  padding: $admin-common-table-line-padding;
-  border-radius: $admin-common-table-line-border-rad;
-  background-color: $text-color-white;
+	width: 100%;
+	padding: $admin-common-table-line-padding;
+	border-radius: $admin-common-table-line-border-rad;
+	background-color: $text-color-white;
 
-  color: $text-color-black;
-  font-size: $admin-common-table-line-fz;
+	color: $text-color-black;
+	font-size: $admin-common-table-line-fz;
 
-  span {
-    display: flex;
-    justify-content: center;
-    flex: 1;
-    gap: 10px;
+	span {
+		display: flex;
+		justify-content: center;
+		flex: 1;
+		gap: 10px;
 
-    word-wrap: break-word; /* Ensures long words break */
-    overflow-wrap: break-word; /* Alternative property */
+		word-wrap: break-word; /* Ensures long words break */
+		overflow-wrap: break-word; /* Alternative property */
 
-    &:first-child {
-      justify-content: left;
-    }
+		&:first-child {
+			justify-content: left;
+		}
 
-    &:last-child {
-      justify-content: right;
-    }
-  }
+		&:last-child {
+			justify-content: right;
+		}
+
+		&:not(:first-child):not(:last-child) {
+			text-align: center;
+		}
+	}
 }

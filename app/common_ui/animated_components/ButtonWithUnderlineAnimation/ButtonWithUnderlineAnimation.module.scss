@@ -1,0 +1,76 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/functions' as *;
+
+.link {
+	z-index: 2;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	height: 100%;
+	padding: 0 20px;
+
+	&::after {
+		content: '';
+		position: absolute;
+		left: 10%;
+		bottom: -2px;
+		width: 80%;
+		height: 2px;
+		opacity: 0;
+		border-radius: 4px 4px 0px 0px;
+		transition: all $anim-time $slow;
+		background-color: $disabled-color;
+	}
+
+
+	&.active {
+		pointer-events: none;
+
+		.btn {
+			color: $primary-color;
+		}
+
+		&::after {
+			opacity: 1;
+			background-color: $primary-color;
+			z-index: 6;
+			box-shadow: 0 0 12px 0 rgba($primary-color, 0.64), 0 0 24px 0 $primary-color-active;
+		}
+	}
+
+	&:hover {
+
+		.btn {
+			cursor: pointer;
+			color: $text-color-black;
+		}
+
+		&::after {
+			left: 0;
+			bottom: -2px;
+			width: 100%;
+			opacity: 1;
+			transform: scaleX(1) scaleY(2) translateY(-0.5px);
+			border-radius: 12px 12px 0 0;
+			box-shadow: 0 0 12px 4px rgba-color($disabled-color, 0.4);
+		}
+	}
+
+	.btn {
+		height: 100%;
+		display: inline-flex;
+		align-items: center;
+		background-color: transparent;
+		border: none;
+		outline: none;
+		padding-bottom: 30px;
+
+		text-decoration: none;
+		@include rgba-text($text-color-black, 0.5);
+		font-size: $pc-t2-fz;
+
+		transition: all $anim-time $slow;
+	}
+
+}
