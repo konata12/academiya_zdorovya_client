@@ -45,6 +45,7 @@ import legalInformationSlice from "@/app/utils/redux/legal_information/legalInfo
 import publicOfferUpdateDetailsOrderSlice from "@/app/utils/redux/details/legal_information/publicOfferUpdateDetailsOrderSlice";
 import privacyPolicyUpdateDetailsOrderSlice from "@/app/utils/redux/details/legal_information/privacyPolicyUpdateDetailsOrderSlice";
 import departmentsContentFormSlice from "@/app/utils/redux/departments/departmentsContentFormSlice";
+import bookingSlice from "@/app/utils/redux/booking/bookingSlice";
 
 // REDUCERS
 
@@ -98,6 +99,7 @@ const rootReducer = combineReducers({
 	// API
 	auth: authSlice,
 	aboutTreatment: aboutTreatment,
+	booking: bookingSlice,
 	bookingServices: bookingServicesSlice,
 	departments: departmentsSlice,
 	employees: employeesSlice,

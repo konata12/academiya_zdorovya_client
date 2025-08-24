@@ -20,8 +20,7 @@ export default function Main({
 		if (accessToken && isLoginPage) router.push("/admin/departments");
 	}, [accessToken]);
 
-	const authStatus =
-		status.login === "succeeded" || status.refresh === "succeeded";
+	const authStatus = status.login === "succeeded" || status.refresh === "succeeded";
 	const renderLoginFallback = isLoginPage && !accessToken && authStatus;
 
 	return (
@@ -31,11 +30,13 @@ export default function Main({
 
 				{/* RENDER MAIN CONTENT */}
 				{renderLoginFallback ? (
-					<div className={styles.not_logged_in}>
-						Ввійдіть в адмін панель
-					</div>
+					<div className={styles.not_logged_in}>Ввійдіть в адмін панель</div>
 				) : (
-					<div className={styles.children}>{children}</div>
+					<div
+						className={`${styles.children} ${pathname.includes("bookings") ? styles.widerContainer : ""}`}
+					>
+						{children}
+					</div>
 				)}
 			</div>
 		</div>

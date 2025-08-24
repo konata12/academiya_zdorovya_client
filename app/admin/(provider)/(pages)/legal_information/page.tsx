@@ -22,7 +22,7 @@ export default function page() {
 		(state: RootState) => state.legalInformation,
 	);
 	const dispatch = useAppDispatch();
-	const { getParsedDateString } = useParsedDate();
+	const { getParsedDateStringWithMinutes } = useParsedDate();
 	const linkToUpdatePage = useLegalInformationLinkToUpdatePage();
 
 	useEffect(() => {
@@ -51,7 +51,7 @@ export default function page() {
 							<span>{item[1]?.data ? "Створена" : "Не створена"}</span>
 							<span>
 								{item[1]?.updatedAt
-									? getParsedDateString(item[1]?.updatedAt)
+									? getParsedDateStringWithMinutes(item[1]?.updatedAt)
 									: "Немає дати"}
 							</span>
 

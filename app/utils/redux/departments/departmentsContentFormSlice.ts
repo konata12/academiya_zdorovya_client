@@ -53,7 +53,7 @@ export const fetchDetailsContentSearchBarData = createAsyncThunk(
 			let url: string;
 			switch (contentType) {
 				case "bookingServices":
-					url = "/booking-services";
+					url = "/bookings-services";
 					break;
 				case "employees":
 					url = "/employees";

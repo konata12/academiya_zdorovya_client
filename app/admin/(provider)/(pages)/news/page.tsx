@@ -36,7 +36,7 @@ export default function page() {
 	const { news, newsIsModalOpen, error, status } = useAppSelector(
 		(state: RootState) => state.news,
 	);
-	const { getParsedDateString } = useParsedDate();
+	const { getParsedDateStringWithMinutes } = useParsedDate();
 
 	const dispatch = useAppDispatch();
 	const router = useRouter();
@@ -92,7 +92,7 @@ export default function page() {
 						news.map((news, i) => (
 							<TableLine key={news.id}>
 								<span>{news.title}</span>
-								<span>{getParsedDateString(news.createdAt)}</span>
+								<span>{getParsedDateStringWithMinutes(news.createdAt)}</span>
 
 								{newsIsModalOpen[i] && (
 									<DeleteModalWindow

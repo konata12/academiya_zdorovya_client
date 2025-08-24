@@ -6,7 +6,6 @@ interface CommonTableProps {
 	tableId?: string;
 	className?: {
 		titles?: string;
-		// titles?: string;
 		list?: string;
 	};
 }

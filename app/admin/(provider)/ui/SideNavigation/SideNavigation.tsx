@@ -52,8 +52,12 @@ export default function SideNavigation() {
 			) {
 				return false;
 			}
-			// ELSE IF DETAILS CONTENT PAGE
+			// ELSE IF DEPARTMENT CONTENT PAGE
 			else if (route && pathname.includes("/admin/departments_content") && id) {
+				return false;
+			}
+			// ELSE IF BOOKINGS PAGES
+			else if (pathname.includes("/admin/bookings")) {
 				return false;
 			}
 
