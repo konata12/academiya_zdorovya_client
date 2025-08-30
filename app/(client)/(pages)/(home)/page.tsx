@@ -7,6 +7,7 @@ import Link from "next/link";
 import { fetchWhatWeTreats } from "@/app/services/client/fetchData.service";
 import { Suspense } from "react";
 import WhatWeTreatHomeLists from "@/app/(client)/ui/Home/WhatWeTreatHomeList/WhatWeTreatHomeLists";
+import WhatWeTreatHomeListsFallback from "@/app/(client)/ui/Home/WhatWeTreatHomeList/fallback/WhatWeTreatHomeListsFallback";
 
 export default async function Home() {
 	const whatWeTreatList = fetchWhatWeTreats();
@@ -110,21 +111,29 @@ export default async function Home() {
 				</div>
 			</section>
 			<section className="news">NEWS</section>
-			<section className={`news container ${styles.whatWeTreatSection}`}>
+			<section className={`container ${styles.whatWeTreatSection}`}>
 				<article>
 					<h2 className={"title left md"}>Що ми лікуємо</h2>
-					<Suspense fallback={<p>Loading ...</p>}>
+					<Suspense fallback={<WhatWeTreatHomeListsFallback />}>
 						<WhatWeTreatHomeLists whatWeTreatList={whatWeTreatList} />
 					</Suspense>
 				</article>
 				{/*todo change to good quality picture*/}
-				<Image src={doctor} alt={"Doctor"} className={styles.img} />
+				<div className={styles.img}>
+					<Image src={doctor} alt={"Doctor"} />
+				</div>
 			</section>
-			<section className="news">HOW WE TREAT</section>
-			<section className="news">OUR SERVICES </section>
-			<section className="news">OUR GOAL</section>
-			<section className="news">REVIEWS</section>
-			<section className="news">FAQ</section>
+			<section className={`container ${styles.howWeTreatSection}`}>
+				<h2 className={"title left md"}>Як ми лікуємо</h2>
+				<p>
+					Дізнайтеся більше про наші методи фізичноі терапії, які забезпечуть
+					ефективне відновлення та тривалий результат.
+				</p>
+			</section>
+			<section className="">OUR SERVICES </section>
+			<section className="">OUR GOAL</section>
+			<section className="">REVIEWS</section>
+			<section className="">FAQ</section>
 		</div>
 	);
 }
