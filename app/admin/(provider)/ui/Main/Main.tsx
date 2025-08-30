@@ -25,7 +25,7 @@ export default function Main({
 
 	return (
 		<div className={styles.main}>
-			<div className={`container ${styles.mainContainer}`}>
+			<div className={`adminContainer ${styles.mainContainer}`}>
 				<SideNavigation />
 
 				{/* RENDER MAIN CONTENT */}

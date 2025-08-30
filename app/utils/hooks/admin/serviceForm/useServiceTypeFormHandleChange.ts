@@ -1,12 +1,6 @@
-import {
-	renameFile,
-	uniqFileNameAndKeepExtension,
-} from "@/app/services/files.service";
+import { renameFile, uniqFileNameAndKeepExtension } from "@/app/services/admin/files.service";
 import { ServiceTypeDetailsOrderSliceNameType } from "@/app/types/data/details.type";
-import {
-	ServiceTypesEnum,
-	ServiceTypesEnumType,
-} from "@/app/types/data/services.type";
+import { ServiceTypesEnum, ServiceTypesEnumType } from "@/app/types/data/services.type";
 import { FormElements } from "@/app/types/ui/form_components/inputContainers.type";
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
@@ -31,14 +25,9 @@ export function useServiceTypeFormHandleChange(
 		useDetailsFormSlice(detailsOrderSliceName);
 
 	const handleChange = useCallback(
-		<T extends FormElements>({
-			e,
-			elementType,
-			oldValue = null,
-		}: ChangeEventProps<T>) => {
+		<T extends FormElements>({ e, elementType, oldValue = null }: ChangeEventProps<T>) => {
 			const newValue = e.target.value;
-			const newFile =
-				(e as React.ChangeEvent<HTMLInputElement>).target.files || null;
+			const newFile = (e as React.ChangeEvent<HTMLInputElement>).target.files || null;
 
 			switch (elementType) {
 				case ServiceTypesEnum.TITLE:
@@ -84,10 +73,7 @@ export function useServiceTypeFormHandleChange(
 					}
 
 					if (newFile && newFile[0]) {
-						const imageName = uniqFileNameAndKeepExtension(
-							uniqName,
-							newFile[0],
-						);
+						const imageName = uniqFileNameAndKeepExtension(uniqName, newFile[0]);
 						const image = renameFile(newFile[0], imageName);
 
 						set(imageName, image, store);

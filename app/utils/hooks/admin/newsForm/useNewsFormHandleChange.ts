@@ -1,7 +1,4 @@
-import {
-	renameFile,
-	uniqFileNameAndKeepExtension,
-} from "@/app/services/files.service";
+import { renameFile, uniqFileNameAndKeepExtension } from "@/app/services/admin/files.service";
 import { NewsDetailsOrderSliceNameType } from "@/app/types/data/details.type";
 import { NewsFormDataEnum, NewsFormDataEnumType } from "@/app/types/data/news.type";
 import { FormElements } from "@/app/types/ui/form_components/inputContainers.type";
@@ -28,14 +25,9 @@ export function useNewsFormHandleChange(
 		useDetailsFormSlice(detailsOrderSliceName);
 
 	const handleChange = useCallback(
-		<T extends FormElements>({
-			e,
-			elementType,
-			oldValue = null,
-		}: ChangeEventProps<T>) => {
+		<T extends FormElements>({ e, elementType, oldValue = null }: ChangeEventProps<T>) => {
 			const newValue = e.target.value;
-			const newFile =
-				(e as React.ChangeEvent<HTMLInputElement>).target.files || null;
+			const newFile = (e as React.ChangeEvent<HTMLInputElement>).target.files || null;
 
 			switch (elementType) {
 				case NewsFormDataEnum.TITLE:
@@ -81,10 +73,7 @@ export function useNewsFormHandleChange(
 					}
 
 					if (newFile && newFile[0]) {
-						const imageName = uniqFileNameAndKeepExtension(
-							uniqName,
-							newFile[0],
-						);
+						const imageName = uniqFileNameAndKeepExtension(uniqName, newFile[0]);
 						const image = renameFile(newFile[0], imageName);
 
 						set(imageName, image, store);

@@ -36,7 +36,7 @@ import {
 import { DraggableAreaContainer } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer";
 import { DraggableElementContainer } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableElementContainer/DraggableElementContainer";
 import { FormInputError } from "@/app/types/data/form.type";
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
 import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
 import { ImageInputPreviewFromIndexedDB } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB";
@@ -44,11 +44,11 @@ import {
 	OrderedListServiceTypeInterface,
 	useOrderedList,
 } from "@/app/utils/hooks/admin/dragAndDrop/useOrderedList";
-import { parseOrderedArrayToRequest } from "@/app/services/order.service";
+import { parseOrderedArrayToRequest } from "@/app/services/admin/order.service";
 import {
 	parseServiceToServiceFormData,
 	transferServiceImagesBetweenIndexDBStores,
-} from "@/app/services/service.service";
+} from "@/app/services/admin/service.service";
 import {
 	setServiceTypeUpdateFormDataOnLink,
 	setServiceTypeUpdateFormInitData,

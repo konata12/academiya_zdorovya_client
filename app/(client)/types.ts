@@ -1,9 +1,9 @@
-export type SelectOptions = {
-	value: number;
+export type DepartmentSelectOptions = {
+	id: number;
 	label: string;
 };
 
-export type DepartmentsRes = {
+export type DepartmentsResponse = {
 	id: number;
 	city: string;
 	address: string;

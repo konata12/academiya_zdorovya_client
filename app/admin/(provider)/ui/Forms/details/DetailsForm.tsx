@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styles from "./DetailsForm.module.scss";
 import { DraggableAreaContainerForDetails } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainerForDetails";
-import { getIndexedDBStoreNameForDetailsImages } from "@/app/services/details.service";
+import { getIndexedDBStoreNameForDetailsImages } from "@/app/services/admin/details.service";
 import { RootState } from "@/app/utils/redux/store";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
@@ -36,7 +36,7 @@ import DetailsListInput from "@/app/admin/(provider)/ui/Forms/details/inputs/det
 import DetailsImageInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput";
 import { FormInputError } from "@/app/types/data/form.type";
 import { useServiceFormsDataCheckChange } from "@/app/utils/hooks/admin/serviceForm/useServiceFormsDataCheckChange";
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import { checkIfDetailsFormDataChanged } from "@/app/utils/hooks/admin/detailsForm/useCheckIfDetailsFormDataChanged";
 
 export default function DetailsForm({

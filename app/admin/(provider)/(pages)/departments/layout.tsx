@@ -1,10 +1,7 @@
 "use client";
 
 import styles from "./layout.module.scss";
-import {
-	checkCreatePage,
-	getUrlLastElement,
-} from "@/app/services/navigation.service";
+import { checkCreatePage, getUrlLastElement } from "@/app/services/admin/navigation.service";
 import {
 	closeDepartmentsModal,
 	deleteDepartment as deleteDepartmentAction,

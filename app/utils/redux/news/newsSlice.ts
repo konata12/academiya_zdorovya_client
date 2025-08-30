@@ -12,7 +12,7 @@ import {
 	createNewsFormData,
 	parseNewsResponse,
 	updateNewsFormData,
-} from "@/app/services/news.service";
+} from "@/app/services/admin/news.service";
 
 const initialState: NewsInit = {
 	news: [],
@@ -36,48 +36,41 @@ const initialState: NewsInit = {
 
 const baseUrl = "news";
 
-export const fetchNews = createAsyncThunk(
-	"news/getAll",
-	async (_, { rejectWithValue }) => {
-		try {
-			const response = await axiosInstance.get<News[]>(`${baseUrl}`);
-			const parsedNews = await parseNewsResponse(response.data);
+export const fetchNews = createAsyncThunk("news/getAll", async (_, { rejectWithValue }) => {
+	try {
+		const response = await axiosInstance.get<News[]>(`${baseUrl}`);
+		const parsedNews = await parseNewsResponse(response.data);
 
-			return parsedNews;
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				console.log(error);
-				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
-					statusCode: error.status || 500,
-				};
-				return rejectWithValue(serializableError);
-			} else if (error instanceof Error) {
-				const serializableError: ErrorResponse = {
-					message: error.message,
-					statusCode: 500,
-				};
-				return rejectWithValue(serializableError);
-			}
+		return parsedNews;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			console.log(error);
+			const serializableError: ErrorResponse = {
+				message: error.response?.data.message || "Unexpected server error",
+				statusCode: error.status || 500,
+			};
+			return rejectWithValue(serializableError);
+		} else if (error instanceof Error) {
+			const serializableError: ErrorResponse = {
+				message: error.message,
+				statusCode: 500,
+			};
+			return rejectWithValue(serializableError);
 		}
-	},
-);
+	}
+});
 export const fetchOneNews = createAsyncThunk(
 	"news/getOne",
 	async (id: string, { rejectWithValue }) => {
 		try {
-			const response = await axiosInstance.get<News[]>(
-				`${baseUrl}/admin/${id}`,
-			);
+			const response = await axiosInstance.get<News[]>(`${baseUrl}/admin/${id}`);
 			// console.log(response)
 			return response.data;
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -102,8 +95,7 @@ export const createNews = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -143,8 +135,7 @@ export const updateNews = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -162,17 +153,14 @@ export const toggleIsBannerNews = createAsyncThunk(
 	"news/toggleIsBannerNews",
 	async (id: number, { rejectWithValue }) => {
 		try {
-			const response = await axiosInstance.patch(
-				`${baseUrl}/admin/update/${id}`,
-			);
+			const response = await axiosInstance.patch(`${baseUrl}/admin/update/${id}`);
 			console.log(response);
 			return id;
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -191,8 +179,7 @@ export const deleteNews = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 					id,
 				};
@@ -236,9 +223,7 @@ const newsSlice = createSlice({
 					state.status.getAll = "succeeded";
 					if (action.payload) {
 						state.news = action.payload;
-						state.newsIsModalOpen = new Array(state.news.length).fill(
-							false,
-						);
+						state.newsIsModalOpen = new Array(state.news.length).fill(false);
 						state.error.delete = new Array(state.news.length).fill(null);
 					}
 				},
@@ -260,9 +245,7 @@ const newsSlice = createSlice({
 					state.status.getOne = "succeeded";
 					if (action.payload) {
 						state.news = action.payload;
-						state.newsIsModalOpen = new Array(state.news.length).fill(
-							false,
-						);
+						state.newsIsModalOpen = new Array(state.news.length).fill(false);
 					}
 				},
 			)
@@ -306,12 +289,9 @@ const newsSlice = createSlice({
 				toggleIsBannerNews.fulfilled,
 				(state, action: PayloadAction<number | undefined>) => {
 					state.status.update = "succeeded";
-					const index = state.news.findIndex(
-						(news) => news.id === action.payload,
-					);
+					const index = state.news.findIndex((news) => news.id === action.payload);
 					if (index !== -1) {
-						state.news[index].isBannerNews =
-							!state.news[index].isBannerNews;
+						state.news[index].isBannerNews = !state.news[index].isBannerNews;
 					}
 				},
 			)
@@ -325,9 +305,7 @@ const newsSlice = createSlice({
 				deleteNews.pending,
 				(state, action: PayloadAction<number | undefined>) => {
 					state.status.delete = "loading";
-					const index = state.news.findIndex(
-						(news) => news.id === action.payload,
-					);
+					const index = state.news.findIndex((news) => news.id === action.payload);
 					if (index !== -1) {
 						state.error.delete[index] = null;
 					}
@@ -337,9 +315,7 @@ const newsSlice = createSlice({
 				deleteNews.fulfilled,
 				(state, action: PayloadAction<number | undefined>) => {
 					state.status.delete = "succeeded";
-					const index = state.news.findIndex(
-						(news) => news.id === action.payload,
-					);
+					const index = state.news.findIndex((news) => news.id === action.payload);
 					if (index !== -1) {
 						state.news.splice(index, 1);
 						state.newsIsModalOpen.splice(index, 1);
@@ -355,9 +331,7 @@ const newsSlice = createSlice({
 					"id" in action.payload
 				) {
 					const error = action.payload as ErrorResponse;
-					const index = state.news.findIndex(
-						(news) => news.id === error.id,
-					);
+					const index = state.news.findIndex((news) => news.id === error.id);
 					if (index !== -1) {
 						state.error.delete[index] = error;
 					}
@@ -366,11 +340,7 @@ const newsSlice = createSlice({
 	},
 });
 
-export const {
-	openNewsModal,
-	closeNewsModal,
-	setNewsUpdateError,
-	resetNewsUpdateError,
-} = newsSlice.actions;
+export const { openNewsModal, closeNewsModal, setNewsUpdateError, resetNewsUpdateError } =
+	newsSlice.actions;
 
 export default newsSlice.reducer;

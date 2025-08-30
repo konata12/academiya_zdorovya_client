@@ -2,11 +2,9 @@ import React from "react";
 import styles from "./InputContainerWithCheckboxHookForm.module.scss";
 import Checkbox from "@/app/admin/(provider)/ui/Checkbox/Checkbox";
 import { HookFormInputContainerWithCheckboxProps } from "@/app/types/ui/form_components/inputContainers.type";
-import AnimatePresenseWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenseWithDynamicHeight";
+import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
 
-export default function HookFormInputContainerWithCheckbox<
-	T extends Record<string, any>,
->({
+export default function HookFormInputContainerWithCheckbox<T extends Record<string, any>>({
 	label,
 	className = {},
 	name,
@@ -21,16 +19,11 @@ export default function HookFormInputContainerWithCheckbox<
 	const error = errors[name];
 
 	return (
-		<div
-			className={`${styles.inputContainer} ${className?.inputContainer || ""}`}
-		>
+		<div className={`${styles.inputContainer} ${className?.inputContainer || ""}`}>
 			<div
 				className={`${styles.checkboxContainer} ${className?.checkboxContainer || ""}`}
 			>
-				<label
-					className={`inputLabel ${className?.inputLabel || ""}`}
-					htmlFor={name}
-				>
+				<label className={`inputLabel ${className?.inputLabel || ""}`} htmlFor={name}>
 					{label}
 				</label>
 				<Checkbox
@@ -40,8 +33,8 @@ export default function HookFormInputContainerWithCheckbox<
 				/>
 			</div>
 
-			<AnimatePresenseWithDynamicHeight
-				childrenIsrendered={isChecked}
+			<AnimatePresenceWithDynamicHeight
+				childrenIsRendered={isChecked}
 				className={{
 					absoluteContainer: styles.absoluteContainer,
 				}}
@@ -62,7 +55,7 @@ export default function HookFormInputContainerWithCheckbox<
 						{error.message as string}
 					</p>
 				)}
-			</AnimatePresenseWithDynamicHeight>
+			</AnimatePresenceWithDynamicHeight>
 		</div>
 	);
 }

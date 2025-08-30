@@ -2,10 +2,7 @@
 
 import React, { useEffect } from "react";
 import styles from "./layout.module.scss";
-import {
-	checkCreatePage,
-	getUrlLastElement,
-} from "@/app/services/navigation.service";
+import { checkCreatePage, getUrlLastElement } from "@/app/services/admin/navigation.service";
 import {
 	closeServiceModal,
 	deleteService as deleteServiceAction,

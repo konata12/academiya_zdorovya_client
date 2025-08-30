@@ -3,8 +3,8 @@ import {
 	parseEmployeeFormDataToUpdate,
 	parseEmployeesResponse,
 	updateEmployeeFormData,
-} from "@/app/services/employee.service";
-import { transferAndReplaceImageBetweenIndexDBStores } from "@/app/services/indexedDB.service";
+} from "@/app/services/admin/employee.service";
+import { transferAndReplaceImageBetweenIndexDBStores } from "@/app/services/admin/indexedDB.service";
 import {
 	CreateEmployeeFormData,
 	Employee,
@@ -50,8 +50,7 @@ export const fetchEmployees = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -63,17 +62,14 @@ export const fetchOneEmployee = createAsyncThunk(
 	"employees/getOne",
 	async (id: string, { rejectWithValue }) => {
 		try {
-			const response = await axiosInstance.get<Employee[]>(
-				`${baseUrl}/admin/${id}`,
-			);
+			const response = await axiosInstance.get<Employee[]>(`${baseUrl}/admin/${id}`);
 			// console.log(response)
 			return response.data;
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -98,8 +94,7 @@ export const createEmployee = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -148,8 +143,7 @@ export const updateEmployee = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -175,8 +169,7 @@ export const deleteEmployee = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 					id,
 				};
@@ -246,9 +239,9 @@ const employeesSlice = createSlice({
 					state.status.getAll = "succeeded";
 					if (action.payload) {
 						state.employees = action.payload;
-						state.employeesIsModalOpen = new Array(
-							state.employees.length,
-						).fill(false);
+						state.employeesIsModalOpen = new Array(state.employees.length).fill(
+							false,
+						);
 					}
 				},
 			)
@@ -268,9 +261,9 @@ const employeesSlice = createSlice({
 					state.status.getOne = "succeeded";
 					if (action.payload) {
 						state.employees = action.payload;
-						state.employeesIsModalOpen = new Array(
-							state.employees.length,
-						).fill(false);
+						state.employeesIsModalOpen = new Array(state.employees.length).fill(
+							false,
+						);
 					}
 				},
 			)
@@ -290,9 +283,9 @@ const employeesSlice = createSlice({
 					state.status.create = "succeeded";
 					if (action.payload) {
 						state.employees = action.payload;
-						state.employeesIsModalOpen = new Array(
-							state.employees.length,
-						).fill(false);
+						state.employeesIsModalOpen = new Array(state.employees.length).fill(
+							false,
+						);
 					}
 				},
 			)
@@ -321,14 +314,8 @@ const employeesSlice = createSlice({
 					state.status.update = "succeeded";
 					if (action.payload) {
 						const { data, id } = action.payload;
-						const {
-							instagram,
-							facebook,
-							X,
-							youtube,
-							achivements,
-							...parsedData
-						} = data;
+						const { instagram, facebook, X, youtube, achivements, ...parsedData } =
+							data;
 						const index = state.employees.findIndex(
 							(employee) => `${employee.id}` === id,
 						);

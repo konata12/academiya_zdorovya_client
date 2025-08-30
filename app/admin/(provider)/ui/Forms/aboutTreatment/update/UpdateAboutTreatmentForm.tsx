@@ -20,7 +20,7 @@ import {
 	updateAboutTreatment,
 } from "@/app/utils/redux/about_treatment/aboutTreatmentSlice";
 import { FormInputError } from "@/app/types/data/form.type";
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import { RootState } from "@/app/utils/redux/store";
 import { useAboutTreatmentFormHandleChange } from "@/app/utils/hooks/admin/aboutTreatmentForm/useAboutTreatmentFormHandleChange";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
@@ -41,7 +41,7 @@ import {
 	setAllAboutTreatmentDataOnLink,
 } from "@/app/utils/redux/about_treatment/aboutTreatmentUpdateFormSlice";
 import { useEffect } from "react";
-import { transferImageBetweenIndexDBStores } from "@/app/services/indexedDB.service";
+import { transferImageBetweenIndexDBStores } from "@/app/services/admin/indexedDB.service";
 import _ from "lodash";
 import { useFormChangeCheck } from "@/app/utils/hooks/common/useFormChangeCheck";
 

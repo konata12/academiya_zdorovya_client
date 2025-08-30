@@ -1,5 +1,5 @@
-import Link from "next/link";
 import styles from "./Links.module.scss";
+import NavLink from "@/app/common_ui/NavLink/NavLink";
 
 const links = [
 	{ label: "Про нас", url: "about_us" },
@@ -13,9 +13,9 @@ export default function Links() {
 		<div className={styles.links}>
 			{links.map((link) => {
 				return (
-					<Link href={link.url} key={link.url}>
+					<NavLink url={link.url} key={link.url}>
 						{link.label}
-					</Link>
+					</NavLink>
 				);
 			})}
 		</div>

@@ -1,4 +1,4 @@
-import { clearDetailsIndexDB } from "@/app/services/details.service";
+import { clearDetailsIndexDB } from "@/app/services/admin/details.service";
 import { DetailsRedactorType } from "@/app/types/data/details.type";
 import { del, UseStore } from "idb-keyval";
 import { useCallback } from "react";

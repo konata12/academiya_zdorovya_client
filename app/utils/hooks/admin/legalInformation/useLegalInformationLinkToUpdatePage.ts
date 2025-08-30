@@ -4,7 +4,7 @@ import {
 	LegalInformationEnumType,
 } from "@/app/types/data/legal_information.type";
 import { DetailsRedactorType } from "@/app/types/data/details.type";
-import { parseDetailsResponseToOrderComponentArray } from "@/app/services/details.service";
+import { parseDetailsResponseToOrderComponentArray } from "@/app/services/admin/details.service";
 import { useAppDispatch } from "@/app/utils/redux/hooks";
 import { setPrivacyPolicyDetailsStateOrder } from "@/app/utils/redux/details/legal_information/privacyPolicyUpdateDetailsOrderSlice";
 import { setPublicOfferDetailsStateOrder } from "@/app/utils/redux/details/legal_information/publicOfferUpdateDetailsOrderSlice";

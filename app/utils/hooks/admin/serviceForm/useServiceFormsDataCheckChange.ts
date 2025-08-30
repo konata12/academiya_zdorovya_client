@@ -4,7 +4,7 @@ import { RootState } from "@/app/utils/redux/store";
 import { useParams } from "next/navigation";
 import _ from "lodash";
 import { useFormChangeCheck } from "@/app/utils/hooks/common/useFormChangeCheck";
-import { parseOrderComponentArrayToDetailsRedactor } from "@/app/services/details.service";
+import { parseOrderComponentArrayToDetailsRedactor } from "@/app/services/admin/details.service";
 
 export function useServiceFormsDataCheckChange() {
 	const { errors, ...data } = useAppSelector((state: RootState) => state.serviceUpdateForm);

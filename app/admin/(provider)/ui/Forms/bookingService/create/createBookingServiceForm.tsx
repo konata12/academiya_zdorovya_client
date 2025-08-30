@@ -1,6 +1,6 @@
 "use client";
 
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import { createBookingService } from "@/app/utils/redux/booking_services/bookingServicesSlice";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { useRouter } from "next/navigation";

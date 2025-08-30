@@ -26,7 +26,7 @@ import {
 	TitlesFormData,
 } from "@/app/types/data/prices.type";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenseWithDynamicHeight";
+import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
 import { usePricesFormHandleChange } from "@/app/utils/hooks/admin/pricesForm/usePricesFormHandleChange";
 import { usePricesFormSlice } from "@/app/utils/hooks/admin/pricesForm/usePricesFormSlice";
 import InputContainerWithCheckbox from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainerWithCheckbox/InputContainerWithCheckbox";
@@ -36,10 +36,10 @@ import PriceFormVariant from "@/app/admin/(provider)/ui/Forms/pricesForms/priceV
 import { FormElements } from "@/app/types/ui/form_components/inputContainers.type";
 import PricesTable from "@/app/admin/(provider)/ui/Tables/PricesTable/PricesTable";
 import { FormInputError } from "@/app/types/data/form.type";
-import { parsePriceSectionFormDataToPriceSectionCreateFormData } from "@/app/services/prices.service";
+import { parsePriceSectionFormDataToPriceSectionCreateFormData } from "@/app/services/admin/prices.service";
 import { setPricesUpdateFromInitData } from "@/app/utils/redux/prices/pricesUpdateFormSlice";
 import { usePriceFormChangeCheck } from "@/app/utils/hooks/admin/pricesForm/usePriceFormChangeCheck";
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import { updatePriceSection } from "@/app/utils/redux/prices/pricesSlice";
 
 const sliceName = "pricesUpdateForm";
@@ -415,7 +415,7 @@ export default function UpdatePriceForm() {
 	return (
 		<form onSubmit={handleSubmit} className={styles.form}>
 			<div className={styles.titles}>
-				<AnimatePresenceWithDynamicHeight childrenIsrendered={true}>
+				<AnimatePresenceWithDynamicHeight childrenIsRendered={true}>
 					{titles.map((title, i) => {
 						return (
 							<PriceFormTitleInput

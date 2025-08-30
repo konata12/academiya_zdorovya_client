@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import styles from "./layout.module.scss";
-import { checkCreatePage } from "@/app/services/navigation.service";
+import { checkCreatePage } from "@/app/services/admin/navigation.service";
 import {
 	closeModalBookingServices,
 	deleteBookingService as deleteBookingServiceAction,
@@ -26,8 +26,9 @@ export default function BookingServices({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { bookingServices, bookingServicesIsModalOpen, error, status } =
-		useAppSelector((state: RootState) => state.bookingServices);
+	const { bookingServices, bookingServicesIsModalOpen, error, status } = useAppSelector(
+		(state: RootState) => state.bookingServices,
+	);
 	const dispatch = useAppDispatch();
 	const pathname = usePathname();
 	const isCreatePage = checkCreatePage(pathname);

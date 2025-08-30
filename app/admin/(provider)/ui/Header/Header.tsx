@@ -28,7 +28,9 @@ export default function Header() {
 
 	return (
 		<div className={`${styles.header}`}>
-			<div className={`container ${styles.container} ${isLoginPage && styles.login}`}>
+			<div
+				className={`adminContainer ${styles.container} ${isLoginPage && styles.login}`}
+			>
 				<div className={styles.logo}>
 					<Image src={logo} alt="logo" />
 				</div>

@@ -1,5 +1,5 @@
-import { renameFile, renameFileOrBlob } from "@/app/services/files.service";
-import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/response.service";
+import { renameFile, renameFileOrBlob } from "@/app/services/admin/files.service";
+import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/admin/response.service";
 import {
 	CreateEmployeeFormData,
 	Employee,
@@ -23,10 +23,7 @@ export const createEmployeeFormData = async (data: CreateEmployeeFormData) => {
 		if (key === EmployeesFormDataEnum.IMAGE) {
 			if (typeof value !== "string")
 				throw Error("Помилка зображення при створенні варіанту лікування");
-			const image = await get<File>(
-				value,
-				getIndexedDBStoreForImages(createStoreName),
-			);
+			const image = await get<File>(value, getIndexedDBStoreForImages(createStoreName));
 
 			if (!(image instanceof File))
 				throw Error("Помилка зображення при створенні варіанту лікування 2");
@@ -87,9 +84,7 @@ export const updateEmployeeFormData = async (data: CreateEmployeeFormData) => {
 	return formData;
 };
 
-export async function parseEmployeesResponse(
-	employees: Employee[],
-): Promise<Employee[]> {
+export async function parseEmployeesResponse(employees: Employee[]): Promise<Employee[]> {
 	const store = getIndexedDBStoreForImages(storeName);
 	clear(store);
 	try {
@@ -97,11 +92,10 @@ export async function parseEmployeesResponse(
 			employees.map(async (employee) => {
 				const { image, ...data } = employee;
 
-				let parsedImage =
-					await getFileNameFromSignedURLAndSaveBlobInIndexedDB(
-						image,
-						store,
-					);
+				let parsedImage = await getFileNameFromSignedURLAndSaveBlobInIndexedDB(
+					image,
+					store,
+				);
 
 				return {
 					...data,

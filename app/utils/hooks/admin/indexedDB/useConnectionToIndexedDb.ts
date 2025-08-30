@@ -1,4 +1,4 @@
-import { getIndexedDB } from "@/app/services/indexedDB.service";
+import { getIndexedDB } from "@/app/services/admin/indexedDB.service";
 import { useEffect } from "react";
 
 export function useConnectionToIndexedDB() {

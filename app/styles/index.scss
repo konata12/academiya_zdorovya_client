@@ -16,9 +16,19 @@ body {
 
 	font-family: $main-font;
 	font-weight: $font-weight-reg;
+	color: $text-color-black;
+
+	main {
+		padding-top: 73px;
+	}
 }
 
 //CONTAINERS
+.adminContainer {
+	max-width: 1440px;
+	margin: 0 auto;
+}
+
 .container {
 	margin: auto;
 	padding: 0 24px;
@@ -35,6 +45,7 @@ body {
 		max-width: 1440px;
 	}
 }
+
 .titleContainerWithReturnBtn {
 	display: flex;
 	justify-content: space-between;
@@ -208,17 +219,19 @@ body {
 			font-size: $pc-btn-fz-xl;
 
 			&.brown {
+				cursor: default;
 				color: $secondary-color;
 				outline: 2px solid $secondary-color;
-				background-color: rgba(47, 48, 53, 0.32);
+				background-color: rgba(47, 48, 53, 0.64);
 
 				&:hover {
-					background-color: rgba(81, 82, 28, 0.64);
+					background-color: rgba(81, 82, 28, 0.9);
 				}
 			}
 		}
 
 		&.sm {
+			white-space: nowrap;
 			border-radius: $pc-btn-border-rad-sm;
 			padding: $pc-btn-padding-sm-h $pc-btn-padding-sm-w;
 
@@ -286,7 +299,7 @@ body {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
-
+	width: max-content;
 	height: max-content;
 }
 

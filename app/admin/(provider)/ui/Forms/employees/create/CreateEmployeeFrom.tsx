@@ -36,7 +36,7 @@ import {
 	EmployeeStringKeysWithoutImageType,
 } from "@/app/types/data/employees.type";
 import { FormInputError } from "@/app/types/data/form.type";
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
 import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
 import { RootState } from "@/app/utils/redux/store";

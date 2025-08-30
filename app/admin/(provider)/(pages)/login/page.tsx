@@ -6,7 +6,7 @@ import styles from "./Login.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { login } from "@/app/utils/redux/auth/authSlice";
 import { RootState } from "@/app/utils/redux/store";
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 
 export default function Login() {
 	const [userName, setUserName] = useState("");

@@ -134,10 +134,7 @@ const employeeCreateFormSlice = createSlice({
 			state,
 			action: {
 				payload: {
-					field: Exclude<
-						EmployeesFormDataEnum,
-						EmployeeStringArrayKeysType
-					>;
+					field: Exclude<EmployeesFormDataEnum, EmployeeStringArrayKeysType>;
 					message: string;
 				};
 			},

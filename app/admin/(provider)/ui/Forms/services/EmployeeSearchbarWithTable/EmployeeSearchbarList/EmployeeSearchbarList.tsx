@@ -1,4 +1,4 @@
-import AnimatePresenseWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenseWithDynamicHeight";
+import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
 import axiosInstance from "@/app/utils/axios";
 import React, { useEffect, useState } from "react";
 import styles from "./EmployeeSearchbarList.module.scss";
@@ -74,8 +74,8 @@ export function EmployeeSearchbarList({ showList, query }: EmployeeSearchbarList
 	const filteredEmployees = result.filter((employee) => employee.name.includes(query));
 
 	return (
-		<AnimatePresenseWithDynamicHeight
-			childrenIsrendered={showList}
+		<AnimatePresenceWithDynamicHeight
+			childrenIsRendered={showList}
 			className={{
 				absoluteContainer: styles.container,
 			}}
@@ -100,6 +100,6 @@ export function EmployeeSearchbarList({ showList, query }: EmployeeSearchbarList
 					);
 				})
 			)}
-		</AnimatePresenseWithDynamicHeight>
+		</AnimatePresenceWithDynamicHeight>
 	);
 }

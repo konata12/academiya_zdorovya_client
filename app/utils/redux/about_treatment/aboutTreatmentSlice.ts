@@ -2,8 +2,8 @@ import {
 	createAboutTreatmentFormData,
 	parseAboutTreatmentsResponse,
 	updateAboutTreatmentFormData,
-} from "@/app/services/about_treatment.service";
-import { transferAndReplaceImageBetweenIndexDBStores } from "@/app/services/indexedDB.service";
+} from "@/app/services/admin/about_treatment.service";
+import { transferAndReplaceImageBetweenIndexDBStores } from "@/app/services/admin/indexedDB.service";
 import {
 	AboutTreatment,
 	AboutTreatmentInit,
@@ -39,17 +39,14 @@ export const fetchAboutTreatments = createAsyncThunk(
 	async (_, { rejectWithValue }) => {
 		try {
 			const response = await axiosInstance.get<AboutTreatment[]>(`${baseUrl}`);
-			const parseAboutTreatments = await parseAboutTreatmentsResponse(
-				response.data,
-			);
+			const parseAboutTreatments = await parseAboutTreatmentsResponse(response.data);
 
 			return parseAboutTreatments;
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -74,17 +71,14 @@ export const createAboutTreatment = createAsyncThunk(
 				`${baseUrl}/admin/create`,
 				formData,
 			);
-			const parseAboutTreatments = await parseAboutTreatmentsResponse(
-				response.data,
-			);
+			const parseAboutTreatments = await parseAboutTreatmentsResponse(response.data);
 			console.log(response);
 			return parseAboutTreatments;
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -134,8 +128,7 @@ export const updateAboutTreatment = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -161,8 +154,7 @@ export const deleteAboutTreatment = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 					id,
 				};
@@ -209,9 +201,9 @@ const aboutTreatmentSlice = createSlice({
 						state.aboutTreatmentsIsModalOpen = new Array(
 							state.aboutTreatments.length,
 						).fill(false);
-						state.error.delete = new Array(
-							state.aboutTreatments.length,
-						).fill(null);
+						state.error.delete = new Array(state.aboutTreatments.length).fill(
+							null,
+						);
 					}
 				},
 			)

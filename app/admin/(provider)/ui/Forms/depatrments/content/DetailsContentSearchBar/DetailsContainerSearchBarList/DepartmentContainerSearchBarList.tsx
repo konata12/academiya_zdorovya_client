@@ -6,7 +6,7 @@ import {
 	fetchDetailsContentSearchBarData,
 } from "@/app/utils/redux/departments/departmentsContentFormSlice";
 import { RootState } from "@/app/utils/redux/store";
-import AnimatePresenseWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenseWithDynamicHeight";
+import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
 import styles from "@/app/admin/(provider)/ui/Forms/services/EmployeeSearchbarWithTable/EmployeeSearchbarList/EmployeeSearchbarList.module.scss";
 import {
 	AddDepartmentContentValueType,
@@ -147,8 +147,8 @@ export function DepartmentContainerSearchBarList({
 	};
 
 	return (
-		<AnimatePresenseWithDynamicHeight
-			childrenIsrendered={showList}
+		<AnimatePresenceWithDynamicHeight
+			childrenIsRendered={showList}
 			className={{
 				absoluteContainer: styles.container,
 			}}
@@ -176,6 +176,6 @@ export function DepartmentContainerSearchBarList({
 					);
 				})
 			)}
-		</AnimatePresenseWithDynamicHeight>
+		</AnimatePresenceWithDynamicHeight>
 	);
 }

@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./FormElementContainerWithCheckbox.module.scss";
 import Checkbox from "@/app/admin/(provider)/ui/Checkbox/Checkbox";
 import { FromElementContainerWithCheckboxProps } from "@/app/types/ui/form_components/inputContainers.type";
-import AnimatePresenseWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenseWithDynamicHeight";
+import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
 
 export default function FormElementContainerWithCheckbox({
 	children,
@@ -15,9 +15,7 @@ export default function FormElementContainerWithCheckbox({
 	dependency,
 }: FromElementContainerWithCheckboxProps) {
 	return (
-		<div
-			className={`${styles.inputContainer} ${className?.inputContainer || ""}`}
-		>
+		<div className={`${styles.inputContainer} ${className?.inputContainer || ""}`}>
 			<div
 				className={`${styles.checkboxContainer} ${className?.checkboxContainer || ""}`}
 			>
@@ -34,15 +32,15 @@ export default function FormElementContainerWithCheckbox({
 				/>
 			</div>
 
-			<AnimatePresenseWithDynamicHeight
-				childrenIsrendered={isChecked}
+			<AnimatePresenceWithDynamicHeight
+				childrenIsRendered={isChecked}
 				dependency={dependency}
 				className={{
 					absoluteContainer: styles.absoluteContainer,
 				}}
 			>
 				{children}
-			</AnimatePresenseWithDynamicHeight>
+			</AnimatePresenceWithDynamicHeight>
 		</div>
 	);
 }

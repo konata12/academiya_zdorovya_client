@@ -5,7 +5,7 @@ import { ErrorWrapper } from "@/app/common_ui/error_components/ErrorWrapper/Erro
 import { FormInputError } from "@/app/types/data/form.type";
 import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
 import { ImageInputPreviewFromIndexedDB } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB";
-import { parseDetailsResponseToOrderComponentArray } from "@/app/services/details.service";
+import { parseDetailsResponseToOrderComponentArray } from "@/app/services/admin/details.service";
 import { RootState } from "@/app/utils/redux/store";
 import {
 	ServiceTypesDetailsSliceNameType,

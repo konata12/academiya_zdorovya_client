@@ -1,9 +1,12 @@
 @use '../../../../styles/_variables.scss' as *;
 
 .links {
+	width: 100%;
+	display: flex;
+	justify-content: right;
 
-  a {
-    color: $text-color-white;
-    text-decoration: none;
-  }
+	a {
+		color: $text-color-white;
+		text-decoration: none;
+	}
 }

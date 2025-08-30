@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Navbar from "./(client)/ui/Navbar/Navbar";
 import "./styles/index.scss";
-import { ubuntu } from "@/app/fonts/fonts";
-import { headers } from "next/headers";
+import { ubuntu, unbounded } from "@/app/fonts/fonts";
 
 export const metadata: Metadata = {
 	title: "Академія здоров'я",
@@ -16,10 +14,7 @@ export default async function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`${ubuntu.className}`}>
-				<Navbar />
-				{children}
-			</body>
+			<body className={`${ubuntu.className} ${unbounded.className}`}>{children}</body>
 		</html>
 	);
 }

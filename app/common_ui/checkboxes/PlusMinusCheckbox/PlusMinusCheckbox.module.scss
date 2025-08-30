@@ -1,0 +1,71 @@
+@use '../../../styles/variables' as *;
+
+.checkbox {
+	position: relative;
+	display: block;
+	min-width: 50px;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	cursor: pointer;
+
+	&:hover {
+		span {
+			filter: drop-shadow(0 5px 30px $primary-color);
+
+			.svg {
+				cursor: pointer;
+
+				path {
+					transform: scale(0.8);
+					cursor: pointer;
+					fill: $secondary-color;
+					stroke: $secondary-color;
+				}
+			}
+		}
+	}
+
+	input {
+		position: relative;
+		z-index: 1;
+		appearance: none;
+
+		&:checked ~ span {
+			.svg {
+				.hor {
+					transform: rotate(180deg);
+				}
+
+				.ver {
+					transform: rotate(90deg);
+				}
+			}
+		}
+	}
+
+	span {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 50px;
+		height: 50px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		background: $primary-color;
+		border-radius: 50%;
+		transition: all $anim-time $slow;
+
+		.svg {
+
+			path {
+				fill: $text-color-white;
+				stroke: $text-color-white;
+				transition: all $anim-time $slow;
+				transform-origin: 50% 50%;
+			}
+		}
+	}
+}

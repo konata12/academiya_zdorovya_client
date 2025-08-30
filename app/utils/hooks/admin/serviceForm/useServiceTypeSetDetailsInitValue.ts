@@ -6,7 +6,7 @@ import { useFormChangeCheck } from "@/app/utils/hooks/common/useFormChangeCheck"
 import {
 	parseDetailsResponseToOrderComponentArray,
 	parseOrderComponentArrayToDetailsRedactor,
-} from "@/app/services/details.service";
+} from "@/app/services/admin/details.service";
 import { useEffect } from "react";
 import { useServiceTypeFormSlice } from "@/app/utils/hooks/admin/serviceForm/useServiceTypeFormSlice";
 import { ServiceTypesDetailsSliceNameType } from "@/app/types/data/services.type";
@@ -14,9 +14,7 @@ import { ServiceTypesDetailsSliceNameType } from "@/app/types/data/services.type
 export function useServiceTypeSetDetailsInitValue(
 	detailsSliceName: ServiceTypesDetailsSliceNameType,
 ) {
-	const { details } = useAppSelector(
-		(state: RootState) => state.serviceTypeUpdateForm,
-	);
+	const { details } = useAppSelector((state: RootState) => state.serviceTypeUpdateForm);
 	const order = useAppSelector(
 		(state: RootState) => state.serviceTypeUpdateDetailsOrder.order,
 	);
@@ -27,8 +25,7 @@ export function useServiceTypeSetDetailsInitValue(
 
 	// CHECK IF SERVICE TYPE DETAILS FORM DATA CHANGED
 	const oldServiceTypeDetails = details;
-	const parsedNewServiceTypeDetails =
-		parseOrderComponentArrayToDetailsRedactor(order);
+	const parsedNewServiceTypeDetails = parseOrderComponentArrayToDetailsRedactor(order);
 	const serviceTypeDetailsIsEqual = _.isEqual(
 		parsedNewServiceTypeDetails,
 		oldServiceTypeDetails,

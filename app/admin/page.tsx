@@ -3,11 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
-export default function admin({
-	children,
-}: Readonly<{
-	children: React.ReactNode;
-}>) {
+export default function admin() {
 	const pathName = usePathname();
 	const router = useRouter();
 

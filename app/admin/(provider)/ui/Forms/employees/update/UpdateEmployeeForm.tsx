@@ -43,7 +43,7 @@ import {
 	UpdateEmployeeRequestIsEuqalCheck,
 } from "@/app/types/data/employees.type";
 import { FormInputError } from "@/app/types/data/form.type";
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
 import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
 import { RootState } from "@/app/utils/redux/store";
@@ -57,7 +57,7 @@ import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/Su
 import ModalWindow from "@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow";
 import Checkbox from "@/app/admin/(provider)/ui/Checkbox/Checkbox";
 import PreviewEmployeeImage from "@/app/admin/(provider)/ui/Forms/employees/PreviewEmployeeImage/PreviewEmployeeImage";
-import { transferImageBetweenIndexDBStores } from "@/app/services/indexedDB.service";
+import { transferImageBetweenIndexDBStores } from "@/app/services/admin/indexedDB.service";
 import _ from "lodash";
 import { useFormChangeCheck } from "@/app/utils/hooks/common/useFormChangeCheck";
 

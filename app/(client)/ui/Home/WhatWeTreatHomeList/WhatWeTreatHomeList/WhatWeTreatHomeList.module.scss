@@ -1,0 +1,32 @@
+@use '../../../../../styles/variables' as *;
+
+.container {
+	border-bottom: 2px solid $disabled-color;
+	clip-path: inset(-200px -200px 0 -200px);
+
+	.labelContainer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 16px;
+		padding: 24px 0 33px;
+
+		h3 {
+			display: inline-block;
+			font-size: $pc-h4-fz;
+			font-weight: $font-weight-med;
+			word-break: break-word;
+		}
+	}
+
+	.list {
+		list-style-position: inside;
+		padding-bottom: $padding-2;
+		padding-left: 12px;
+
+		li {
+			font-size: $pc-h6-fz;
+			line-height: 180%;
+		}
+	}
+}

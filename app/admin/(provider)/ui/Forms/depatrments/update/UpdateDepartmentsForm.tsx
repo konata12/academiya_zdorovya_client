@@ -21,7 +21,7 @@ import {
 import { isEqual } from "lodash";
 import HookFormInputContainer from "@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm";
 import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import { useCheckIfDepartmentFormDataChanged } from "@/app/utils/hooks/admin/departmentForm/useCheckIfDepartmentFormDataChanged";
 
 export default function UpdateDepartmentForm() {

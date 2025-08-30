@@ -6,7 +6,7 @@ import {
 import { useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
 import _ from "lodash";
-import { parseOrderComponentArrayToDetailsRedactor } from "@/app/services/details.service";
+import { parseOrderComponentArrayToDetailsRedactor } from "@/app/services/admin/details.service";
 import { useFormChangeCheck } from "@/app/utils/hooks/common/useFormChangeCheck";
 
 export function checkIfDetailsFormDataChanged({

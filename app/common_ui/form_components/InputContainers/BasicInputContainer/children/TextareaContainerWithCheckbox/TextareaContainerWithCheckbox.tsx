@@ -1,4 +1,4 @@
-import AnimatePresenseWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenseWithDynamicHeight";
+import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
 import AutoResizingTextarea from "@/app/common_ui/form_components/basic_components/AutoResizingTextarea/AutoResizingTextarea";
 import styles from "./TextareaContainerWithCheckbox.module.scss";
 import { TextareaContainerWithCheckboxProps } from "@/app/types/ui/form_components/inputContainers.type";
@@ -21,9 +21,7 @@ export default function TextareaContainerWithCheckbox({
 	value = value || "";
 
 	return (
-		<div
-			className={`${styles.inputContainer} ${className?.inputContainer || ""}`}
-		>
+		<div className={`${styles.inputContainer} ${className?.inputContainer || ""}`}>
 			<div
 				className={`${styles.checkboxContainer} ${className?.checkboxContainer || ""}`}
 			>
@@ -40,8 +38,8 @@ export default function TextareaContainerWithCheckbox({
 				/>
 			</div>
 
-			<AnimatePresenseWithDynamicHeight
-				childrenIsrendered={isChecked}
+			<AnimatePresenceWithDynamicHeight
+				childrenIsRendered={isChecked}
 				className={{
 					absoluteContainer: styles.absoluteContainer,
 				}}
@@ -60,7 +58,7 @@ export default function TextareaContainerWithCheckbox({
 						{error.message as string}
 					</p>
 				)}
-			</AnimatePresenseWithDynamicHeight>
+			</AnimatePresenceWithDynamicHeight>
 		</div>
 	);
 }

@@ -9,8 +9,8 @@ import axiosInstance from "@/app/utils/axios";
 import { AxiosError } from "axios";
 import { ErrorResponse } from "@/app/types/data/response.type";
 import { DetailsRedactorType } from "@/app/types/data/details.type";
-import { getStatusErrorKeyFromLegalInformationField } from "@/app/services/legal_information.service";
-import { parseDetailsUpdateRequestFormData } from "@/app/services/details.service";
+import { getStatusErrorKeyFromLegalInformationField } from "@/app/services/admin/legal_information.service";
+import { parseDetailsUpdateRequestFormData } from "@/app/services/admin/details.service";
 
 const initialState: LegalInformationInit = {
 	privacyPolicy: null,

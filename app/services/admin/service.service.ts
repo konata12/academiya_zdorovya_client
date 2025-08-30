@@ -24,18 +24,18 @@ import {
 	parseDetailsResponse,
 	parseDetailsUpdateRequestFormData,
 	transferDetailsRedactorTypeImagesBetweenIndexDBStores,
-} from "@/app/services/details.service";
-import { renameFile, renameFileOrBlob } from "@/app/services/files.service";
-import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/response.service";
+} from "@/app/services/admin/details.service";
+import { renameFile, renameFileOrBlob } from "@/app/services/admin/files.service";
+import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/admin/response.service";
 import {
 	parseOrderedArrayToRequest,
 	sortByOrderWithOrderId,
 	sortByOrderWithoutOrderId,
-} from "@/app/services/order.service";
+} from "@/app/services/admin/order.service";
 import {
 	AppDBSchema,
 	transferImageBetweenIndexDBStores,
-} from "@/app/services/indexedDB.service";
+} from "@/app/services/admin/indexedDB.service";
 
 const storeName = "service_images";
 const createStoreName = "service_create_images";
@@ -88,9 +88,7 @@ export const createServiceFormData = async (data: CreateServiceFormData) => {
 						typedValues.map(async (typedValue, i) => {
 							for (const typedKey in typedValue) {
 								const value =
-									typedValue[
-										typedKey as keyof CreateServiceTypesFormData
-									];
+									typedValue[typedKey as keyof CreateServiceTypesFormData];
 
 								if (typedKey === "order") {
 									if (typeof value !== "number") {
@@ -98,10 +96,7 @@ export const createServiceFormData = async (data: CreateServiceFormData) => {
 											"Заголовок або опис неправильного формату",
 										);
 									}
-									formData.append(
-										`${key}[${i}][${typedKey}]`,
-										`${value}`,
-									);
+									formData.append(`${key}[${i}][${typedKey}]`, `${value}`);
 								} else if (
 									typedKey === ServiceTypesEnum.TITLE ||
 									typedKey === ServiceTypesEnum.DESCRIPTION
@@ -111,13 +106,8 @@ export const createServiceFormData = async (data: CreateServiceFormData) => {
 											"Заголовок або опис неправильного формату",
 										);
 									}
-									formData.append(
-										`${key}[${i}][${typedKey}]`,
-										value,
-									);
-								} else if (
-									typedKey === ServiceTypesEnum.BACKGROUNDIMG
-								) {
+									formData.append(`${key}[${i}][${typedKey}]`, value);
+								} else if (typedKey === ServiceTypesEnum.BACKGROUNDIMG) {
 									if (typeof value !== "string")
 										throw Error(
 											"Помилка BACKGROUNDIMG при створенні новини зображення",
@@ -131,16 +121,10 @@ export const createServiceFormData = async (data: CreateServiceFormData) => {
 										throw Error(
 											"Помилка BACKGROUNDIMG при створенні новини зображення",
 										);
-									formData.append(
-										`${key}[${i}][${typedKey}]`,
-										value,
-									);
+									formData.append(`${key}[${i}][${typedKey}]`, value);
 									formData.append(`backgroundImgs`, image);
 								} else if (typedKey === ServiceTypesEnum.DETAILS) {
-									if (
-										typeof value === "string" ||
-										typeof value === "number"
-									)
+									if (typeof value === "string" || typeof value === "number")
 										throw Error("Помилка даних редактора");
 									await parseDetailsCreateRequestFormData(
 										formData,
@@ -229,9 +213,7 @@ export const updateServiceFormData = async (data: CreateServiceFormData) => {
 						typedValues.map(async (typedValue, i) => {
 							for (const typedKey in typedValue) {
 								const value =
-									typedValue[
-										typedKey as keyof CreateServiceTypesFormData
-									];
+									typedValue[typedKey as keyof CreateServiceTypesFormData];
 
 								if (typedKey === "order") {
 									if (typeof value !== "number") {
@@ -239,10 +221,7 @@ export const updateServiceFormData = async (data: CreateServiceFormData) => {
 											"Заголовок або опис неправильного формату",
 										);
 									}
-									formData.append(
-										`${key}[${i}][${typedKey}]`,
-										`${value}`,
-									);
+									formData.append(`${key}[${i}][${typedKey}]`, `${value}`);
 								} else if (
 									typedKey === ServiceTypesEnum.TITLE ||
 									typedKey === ServiceTypesEnum.DESCRIPTION
@@ -252,13 +231,8 @@ export const updateServiceFormData = async (data: CreateServiceFormData) => {
 											"Заголовок або опис неправильного формату",
 										);
 									}
-									formData.append(
-										`${key}[${i}][${typedKey}]`,
-										value,
-									);
-								} else if (
-									typedKey === ServiceTypesEnum.BACKGROUNDIMG
-								) {
+									formData.append(`${key}[${i}][${typedKey}]`, value);
+								} else if (typedKey === ServiceTypesEnum.BACKGROUNDIMG) {
 									if (typeof value !== "string")
 										throw Error(
 											"Помилка BACKGROUNDIMG при створенні новини зображення",
@@ -272,21 +246,12 @@ export const updateServiceFormData = async (data: CreateServiceFormData) => {
 										throw Error(
 											"Помилка BACKGROUNDIMG при створенні новини зображення",
 										);
-									const parsedImage = renameFileOrBlob(
-										image,
-										value,
-									);
+									const parsedImage = renameFileOrBlob(image, value);
 
-									formData.append(
-										`${key}[${i}][${typedKey}]`,
-										value,
-									);
+									formData.append(`${key}[${i}][${typedKey}]`, value);
 									formData.append(`backgroundImgs`, parsedImage);
 								} else if (typedKey === ServiceTypesEnum.DETAILS) {
-									if (
-										typeof value === "string" ||
-										typeof value === "number"
-									)
+									if (typeof value === "string" || typeof value === "number")
 										throw Error("Помилка даних редактора");
 									await parseDetailsUpdateRequestFormData(
 										formData,
@@ -339,18 +304,14 @@ export async function parseServiceResponse(
 
 	return await Promise.all(
 		service.map(async (serviceData) => {
-			const { image, treatmentStages, serviceTypes, employees, ...data } =
-				serviceData;
+			const { image, treatmentStages, serviceTypes, employees, ...data } = serviceData;
 
 			const parsedImage = await getFileNameFromSignedURLAndSaveBlobInIndexedDB(
 				image,
 				store,
 			);
 			const parsedTreatmentStages = sortByOrderWithoutOrderId(treatmentStages);
-			const parsedServiceTypes = await parseServiceTypesResponse(
-				serviceTypes,
-				store,
-			);
+			const parsedServiceTypes = await parseServiceTypesResponse(serviceTypes, store);
 			const sortedEmployees = employees.sort((a, b) => {
 				return a.order - b.order;
 			});
@@ -375,11 +336,10 @@ async function parseServiceTypesResponse(
 		serviceTypes.map(async (type) => {
 			const { details, backgroundImg, ...data } = type;
 
-			let parsedBackgroundImg =
-				await getFileNameFromSignedURLAndSaveBlobInIndexedDB(
-					backgroundImg,
-					store,
-				);
+			let parsedBackgroundImg = await getFileNameFromSignedURLAndSaveBlobInIndexedDB(
+				backgroundImg,
+				store,
+			);
 
 			// PARSE DETAILS AND SAVE IMAGES IN INDEXEDDB
 			const parsedDetails = await parseDetailsResponse(details, store);
@@ -470,9 +430,7 @@ export async function transferServiceImagesBetweenIndexDBStores(
 		}
 	} catch (error) {
 		console.error(error);
-		throw new Error(
-			"Error when transferring service images between indexedDB stores",
-		);
+		throw new Error("Error when transferring service images between indexedDB stores");
 	}
 }
 
@@ -500,8 +458,7 @@ export function parseOldAndNewServiceDataToCheckIfDataIsEqual(
 		oldData: oldOtherData,
 		newData: {
 			...newOtherData,
-			serviceTypes:
-				newServiceTypes && parseOrderedArrayToRequest(newServiceTypes),
+			serviceTypes: newServiceTypes && parseOrderedArrayToRequest(newServiceTypes),
 			employees: parseOrderedArrayToRequest(newEmployees),
 		},
 	};

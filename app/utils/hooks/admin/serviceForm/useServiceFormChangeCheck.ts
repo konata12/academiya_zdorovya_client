@@ -1,5 +1,5 @@
 import { useFormChangeCheck } from "@/app/utils/hooks/common/useFormChangeCheck";
-import { parseOldAndNewServiceDataToCheckIfDataIsEqual } from "@/app/services/service.service";
+import { parseOldAndNewServiceDataToCheckIfDataIsEqual } from "@/app/services/admin/service.service";
 import { Service, ServiceFormData } from "@/app/types/data/services.type";
 import { log } from "node:util";
 

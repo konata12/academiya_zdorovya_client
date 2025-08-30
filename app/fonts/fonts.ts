@@ -15,7 +15,7 @@ export const ubuntu = localFont({
 	],
 });
 
-export const ubounded = localFont({
+export const unbounded = localFont({
 	src: [
 		{
 			path: "./unbounded/Unbounded-Medium.ttf",

@@ -1,5 +1,5 @@
-import { renameFile, renameFileOrBlob } from "@/app/services/files.service";
-import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/response.service";
+import { renameFile, renameFileOrBlob } from "@/app/services/admin/files.service";
+import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/admin/response.service";
 import {
 	AboutTreatment,
 	AboutTreatmentEnum,
@@ -12,9 +12,7 @@ const storeName = "about_treatment_images";
 const updateStoreName = "about_treatment_update_images";
 const createStoreName = "about_treatment_create_images";
 
-export const createAboutTreatmentFormData = async (
-	data: CreateAboutTreatmentFormData,
-) => {
+export const createAboutTreatmentFormData = async (data: CreateAboutTreatmentFormData) => {
 	const formData = new FormData();
 
 	for (const key in data) {
@@ -28,10 +26,7 @@ export const createAboutTreatmentFormData = async (
 		} else if (key === AboutTreatmentEnum.IMG) {
 			if (typeof value !== "string")
 				throw Error("Помилка зображення при створенні варіанту лікування");
-			const image = await get<File>(
-				value,
-				getIndexedDBStoreForImages(createStoreName),
-			);
+			const image = await get<File>(value, getIndexedDBStoreForImages(createStoreName));
 
 			if (!(image instanceof File))
 				throw Error("Помилка зображення при створенні варіанту лікування 2");
@@ -41,17 +36,13 @@ export const createAboutTreatmentFormData = async (
 			if (!value.length || typeof value === "string")
 				throw Error("Список варіантів лікування не може бути порожнім");
 
-			value.forEach((treatmentType) =>
-				formData.append(`${key}[]`, treatmentType),
-			);
+			value.forEach((treatmentType) => formData.append(`${key}[]`, treatmentType));
 		}
 	}
 
 	return formData;
 };
-export const updateAboutTreatmentFormData = async (
-	data: CreateAboutTreatmentFormData,
-) => {
+export const updateAboutTreatmentFormData = async (data: CreateAboutTreatmentFormData) => {
 	const formData = new FormData();
 
 	for (const key in data) {
@@ -96,11 +87,10 @@ export async function parseAboutTreatmentsResponse(
 			aboutTreatments.map(async (aboutTreatment) => {
 				const { image, ...data } = aboutTreatment;
 
-				let parsedImage =
-					await getFileNameFromSignedURLAndSaveBlobInIndexedDB(
-						image,
-						store,
-					);
+				let parsedImage = await getFileNameFromSignedURLAndSaveBlobInIndexedDB(
+					image,
+					store,
+				);
 
 				return {
 					...data,

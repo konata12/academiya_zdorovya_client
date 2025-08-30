@@ -13,11 +13,11 @@ import {
 } from "@/app/utils/redux/news/newsSlice";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
 import { News } from "@/app/types/data/news.type";
-import { parseDetailsResponseToOrderComponentArray } from "@/app/services/details.service";
+import { parseDetailsResponseToOrderComponentArray } from "@/app/services/admin/details.service";
 import { RootState } from "@/app/utils/redux/store";
 import { setAllNewsFormUpdateDataOnLink } from "@/app/utils/redux/news/newsUpdateFormSlice";
 import { setInitialDataOnLink } from "@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice";
-import { transferNewsImagesBetweenIndexDBStores } from "@/app/services/news.service";
+import { transferNewsImagesBetweenIndexDBStores } from "@/app/services/admin/news.service";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { useParsedDate } from "@/app/utils/hooks/common/useParsedDate";
 import { useRouter } from "next/navigation";

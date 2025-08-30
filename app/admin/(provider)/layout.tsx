@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./layout.module.scss";
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import { refreshTokens } from "@/app/utils/redux/auth/authSlice";
 import { RootState } from "@/app/utils/redux/store";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";

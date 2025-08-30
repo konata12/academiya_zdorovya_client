@@ -8,9 +8,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { basicAnimationTransition } from "@/app/utils/animations/variables";
 import styles from "./AnimatePresenseWithDynamicHeight.module.scss";
 
-export default function AnimatePresenseWithDynamicHeight({
+export default function AnimatePresenceWithDynamicHeight({
 	children,
-	childrenIsrendered,
+	childrenIsRendered,
 	className,
 	dependency = [],
 }: AnimatePresenseWithDynamicHeightProps) {
@@ -21,7 +21,7 @@ export default function AnimatePresenseWithDynamicHeight({
 		if (!elementRef.current) return;
 
 		// Initial height calculation (with forced reflow)
-		if (childrenIsrendered) {
+		if (childrenIsRendered) {
 			void elementRef.current.offsetHeight;
 			const newHeight = elementRef.current.offsetHeight;
 			setElemHeight(newHeight);
@@ -39,7 +39,7 @@ export default function AnimatePresenseWithDynamicHeight({
 
 		observer.observe(elementRef.current);
 		return () => observer.disconnect();
-	}, [childrenIsrendered, ...dependency]);
+	}, [childrenIsRendered, ...dependency]);
 
 	return (
 		<motion.div
@@ -52,7 +52,7 @@ export default function AnimatePresenseWithDynamicHeight({
 			transition={basicAnimationTransition}
 		>
 			<AnimatePresence>
-				{childrenIsrendered && (
+				{childrenIsRendered && (
 					<motion.div
 						ref={elementRef}
 						className={`${styles.shape} ${className?.absoluteContainer || ""}`}

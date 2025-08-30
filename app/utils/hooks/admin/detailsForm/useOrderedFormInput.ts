@@ -26,7 +26,7 @@ import { useCallback } from "react";
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
 import { useIndexedDBStoreForDetailsImages } from "@/app/utils/hooks/admin/detailsForm/useIndexedDBStoreForDetailsImages";
 import { v4 as uuidv4 } from "uuid";
-import { renameFile, uniqFileNameAndKeepExtension } from "@/app/services/files.service";
+import { renameFile, uniqFileNameAndKeepExtension } from "@/app/services/admin/files.service";
 
 interface HandleChangeProps<
 	T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,

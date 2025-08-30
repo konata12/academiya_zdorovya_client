@@ -20,7 +20,7 @@ import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/Su
 import { ErrorWrapper } from "@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper";
 import { FormInputError } from "@/app/types/data/form.type";
 import { setNewsUpdateError, updateNews } from "@/app/utils/redux/news/newsSlice";
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
 import _ from "lodash";

@@ -1,22 +1,18 @@
 import { clear, get } from "idb-keyval";
-import {
-	CreateNewsFormData,
-	News,
-	NewsRequstDataEnum,
-} from "@/app/types/data/news.type";
-import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/response.service";
+import { CreateNewsFormData, News, NewsRequstDataEnum } from "@/app/types/data/news.type";
+import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/admin/response.service";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
 import {
 	parseDetailsCreateRequestFormData,
 	parseDetailsResponse,
 	parseDetailsUpdateRequestFormData,
 	transferDetailsRedactorTypeImagesBetweenIndexDBStores,
-} from "@/app/services/details.service";
-import { renameFileOrBlob } from "@/app/services/files.service";
+} from "@/app/services/admin/details.service";
+import { renameFileOrBlob } from "@/app/services/admin/files.service";
 import {
 	AppDBSchema,
 	transferImageBetweenIndexDBStores,
-} from "@/app/services/indexedDB.service";
+} from "@/app/services/admin/indexedDB.service";
 
 const storeName = "news_images";
 const createStoreName = "news_create_images";
@@ -29,37 +25,25 @@ export const createNewsFormData = async (data: CreateNewsFormData) => {
 		for (const key in data) {
 			const value = data[key as keyof CreateNewsFormData];
 
-			if (
-				key === NewsRequstDataEnum.TITLE ||
-				key === NewsRequstDataEnum.DESCRIPTION
-			) {
+			if (key === NewsRequstDataEnum.TITLE || key === NewsRequstDataEnum.DESCRIPTION) {
 				if (typeof value !== "string") {
 					throw Error("Заголовок або опис неправильного формату");
 				}
 				formData.append(key, value);
 			} else if (key === NewsRequstDataEnum.BACKGROUNDIMG) {
 				if (typeof value !== "string")
-					throw Error(
-						"Помилка BACKGROUNDIMG при створенні новини зображення",
-					);
+					throw Error("Помилка BACKGROUNDIMG при створенні новини зображення");
 				const image = await get<File>(
 					value,
 					getIndexedDBStoreForImages(createStoreName),
 				);
 
 				if (!(image instanceof File))
-					throw Error(
-						"Помилка BACKGROUNDIMG при створенні новини зображення",
-					);
+					throw Error("Помилка BACKGROUNDIMG при створенні новини зображення");
 				formData.append(key, image);
 			} else if (key === NewsRequstDataEnum.DETAILS) {
-				if (typeof value === "string")
-					throw Error("Помилка даних редактора");
-				await parseDetailsCreateRequestFormData(
-					formData,
-					value,
-					createStoreName,
-				);
+				if (typeof value === "string") throw Error("Помилка даних редактора");
+				await parseDetailsCreateRequestFormData(formData, value, createStoreName);
 			}
 		}
 		formData.append(NewsRequstDataEnum.CREATEDAT, `${Date.now()}`);
@@ -78,38 +62,26 @@ export const updateNewsFormData = async (data: CreateNewsFormData) => {
 		for (const key in data) {
 			const value = data[key as keyof CreateNewsFormData];
 
-			if (
-				key === NewsRequstDataEnum.TITLE ||
-				key === NewsRequstDataEnum.DESCRIPTION
-			) {
+			if (key === NewsRequstDataEnum.TITLE || key === NewsRequstDataEnum.DESCRIPTION) {
 				if (typeof value !== "string") {
 					throw Error("Заголовок або опис неправильного формату");
 				}
 				formData.append(key, value);
 			} else if (key === NewsRequstDataEnum.BACKGROUNDIMG) {
 				if (typeof value !== "string")
-					throw Error(
-						"Помилка BACKGROUNDIMG при оновлені новини зображення",
-					);
+					throw Error("Помилка BACKGROUNDIMG при оновлені новини зображення");
 				const image = await get<File | Blob>(
 					value,
 					getIndexedDBStoreForImages(updateStoreName),
 				);
 
 				if (!(image instanceof Blob))
-					throw Error(
-						"Помилка BACKGROUNDIMG при оновлені новини зображення",
-					);
+					throw Error("Помилка BACKGROUNDIMG при оновлені новини зображення");
 				const parsedImage = renameFileOrBlob(image, value);
 				formData.append(key, parsedImage);
 			} else if (key === NewsRequstDataEnum.DETAILS) {
-				if (typeof value === "string")
-					throw Error("Помилка даних редактора");
-				await parseDetailsUpdateRequestFormData(
-					formData,
-					value,
-					updateStoreName,
-				);
+				if (typeof value === "string") throw Error("Помилка даних редактора");
+				await parseDetailsUpdateRequestFormData(formData, value, updateStoreName);
 			}
 		}
 		formData.append(NewsRequstDataEnum.CREATEDAT, `${Date.now()}`);
@@ -131,11 +103,10 @@ export async function parseNewsResponse(news: News[]): Promise<News[]> {
 		news.map(async (news) => {
 			const { details, backgroundImg, ...data } = news;
 
-			let parsedBackgroungImg =
-				await getFileNameFromSignedURLAndSaveBlobInIndexedDB(
-					backgroundImg,
-					store,
-				);
+			let parsedBackgroungImg = await getFileNameFromSignedURLAndSaveBlobInIndexedDB(
+				backgroundImg,
+				store,
+			);
 
 			// PARSE DETAILS AND SAVE IMAGES IN INDEXEDDB
 			const parsedDetails = await parseDetailsResponse(details, store);

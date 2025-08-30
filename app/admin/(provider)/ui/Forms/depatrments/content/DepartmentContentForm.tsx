@@ -14,7 +14,7 @@ import {
 	setDetailsContent,
 } from "@/app/utils/redux/departments/departmentsContentFormSlice";
 import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
-import { fulfilled } from "@/app/services/response.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import { updateDepartmentInStateContent } from "@/app/utils/redux/departments/departmentsSlice";
 
 export type DepartmentContentSelectButtonsType = "bookingServices" | "employees" | "services";

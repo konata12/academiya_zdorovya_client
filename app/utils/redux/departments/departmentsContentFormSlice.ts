@@ -53,7 +53,7 @@ export const fetchDetailsContentSearchBarData = createAsyncThunk(
 			let url: string;
 			switch (contentType) {
 				case "bookingServices":
-					url = "/bookings-services";
+					url = "/booking-services";
 					break;
 				case "employees":
 					url = "/employees";
@@ -62,7 +62,6 @@ export const fetchDetailsContentSearchBarData = createAsyncThunk(
 					url = "/services";
 					break;
 			}
-
 			const response = await axiosInstance.get<DetailsContentDataType[]>(
 				`${url}/admin/getBasicData`,
 			);

@@ -27,14 +27,14 @@ import {
 	TitleFormDataEnum,
 	TitleOrderComponent,
 } from "@/app/types/data/details.type";
-import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/response.service";
-import { renameFile, renameFileOrBlob } from "@/app/services/files.service";
+import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/admin/response.service";
+import { renameFile, renameFileOrBlob } from "@/app/services/admin/files.service";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
 import { v4 as uuidv4 } from "uuid";
 import {
 	AppDBSchema,
 	transferImageBetweenIndexDBStores,
-} from "@/app/services/indexedDB.service";
+} from "@/app/services/admin/indexedDB.service";
 
 // INDEXED DB
 export function clearDetailsIndexDB(details: DetailsRedactorType | null, store: UseStore) {

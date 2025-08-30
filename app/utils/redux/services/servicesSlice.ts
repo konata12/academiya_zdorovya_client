@@ -12,7 +12,7 @@ import {
 	createServiceFormData,
 	parseServiceResponse,
 	updateServiceFormData,
-} from "@/app/services/service.service";
+} from "@/app/services/admin/service.service";
 
 const initialState: ServiceInit = {
 	services: [],
@@ -40,16 +40,13 @@ export const fetchServices = createAsyncThunk(
 	"service/getAll",
 	async (_, { rejectWithValue }) => {
 		try {
-			const response = await axiosInstance.get<ServiceResponseData[]>(
-				`${baseUrl}`,
-			);
+			const response = await axiosInstance.get<ServiceResponseData[]>(`${baseUrl}`);
 			return await parseServiceResponse(response.data);
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -67,17 +64,14 @@ export const fetchOneService = createAsyncThunk(
 	"service/getOne",
 	async (id: string, { rejectWithValue }) => {
 		try {
-			const response = await axiosInstance.get<Service[]>(
-				`${baseUrl}/admin/${id}`,
-			);
+			const response = await axiosInstance.get<Service[]>(`${baseUrl}/admin/${id}`);
 			// console.log(response)
 			return response.data;
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -103,8 +97,7 @@ export const createService = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				let message = "Unexpected server error";
-				if (error.response?.data.message)
-					message = error.response?.data.message;
+				if (error.response?.data.message) message = error.response?.data.message;
 				if (Array.isArray(error.response?.data.message))
 					message = "Many errors check console";
 
@@ -157,8 +150,7 @@ export const updateService = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -183,8 +175,7 @@ export const deleteService = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 					id,
 				};
@@ -228,12 +219,10 @@ const servicesSlice = createSlice({
 					state.status.getAll = "succeeded";
 					if (action.payload) {
 						state.services = action.payload;
-						state.servicesIsModalOpen = new Array(
-							state.services.length,
-						).fill(false);
-						state.error.delete = new Array(state.services.length).fill(
-							null,
+						state.servicesIsModalOpen = new Array(state.services.length).fill(
+							false,
 						);
+						state.error.delete = new Array(state.services.length).fill(null);
 					}
 				},
 			)
@@ -254,9 +243,9 @@ const servicesSlice = createSlice({
 					state.status.getOne = "succeeded";
 					if (action.payload) {
 						state.services = action.payload;
-						state.servicesIsModalOpen = new Array(
-							state.services.length,
-						).fill(false);
+						state.servicesIsModalOpen = new Array(state.services.length).fill(
+							false,
+						);
 					}
 				},
 			)
@@ -276,12 +265,10 @@ const servicesSlice = createSlice({
 					state.status.create = "succeeded";
 					if (action.payload) {
 						state.services = action.payload;
-						state.servicesIsModalOpen = new Array(
-							state.services.length,
-						).fill(false);
-						state.error.delete = new Array(state.services.length).fill(
-							null,
+						state.servicesIsModalOpen = new Array(state.services.length).fill(
+							false,
 						);
+						state.error.delete = new Array(state.services.length).fill(null);
 					}
 				},
 			)
@@ -301,12 +288,10 @@ const servicesSlice = createSlice({
 					state.status.create = "succeeded";
 					if (action.payload) {
 						state.services = action.payload;
-						state.servicesIsModalOpen = new Array(
-							state.services.length,
-						).fill(false);
-						state.error.delete = new Array(state.services.length).fill(
-							null,
+						state.servicesIsModalOpen = new Array(state.services.length).fill(
+							false,
 						);
+						state.error.delete = new Array(state.services.length).fill(null);
 					}
 				},
 			)
