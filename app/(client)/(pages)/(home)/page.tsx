@@ -3,11 +3,16 @@ import Image from "next/image";
 import logo from "@/public/icons/logo.svg";
 import avatars from "@/public/images/client/main_hero_avatars.png";
 import doctor from "@/public/images/client/what_we_treat_home_page.png";
+import woman from "@/public/images/client/our_services.png";
 import Link from "next/link";
 import { fetchWhatWeTreats } from "@/app/services/client/fetchData.service";
 import { Suspense } from "react";
 import WhatWeTreatHomeLists from "@/app/(client)/ui/Home/WhatWeTreatHomeList/WhatWeTreatHomeLists";
 import WhatWeTreatHomeListsFallback from "@/app/(client)/ui/Home/WhatWeTreatHomeList/fallback/WhatWeTreatHomeListsFallback";
+import HowWeTreatArticles from "@/app/(client)/ui/Home/HowWeTreatArticles/HowWeTreatArticles";
+import OurServicesList from "@/app/(client)/ui/Home/OurServicesList/OurServicesList";
+import GoalsCards from "@/app/(client)/ui/Home/GoalsCards/GoalsCards";
+import FAQList from "@/app/(client)/ui/Home/FAQList/FAQList";
 
 export default async function Home() {
 	const whatWeTreatList = fetchWhatWeTreats();
@@ -118,7 +123,7 @@ export default async function Home() {
 						<WhatWeTreatHomeLists whatWeTreatList={whatWeTreatList} />
 					</Suspense>
 				</article>
-				{/*todo change to good quality picture*/}
+				{/*todo change to good quality picture and add box shadow*/}
 				<div className={styles.img}>
 					<Image src={doctor} alt={"Doctor"} />
 				</div>
@@ -129,11 +134,32 @@ export default async function Home() {
 					Дізнайтеся більше про наші методи фізичноі терапії, які забезпечуть
 					ефективне відновлення та тривалий результат.
 				</p>
+				<HowWeTreatArticles />
 			</section>
-			<section className="">OUR SERVICES </section>
-			<section className="">OUR GOAL</section>
+			<section className={`container ${styles.ourServicesSection}`}>
+				{/*todo change to good quality picture and add box shadow*/}
+				<div className={styles.img}>
+					<Image src={woman} alt={"Doctor"} />
+				</div>
+				<article>
+					<h2 className={"title left md"}>Наш спектр послуг</h2>
+					<OurServicesList />
+				</article>
+			</section>
+			<section className={`container ${styles.goalsSection}`}>
+				<h2 className={"title left md"}>Наша мета та цінності</h2>
+				<p>
+					Відданість, професіоналізм, індивідуальний підхід та турбота про кожного
+					пацієнта – основа нашої роботи.
+				</p>
+				<GoalsCards />
+			</section>
 			<section className="">REVIEWS</section>
-			<section className="">FAQ</section>
+			<section className={`container ${styles.faqSection}`}>
+				<h2 className={"title left md"}>Часто запитують</h2>
+				<p>Дізнайтесь відповіді на поширені питання.</p>
+				<FAQList />
+			</section>
 		</div>
 	);
 }

@@ -1,0 +1,12 @@
+.container {
+	display: flex;
+	flex-wrap: wrap;
+	max-width: 665px;
+	gap: 11px;
+
+	.dropdown {
+		p {
+			text-align: left;
+		}
+	}
+}

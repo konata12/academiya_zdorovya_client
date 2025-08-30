@@ -1,16 +1,27 @@
-import { AboutTreatment } from "@/app/types/data/about_treatment.type";
+"use client";
+
 import { useState } from "react";
-import styles from "./WhatWeTreatHomeList.module.scss";
+import styles from "./DetailsDropdownList.module.scss";
 import PlusMinusCheckbox from "@/app/common_ui/checkboxes/PlusMinusCheckbox/PlusMinusCheckbox";
 import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
 
-export default function WhatWeTreatHomeList({ data }: { data: AboutTreatment }) {
+interface DetailsDropdownListProps {
+	title: string;
+	text: string[] | string;
+	className?: string;
+}
+
+export default function DetailsDropdownList({
+	title,
+	text,
+	className,
+}: DetailsDropdownListProps) {
 	const [open, setOpen] = useState(false);
 
 	return (
-		<article className={styles.container}>
+		<article className={`${styles.container} ${className || ""}`}>
 			<div className={styles.labelContainer}>
-				<h3>{data.title}</h3>
+				<h3>{title}</h3>
 				<PlusMinusCheckbox
 					isChecked={open}
 					handleFunction={(e) => setOpen(e.target.checked)}
@@ -18,11 +29,15 @@ export default function WhatWeTreatHomeList({ data }: { data: AboutTreatment }) 
 			</div>
 
 			<AnimatePresenceWithDynamicHeight childrenIsRendered={open}>
-				<ul className={`${styles.list}`}>
-					{data.treatmentTypes.map((type, i) => {
-						return <li key={i}>{type}</li>;
-					})}
-				</ul>
+				{typeof text === "string" ? (
+					<p>{text}</p>
+				) : (
+					<ul className={`${styles.list}`}>
+						{text.map((type, i) => {
+							return <li key={i}>{type}</li>;
+						})}
+					</ul>
+				)}
 			</AnimatePresenceWithDynamicHeight>
 		</article>
 	);

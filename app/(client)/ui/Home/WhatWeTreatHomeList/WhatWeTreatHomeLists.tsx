@@ -3,7 +3,7 @@
 import { AboutTreatment } from "@/app/types/data/about_treatment.type";
 import { use } from "react";
 import styles from "./WhatWeTreatHomeLists.module.scss";
-import WhatWeTreatHomeList from "@/app/(client)/ui/Home/WhatWeTreatHomeList/WhatWeTreatHomeList/WhatWeTreatHomeList";
+import DetailsDropdownList from "@/app/common_ui/animated_components/DetailsDropdownList/DetailsDropdownList";
 
 export default function WhatWeTreatHomeLists({
 	whatWeTreatList,
@@ -15,7 +15,13 @@ export default function WhatWeTreatHomeLists({
 	return (
 		<div className={styles.container}>
 			{list.map((item) => {
-				return <WhatWeTreatHomeList data={item} key={item.id} />;
+				return (
+					<DetailsDropdownList
+						title={item.title}
+						text={item.treatmentTypes}
+						key={item.id}
+					/>
+				);
 			})}
 		</div>
 	);
