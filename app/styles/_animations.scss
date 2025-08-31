@@ -12,3 +12,18 @@ $anim-time: 0.6s;
  * @sass-export-section="box-shadow"
  */
 $shadow-size: 0px 5px 30px 0px;
+
+//loading animation variables
+.loading {
+	animation: l1 1s linear infinite alternate;
+
+	&:before {
+		content: "Loading..."
+	}
+}
+
+@keyframes l1 {
+	to {
+		opacity: 0
+	}
+}

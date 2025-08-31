@@ -30,8 +30,7 @@ export const login = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected server error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -65,13 +64,10 @@ export const authSlice = createSlice({
 				state.status.login = "loading";
 				state.error.login = null;
 			})
-			.addCase(
-				login.fulfilled,
-				(state, action: PayloadAction<AccessToken>) => {
-					state.status.login = "succeeded";
-					state.accessToken = action.payload.access_token;
-				},
-			)
+			.addCase(login.fulfilled, (state, action: PayloadAction<AccessToken>) => {
+				state.status.login = "succeeded";
+				state.accessToken = action.payload.access_token;
+			})
 			.addCase(login.rejected, (state, action) => {
 				state.status.login = "failed";
 				state.accessToken = null;
@@ -83,13 +79,10 @@ export const authSlice = createSlice({
 				state.status.refresh = "loading";
 				state.error.refresh = null;
 			})
-			.addCase(
-				refreshTokens.fulfilled,
-				(state, action: PayloadAction<AccessToken>) => {
-					state.status.refresh = "succeeded";
-					state.accessToken = action.payload.access_token;
-				},
-			)
+			.addCase(refreshTokens.fulfilled, (state, action: PayloadAction<AccessToken>) => {
+				state.status.refresh = "succeeded";
+				state.accessToken = action.payload.access_token;
+			})
 			.addCase(refreshTokens.rejected, (state, action) => {
 				state.status.refresh = "failed";
 				state.accessToken = null;

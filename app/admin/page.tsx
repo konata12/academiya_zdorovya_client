@@ -13,5 +13,5 @@ export default function admin() {
 			return;
 		}
 	});
-	return <>{children}</>;
+	return <></>;
 }

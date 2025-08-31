@@ -1,16 +1,17 @@
-@use '../../../../styles/variables' as *;
-@use '../../../../styles/mixins' as *;
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
+
 
 .page {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 64px;
+	gap: 32px;
 
 	text-align: center;
 
 	.code {
-		font-size: 448px;
+		font-size: 300px;
 		font-family: $not-found-font;
 		font-weight: $font-weight-med;
 		color: $primary-color;

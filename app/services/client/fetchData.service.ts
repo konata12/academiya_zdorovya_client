@@ -1,31 +1,32 @@
 import { AboutTreatment } from "@/app/types/data/about_treatment.type";
+import { Department } from "@/app/types/data/departments.type";
 
 const basicUrl = process.env.NEXT_PUBLIC_API_URL;
 
-// export async function fetchDepartments() {
-// 	console.log("fetch started"); // will log only once
-// 	const res = await fetch(`${basicUrl}/departments`);
-// 	const parsedData = await res.json();
-// 	return parsedData;
-// }
 export async function fetchDepartments() {
-	const first = Date.now();
-	const data = await fetch(`${basicUrl}/departments`);
-	const second = Date.now();
+	// "use cache";
+	const first = performance.now();
+	const res = await fetch(`${basicUrl}/departments`);
+	const second = performance.now();
 	console.log(second - first);
-	const parsedData = await data.json();
-	console.log("parsedData", parsedData);
+	console.log("res", res);
+
+	const parsedData: Department[] = await res.json();
+	console.log("departments Data", parsedData);
+
+	await new Promise((resolve) => setTimeout(resolve, 1500));
 
 	return parsedData;
 }
 
 export async function fetchWhatWeTreats() {
-	const first = Date.now();
+	// "use cache";
+	const first = performance.now();
 	const data = await fetch(`${basicUrl}/about-treatment`);
-	const second = Date.now();
-	console.log(second - first);
+	const second = performance.now();
+	// console.log(second - first);
 	const parsedData: AboutTreatment[] = await data.json();
-	console.log("parsedData", parsedData);
+	// console.log("parsedData", parsedData);
 
 	await new Promise((resolve) => setTimeout(resolve, 1500));
 

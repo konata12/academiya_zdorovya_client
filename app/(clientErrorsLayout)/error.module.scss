@@ -1,0 +1,28 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.container {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+
+	.header {
+		position: relative;
+		padding-bottom: 28px;
+	}
+
+	.main {
+		flex-grow: 1;
+		justify-content: center;
+	}
+
+	.footer {
+		background-color: $primary-color;
+		border-top: 2px solid $secondary-color;
+		padding: 32px 0;
+
+		color: $text-color-white;
+		text-align: center;
+		font-size: $pc-t3-fz;
+	}
+}
