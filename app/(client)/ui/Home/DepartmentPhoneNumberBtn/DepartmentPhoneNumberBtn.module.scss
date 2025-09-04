@@ -1,0 +1,45 @@
+@use '../../../../styles/variables' as *;
+
+.link {
+	cursor: pointer;
+	display: contents;
+	text-decoration: none;
+}
+.infoBtn {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	gap: 32px;
+
+	&:hover {
+
+		svg {
+			transform: scale(0.85);
+		}
+	}
+
+	svg {
+		transition: all $anim-time $slow;
+	}
+
+	.title {
+		font-size: $pc-t2-fz;
+		text-align: left;
+		font-weight: $font-weight-reg;
+
+		margin-bottom: 6px;
+	}
+
+	.phoneNumber,
+	span {
+		font-style: normal;
+		font-size: $pc-h5-fz;
+		font-weight: $font-weight-reg;
+		text-align: left;
+
+		a {
+			color: $secondary-color;
+			text-decoration: none;
+		}
+	}
+}

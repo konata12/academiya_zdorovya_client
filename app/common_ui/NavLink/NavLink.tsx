@@ -1,25 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import styles from "./NavLink.module.scss";
 import { usePathname } from "next/navigation";
+import styles from "./NavLink.module.scss";
 
 export default function NavLink({
 	children,
 	url,
+	className,
 }: {
 	children: React.ReactNode;
 	url: string;
+	className?: string;
 }) {
 	const pathname = usePathname();
 	const isActive = pathname.includes(url);
 
 	return (
-		<div className={`${styles.link} ${isActive && styles.active}`}>
+		<div className={`${styles.link} ${isActive ? styles.active : ""} ${className || ""}`}>
 			<Link className={`${styles.url} ${isActive && styles.active}`} href={url}>
 				{children}
 			</Link>
-			<div className={`${styles.bottom}`}></div>
 		</div>
 	);
 }

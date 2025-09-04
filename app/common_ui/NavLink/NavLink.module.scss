@@ -41,6 +41,7 @@
 		}
 
 		&::after {
+			z-index: 5;
 			left: 0;
 			bottom: -2px;
 			width: 100%;

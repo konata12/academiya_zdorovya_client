@@ -1,0 +1,145 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/functions' as *;
+
+//VARIABLES
+@mixin burger-styles {
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+@mixin links-styles {
+	position: absolute;
+	top: calc(100% + 2px);
+	left: 0;
+	width: 100%;
+	padding: 16px 0;
+	opacity: 0;
+	transform: scaleY(0);
+	transform-origin: top;
+
+	flex-wrap: wrap;
+	justify-content: center;
+
+	background-color: $background-color-secondary;
+	border-radius: 0 0 24px 24px;
+
+	&.active {
+		display: flex;
+		opacity: 1;
+		transform: scaleY(1);
+	}
+
+	.link {
+		clip-path: none;
+
+		&::after {
+			background-color: $disabled-color;
+		}
+
+		&:hover {
+
+			a {
+				color: $text-color-black;
+			}
+
+			&::after {
+				box-shadow: 0 0 22px 0 rgba-color($primary-color-active, 0.64);
+			}
+		}
+
+		a {
+			@include rgba-text($text-color-black, 0.5);
+		}
+	}
+}
+
+
+.linksContainer {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: right;
+
+	.links {
+		width: 100%;
+		display: flex;
+		justify-content: right;
+		transition: all $anim-time $slow;
+
+		a {
+			color: $text-color-white;
+			text-decoration: none;
+		}
+
+		@include respond-to(s) {
+			@include links-styles
+		}
+		@include respond-to(m) {
+			@include links-styles
+		}
+		@include respond-to(l) {
+			@include links-styles
+		}
+	}
+
+	.bookingBtn {
+		display: flex;
+		align-items: center;
+
+		.btn {
+			@include respond-to(s) {
+				display: none;
+			}
+		}
+
+		.icon {
+			display: none;
+
+			img {
+				height: 20px;
+				width: 20px;
+			}
+
+			@include respond-to(s) {
+				display: block;
+			}
+		}
+	}
+
+	.burger {
+		display: none;
+		background-color: transparent;
+		border: none;
+		outline: none;
+
+		.line {
+			height: 2px;
+			width: 20px;
+			border-radius: 44px;
+			background-color: $secondary-color;
+		}
+
+		@include respond-to(s) {
+			@include burger-styles
+		}
+		@include respond-to(m) {
+			@include burger-styles
+		}
+		@include respond-to(l) {
+			@include burger-styles
+		}
+	}
+
+	@include respond-to(s) {
+		gap: 16px;
+	}
+	@include respond-to(m) {
+		gap: 24px;
+	}
+	@include respond-to(l) {
+		gap: 24px;
+	}
+}

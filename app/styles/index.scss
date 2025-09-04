@@ -18,9 +18,9 @@ body {
 	font-weight: $font-weight-reg;
 	color: $text-color-black;
 
-	main {
-		padding-top: 73px;
-	}
+	//main {
+	//	padding-top: 73px;
+	//}
 }
 
 //CONTAINERS
@@ -33,16 +33,10 @@ body {
 	margin: auto;
 	padding: 0 24px;
 
-	//@include respond-to(s) {
-	//	max-width: 375px;
-	//}
-	//
-	//@include respond-to(m) {
-	//	max-width: 744px;
-	//}
+	max-width: $container-max-width-xl;
 
-	@include respond-to(l) {
-		max-width: 1440px;
+	@include respond-to(s) {
+		padding: 0 12px;
 	}
 }
 

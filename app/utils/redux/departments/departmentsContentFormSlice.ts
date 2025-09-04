@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { DepartmentContentSelectButtonsType } from "@/app/admin/(provider)/ui/Forms/depatrments/content/DepartmentContentForm";
 import {
 	AddDepartmentContentValueType,
 	Department,
@@ -11,10 +11,10 @@ import {
 	DepartmentsService,
 	DetailsContentDataType,
 } from "@/app/types/data/departments.type";
-import axiosInstance from "@/app/utils/axios";
-import { AxiosError } from "axios";
 import { ErrorResponse } from "@/app/types/data/response.type";
-import { DepartmentContentSelectButtonsType } from "@/app/admin/(provider)/ui/Forms/depatrments/content/DepartmentContentForm";
+import axiosInstance from "@/app/utils/axios";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 
 const initialState: DepartmentContentFormInit = {
 	tableData: {
@@ -53,18 +53,16 @@ export const fetchDetailsContentSearchBarData = createAsyncThunk(
 			let url: string;
 			switch (contentType) {
 				case "bookingServices":
-					url = "/booking-services";
+					url = "/booking-services/admin/getBasicData";
 					break;
 				case "employees":
-					url = "/employees";
+					url = "/employees/admin/getBasicData";
 					break;
 				case "services":
-					url = "/services";
+					url = "/services/getBasicData";
 					break;
 			}
-			const response = await axiosInstance.get<DetailsContentDataType[]>(
-				`${url}/admin/getBasicData`,
-			);
+			const response = await axiosInstance.get<DetailsContentDataType[]>(url);
 			console.log(response);
 			return { field: contentType, data: response.data };
 		} catch (error) {

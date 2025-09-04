@@ -1,0 +1,66 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+
+.page {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 32px;
+	padding-top: 113px;
+
+	text-align: center;
+
+	&.serverError.serverError {
+		padding-top: 0;
+	}
+
+	.code {
+		font-size: 300px;
+		font-family: $not-found-font;
+		font-weight: $font-weight-med;
+		color: $primary-color;
+
+		@include respond-to(s) {
+			font-size: 117px;
+		}
+		@include respond-to(m) {
+			font-size: 200px;
+		}
+	}
+
+	.shortDescription {
+		font-size: $pc-h6-fz;
+		@include rgba-text($text-color-black, .5);
+
+		@include respond-to(s) {
+			font-size: $mob-t1-fz;
+		}
+		@include respond-to(m) {
+			font-size: $mob-t1-fz;
+		}
+	}
+
+	.mainDescription {
+		max-width: 800px;
+		font-size: $pc-h3-fz;
+		color: $black-bg-color;
+
+		@include respond-to(s) {
+			font-size: $mob-h4-fz;
+		}
+		@include respond-to(m) {
+			font-size: $pc-h4-fz;
+		}
+	}
+
+	@include respond-to(s) {
+		gap: 24px;
+		padding-top: 58px;
+	}
+	@include respond-to(m) {
+		gap: 16px;
+		padding-top: 48px;
+	}
+}

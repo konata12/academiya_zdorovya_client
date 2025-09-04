@@ -1,10 +1,12 @@
-/**
+ /**
  * @sass-export-section="breakpoints"
  */
-$breakpoint-small: 320px;
-$breakpoint-medium: 744px;
-$breakpoint-large: 1025px;
+$breakpoint-s: 0; //320px
+$breakpoint-m: 744px;
+$breakpoint-l: 1025px;
+$breakpoint-xl: 1280px;
 
-$container-size-small: 480px;
-$container-size-medium: 1024px;
-$container-size-large: 1440px;
+ $container-max-width-s: 743px;
+ $container-max-width-m: 1024px;
+ $container-max-width-l: 1279px;
+ $container-max-width-xl: 1440px;

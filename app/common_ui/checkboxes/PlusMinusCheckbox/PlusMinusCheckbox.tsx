@@ -17,6 +17,7 @@ export default function PlusMinusCheckbox({
 				onChange={handleFunction}
 				type="checkbox"
 				id={elemId}
+				aria-label={isChecked ? "Close" : "Open"}
 				{...props}
 			/>
 			<span className={className?.span || ""}>

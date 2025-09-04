@@ -1,0 +1,82 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/functions' as *;
+
+.container {
+	position: relative;
+
+	.selected {
+		display: flex;
+		height: 100%;
+		align-items: center;
+		gap: 16px;
+		border-radius: $pc-input-border-rad;
+
+		&:hover {
+			cursor: pointer;
+
+			.department {
+				color: $secondary-color;
+			}
+
+			.arrow {
+				cursor: pointer;
+
+				.svg {
+					cursor: pointer;
+
+					path {
+						cursor: pointer;
+						fill: $secondary-color;
+						stroke: $secondary-color;
+					}
+				}
+			}
+		}
+
+		.department {
+			transition: all $slow $anim-time;
+			width: max-content;
+			font-size: $pc-t2-fz;
+
+			@include rgba-text($text-color-white, 0.9);
+
+			&.on {
+				color: $secondary-color;
+			}
+		}
+
+		.arrow {
+			border: none;
+			outline: none;
+			background-color: transparent;
+			transition: all $slow $anim-time;
+
+			&.on {
+				transform: rotate(180deg);
+			}
+
+			.svg {
+				display: block;
+				transition: all $slow $anim-time;
+
+				path {
+					fill: rgba-color($text-color-white, 0.9);
+					stroke: rgba-color($text-color-white, 0.9);
+					stroke-width: 0.3;
+					transition: all $slow $anim-time;
+				}
+
+				&.on {
+					fill: $secondary-color;
+					stroke: $secondary-color;
+
+					path {
+						fill: $secondary-color;
+						stroke: $secondary-color;
+					}
+				}
+			}
+		}
+	}
+}

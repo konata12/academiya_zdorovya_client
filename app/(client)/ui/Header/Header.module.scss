@@ -1,0 +1,50 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.header {
+	position: fixed;
+	top: 0;
+	z-index: 9999;
+	width: 100%;
+	background-color: $primary-color;
+	border-bottom: 2px $secondary-color solid;
+
+	.container {
+		height: 73px;
+		display: flex;
+		align-items: center;
+		gap: 32px;
+
+		.logo {
+			max-width: 164px;
+			display: block;
+			align-self: flex-start;
+
+			img {
+				width: 100%;
+				display: block;
+				height: auto;
+				padding-top: 8px;
+			}
+
+			@include respond-to(s) {
+				display: none;
+			}
+		}
+
+		.departmentsFallback {
+			align-self: center;
+			font-size: $pc-t2-fz;
+			@include rgba-text($text-color-white, 0.9);
+		}
+
+		@include respond-to(s) {
+			gap: 16px;
+		}
+	}
+}
+
+.headerShape {
+	height: 73px;
+	width: 100%;
+}

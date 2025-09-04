@@ -1,0 +1,254 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.footer {
+	margin-top: 186px;
+	background-color: $primary-color;
+	border-top: 2px solid $secondary-color;
+	color: $text-color-white;
+
+	.dataContainers {
+		display: flex;
+		justify-content: space-between;
+		gap: 32px;
+		padding: 65px 0 93px;
+
+		.dataContainer {
+			display: flex;
+			flex-direction: column;
+			gap: 24px;
+			flex: 0 1 300px;
+			padding-top: 47px;
+
+			.title {
+				font-size: $pc-h5-fz;
+				font-weight: $font-weight-med;
+
+				@include respond-to(s) {
+					font-size: $mob-h5-fz;
+				}
+				@include respond-to(m) {
+					font-size: $mob-h5-fz;
+				}
+			}
+
+			.text {
+				font-size: $pc-t2-fz;
+				font-weight: $font-weight-reg;
+				font-style: normal;
+
+				&.big {
+					font-size: $pc-t1-fz;
+					font-weight: $font-weight-med;
+
+					@include respond-to(s) {
+						font-size: $mob-t1-fz;
+					}
+					@include respond-to(m) {
+						font-size: $mob-t1-fz;
+					}
+				}
+
+				@include respond-to(s) {
+					font-size: $mob-t2-fz;
+				}
+				@include respond-to(m) {
+					font-size: $mob-t2-fz;
+				}
+			}
+
+			.links,
+			.address {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+
+			a {
+				max-width: max-content;
+				color: $text-color-white;
+				text-decoration: none;
+				font-style: normal;
+				transition: all $anim-time $slow;
+
+				&:hover {
+					color: $secondary-color;
+				}
+			}
+
+			@include respond-to(s) {
+				flex: 1 1 100%;
+				gap: 16px;
+				padding-top: 0;
+			}
+			@include respond-to(m) {
+				flex: 1 1 328px;
+				padding-top: 0;
+			}
+			@include respond-to(l) {
+				flex: 1 1 298px;
+				padding-top: 0;
+			}
+		}
+
+		.company {
+			padding-top: 0;
+
+			.logo {
+				max-width: 300px;
+				height: auto;
+
+				@include respond-to(s) {
+					max-width: 164px;
+				}
+				@include respond-to(m) {
+					max-width: 164px;
+				}
+			}
+
+			.icons {
+				display: flex;
+				gap: 16px;
+
+				a {
+					display: block;
+
+					svg {
+						&:hover {
+							cursor: pointer;
+
+							path {
+								cursor: pointer;
+								fill: $secondary-color;
+								stroke: $secondary-color;
+							}
+						}
+
+						path {
+							fill: $text-color-white;
+							stroke: $text-color-white;
+							transition: all $anim-time $slow;
+						}
+					}
+				}
+			}
+
+			@include respond-to(l) {
+				flex: 1 1 100%;
+				align-items: center;
+			}
+		}
+
+		.departmentsContainer {
+			.departments {
+				display: flex;
+				flex-direction: column;
+				gap: 16px;
+
+				.addresses {
+					display: flex;
+					flex-direction: column;
+					gap: 8px;
+					margin-top: 16px;
+
+					@include respond-to(s) {
+						margin-top: 10px;
+					}
+				}
+			}
+
+			@include respond-to(m) {
+				padding-top: 19px;
+			}
+		}
+
+		@include respond-to(s) {
+			flex-wrap: wrap;
+			padding: 45px 0 64px;
+		}
+		@include respond-to(m) {
+			flex-wrap: wrap;
+			justify-content: space-between;
+			padding: 45px 0 64px;
+		}
+		@include respond-to(l) {
+			flex-wrap: wrap;
+			padding: 45px 0 64px;
+		}
+	}
+
+	.navContainer {
+		position: relative;
+		width: 100%;
+		border-bottom: 2px $text-color-black solid;
+
+		.nav {
+			position: relative;
+			left: 0;
+			display: flex;
+			justify-content: center;
+			width: 100%;
+
+			overflow-x: auto;
+			overflow-y: hidden;
+			scroll-behavior: smooth;
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+			will-change: transform;
+			backface-visibility: hidden;
+			transform: translateZ(0);
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
+
+			&.scrollable {
+				justify-content: left;
+				user-select: none;
+			}
+
+			.link {
+				flex: 0 0 auto;
+				white-space: nowrap;
+				backface-visibility: hidden;
+			}
+		}
+
+		.scroll {
+			position: absolute;
+			bottom: -2px;
+			left: 0;
+			height: 2px;
+			width: 10%;
+			background-color: $secondary-color;
+		}
+	}
+
+	.navFallback {
+		width: 100%;
+		text-align: center;
+		border-bottom: 2px $secondary-color solid;
+	}
+
+	@include respond-to(s) {
+		margin-top: 93px;
+	}
+	@include respond-to(m) {
+		margin-top: 93px;
+	}
+}
+
+// BOTTOM
+.bottom {
+	background-color: $primary-color;
+	border-top: 2px solid $secondary-color;
+	padding: 32px 0;
+
+	color: $text-color-white;
+	text-align: center;
+	font-size: $pc-t3-fz;
+
+	&.mainBottom {
+		border: none;
+	}
+}
