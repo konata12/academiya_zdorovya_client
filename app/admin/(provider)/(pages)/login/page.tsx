@@ -35,7 +35,7 @@ export default function Login() {
 			) : (
 				<div className={styles.container}>
 					<form className={styles.form} onSubmit={formSubmit}>
-						<p className={`title lg`}>Вхід</p>
+						<p className={`title lg pb`}>Вхід</p>
 						<input
 							className={`input ${styles.login}`}
 							type="text"

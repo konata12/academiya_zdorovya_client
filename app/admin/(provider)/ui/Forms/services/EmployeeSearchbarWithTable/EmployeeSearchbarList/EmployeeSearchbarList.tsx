@@ -45,7 +45,7 @@ export function EmployeeSearchbarList({ showList, query }: EmployeeSearchbarList
 			if (error instanceof AxiosError) {
 				console.error(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				setError(serializableError);

@@ -1,4 +1,5 @@
 @use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
 @use '../../../styles/functions' as *;
 
 .page {
@@ -29,19 +30,41 @@
 		}
 
 		.container {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			gap: 64px;
-			text-align: center;
+			flex-wrap: nowrap;
 			width: 100%;
-			padding: 102px 24px 186px;
+			padding-top: 102px;
+			padding-bottom: 186px;
+
+			.logo {
+				justify-self: center;
+
+				img {
+					width: 100%;
+					@include respond-to(s) {
+						height: 72px;
+					}
+				}
+
+				@include respond-to(s) {
+					max-width: 300px;
+				}
+				@include respond-to(m) {
+					max-width: 520px;
+				}
+			}
 
 			h1 {
 				margin-top: 13px;
 				color: $text-color-white;
 				font-size: $pc-h3-fz;
 				font-weight: $font-weight-med;
+
+				@include respond-to(s) {
+					font-size: $mob-h5-fz;
+				}
+				@include respond-to(m) {
+					font-size: $mob-h3-fz;
+				}
 			}
 
 			.description {
@@ -59,12 +82,29 @@
 					color: $text-color-white;
 					font-weight: $font-weight-med;
 					text-align: center;
+
+					@include respond-to(s) {
+						display: none;
+					}
+					@include respond-to(m) {
+						display: none;
+					}
+					@include respond-to(l) {
+						display: none;
+					}
 				}
 
 				p {
 					color: $text-color-white;
 					font-size: $pc-h6-fz;
-					line-height: 180%
+					line-height: 180%;
+
+					@include respond-to(s) {
+						font-size: $mob-h6-fz;
+					}
+					@include respond-to(m) {
+						font-size: $mob-h6-fz;
+					}
 				}
 			}
 
@@ -72,46 +112,28 @@
 				display: flex;
 				max-width: 1228px;
 				width: 100%;
-				gap: 28px;
+				gap: 24px;
 
-				.infoBtn {
-					display: flex;
-					width: 100%;
-					align-items: center;
-					gap: 32px;
-
-					&:hover {
-
-						svg {
-							transform: scale(0.85);
-						}
-					}
-
-					svg {
-						transition: all $anim-time $slow;
-					}
-
-					.title {
-						font-size: $pc-t2-fz;
-						text-align: left;
-						font-weight: $font-weight-reg;
-
-						margin-bottom: 6px;
-					}
-
-					.phoneNumber,
-					span {
-						font-style: normal;
-						font-size: $pc-h5-fz;
-						font-weight: $font-weight-reg;
-						text-align: left;
-
-						a {
-							color: $secondary-color;
-							text-decoration: none;
-						}
-					}
+				@include respond-to(s) {
+					flex-wrap: wrap;
 				}
+				@include respond-to(m) {
+					flex-wrap: wrap;
+				}
+				@include respond-to(l) {
+					justify-content: space-between;
+					flex-wrap: wrap;
+				}
+			}
+
+			@include respond-to(s) {
+				gap: 44px;
+				padding-top: 65px;
+				padding-bottom: 93px;
+			}
+			@include respond-to(m) {
+				padding-top: 75px;
+				padding-bottom: 93px;
 			}
 		}
 	}
@@ -130,11 +152,22 @@
 			h2 {
 				margin-bottom: 54px;
 			}
+
+			@include respond-to(s) {
+				flex: 1 1 100%;
+			}
+			@include respond-to(m) {
+				flex: 1 1 100%;
+			}
+			@include respond-to(l) {
+				min-width: 470px;
+			}
 		}
 
 		.img {
-			flex: 1 1 0; // takes 1 part of available space
-			max-width: 632px; // optional max
+			flex: 1 1;
+			margin: 0 auto;
+			max-width: 632px;
 			//todo when normal picture is added create box and shadow
 			//border-radius: 42px;
 			//box-shadow: 3px 7px 37px 0 rgba(0, 0, 0, 0.12), 0 0 0 0 rgba(0, 0, 0, 0.08);
@@ -142,30 +175,26 @@
 			img {
 				width: 100%;
 				height: auto;
-				object-fit: contain; // keep proportions
+				object-fit: contain;
+			}
+
+			@include respond-to(s) {
+				order: -1;
+				max-width: 324px;
+			}
+			@include respond-to(m) {
+				order: -1;
+				max-width: 324px;
 			}
 		}
-	}
 
-	.howWeTreatSection,
-	.goalsSection,
-	.faqSection {
-		display: flex;
-		flex-wrap: wrap;
-		flex-direction: column;
-		align-items: center;
-		gap: 64px;
-
-		h2 {
-			text-align: center;
+		@include respond-to(s) {
+			gap: 44px;
+			flex-wrap: wrap;
 		}
-
-		p {
-			max-width: 700px;
-
-			text-align: center;
-			font-size: $pc-h6-fz;
-			line-height: 180%;
+		@include respond-to(m) {
+			gap: 44px;
+			flex-wrap: wrap;
 		}
 	}
 }

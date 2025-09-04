@@ -1,6 +1,7 @@
 "use client";
 
 import NavLink from "@/app/common_ui/NavLink/NavLink";
+import { useElementWidth } from "@/app/utils/hooks/common/useElementWidth";
 import phone from "@/public/icons/phone.svg";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,12 +17,13 @@ const links = [
 ];
 export default function Links() {
 	const [showLinks, setShowLinks] = useState(false);
+	const { width, ref } = useElementWidth(1);
 
 	return (
-		<div className={styles.linksContainer}>
+		<div className={styles.linksContainer} ref={ref}>
 			<div className={`${styles.links} ${showLinks ? styles.active : ""}`}>
 				{/*	ADD ON MOBILE*/}
-				{showLinks && (
+				{width <= 1217 && (
 					<NavLink className={styles.link} url={"/"}>
 						Головна
 					</NavLink>

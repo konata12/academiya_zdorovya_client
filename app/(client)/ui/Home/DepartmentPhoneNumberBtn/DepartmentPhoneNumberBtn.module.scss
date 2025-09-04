@@ -1,15 +1,25 @@
 @use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
 
 .link {
 	cursor: pointer;
 	display: contents;
 	text-decoration: none;
+
+	@include respond-to(s) {
+		display: none;
+	}
+	@include respond-to(l) {
+		max-width: 480px;
+	}
 }
-.infoBtn {
+
+.infoBtn.infoBtn.infoBtn {
 	display: flex;
 	width: 100%;
 	align-items: center;
 	gap: 32px;
+	text-align: left;
 
 	&:hover {
 
@@ -28,6 +38,10 @@
 		font-weight: $font-weight-reg;
 
 		margin-bottom: 6px;
+
+		@include respond-to(s) {
+			font-size: $mob-t2-fz;
+		}
 	}
 
 	.phoneNumber,
@@ -40,6 +54,22 @@
 		a {
 			color: $secondary-color;
 			text-decoration: none;
+		}
+
+		@include respond-to(s) {
+			font-size: $mob-h5-fz;
+		}
+	}
+
+	@include respond-to(s) {
+		padding: 24px;
+		gap: 24px;
+	}
+	@include respond-to(l) {
+		flex: 1 1 465px;
+
+		&:nth-child(3) {
+			flex: 1 1 100%;
 		}
 	}
 }

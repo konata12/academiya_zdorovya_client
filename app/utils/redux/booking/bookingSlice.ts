@@ -39,7 +39,7 @@ export const getAllNotRepliedCount = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -59,7 +59,7 @@ export const getAllNotRepliedCountForEveryDepartment = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -78,7 +78,7 @@ export const getDepartmentBookings = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -102,7 +102,7 @@ export const updateRepliedStatus = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);

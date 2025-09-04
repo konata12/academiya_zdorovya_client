@@ -1,19 +1,36 @@
-import React from "react";
-import { getDepartmentIdServerComponent } from "@/app/services/client/utils.service";
-import { Department } from "@/app/types/data/departments.type";
-import styles from "./DepartmentPhoneNumberBtn.module.scss";
-import DepartmentPhoneNumber from "@/app/(client)/ui/common/DepartmentPhoneNumber/DepartmentPhoneNumber";
+"use client";
 
-export default async function DepartmentPhoneNumberBtn({
+import { getCookieInClientComponent } from "@/app/services/client/utils.service";
+import { Department } from "@/app/types/data/departments.type";
+import { useElementWidth } from "@/app/utils/hooks/common/useElementWidth";
+import React, { use, useEffect, useState } from "react";
+import styles from "./DepartmentPhoneNumberBtn.module.scss";
+
+export default function DepartmentPhoneNumberBtn({
 	departmentsPromise,
 }: {
 	departmentsPromise: Promise<Department[]>;
 }) {
-	const number = await getDepartmentIdServerComponent(departmentsPromise);
+	const [number, setNumber] = useState("Loading...");
+	const departments = use(departmentsPromise);
+	const { width, ref } = useElementWidth(2);
+
+	useEffect(() => {
+		const id = getCookieInClientComponent("departmentId");
+		const department = departments.find((department) => `${department.id}` === id);
+
+		if (department) {
+			setNumber(department.hotline);
+		} else {
+			setNumber("Loading...");
+		}
+	}, []);
+
+	if (width <= 681) return;
 
 	return (
-		<a href={`tel:${number}`} className={styles.link}>
-			<div className={`btn yellow xxl brown ${styles.infoBtn}`}>
+		<a href={`tel:${number}`} className={`${styles.link}`}>
+			<div className={`btn yellow xxl brown ${styles.infoBtn}`} ref={ref}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="44"

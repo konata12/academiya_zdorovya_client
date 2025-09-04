@@ -84,7 +84,7 @@ export default function page({
 	return (
 		<>
 			<div className={styles.titleWrap}>
-				<p className={`title lg ${styles.title}`}>
+				<p className={`title lg pb ${styles.title}`}>
 					{department?.city}, {department?.address}
 				</p>
 				<SafeLink className={`btn blue md returnBtn`} href="/admin/prices">

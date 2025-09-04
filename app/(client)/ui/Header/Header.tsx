@@ -1,6 +1,6 @@
 import DepartmentsSelectContainer from "@/app/(client)/ui/Header/Departments_select/DepartmentsSelectContainer";
 import Links from "@/app/(client)/ui/Header/Links/Links";
-import { fetchDepartments } from "@/app/services/client/fetchData.service";
+import { fetchDepartments } from "@/app/services/server/fetchData.service";
 import logo from "@/public/icons/logo.svg";
 import Image from "next/image";
 import Link from "next/link";

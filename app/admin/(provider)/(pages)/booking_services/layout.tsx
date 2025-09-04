@@ -51,7 +51,7 @@ export default function BookingServices({
 
 	return (
 		<>
-			<p className={`title lg `}>Послуги для запису</p>
+			<p className={`title lg pb `}>Послуги для запису</p>
 			<CommonTable titles={titles}>
 				{!bookingServices.length ? (
 					<CommonTable404

@@ -1,6 +1,17 @@
+@use '../../../../styles/mixins' as *;
+
 .container {
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
 	gap: 32px;
+
+	.card {
+		flex-direction: column;
+		gap: 22px;
+
+		@include respond-to(l) {
+			flex: 100%;
+		}
+	}
 }

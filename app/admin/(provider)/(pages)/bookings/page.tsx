@@ -34,7 +34,7 @@ export default function page() {
 
 	return (
 		<div>
-			<p className={`title lg`}>Наповнення відділення</p>
+			<p className={`title lg pb`}>Наповнення відділення</p>
 			<CommonTable titles={titles}>
 				{!departments || !departments.length ? (
 					<p className={`fetchError`}>{errorUIMessage()}</p>

@@ -1,5 +1,11 @@
-export function getCookieInClientComponent(name: string) {
-	const value = `; ${document.cookie}`;
-	const parts = value.split(`; ${name}=`);
-	if (parts.length === 2) return parts.pop()?.split(";").shift();
+import { Department } from "@/app/types/data/departments.type";
+import { cookies } from "next/headers";
+
+export async function getDepartmentIdServerComponent(
+	departmentsPromise: Promise<Department[]>,
+) {
+	const departments = await departmentsPromise;
+	const cookieStore = await cookies();
+	const id = cookieStore.get("departmentId")?.value;
+	return departments.find((department) => `${department.id}` === `${id}`)?.hotline;
 }

@@ -46,7 +46,7 @@ export const fetchServices = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -71,7 +71,7 @@ export const fetchOneService = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -96,7 +96,7 @@ export const createService = createAsyncThunk(
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				console.log(error);
-				let message = "Unexpected server error";
+				let message = "Unexpected client error";
 				if (error.response?.data.message) message = error.response?.data.message;
 				if (Array.isArray(error.response?.data.message))
 					message = "Many errors check console";
@@ -150,7 +150,7 @@ export const updateService = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -175,7 +175,7 @@ export const deleteService = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 					id,
 				};

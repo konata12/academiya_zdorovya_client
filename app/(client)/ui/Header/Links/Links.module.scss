@@ -14,8 +14,6 @@
 		.line:nth-child(1) {
 			transform-origin: center;
 			transform: translateY(7px) rotate(45deg);
-			//transform-origin: top left;
-			//transform: rotate(45deg);
 		}
 		.line:nth-child(2) {
 			opacity: 0;
@@ -23,8 +21,6 @@
 		.line:nth-child(3) {
 			transform-origin: center;
 			transform: translateY(-7px) rotate(-45deg);
-			//transform-origin: top left;
-			//transform: rotate(-45deg);
 		}
 	}
 }
@@ -89,6 +85,7 @@
 		transition: all $anim-time $slow;
 
 		a {
+			pointer-events: auto;
 			color: $text-color-white;
 			text-decoration: none;
 		}

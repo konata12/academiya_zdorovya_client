@@ -1,4 +1,5 @@
 @use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
 
 .container {
 	width: 100%;
@@ -17,6 +18,13 @@
 			font-size: $pc-h4-fz;
 			font-weight: $font-weight-med;
 			word-break: break-word;
+
+			@include respond-to(s) {
+				font-size: $mob-h4-fz;
+			}
+			@include respond-to(m) {
+				font-size: $mob-h4-fz;
+			}
 		}
 	}
 
@@ -24,6 +32,13 @@
 		font-size: $pc-h6-fz;
 		line-height: 180%;
 		padding-bottom: $padding-2;
+
+		@include respond-to(s) {
+			font-size: $mob-h6-fz;
+		}
+		@include respond-to(m) {
+			font-size: $mob-h6-fz;
+		}
 	}
 
 	.list {
@@ -34,6 +49,13 @@
 		li {
 			font-size: $pc-h6-fz;
 			line-height: 180%;
+
+			@include respond-to(s) {
+				font-size: $mob-h6-fz;
+			}
+			@include respond-to(m) {
+				font-size: $mob-h6-fz;
+			}
 		}
 	}
 }

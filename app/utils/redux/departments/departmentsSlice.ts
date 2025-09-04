@@ -48,7 +48,7 @@ export const fetchDepartments = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -67,7 +67,7 @@ export const fetchDepartmentsWithRelations = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -87,7 +87,7 @@ export const fetchOneDepartment = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -109,7 +109,7 @@ export const createDepartment = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -138,7 +138,7 @@ export const updateDepartment = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -158,7 +158,7 @@ export const deleteDepartment = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 					id,
 				};

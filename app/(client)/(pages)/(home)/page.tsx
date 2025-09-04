@@ -1,12 +1,13 @@
+import { FAQ } from "@/app/(client)/ui/common/sections/FAQ/FAQ";
 import DepartmentPhoneNumberBtn from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn";
+import btnStyles from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn.module.scss";
 import DepartmentPhoneNumberBtnFallback from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtnFallback";
-import FAQList from "@/app/(client)/ui/Home/FAQList/FAQList";
 import GoalsCards from "@/app/(client)/ui/Home/GoalsCards/GoalsCards";
 import HowWeTreatArticles from "@/app/(client)/ui/Home/HowWeTreatArticles/HowWeTreatArticles";
 import OurServicesList from "@/app/(client)/ui/Home/OurServicesList/OurServicesList";
 import WhatWeTreatHomeListsFallback from "@/app/(client)/ui/Home/WhatWeTreatHomeList/fallback/WhatWeTreatHomeListsFallback";
 import WhatWeTreatHomeLists from "@/app/(client)/ui/Home/WhatWeTreatHomeList/WhatWeTreatHomeLists";
-import { fetchDepartments, fetchWhatWeTreats } from "@/app/services/client/fetchData.service";
+import { fetchDepartments, fetchWhatWeTreats } from "@/app/services/server/fetchData.service";
 import logo from "@/public/icons/logo.svg";
 import avatars from "@/public/images/client/main_hero_avatars.png";
 import woman from "@/public/images/client/our_services.png";
@@ -23,9 +24,11 @@ export default async function Home() {
 	return (
 		<div className={styles.page}>
 			<section className={styles.heroSection}>
-				<div className={`container ${styles.container}`}>
+				<div className={`container section ${styles.container}`}>
 					<div>
-						<Image src={logo} alt={"Logo"} />
+						<div className={styles.logo}>
+							<Image src={logo} alt={"Logo"} />
+						</div>
 						<h1>медичний центр фізичної реабілітації</h1>
 					</div>
 
@@ -48,12 +51,12 @@ export default async function Home() {
 						<Suspense fallback={<DepartmentPhoneNumberBtnFallback />}>
 							<DepartmentPhoneNumberBtn departmentsPromise={departments} />
 						</Suspense>
-						<div className={`btn yellow xxl brown ${styles.infoBtn}`}>
+						<div className={`btn yellow xxl brown ${btnStyles.infoBtn}`}>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								width="45"
+								width="44"
 								height="44"
-								viewBox="0 0 45 44"
+								viewBox="0 0 44 44"
 								fill="none"
 							>
 								<path
@@ -62,19 +65,19 @@ export default async function Home() {
 								/>
 							</svg>
 							<div>
-								<p className={styles.title}>Працюємо</p>
+								<p className={btnStyles.title}>Працюємо</p>
 								<span>пн - сб з 9:00 - 20:00</span>
 							</div>
 						</div>
 						<Link
 							href={"/contacts"}
-							className={`btn yellow xxl ${styles.infoBtn}`}
+							className={`btn yellow xxl ${btnStyles.infoBtn}`}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								width="45"
+								width="44"
 								height="44"
-								viewBox="0 0 45 44"
+								viewBox="0 0 44 44"
 								fill="none"
 							>
 								<path
@@ -95,7 +98,7 @@ export default async function Home() {
 								/>
 							</svg>
 							<div>
-								<p className={styles.title}>Запис на прийом</p>
+								<p className={btnStyles.title}>Запис на прийом</p>
 								<span>Записатись зараз</span>
 							</div>
 						</Link>
@@ -105,7 +108,7 @@ export default async function Home() {
 			<section className="news">NEWS</section>
 			<section className={`container ${styles.whatWeTreatSection}`}>
 				<article>
-					<h2 className={"title left md"}>Що ми лікуємо</h2>
+					<h2 className={"title left lg"}>Що ми лікуємо</h2>
 					<Suspense fallback={<WhatWeTreatHomeListsFallback />}>
 						<WhatWeTreatHomeLists whatWeTreatList={whatWeTreatList} />
 					</Suspense>
@@ -115,8 +118,8 @@ export default async function Home() {
 					<Image src={doctor} alt={"Doctor"} />
 				</div>
 			</section>
-			<section className={`container ${styles.howWeTreatSection}`}>
-				<h2 className={"title left md"}>Як ми лікуємо</h2>
+			<section className={`container section`}>
+				<h2 className={"title left lg"}>Як ми лікуємо</h2>
 				<p>
 					Дізнайтеся більше про наші методи фізичноі терапії, які забезпечуть
 					ефективне відновлення та тривалий результат.
@@ -129,12 +132,12 @@ export default async function Home() {
 					<Image src={woman} alt={"Doctor"} />
 				</div>
 				<article>
-					<h2 className={"title left md"}>Наш спектр послуг</h2>
+					<h2 className={"title left lg"}>Наш спектр послуг</h2>
 					<OurServicesList />
 				</article>
 			</section>
-			<section className={`container ${styles.goalsSection}`}>
-				<h2 className={"title left md"}>Наша мета та цінності</h2>
+			<section className={`container section`}>
+				<h2 className={"title left lg"}>Наша мета та цінності</h2>
 				<p>
 					Відданість, професіоналізм, індивідуальний підхід та турбота про кожного
 					пацієнта – основа нашої роботи.
@@ -142,11 +145,7 @@ export default async function Home() {
 				<GoalsCards />
 			</section>
 			<section className="">REVIEWS</section>
-			<section className={`container ${styles.faqSection}`}>
-				<h2 className={"title left md"}>Часто запитують</h2>
-				<p>Дізнайтесь відповіді на поширені питання.</p>
-				<FAQList />
-			</section>
+			<FAQ />
 		</div>
 	);
 }

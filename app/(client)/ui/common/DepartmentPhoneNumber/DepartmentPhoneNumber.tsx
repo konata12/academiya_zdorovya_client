@@ -1,5 +1,5 @@
 import { Department } from "@/app/types/data/departments.type";
-import { getDepartmentIdServerComponent } from "@/app/services/client/utils.service";
+import { getDepartmentIdServerComponent } from "@/app/services/server/utils.service";
 
 export default async function DepartmentPhoneNumber({
 	departmentsPromise,

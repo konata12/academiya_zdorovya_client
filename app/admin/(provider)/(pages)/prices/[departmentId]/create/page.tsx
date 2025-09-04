@@ -7,9 +7,7 @@ import CreatePriceForm from "@/app/admin/(provider)/ui/Forms/pricesForms/create/
 export default function page() {
 	return (
 		<div className={styles.container}>
-			<p className={`title left md ${styles.title}`}>
-				Додати послугу з розцінками
-			</p>
+			<p className={`title left md ${styles.title}`}>Додати послугу з розцінками</p>
 			<CreatePriceForm />
 		</div>
 	);

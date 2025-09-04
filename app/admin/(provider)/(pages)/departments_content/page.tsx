@@ -29,7 +29,7 @@ export default function page() {
 
 	return (
 		<div>
-			<p className={`title lg`}>Наповнення відділення</p>
+			<p className={`title lg pb`}>Наповнення відділення</p>
 			<CommonTable titles={titles}>
 				{!departments.length ? (
 					<CommonTable404

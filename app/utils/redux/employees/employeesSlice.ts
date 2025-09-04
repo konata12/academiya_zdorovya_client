@@ -50,7 +50,7 @@ export const fetchEmployees = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -69,7 +69,7 @@ export const fetchOneEmployee = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -94,7 +94,7 @@ export const createEmployee = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -143,7 +143,7 @@ export const updateEmployee = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -169,7 +169,7 @@ export const deleteEmployee = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message: error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 					id,
 				};

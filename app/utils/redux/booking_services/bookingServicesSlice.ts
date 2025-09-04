@@ -29,17 +29,14 @@ export const fetchBookingServices = createAsyncThunk(
 	"bookingServices/get",
 	async (_, { rejectWithValue }) => {
 		try {
-			const response = await axiosInstance.get<BookingService[]>(
-				`${requesUrlBase}`,
-			);
+			const response = await axiosInstance.get<BookingService[]>(`${requesUrlBase}`);
 			console.log(response);
 			return response.data;
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -62,8 +59,7 @@ export const createBookingService = createAsyncThunk(
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 				};
 				return rejectWithValue(serializableError);
@@ -76,17 +72,14 @@ export const deleteBookingService = createAsyncThunk(
 	"bookingServices/delete",
 	async (id: number, { rejectWithValue }) => {
 		try {
-			const response = await axiosInstance.delete(
-				`${requesUrlBase}/admin/${id}`,
-			);
+			const response = await axiosInstance.delete(`${requesUrlBase}/admin/${id}`);
 			console.log(response);
 			return id;
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				console.log(error);
 				const serializableError: ErrorResponse = {
-					message:
-						error.response?.data.message || "Unexpected server error",
+					message: error.response?.data.message || "Unexpected client error",
 					statusCode: error.status || 500,
 					id,
 				};
@@ -123,9 +116,9 @@ const bookingServicesSlice = createSlice({
 						state.bookingServicesIsModalOpen = new Array(
 							state.bookingServices.length,
 						).fill(false);
-						state.error.delete = new Array(
-							state.bookingServices.length,
-						).fill(null);
+						state.error.delete = new Array(state.bookingServices.length).fill(
+							null,
+						);
 					}
 				},
 			)

@@ -11,9 +11,7 @@ import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
 const titles = ["Відділення", "Опції"];
 
 export default function page() {
-	const { departments, error } = useAppSelector(
-		(state: RootState) => state.departments,
-	);
+	const { departments, error } = useAppSelector((state: RootState) => state.departments);
 
 	const dispatch = useAppDispatch();
 
@@ -23,7 +21,7 @@ export default function page() {
 
 	return (
 		<>
-			<p className={`title lg`}>Виберіть відділення</p>
+			<p className={`title lg pb`}>Виберіть відділення</p>
 			<CommonTable titles={titles}>
 				{!departments.length ? (
 					<p className="fetchError">

@@ -5,7 +5,7 @@ import { FooterNavBar } from "@/app/(client)/ui/Footer/FooterNavBar";
 import {
 	fetchDepartments,
 	fetchServicesTitles,
-} from "@/app/services/client/fetchData.service";
+} from "@/app/services/server/fetchData.service";
 import logo from "@/public/icons/logo.svg";
 import Image from "next/image";
 import Link from "next/link";

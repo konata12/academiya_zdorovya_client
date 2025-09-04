@@ -93,6 +93,7 @@ export default function HowWeTreatArticles() {
 					icon={item.icon}
 					title={`${i + 1}. ${item.title}`}
 					text={item.text}
+					className={styles.card}
 				/>
 			))}
 		</div>

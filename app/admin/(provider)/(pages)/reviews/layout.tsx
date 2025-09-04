@@ -22,7 +22,7 @@ export default function layout({
 
 	return (
 		<>
-			<p className={`title lg`}>Відгуки</p>
+			<p className={`title lg pb`}>Відгуки</p>
 			<CommonTable titles={titles}>123</CommonTable>
 			<SafeLink
 				className={`btn blue xl ${styles.addButton} ${isCreatePage ? "disabled" : ""}`}

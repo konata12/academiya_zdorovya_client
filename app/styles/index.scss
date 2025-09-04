@@ -40,6 +40,33 @@ body {
 	}
 }
 
+.section {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	align-items: center;
+	gap: 54px;
+
+	h2 {
+		text-align: center;
+	}
+
+	p {
+		max-width: 700px;
+
+		text-align: center;
+		font-size: $pc-h6-fz;
+		line-height: 180%;
+
+		@include respond-to(s) {
+			font-size: $mob-h6-fz;
+		}
+		@include respond-to(m) {
+			font-size: $mob-h6-fz;
+		}
+	}
+}
+
 .titleContainerWithReturnBtn {
 	display: flex;
 	justify-content: space-between;
@@ -56,9 +83,19 @@ body {
 		text-align: left;
 	}
 
+	&.pb {
+		margin-bottom: 64px;
+	}
+
 	&.lg {
 		font-size: $pc-h1-fz;
-		margin-bottom: 64px;
+
+		@include respond-to(s) {
+			font-size: $mob-h1-fz;
+		}
+		@include respond-to(m) {
+			font-size: $mob-h1-fz;
+		}
 	}
 
 	&.md {

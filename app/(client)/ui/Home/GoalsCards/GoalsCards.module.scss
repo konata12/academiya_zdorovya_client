@@ -1,3 +1,5 @@
+@use '../../../../styles/mixins' as *;
+
 .container {
 	display: flex;
 	align-items: stretch;
@@ -12,5 +14,25 @@
 		h3 {
 			margin: 0 0 24px;
 		}
+
+		@include respond-to(s) {
+			flex: 100%;
+		}
+		@include respond-to(m) {
+			flex: 100%;
+		}
+		@include respond-to(l) {
+			flex: 1 1 465px;
+		}
+	}
+
+	@include respond-to(s) {
+		flex-wrap: wrap;
+	}
+	@include respond-to(m) {
+		flex-wrap: wrap;
+	}
+	@include respond-to(l) {
+		flex-wrap: wrap;
 	}
 }

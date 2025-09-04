@@ -4,7 +4,7 @@ import React, { use, useEffect, useRef, useState } from "react";
 import styles from "./DepartmentsSelectContainer.module.scss";
 import { DepartmentSelect } from "@/app/(client)/ui/Header/Departments_select/DepartmentSelect/DepartmentSelect";
 import { Department } from "@/app/types/data/departments.type";
-import { getCookieInClientComponent } from "@/app/services/server/utils.service";
+import { getCookieInClientComponent } from "@/app/services/client/utils.service";
 
 export default function DepartmentsSelectContainer({
 	departmentsPromise,
