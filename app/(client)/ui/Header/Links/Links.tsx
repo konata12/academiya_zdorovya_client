@@ -16,11 +16,11 @@ const links = [
 ];
 export default function Links() {
 	const [showLinks, setShowLinks] = useState(false);
-	console.log(showLinks);
 
 	return (
 		<div className={styles.linksContainer}>
 			<div className={`${styles.links} ${showLinks ? styles.active : ""}`}>
+				{/*	ADD ON MOBILE*/}
 				{showLinks && (
 					<NavLink className={styles.link} url={"/"}>
 						Головна
@@ -45,7 +45,7 @@ export default function Links() {
 				</Link>
 			</div>
 			<button
-				className={styles.burger}
+				className={`${styles.burger} ${showLinks ? styles.active : ""}`}
 				type={"button"}
 				onClick={() => setShowLinks(!showLinks)}
 			>
