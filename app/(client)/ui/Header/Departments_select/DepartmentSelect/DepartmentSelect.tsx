@@ -1,8 +1,8 @@
 "use client";
 
-import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
-import React, { RefObject, useEffect, useRef } from "react";
 import { DepartmentSelectOptions } from "@/app/(client)/types";
+import { useElementWidth } from "@/app/utils/hooks/common/useElementWidth";
+import React, { RefObject, useEffect, useRef } from "react";
 import styles from "./DepartmentSelect.module.scss";
 
 interface DepartmentSelectProps {
@@ -20,8 +20,13 @@ export function DepartmentSelect({
 	setShowList,
 	parentRef,
 }: DepartmentSelectProps) {
+	const [triangleLeftPosition, setTriangleLeftPosition] = React.useState<number | "unset">(
+		"unset",
+	);
 	const listRef = useRef<HTMLDivElement>(null);
+	const { width, ref } = useElementWidth<HTMLDivElement>(5);
 
+	// HANDLE OUTSIDE CLICK CLOSE
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
 			const departmentEl = parentRef?.current;
@@ -44,21 +49,58 @@ export function DepartmentSelect({
 		};
 	}, [listRef]);
 
+	// OBSERVE LIST TITLE WIDTH
+	useEffect(() => {
+		if (!parentRef.current) return;
+
+		const observer = new ResizeObserver((entries) => {
+			for (const entry of entries) {
+				setTriangleLeftPosition(entry.contentRect.width);
+			}
+		});
+
+		observer.observe(parentRef.current);
+
+		setTriangleLeftPosition(parentRef.current.offsetWidth);
+
+		return () => observer.disconnect();
+	}, [parentRef.current]);
+
 	const changeDepartment = (department: DepartmentSelectOptions) => {
 		setDepartment(department.label);
 		document.cookie = `departmentId=${department.id}; path=/;`;
 	};
 
-	// todo change position a little bit and add triangle from arrow
 	return (
-		<AnimatePresenceWithDynamicHeight
-			childrenIsRendered={showList}
-			className={{
-				relativeContainer: styles.listContainer,
-				absoluteContainer: styles.container,
-			}}
+		<div
+			className={styles.container}
+			ref={ref}
+			style={showList ? { opacity: 1 } : undefined}
 		>
-			<div ref={listRef}>
+			<svg
+				className={styles.triangle}
+				style={
+					width <= 728
+						? {
+								left:
+									triangleLeftPosition === "unset"
+										? "unset"
+										: `${triangleLeftPosition - 31}px`,
+							}
+						: undefined
+				}
+				xmlns="http://www.w3.org/2000/svg"
+				width="29"
+				height="13"
+				viewBox="0 0 29 13"
+				fill="none"
+			>
+				<path
+					d="M11.2031 1.16864C12.7645 -0.389545 15.2921 -0.389546 16.8535 1.16864L28.0566 12.3483H0L11.2031 1.16864Z"
+					fill="#fff"
+				/>
+			</svg>
+			<div ref={listRef} className={styles.listContainer}>
 				{departments &&
 					departments.map((department, i) => {
 						return (
@@ -73,6 +115,6 @@ export function DepartmentSelect({
 						);
 					})}
 			</div>
-		</AnimatePresenceWithDynamicHeight>
+		</div>
 	);
 }

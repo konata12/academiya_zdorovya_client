@@ -2,7 +2,7 @@ import styles from "./DepartmentPhoneNumberBtn.module.scss";
 
 export default function DepartmentPhoneNumberBtnFallback() {
 	return (
-		<div className={`btn yellow xxl brown ${styles.infoBtn}`}>
+		<div className={`btn yellow xxl brown ${styles.notRender} ${styles.infoBtn}`}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="44"

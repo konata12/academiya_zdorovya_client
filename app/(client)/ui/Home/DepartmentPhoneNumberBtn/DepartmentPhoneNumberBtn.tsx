@@ -1,8 +1,8 @@
 "use client";
 
-import { getCookieInClientComponent } from "@/app/services/client/utils.service";
 import { Department } from "@/app/types/data/departments.type";
 import { useElementWidth } from "@/app/utils/hooks/common/useElementWidth";
+import { useObserveCookie } from "@/app/utils/hooks/common/useObserveCookie";
 import React, { use, useEffect, useState } from "react";
 import styles from "./DepartmentPhoneNumberBtn.module.scss";
 
@@ -12,11 +12,11 @@ export default function DepartmentPhoneNumberBtn({
 	departmentsPromise: Promise<Department[]>;
 }) {
 	const [number, setNumber] = useState("Loading...");
+	const { width, ref } = useElementWidth<HTMLDivElement>(6);
 	const departments = use(departmentsPromise);
-	const { width, ref } = useElementWidth(2);
 
+	const id = useObserveCookie("departmentId");
 	useEffect(() => {
-		const id = getCookieInClientComponent("departmentId");
 		const department = departments.find((department) => `${department.id}` === id);
 
 		if (department) {
@@ -24,13 +24,25 @@ export default function DepartmentPhoneNumberBtn({
 		} else {
 			setNumber("Loading...");
 		}
-	}, []);
-
-	if (width <= 681) return;
+	}, [id]);
 
 	return (
 		<a href={`tel:${number}`} className={`${styles.link}`}>
-			<div className={`btn yellow xxl brown ${styles.infoBtn}`} ref={ref}>
+			<div
+				className={`btn yellow xxl brown ${styles.infoBtn}`}
+				ref={ref}
+				style={
+					width <= 728
+						? {
+								height: 0,
+								opacity: 0,
+								width: 0,
+								padding: 0,
+								border: "none",
+							}
+						: undefined
+				}
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="44"

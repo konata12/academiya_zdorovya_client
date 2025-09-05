@@ -1,25 +1,38 @@
 @use '../../../../styles/variables' as *;
 @use '../../../../styles/mixins' as *;
 
+@mixin btnFlex {
+	padding: 0;
+	flex: 1 1 397px;
+	width: 100%;
+	align-items: center;
+}
+
 .link {
 	cursor: pointer;
 	display: contents;
 	text-decoration: none;
 
-	@include respond-to(s) {
-		display: none;
-	}
 	@include respond-to(l) {
 		max-width: 480px;
 	}
 }
 
+.phoneBtn {
+	@include btnFlex;
+
+	@include respond-to(l) {
+		flex: 1 1 465px;
+	}
+}
+
 .infoBtn.infoBtn.infoBtn {
 	display: flex;
-	width: 100%;
-	align-items: center;
+	@include btnFlex;
+	padding: 32px;
 	gap: 32px;
 	text-align: left;
+	transition: all $anim-time $slow;
 
 	&:hover {
 
@@ -67,9 +80,5 @@
 	}
 	@include respond-to(l) {
 		flex: 1 1 465px;
-
-		&:nth-child(3) {
-			flex: 1 1 100%;
-		}
 	}
 }

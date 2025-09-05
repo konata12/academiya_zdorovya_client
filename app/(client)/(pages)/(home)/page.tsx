@@ -7,6 +7,7 @@ import HowWeTreatArticles from "@/app/(client)/ui/Home/HowWeTreatArticles/HowWeT
 import OurServicesList from "@/app/(client)/ui/Home/OurServicesList/OurServicesList";
 import WhatWeTreatHomeListsFallback from "@/app/(client)/ui/Home/WhatWeTreatHomeList/fallback/WhatWeTreatHomeListsFallback";
 import WhatWeTreatHomeLists from "@/app/(client)/ui/Home/WhatWeTreatHomeList/WhatWeTreatHomeLists";
+import { DynamicRenderByWidth } from "@/app/common_ui/wrappers/DynamicRenderByWidth/DynamicRenderByWidth";
 import { fetchDepartments, fetchWhatWeTreats } from "@/app/services/server/fetchData.service";
 import logo from "@/public/icons/logo.svg";
 import avatars from "@/public/images/client/main_hero_avatars.png";
@@ -22,7 +23,7 @@ export default async function Home() {
 	const departments = fetchDepartments();
 
 	return (
-		<div className={styles.page}>
+		<div className={"page"}>
 			<section className={styles.heroSection}>
 				<div className={`container section ${styles.container}`}>
 					<div>
@@ -48,9 +49,16 @@ export default async function Home() {
 					</div>
 
 					<div className={styles.buttons}>
-						<Suspense fallback={<DepartmentPhoneNumberBtnFallback />}>
-							<DepartmentPhoneNumberBtn departmentsPromise={departments} />
-						</Suspense>
+						<DynamicRenderByWidth
+							notRenderWidth={728}
+							parentNodeLayer={4}
+							defaultWidth={0}
+							className={`${btnStyles.phoneBtn}`}
+						>
+							<Suspense fallback={<DepartmentPhoneNumberBtnFallback />}>
+								<DepartmentPhoneNumberBtn departmentsPromise={departments} />
+							</Suspense>
+						</DynamicRenderByWidth>
 						<div className={`btn yellow xxl brown ${btnStyles.infoBtn}`}>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"

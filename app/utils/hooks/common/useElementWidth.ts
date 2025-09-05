@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
-export function useElementWidth(parentNodeLayer: number = 0) {
-	const [width, setWidth] = useState(1440);
-	const ref = useRef<HTMLDivElement>(null);
+export function useElementWidth<T extends HTMLElement>(
+	parentNodeLayer: number = 0,
+	defaultWidth: number = 1440,
+) {
+	const [width, setWidth] = useState(defaultWidth);
+	const ref = useRef<T>(null);
 
 	useEffect(() => {
 		if (!ref.current) return;
@@ -23,6 +26,8 @@ export function useElementWidth(parentNodeLayer: number = 0) {
 		observer.observe(target);
 
 		// set initial
+		// console.dir("target");
+		// console.dir(target);
 		setWidth(target.offsetWidth);
 
 		return () => observer.disconnect();

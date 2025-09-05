@@ -2,199 +2,196 @@
 @use '../../../styles/mixins' as *;
 @use '../../../styles/functions' as *;
 
-.page {
-	display: flex;
-	flex-direction: column;
-	gap: 186px;
 
-	.heroSection {
-		position: relative;
+.heroSection {
+	position: relative;
 
-		background-image: url('/images/client/main_hero_bg.jpg');
-		background-size: cover;
-		background-position: center center;
-		background-repeat: no-repeat;
-		background-attachment: fixed;
-		isolation: isolate;
+	background-image: url('/images/client/main_hero_bg.jpg');
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	isolation: isolate;
 
-		&:after {
-			z-index: -1;
-			position: absolute;
-			content: '';
-			inset: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba-color($primary-color, 0.7);
-			mix-blend-mode: multiply;
-			backdrop-filter: blur(6px);
-		}
-
-		.container {
-			flex-wrap: nowrap;
-			width: 100%;
-			padding-top: 102px;
-			padding-bottom: 186px;
-
-			.logo {
-				justify-self: center;
-
-				img {
-					width: 100%;
-					@include respond-to(s) {
-						height: 72px;
-					}
-				}
-
-				@include respond-to(s) {
-					max-width: 300px;
-				}
-				@include respond-to(m) {
-					max-width: 520px;
-				}
-			}
-
-			h1 {
-				margin-top: 13px;
-				color: $text-color-white;
-				font-size: $pc-h3-fz;
-				font-weight: $font-weight-med;
-
-				@include respond-to(s) {
-					font-size: $mob-h5-fz;
-				}
-				@include respond-to(m) {
-					font-size: $mob-h3-fz;
-				}
-			}
-
-			.description {
-				max-width: 1228px;
-
-				h2 {
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					gap: 12px;
-					flex-wrap: wrap;
-					margin-bottom: 48px;
-
-					font-size: $pc-h5-fz;
-					color: $text-color-white;
-					font-weight: $font-weight-med;
-					text-align: center;
-
-					@include respond-to(s) {
-						display: none;
-					}
-					@include respond-to(m) {
-						display: none;
-					}
-					@include respond-to(l) {
-						display: none;
-					}
-				}
-
-				p {
-					color: $text-color-white;
-					font-size: $pc-h6-fz;
-					line-height: 180%;
-
-					@include respond-to(s) {
-						font-size: $mob-h6-fz;
-					}
-					@include respond-to(m) {
-						font-size: $mob-h6-fz;
-					}
-				}
-			}
-
-			.buttons {
-				display: flex;
-				max-width: 1228px;
-				width: 100%;
-				gap: 24px;
-
-				@include respond-to(s) {
-					flex-wrap: wrap;
-				}
-				@include respond-to(m) {
-					flex-wrap: wrap;
-				}
-				@include respond-to(l) {
-					justify-content: space-between;
-					flex-wrap: wrap;
-				}
-			}
-
-			@include respond-to(s) {
-				gap: 44px;
-				padding-top: 65px;
-				padding-bottom: 93px;
-			}
-			@include respond-to(m) {
-				padding-top: 75px;
-				padding-bottom: 93px;
-			}
-		}
+	&:after {
+		z-index: -1;
+		position: absolute;
+		content: '';
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba-color($primary-color, 0.7);
+		mix-blend-mode: multiply;
+		backdrop-filter: blur(6px);
 	}
 
-	.whatWeTreatSection,
-	.ourServicesSection {
+	.container {
+		flex-wrap: nowrap;
 		width: 100%;
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: 64px;
+		padding-top: 102px;
+		padding-bottom: 186px;
 
-		article {
-			flex: 1 1 0;
-
-			h2 {
-				margin-bottom: 54px;
-			}
-
-			@include respond-to(s) {
-				flex: 1 1 100%;
-			}
-			@include respond-to(m) {
-				flex: 1 1 100%;
-			}
-			@include respond-to(l) {
-				min-width: 470px;
-			}
-		}
-
-		.img {
-			flex: 1 1;
-			margin: 0 auto;
-			max-width: 632px;
-			//todo when normal picture is added create box and shadow
-			//border-radius: 42px;
-			//box-shadow: 3px 7px 37px 0 rgba(0, 0, 0, 0.12), 0 0 0 0 rgba(0, 0, 0, 0.08);
+		.logo {
+			justify-self: center;
 
 			img {
 				width: 100%;
-				height: auto;
-				object-fit: contain;
+				@include respond-to(s) {
+					height: 72px;
+				}
 			}
 
 			@include respond-to(s) {
-				order: -1;
-				max-width: 324px;
+				max-width: 300px;
 			}
 			@include respond-to(m) {
-				order: -1;
-				max-width: 324px;
+				max-width: 520px;
+			}
+		}
+
+		h1 {
+			margin-top: 13px;
+			color: $text-color-white;
+			font-size: $pc-h3-fz;
+			font-weight: $font-weight-med;
+			text-align: center;
+
+			@include respond-to(s) {
+				font-size: $mob-h5-fz;
+			}
+			@include respond-to(m) {
+				font-size: $mob-h3-fz;
+			}
+		}
+
+		.description {
+			max-width: 1228px;
+
+			h2 {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 12px;
+				flex-wrap: wrap;
+				margin-bottom: 48px;
+
+				font-size: $pc-h5-fz;
+				color: $text-color-white;
+				font-weight: $font-weight-med;
+				text-align: center;
+
+				@include respond-to(s) {
+					display: none;
+				}
+				@include respond-to(m) {
+					display: none;
+				}
+				@include respond-to(l) {
+					display: none;
+				}
+			}
+
+			p {
+				max-width: 100%;
+				color: $text-color-white;
+				font-size: $pc-h6-fz;
+				line-height: 180%;
+
+				@include respond-to(s) {
+					font-size: $mob-h6-fz;
+				}
+				@include respond-to(m) {
+					font-size: $mob-h6-fz;
+				}
+			}
+		}
+
+		.buttons {
+			display: flex;
+			max-width: 1228px;
+			width: 100%;
+			gap: 24px;
+
+			@include respond-to(s) {
+				flex-wrap: wrap;
+			}
+			@include respond-to(m) {
+				flex-wrap: wrap;
+			}
+			@include respond-to(l) {
+				justify-content: space-between;
+				flex-wrap: wrap;
 			}
 		}
 
 		@include respond-to(s) {
 			gap: 44px;
-			flex-wrap: wrap;
+			padding-top: 65px;
+			padding-bottom: 93px;
 		}
 		@include respond-to(m) {
-			gap: 44px;
-			flex-wrap: wrap;
+			padding-top: 75px;
+			padding-bottom: 93px;
 		}
+	}
+}
+
+.whatWeTreatSection,
+.ourServicesSection {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 64px;
+
+	article {
+		flex: 1 1 0;
+
+		h2 {
+			margin-bottom: 54px;
+		}
+
+		@include respond-to(s) {
+			flex: 1 1 100%;
+		}
+		@include respond-to(m) {
+			flex: 1 1 100%;
+		}
+		@include respond-to(l) {
+			min-width: 470px;
+		}
+	}
+
+	.img {
+		flex: 1 1;
+		margin: 0 auto;
+		max-width: 632px;
+		//todo when normal picture is added create box and shadow
+		//border-radius: 42px;
+		//box-shadow: 3px 7px 37px 0 rgba(0, 0, 0, 0.12), 0 0 0 0 rgba(0, 0, 0, 0.08);
+
+		img {
+			width: 100%;
+			height: auto;
+			object-fit: contain;
+		}
+
+		@include respond-to(s) {
+			order: -1;
+			max-width: 324px;
+		}
+		@include respond-to(m) {
+			order: -1;
+			max-width: 324px;
+		}
+	}
+
+	@include respond-to(s) {
+		gap: 44px;
+		flex-wrap: wrap;
+	}
+	@include respond-to(m) {
+		gap: 44px;
+		flex-wrap: wrap;
 	}
 }

@@ -39,7 +39,22 @@ export async function fetchServicesTitles() {
 	// console.log("res", res);
 
 	const parsedData: DepartmentsService[] = await res.json();
-	console.log("services Data", parsedData);
+	// console.log("services Data", parsedData);
+
+	await new Promise((resolve) => setTimeout(resolve, 1500));
+
+	return parsedData;
+}
+
+export async function fetchBannerNews() {
+	const first = performance.now();
+	const res = await fetch(`${basicUrl}/news/banner`);
+	const second = performance.now();
+	// console.log(second - first);
+	// console.log("res", res);
+
+	const parsedData: DepartmentsService[] = await res.json();
+	// console.log("services Data", parsedData);
 
 	await new Promise((resolve) => setTimeout(resolve, 1500));
 

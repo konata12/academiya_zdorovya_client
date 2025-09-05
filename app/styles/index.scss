@@ -17,10 +17,6 @@ body {
 	font-family: $main-font;
 	font-weight: $font-weight-reg;
 	color: $text-color-black;
-
-	//main {
-	//	padding-top: 73px;
-	//}
 }
 
 //CONTAINERS
@@ -37,6 +33,19 @@ body {
 
 	@include respond-to(s) {
 		padding: 0 12px;
+	}
+}
+
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 186px;
+
+	@include respond-to(s) {
+		gap: 93px;
+	}
+	@include respond-to(m) {
+		gap: 93px;
 	}
 }
 
