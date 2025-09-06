@@ -13,17 +13,7 @@
 	background-attachment: fixed;
 	isolation: isolate;
 
-	&:after {
-		z-index: -1;
-		position: absolute;
-		content: '';
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba-color($primary-color, 0.7);
-		mix-blend-mode: multiply;
-		backdrop-filter: blur(6px);
-	}
+	@include mix-bg-colors($primary-color);
 
 	.container {
 		flex-wrap: nowrap;

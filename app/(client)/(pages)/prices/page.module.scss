@@ -1,0 +1,29 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/functions' as *;
+
+
+.heroSection {
+	padding: 186px 0;
+
+	background: linear-gradient(0deg, rgba(0, 75, 174, 0.64) 0%, rgba(0, 75, 174, 0.64) 100%), radial-gradient(74.53% 63.85% at 50% 36.15%, rgba(0, 75, 174, 0.80) 0%, rgba(0, 75, 174, 0.00) 100%);
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+
+	background-blend-mode: multiply, luminosity;
+	backdrop-filter: blur(6px);
+
+	h1,
+	p {
+		color: $text-color-white;
+	}
+
+	@include respond-to(s) {
+		padding: 93px 0;
+	}
+	@include respond-to(m) {
+		padding: 93px 0;
+	}
+}

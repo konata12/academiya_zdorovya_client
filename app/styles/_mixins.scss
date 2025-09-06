@@ -1,29 +1,44 @@
 @use './variables' as *;
+@use './functions' as *;
 @use "sass:color";
 
 @mixin respond-to($breakpoint) {
-  @if $breakpoint ==s {
-    @media (min-width: $breakpoint-s) and (max-width: $container-max-width-s) {
-      @content;
-    }
-  } @else if $breakpoint ==m {
-    @media (min-width: $breakpoint-m) and (max-width: $container-max-width-m) {
-      @content;
-    }
-  } @else if $breakpoint ==l {
-    @media (min-width: $breakpoint-l) and (max-width: $breakpoint-xl) {
-      @content;
-    }
-  } @else if $breakpoint ==xl {
-	  @media (min-width: $breakpoint-xl) {
-		  @content;
-	  }
-  }
+	@if $breakpoint ==s {
+		@media (min-width: $breakpoint-s) and (max-width: $container-max-width-s) {
+			@content;
+		}
+	} @else if $breakpoint ==m {
+		@media (min-width: $breakpoint-m) and (max-width: $container-max-width-m) {
+			@content;
+		}
+	} @else if $breakpoint ==l {
+		@media (min-width: $breakpoint-l) and (max-width: $breakpoint-xl) {
+			@content;
+		}
+	} @else if $breakpoint ==xl {
+		@media (min-width: $breakpoint-xl) {
+			@content;
+		}
+	}
+}
+
+@mixin mix-bg-colors($color) {
+	&:after {
+		z-index: -1;
+		position: absolute;
+		content: '';
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba-color($primary-color, 0.7);
+		mix-blend-mode: multiply;
+		backdrop-filter: blur(6px);
+	}
 }
 
 @mixin rgba-text($color, $opacity) {
-  color: rgba(color.channel($color, "red", $space: rgb),
-          color.channel($color, "green", $space: rgb),
-          color.channel($color, "blue", $space: rgb),
-          $opacity);
+	color: rgba(color.channel($color, "red", $space: rgb),
+			color.channel($color, "green", $space: rgb),
+			color.channel($color, "blue", $space: rgb),
+			$opacity);
 }

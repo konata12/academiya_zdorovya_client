@@ -75,7 +75,7 @@ export function DepartmentSelect({
 		<div
 			className={styles.container}
 			ref={ref}
-			style={showList ? { opacity: 1 } : undefined}
+			style={showList ? { opacity: 1, transform: "scaleY(1)" } : undefined}
 		>
 			<svg
 				className={styles.triangle}
