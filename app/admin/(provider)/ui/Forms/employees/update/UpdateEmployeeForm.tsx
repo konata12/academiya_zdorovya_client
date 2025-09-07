@@ -1,5 +1,6 @@
 "use client";
 
+import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
 import FormElementContainerWithCheckboxHookForm from "@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox";
 import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
 import InputContainerWithCheckbox from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainerWithCheckbox/InputContainerWithCheckbox";
@@ -116,6 +117,10 @@ export default function UpdateEmployeeFrom() {
 			youtube: youtube && youtubeCheckbox ? youtube : undefined,
 			achivements: achivements && achivementsCheckbox ? achivements : undefined,
 		};
+	}
+
+	if (!oldEmployee) {
+		return <NotFoundFallback message={"Такого лікаря не існує"} />;
 	}
 
 	// UI Slice state reset

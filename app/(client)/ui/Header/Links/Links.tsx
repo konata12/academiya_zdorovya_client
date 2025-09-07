@@ -17,7 +17,7 @@ const links = [
 ];
 export default function Links() {
 	const [showLinks, setShowLinks] = useState(false);
-	const { width, ref } = useElementWidth(1);
+	const { width, ref } = useElementWidth<HTMLDivElement>(1);
 
 	return (
 		<div className={styles.linksContainer} ref={ref}>

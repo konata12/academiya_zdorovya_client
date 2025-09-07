@@ -1,33 +1,34 @@
-import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
-import React from "react";
-import styles from "./UpdateNewsForm.module.scss";
+import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
+import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
+import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
+
+import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
+import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
+import { ErrorWrapper } from "@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper";
 import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
 import { ImageInputPreviewFromIndexedDB } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB";
+import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
+import { TextareaContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer";
+import { fulfilled } from "@/app/services/admin/response.service";
+import { FormInputError } from "@/app/types/data/form.type";
 import {
 	CreateNewsFormData,
 	NewsFormDataEnum,
 	NewsFormDataEnumType,
 } from "@/app/types/data/news.type";
-import { RootState } from "@/app/utils/redux/store";
-import { TextareaContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer";
-import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
-import { useNewsFormHandleChange } from "@/app/utils/hooks/admin/newsForm/useNewsFormHandleChange";
-
-import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
-import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
-import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
-import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
-import { ErrorWrapper } from "@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper";
-import { FormInputError } from "@/app/types/data/form.type";
-import { setNewsUpdateError, updateNews } from "@/app/utils/redux/news/newsSlice";
-import { fulfilled } from "@/app/services/admin/response.service";
-import { useParams, usePathname, useRouter } from "next/navigation";
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
-import _ from "lodash";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
-import { clear } from "idb-keyval";
-import Link from "next/link";
+import { useNewsFormHandleChange } from "@/app/utils/hooks/admin/newsForm/useNewsFormHandleChange";
 import { useCheckIfNewsUpdateFormDataChanged } from "@/app/utils/hooks/admin/serviceForm/useCheckIfNewsUpdateFormDataChanged";
+import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
+import { setNewsUpdateError, updateNews } from "@/app/utils/redux/news/newsSlice";
+import { RootState } from "@/app/utils/redux/store";
+import { clear } from "idb-keyval";
+import _ from "lodash";
+import Link from "next/link";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import React from "react";
+import styles from "./UpdateNewsForm.module.scss";
 
 const titles = ["Стан вмісту", "Опції"];
 const indexedDBStoreName = "news_update_images";
@@ -46,6 +47,11 @@ export default function UpdateNewsForm() {
 	const handleChange = useNewsFormHandleChange(indexedDBStoreName, detailsOrderSliceName);
 	const { setFormError, resetDetailsComponentsOrder, resetFromData } =
 		useDetailsFormSlice(detailsOrderSliceName);
+
+	const oldNews = news.find((news) => `${news.id}` === id);
+	if (!oldNews) {
+		return <NotFoundFallback message={"Такого відділення не існує"} />;
+	}
 
 	useCheckIfNewsUpdateFormDataChanged();
 
@@ -144,7 +150,6 @@ export default function UpdateNewsForm() {
 		};
 
 		// CHECK IF DATA CHANGED
-		const oldNews = news.find((news) => `${news.id}` === id);
 		let oldData: CreateNewsFormData | undefined = undefined;
 		if (oldNews) {
 			const { id, createdAt, isBannerNews, ...oldNewsData } = oldNews;

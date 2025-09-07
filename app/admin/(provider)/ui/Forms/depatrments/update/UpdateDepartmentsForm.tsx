@@ -1,28 +1,29 @@
 "use client";
 
-import styles from "./UpdateDepartmentsForm.module.scss";
-import { useEffect } from "react";
-import { SubmitHandler, useForm, useWatch } from "react-hook-form";
-import { useParams, useRouter } from "next/navigation";
-import { GOOGLE_MAPS_URL, PHONE_NUMBER } from "@/app/utils/regex";
-import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
-import { RootState } from "@/app/utils/redux/store";
-import {
-	setUpdateError,
-	updateDepartment as updateDepartmentAction,
-	updateDepartmentInState,
-} from "@/app/utils/redux/departments/departmentsSlice";
+import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
+import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
+import HookFormInputContainer from "@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm";
+import { fulfilled } from "@/app/services/admin/response.service";
 import {
 	Department,
 	DepartmentsDefaultFormData,
 	DepartmentsFormData,
 	DepartmentsFormDataEnum,
 } from "@/app/types/data/departments.type";
-import { isEqual } from "lodash";
-import HookFormInputContainer from "@/app/common_ui/form_components/InputContainers/HookForm/children/InputContainer/InputContainerHookForm";
-import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
-import { fulfilled } from "@/app/services/admin/response.service";
 import { useCheckIfDepartmentFormDataChanged } from "@/app/utils/hooks/admin/departmentForm/useCheckIfDepartmentFormDataChanged";
+import {
+	setUpdateError,
+	updateDepartment as updateDepartmentAction,
+	updateDepartmentInState,
+} from "@/app/utils/redux/departments/departmentsSlice";
+import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
+import { RootState } from "@/app/utils/redux/store";
+import { GOOGLE_MAPS_URL, PHONE_NUMBER } from "@/app/utils/regex";
+import { isEqual } from "lodash";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { SubmitHandler, useForm, useWatch } from "react-hook-form";
+import styles from "./UpdateDepartmentsForm.module.scss";
 
 export default function UpdateDepartmentForm() {
 	const { departments, error } = useAppSelector((state: RootState) => state.departments);
@@ -45,6 +46,10 @@ export default function UpdateDepartmentForm() {
 
 	// Watch form values to detect changes
 	const formValues = useWatch({ control });
+
+	if (!department) {
+		return <NotFoundFallback message={"Такого відділення не існує"} />;
+	}
 
 	// Reset form values when `department` is available | just creates default values
 	useEffect(() => {

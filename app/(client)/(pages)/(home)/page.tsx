@@ -106,7 +106,9 @@ export default async function Home() {
 								/>
 							</svg>
 							<div>
-								<p className={btnStyles.title}>Запис на прийом</p>
+								<p className={`${btnStyles.title} ${btnStyles.black}`}>
+									Запис на прийом
+								</p>
 								<span>Записатись зараз</span>
 							</div>
 						</Link>
@@ -117,9 +119,9 @@ export default async function Home() {
 			<section className={`container ${styles.whatWeTreatSection}`}>
 				<article>
 					<h2 className={"title left lg"}>Що ми лікуємо</h2>
-					<Suspense fallback={<WhatWeTreatHomeListsFallback />}>
-						<WhatWeTreatHomeLists whatWeTreatList={whatWeTreatList} />
-					</Suspense>
+					{/*<Suspense fallback={<WhatWeTreatHomeListsFallback />}>*/}
+					<WhatWeTreatHomeLists whatWeTreatList={whatWeTreatList} />
+					{/*</Suspense>*/}
 				</article>
 				{/*todo change to good quality picture and add box shadow*/}
 				<div className={styles.img}>

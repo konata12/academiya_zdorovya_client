@@ -22,7 +22,14 @@
 	}
 }
 
-@mixin mix-bg-colors($color) {
+@mixin mix-bg-colors($url-path) {
+	background-image: url($url-path);
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	isolation: isolate;
+
 	&:after {
 		z-index: -1;
 		position: absolute;
@@ -33,6 +40,23 @@
 		background: rgba-color($primary-color, 0.7);
 		mix-blend-mode: multiply;
 		backdrop-filter: blur(6px);
+	}
+}
+
+@mixin hero-section-basic() {
+	position: relative;
+	padding: 186px 0;
+
+	h1,
+	p {
+		color: $text-color-white;
+	}
+
+	@include respond-to(s) {
+		padding: 93px 0;
+	}
+	@include respond-to(m) {
+		padding: 93px 0;
 	}
 }
 

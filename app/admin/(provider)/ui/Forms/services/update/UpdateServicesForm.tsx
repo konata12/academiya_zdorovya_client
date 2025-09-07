@@ -1,5 +1,6 @@
 // noinspection DuplicatedCode
 
+import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
 import _ from "lodash";
 import FormElementContainerWithCheckbox from "@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox";
 import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
@@ -146,6 +147,10 @@ export default function UpdateServiceForm() {
 		valueName: ServiceFormDataEnum.SERVICETYPES,
 		sliceName: "servicesUpdateForm",
 	};
+
+	if (!oldService) {
+		return <NotFoundFallback message={"Такої послуги не існує"} />;
+	}
 
 	// RESET ERRORS ON SOME VALUES ON THEIR CHANGE
 	useEffect(() => {

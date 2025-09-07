@@ -1,5 +1,6 @@
 "use client";
 
+import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
 import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
 import styles from "./UpdateAboutTreatmentForm.module.scss";
 import {
@@ -40,7 +41,7 @@ import {
 	setAboutTreatmentUpdateTreatmentTypesValueError,
 	setAllAboutTreatmentDataOnLink,
 } from "@/app/utils/redux/about_treatment/aboutTreatmentUpdateFormSlice";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { transferImageBetweenIndexDBStores } from "@/app/services/admin/indexedDB.service";
 import _ from "lodash";
 import { useFormChangeCheck } from "@/app/utils/hooks/common/useFormChangeCheck";
@@ -74,6 +75,10 @@ export default function UpdateAboutTreatmentForm() {
 	if (oldAboutTreatment) {
 		const { id, ...oldNewsData } = oldAboutTreatment;
 		oldData = oldNewsData;
+	}
+
+	if (!oldAboutTreatment) {
+		return <NotFoundFallback />;
 	}
 
 	// LOAD DATA TO FORM AND LOAD IMAGE TO UPLOAD STORE

@@ -1,3 +1,4 @@
+import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
 import { useParams, useRouter } from "next/navigation";
@@ -37,6 +38,10 @@ export function DepartmentContentForm() {
 		id: string;
 	}>();
 	const department = departments.find((department) => `${department.id}` === id);
+
+	if (!department) {
+		return <NotFoundFallback message={"Такого відділення не існує"} />;
+	}
 
 	useEffect(() => {
 		if (department) {

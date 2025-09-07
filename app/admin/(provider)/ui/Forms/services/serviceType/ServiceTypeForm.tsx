@@ -1,3 +1,4 @@
+import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
 import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
 import React, { useEffect } from "react";
 import styles from "./ServiceTypeForm.module.scss";
@@ -50,6 +51,7 @@ export default function ServiceTypeForm({
 	}>();
 	const dispatch = useAppDispatch();
 
+	const service = services.find((service) => `${service.id}` === id);
 	const isCreatePage = pathname.includes("create");
 	const indexedDBStoreName = isCreatePage
 		? "service_create_images"
@@ -60,6 +62,10 @@ export default function ServiceTypeForm({
 	const { setServiceTypesValue, setServiceTypeDetailsInitialDataOnLink } =
 		useServiceTypeFormSlice(detailsSliceName);
 	const { setFormError } = useDetailsFormSlice(detailsSliceName);
+
+	if (!service?.serviceTypes?.[+serviceTypeIndex]) {
+		return <NotFoundFallback message={"Такого виду послуги не існує"} />;
+	}
 
 	// WHEN OPENING PAGE SET DETAILS SLICE DATA
 	useEffect(() => {

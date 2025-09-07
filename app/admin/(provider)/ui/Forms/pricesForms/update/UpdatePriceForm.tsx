@@ -1,5 +1,6 @@
 "use client";
 
+import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
 import React, { ChangeEvent, useEffect } from "react";
 import styles from "./UpdatePriceForm.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
@@ -51,7 +52,6 @@ export default function UpdatePriceForm() {
 	console.log("data:", data);
 
 	const dispatch = useAppDispatch();
-	const pathname = usePathname();
 	const router = useRouter();
 	const handleChange = usePricesFormHandleChange(sliceName);
 	const {
@@ -88,6 +88,10 @@ export default function UpdatePriceForm() {
 		meetingPriceCheckbox,
 		meetingTotalPriceCheckbox,
 	];
+
+	if (!oldPriceSection) {
+		return <NotFoundFallback message={"Така цінова таблиця не існує"} />;
+	}
 
 	useEffect(() => {
 		if (oldPriceSection) {

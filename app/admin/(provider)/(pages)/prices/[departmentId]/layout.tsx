@@ -1,6 +1,7 @@
 "use client";
 
 import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
+import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
 import {
 	checkCreatePage,
 	checkUpdatePage,
@@ -49,6 +50,10 @@ export default function page({
 	const department = departments.find((department) => {
 		return `${department.id}` === departmentId;
 	});
+
+	if (!department) {
+		return <NotFoundFallback message={"Такого відділення не існує"} />;
+	}
 
 	useEffect(() => {
 		// fetch department if there are no departments in state after reloading

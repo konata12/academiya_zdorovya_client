@@ -84,10 +84,15 @@
 		justify-content: right;
 		transition: all $anim-time $slow;
 
-		a {
+		.link {
+			clip-path: inset(-1px -200px);
 			pointer-events: auto;
 			color: $text-color-white;
 			text-decoration: none;
+
+			&::after {
+				bottom: -3px;
+			}
 		}
 
 		@include respond-to(s) {

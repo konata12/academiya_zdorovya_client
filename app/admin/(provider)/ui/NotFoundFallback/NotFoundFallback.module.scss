@@ -1,0 +1,9 @@
+@use '../../../../styles/variables' as *;
+
+
+.container {
+	text-align: center;
+	font-size: $pc-h3-fz;
+	font-weight: $font-weight-med;
+	color: $error-color;
+}
