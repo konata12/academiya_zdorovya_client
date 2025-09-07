@@ -88,8 +88,6 @@ const storeName = "service_images";
 const indexedDBStoreName = "service_update_images";
 const serviceTypesTableTitles = ["Види послуг", "Опції"];
 
-// todo add checking for employees change before leaving page
-// todo animated block to service stages
 export default function UpdateServiceForm() {
 	const { errors, ...data } = useAppSelector((state: RootState) => state.serviceUpdateForm);
 	const {

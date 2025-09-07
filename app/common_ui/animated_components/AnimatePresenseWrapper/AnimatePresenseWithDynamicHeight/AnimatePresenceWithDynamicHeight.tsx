@@ -3,9 +3,9 @@ import {
 	AnimatePresenseWithDynamicHeightVariants,
 	componentVisibleAnimationVariants,
 } from "@/app/utils/animations/animations";
-import React, { useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { basicAnimationTransition } from "@/app/utils/animations/variables";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useRef, useState } from "react";
 import styles from "./AnimatePresenseWithDynamicHeight.module.scss";
 
 export default function AnimatePresenceWithDynamicHeight({
@@ -20,25 +20,29 @@ export default function AnimatePresenceWithDynamicHeight({
 	React.useEffect(() => {
 		if (!elementRef.current) return;
 
-		// Initial height calculation (with forced reflow)
+		let observer: ResizeObserver | null = null;
+
 		if (childrenIsRendered) {
+			// Initial height calculation (with forced reflow)
 			void elementRef.current.offsetHeight;
 			const newHeight = elementRef.current.offsetHeight;
 			setElemHeight(newHeight);
+
+			// ResizeObserver for dynamic changes
+			observer = new ResizeObserver((entries) => {
+				if (elementRef.current) {
+					const newHeight = elementRef.current.offsetHeight;
+					if (newHeight !== elemHeight) setElemHeight(newHeight);
+				}
+			});
+			observer.observe(elementRef.current);
 		} else {
 			setElemHeight(0);
 		}
 
-		// ResizeObserver for dynamic changes
-		const observer = new ResizeObserver((entries) => {
-			if (elementRef.current) {
-				const newHeight = elementRef.current.offsetHeight;
-				if (newHeight !== elemHeight) setElemHeight(newHeight);
-			}
-		});
-
-		observer.observe(elementRef.current);
-		return () => observer.disconnect();
+		return () => {
+			if (observer) observer.disconnect();
+		};
 	}, [childrenIsRendered, ...dependency]);
 
 	return (

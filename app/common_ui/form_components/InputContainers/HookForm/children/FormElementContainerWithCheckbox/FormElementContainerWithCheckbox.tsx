@@ -14,6 +14,7 @@ export default function FormElementContainerWithCheckbox({
 	isChecked,
 	dependency,
 }: FromElementContainerWithCheckboxProps) {
+	console.log(isChecked);
 	return (
 		<div className={`${styles.inputContainer} ${className?.inputContainer || ""}`}>
 			<div
