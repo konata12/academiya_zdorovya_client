@@ -2,10 +2,7 @@ import DepartmentPhoneNumber from "@/app/(client)/ui/common/DepartmentPhoneNumbe
 import FooterBottom from "@/app/(client)/ui/Footer/FooterBottom";
 import FooterDepartments from "@/app/(client)/ui/Footer/FooterDepartments";
 import { FooterNavBar } from "@/app/(client)/ui/Footer/FooterNavBar";
-import {
-	fetchDepartments,
-	fetchServicesTitles,
-} from "@/app/services/server/fetchData.service";
+import { fetchServicesTitles } from "@/app/services/server/fetchData.service";
 import logo from "@/public/icons/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +10,6 @@ import { Suspense } from "react";
 import styles from "./Footer.module.scss";
 
 export default function Footer() {
-	const departments = fetchDepartments();
 	const services = fetchServicesTitles();
 
 	return (
@@ -77,13 +73,7 @@ export default function Footer() {
 					</div>
 					<div className={`${styles.dataContainer} ${styles.departmentsContainer}`}>
 						<h4 className={styles.title}>Адреси центрів</h4>
-						<Suspense
-							fallback={
-								<p className={`loading ${styles.text} ${styles.big}`}></p>
-							}
-						>
-							<FooterDepartments departmentsPromise={departments} />
-						</Suspense>
+						<FooterDepartments />
 					</div>
 					<div className={`${styles.dataContainer}`}>
 						<h4 className={styles.title}>Юридична інформація</h4>
@@ -113,16 +103,9 @@ export default function Footer() {
 							>
 								akademiyazdorovya@gmail.com
 							</a>
-							<Suspense
-								fallback={
-									<p className={`loading ${styles.text} ${styles.big}`}></p>
-								}
-							>
-								<DepartmentPhoneNumber
-									departmentsPromise={departments}
-									className={`${styles.text} ${styles.big}`}
-								/>
-							</Suspense>
+							<DepartmentPhoneNumber
+								className={`${styles.text} ${styles.big}`}
+							/>
 						</address>
 					</div>
 				</div>

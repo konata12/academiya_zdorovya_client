@@ -1,6 +1,7 @@
 import styles from "./page.module.scss";
 
 export default async function AboutUs() {
+	console.log("anus");
 	return (
 		<div className={"page"}>
 			<section className={`section ${styles.heroSection}`}>

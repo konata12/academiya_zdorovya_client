@@ -1,33 +1,9 @@
-"use client";
+import { fetchDepartments } from "@/app/services/server/fetchData.service";
+import { getDepartmentIdServerComponent } from "@/app/services/server/utils.service";
 
-import { Department } from "@/app/types/data/departments.type";
-import { useObserveCookie } from "@/app/utils/hooks/common/useObserveCookie";
-import { use, useEffect, useState } from "react";
-
-export default function DepartmentPhoneNumber({
-	departmentsPromise,
-	handledNumber,
-	className,
-}: {
-	departmentsPromise: Promise<Department[]>;
-	handledNumber?: string;
-	className?: string;
-}) {
-	// const number = handledNumber || (await getDepartmentIdServerComponent(departmentsPromise));
-	const [number, setNumber] = useState("Loading...");
-
-	const departments = use(departmentsPromise);
-
-	const id = useObserveCookie("departmentId");
-	useEffect(() => {
-		const department = departments.find((department) => `${department.id}` === id);
-
-		if (department) {
-			setNumber(department.hotline);
-		} else {
-			setNumber("Loading...");
-		}
-	}, [id]);
+export default async function DepartmentPhoneNumber({ className }: { className?: string }) {
+	const departments = fetchDepartments();
+	const number = await getDepartmentIdServerComponent(departments);
 
 	return (
 		<a href={`tel:${number}`} className={className || ""}>

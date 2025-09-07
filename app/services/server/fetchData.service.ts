@@ -11,7 +11,7 @@ export async function fetchDepartments() {
 	// console.log("res", res);
 
 	const parsedData: Department[] = await res.json();
-	// console.log("departments Data", parsedData);
+	console.log("departments Data", parsedData);
 
 	await new Promise((resolve) => setTimeout(resolve, 1500));
 

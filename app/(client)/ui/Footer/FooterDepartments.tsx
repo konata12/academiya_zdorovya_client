@@ -1,6 +1,6 @@
+import { fetchDepartments } from "@/app/services/server/fetchData.service";
 import styles from "./Footer.module.scss";
 import React from "react";
-import { Department } from "@/app/types/data/departments.type";
 import Link from "next/link";
 
 interface ParsedDepartments {
@@ -10,12 +10,8 @@ interface ParsedDepartments {
 	}[];
 }
 
-export default async function FooterDepartments({
-	departmentsPromise,
-}: {
-	departmentsPromise: Promise<Department[]>;
-}) {
-	const departments = await departmentsPromise;
+export default async function FooterDepartments() {
+	const departments = await fetchDepartments();
 	let parsedDepartments: ParsedDepartments = {};
 
 	departments.forEach((department) => {

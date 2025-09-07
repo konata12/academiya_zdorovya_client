@@ -6,6 +6,7 @@
 .heroSection {
 	@include hero-section-basic();
 	@include mix-bg-colors('/images/client/main_hero_bg.jpg');
+	padding: 0;
 
 	.container {
 		flex-wrap: nowrap;
@@ -115,6 +116,13 @@
 			padding-top: 75px;
 			padding-bottom: 93px;
 		}
+	}
+
+	@include respond-to(s) {
+		padding: 0;
+	}
+	@include respond-to(m) {
+		padding: 0;
 	}
 }
 
