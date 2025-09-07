@@ -69,6 +69,7 @@ export function DepartmentSelect({
 	const changeDepartment = (department: DepartmentSelectOptions) => {
 		setDepartment(department.label);
 		document.cookie = `departmentId=${department.id}; path=/;`;
+		window.location.reload();
 	};
 
 	return (

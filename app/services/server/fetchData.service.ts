@@ -7,7 +7,7 @@ export async function fetchDepartments() {
 	const first = performance.now();
 	const res = await fetch(`${basicUrl}/departments`);
 	const second = performance.now();
-	// console.log(second - first);
+	console.log(second - first);
 	// console.log("res", res);
 
 	const parsedData: Department[] = await res.json();

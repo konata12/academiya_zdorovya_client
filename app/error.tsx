@@ -13,7 +13,7 @@ export default function Error() {
 		<div className={styles.container}>
 			<header className={`${headerStyles.header} ${styles.header}`}>
 				<div className={`${headerStyles.container} container`}>
-					<div className={headerStyles.logo}>
+					<div className={`${headerStyles.logo} ${styles.logo}`}>
 						<Image src={logo} priority={true} alt="logo" />
 					</div>
 				</div>

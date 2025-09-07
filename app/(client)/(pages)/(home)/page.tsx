@@ -1,25 +1,21 @@
 import { FAQ } from "@/app/(client)/ui/common/sections/FAQ/FAQ";
 import DepartmentPhoneNumberBtn from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn";
 import btnStyles from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn.module.scss";
-import DepartmentPhoneNumberBtnFallback from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtnFallback";
 import GoalsCards from "@/app/(client)/ui/Home/GoalsCards/GoalsCards";
 import HowWeTreatArticles from "@/app/(client)/ui/Home/HowWeTreatArticles/HowWeTreatArticles";
 import OurServicesList from "@/app/(client)/ui/Home/OurServicesList/OurServicesList";
-import WhatWeTreatHomeListsFallback from "@/app/(client)/ui/Home/WhatWeTreatHomeList/fallback/WhatWeTreatHomeListsFallback";
 import WhatWeTreatHomeLists from "@/app/(client)/ui/Home/WhatWeTreatHomeList/WhatWeTreatHomeLists";
-import { DynamicRenderByWidth } from "@/app/common_ui/wrappers/DynamicRenderByWidth/DynamicRenderByWidth";
-import { fetchDepartments, fetchWhatWeTreats } from "@/app/services/server/fetchData.service";
+import { fetchDepartments } from "@/app/services/server/fetchData.service";
 import logo from "@/public/icons/logo.svg";
 import avatars from "@/public/images/client/main_hero_avatars.png";
 import woman from "@/public/images/client/our_services.png";
 import doctor from "@/public/images/client/what_we_treat_home_page.png";
 import Image from "next/image";
 import Link from "next/link";
-import React, { Suspense } from "react";
+import React from "react";
 import styles from "./page.module.scss";
 
 export default async function Home() {
-	const whatWeTreatList = fetchWhatWeTreats();
 	const departments = fetchDepartments();
 
 	return (
@@ -49,16 +45,7 @@ export default async function Home() {
 					</div>
 
 					<div className={styles.buttons}>
-						<DynamicRenderByWidth
-							notRenderWidth={728}
-							parentNodeLayer={4}
-							defaultWidth={0}
-							className={`${btnStyles.phoneBtn}`}
-						>
-							<Suspense fallback={<DepartmentPhoneNumberBtnFallback />}>
-								<DepartmentPhoneNumberBtn departmentsPromise={departments} />
-							</Suspense>
-						</DynamicRenderByWidth>
+						<DepartmentPhoneNumberBtn departmentsPromise={departments} />
 						<div className={`btn yellow xxl brown ${btnStyles.infoBtn}`}>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -119,9 +106,7 @@ export default async function Home() {
 			<section className={`container ${styles.whatWeTreatSection}`}>
 				<article>
 					<h2 className={"title left lg"}>Що ми лікуємо</h2>
-					{/*<Suspense fallback={<WhatWeTreatHomeListsFallback />}>*/}
-					<WhatWeTreatHomeLists whatWeTreatList={whatWeTreatList} />
-					{/*</Suspense>*/}
+					<WhatWeTreatHomeLists />
 				</article>
 				{/*todo change to good quality picture and add box shadow*/}
 				<div className={styles.img}>

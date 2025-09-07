@@ -8,9 +8,9 @@ export default async function ClientLayout({
 }>) {
 	return (
 		<>
-			{/*<Header />*/}
+			<Header />
 			<main>{children}</main>
-			{/*<Footer />*/}
+			<Footer />
 		</>
 	);
 }

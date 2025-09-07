@@ -1,16 +1,9 @@
-"use client";
-
-import { AboutTreatment } from "@/app/types/data/about_treatment.type";
-import { use } from "react";
-import styles from "./WhatWeTreatHomeLists.module.scss";
 import DetailsDropdownList from "@/app/common_ui/animated_components/DetailsDropdownList/DetailsDropdownList";
+import { fetchWhatWeTreats } from "@/app/services/server/fetchData.service";
+import styles from "./WhatWeTreatHomeLists.module.scss";
 
-export default function WhatWeTreatHomeLists({
-	whatWeTreatList,
-}: {
-	whatWeTreatList: Promise<AboutTreatment[]>;
-}) {
-	const list = use(whatWeTreatList);
+export default async function WhatWeTreatHomeLists() {
+	const list = await fetchWhatWeTreats();
 
 	return (
 		<div className={styles.container}>
