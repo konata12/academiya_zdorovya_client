@@ -18,14 +18,18 @@ export default async function AboutUs() {
 				<h1 className={"title lg"}>Ціни на послуги</h1>
 				<p>Ознайомтесь з вартістю реабілітаційних програм у нашому центрі</p>
 			</section>
-			<section className={`container ${styles.pricesSection}`}>
-				<SideNav list={pricesNamesList} />
-				<div className={styles.prices}>
-					{prices.map((price, i) => (
-						<PriceTable data={price} key={i} />
-					))}
-				</div>
-			</section>
+			{!prices.length ? (
+				<p className={"title lg error"}>У цього відділення немає таблиць розцінок</p>
+			) : (
+				<section className={`container ${styles.pricesSection}`}>
+					<SideNav list={pricesNamesList} />
+					<div className={styles.prices}>
+						{prices.map((price, i) => (
+							<PriceTable data={price} key={i} />
+						))}
+					</div>
+				</section>
+			)}
 		</div>
 	);
 }

@@ -1,0 +1,21 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.paragraph.paragraph {
+	width: 100%;
+	max-width: none;
+
+	color: $text-color-black;
+	font-size: $pc-h6-fz;
+
+	&.legalInfo {
+		text-align: justify;
+	}
+
+	@include respond-to(s) {
+		font-size: $mob-h6-fz;
+	}
+	@include respond-to(m) {
+		font-size: $mob-h6-fz;
+	}
+}

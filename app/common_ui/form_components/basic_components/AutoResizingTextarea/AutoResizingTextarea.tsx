@@ -15,7 +15,7 @@ export default function AutoResizingTextarea({
 	lineHeight = 24,
 	padding = 24,
 	minRows = 1,
-	maxRows = 100,
+	maxRows = 1000,
 	style,
 	value: propValue,
 	onChange: propOnChange,
@@ -41,14 +41,10 @@ export default function AutoResizingTextarea({
 		if (textarea) {
 			textarea.style.height = "auto";
 			const scrollHeight = textarea.scrollHeight;
-			const rowHeight =
-				parseInt(getComputedStyle(textarea).lineHeight) || lineHeight;
+			const rowHeight = parseInt(getComputedStyle(textarea).lineHeight) || lineHeight;
 			const rows = Math.min(
 				maxRows,
-				Math.max(
-					minRows,
-					Math.floor((scrollHeight - padding * 2) / rowHeight),
-				),
+				Math.max(minRows, Math.floor((scrollHeight - padding * 2) / rowHeight)),
 			);
 			textarea.style.height = `${rows * rowHeight + padding * 2}px`;
 		}

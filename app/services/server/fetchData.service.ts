@@ -1,9 +1,11 @@
 import { AboutTreatment } from "@/app/types/data/about_treatment.type";
 import { Department, DepartmentsService } from "@/app/types/data/departments.type";
+import { DetailsRedactorType } from "@/app/types/data/details.type";
 import { PriceSection } from "@/app/types/data/prices.type";
 
 const basicUrl = process.env.NEXT_PUBLIC_API_URL;
 
+// DATA WITH NO IMAGES
 export async function fetchDepartments() {
 	// const first = performance.now();
 	const res = await fetch(`${basicUrl}/departments`);
@@ -15,10 +17,9 @@ export async function fetchDepartments() {
 
 	return parsedData;
 }
-
-export async function fetchWhatWeTreats() {
-	const data = await fetch(`${basicUrl}/about-treatment`);
-	const parsedData: AboutTreatment[] = await data.json();
+export async function fetchLegalInfo(title: "privacyPolicy" | "publicOffer") {
+	const data = await fetch(`${basicUrl}/legal-information/${title}`);
+	const parsedData: DetailsRedactorType = await data.json();
 
 	return parsedData;
 }
@@ -28,15 +29,6 @@ export async function fetchWhatWeTreatsNoImages() {
 
 	return parsedData;
 }
-
-export async function fetchServicesTitles() {
-	const res = await fetch(`${basicUrl}/services/getBasicData`);
-	const parsedData: DepartmentsService[] = await res.json();
-	// console.log("services Data", parsedData);
-
-	return parsedData;
-}
-
 export async function fetchPrices(departmentId: string) {
 	const res = await fetch(`${basicUrl}/prices/all`, {
 		headers: {
@@ -46,6 +38,21 @@ export async function fetchPrices(departmentId: string) {
 
 	const parsedData: PriceSection[] = await res.json();
 	console.log("prices Data", parsedData);
+
+	return parsedData;
+}
+
+// DATA WITH IMAGES
+export async function fetchWhatWeTreats() {
+	const data = await fetch(`${basicUrl}/about-treatment`);
+	const parsedData: AboutTreatment[] = await data.json();
+
+	return parsedData;
+}
+export async function fetchServicesTitles() {
+	const res = await fetch(`${basicUrl}/services/getBasicData`);
+	const parsedData: DepartmentsService[] = await res.json();
+	// console.log("services Data", parsedData);
 
 	return parsedData;
 }

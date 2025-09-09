@@ -31,6 +31,7 @@ body {
 	padding: 0 24px;
 
 	max-width: $container-max-width-xl;
+	width: 100%;
 
 	@include respond-to(s) {
 		padding: 0 12px;
@@ -119,6 +120,14 @@ body {
 	&.xs {
 		font-size: $pc-h5-fz;
 	}
+
+	// colors
+	&.error {
+		margin: 0;
+		color: $error-color;
+		text-align: center;
+	}
+
 }
 
 .inputLabel {
