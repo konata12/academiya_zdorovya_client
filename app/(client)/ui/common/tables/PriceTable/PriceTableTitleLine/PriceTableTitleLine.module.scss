@@ -4,24 +4,21 @@
 .tableLine {
 	width: 100%;
 	display: flex;
-	border-bottom: 2px $disabled-color solid;
+	gap: 6px;
 
 	color: $text-color-black;
 	font-size: $price-table-table-line-fz;
+	font-weight: $font-weight-med;
 
 	&.dataLine {
 		padding: $prices-table-line-padding 0;
 	}
 
 	.titleColumn {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
 		max-width: 218px;
 		width: 100%;
 
-		word-wrap: break-word;
-		font-weight: $font-weight-med;
+		text-align: left;
 
 		@include respond-to(s) {
 			max-width: 130px;
@@ -43,6 +40,7 @@
 			padding: 0 6px;
 
 			text-align: center;
+			text-wrap: wrap;
 		}
 	}
 

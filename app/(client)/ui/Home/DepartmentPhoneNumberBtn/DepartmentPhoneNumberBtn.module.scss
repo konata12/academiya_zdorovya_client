@@ -12,6 +12,10 @@
 	display: contents;
 	text-decoration: none;
 
+	@include respond-to(s) {
+		display: none
+	}
+
 	@include respond-to(l) {
 		max-width: 480px;
 	}

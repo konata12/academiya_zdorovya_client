@@ -95,6 +95,18 @@ const pricesFormUiSlice = createSlice({
 			},
 		) {
 			const { titles, optionalService, prices } = action.payload;
+
+			let countCheckbox: boolean = false;
+			let durationCheckbox: boolean = false;
+			let priceCheckbox: boolean = false;
+			let totalPriceCheckbox: boolean = false;
+
+			prices?.forEach((price) => {
+				if (price.meetingCount?.length) countCheckbox = true;
+				if (price.meetingDuration?.length) durationCheckbox = true;
+				if (price.meetingPrice?.length) priceCheckbox = true;
+				if (price.coursePrice?.length) totalPriceCheckbox = true;
+			});
 			return {
 				addTitlePriceCheckbox: titles.map((title) => {
 					return !!title.priceNearTitle;
@@ -108,10 +120,10 @@ const pricesFormUiSlice = createSlice({
 						})
 					: [],
 				priceVariantsCheckbox: !!prices,
-				meetingCountCheckbox: !!prices?.[0].meetingCount,
-				meetingDurationCheckbox: !!prices?.[0].meetingDuration,
-				meetingPriceCheckbox: !!prices?.[0].meetingPrice,
-				meetingTotalPriceCheckbox: !!prices?.[0].coursePrice,
+				meetingCountCheckbox: countCheckbox,
+				meetingDurationCheckbox: durationCheckbox,
+				meetingPriceCheckbox: priceCheckbox,
+				meetingTotalPriceCheckbox: totalPriceCheckbox,
 			};
 		},
 	},

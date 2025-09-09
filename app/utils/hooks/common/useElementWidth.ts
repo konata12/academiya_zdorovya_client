@@ -24,10 +24,6 @@ export function useElementWidth<T extends HTMLElement>(
 		});
 
 		observer.observe(target);
-
-		// set initial
-		// console.dir("target");
-		// console.dir(target);
 		setWidth(target.offsetWidth);
 
 		return () => observer.disconnect();

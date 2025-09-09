@@ -1,11 +1,23 @@
-import { Department } from "@/app/types/data/departments.type";
+import { fetchDepartments } from "@/app/services/server/fetchData.service";
 import { cookies } from "next/headers";
 
-export async function getDepartmentIdServerComponent(
-	departmentsPromise: Promise<Department[]>,
-) {
-	const departments = await departmentsPromise;
+export async function getDepartmentIdFromCookies() {
 	const cookieStore = await cookies();
-	const id = cookieStore.get("departmentId")?.value;
+	return cookieStore.get("departmentId")?.value;
+}
+
+export async function getDepartmentIdFromCookiesAlsoCheckDepartments() {
+	let departmentId = await getDepartmentIdFromCookies();
+
+	if (!departmentId) {
+		departmentId = `${(await fetchDepartments())[0].id}`;
+	}
+
+	return departmentId;
+}
+
+export async function getDepartmentHotline() {
+	const departments = await fetchDepartments();
+	const id = await getDepartmentIdFromCookies();
 	return departments.find((department) => `${department.id}` === `${id}`)?.hotline;
 }

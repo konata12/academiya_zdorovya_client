@@ -1,9 +1,9 @@
+import PriceTableLine from "@/app/admin/(provider)/ui/Tables/PricesTable/TableLine/PriceTableLine";
+import PriceTableTitleLine from "@/app/admin/(provider)/ui/Tables/PricesTable/TableLine/TitleLine/PriceTableTitleLine";
+import { PriceSectionFormData } from "@/app/types/data/prices.type";
+import { useAdjustPricesTableColumnsToData } from "@/app/utils/hooks/admin/pricesForm/useAdjustPricesTableColumnsToData";
 import React from "react";
 import styles from "./PricesTable.module.scss";
-import { PriceSectionFormData } from "@/app/types/data/prices.type";
-import PriceTableTitleLine from "@/app/admin/(provider)/ui/Tables/PricesTable/TableLine/TitleLine/PriceTableTitleLine";
-import PriceTableLine from "@/app/admin/(provider)/ui/Tables/PricesTable/TableLine/PriceTableLine";
-import { useAdjustPricesTableColumnsToData } from "@/app/utils/hooks/admin/pricesForm/useAdjustPricesTableColumnsToData";
 
 export default function PricesTable({
 	data,

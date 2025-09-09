@@ -1,8 +1,8 @@
+import Checkbox from "@/app/admin/(provider)/ui/Checkbox/Checkbox";
+import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
+import { FromElementContainerWithCheckboxProps } from "@/app/types/ui/form_components/inputContainers.type";
 import React from "react";
 import styles from "./FormElementContainerWithCheckbox.module.scss";
-import Checkbox from "@/app/admin/(provider)/ui/Checkbox/Checkbox";
-import { FromElementContainerWithCheckboxProps } from "@/app/types/ui/form_components/inputContainers.type";
-import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
 
 export default function FormElementContainerWithCheckbox({
 	children,
@@ -14,7 +14,6 @@ export default function FormElementContainerWithCheckbox({
 	isChecked,
 	dependency,
 }: FromElementContainerWithCheckboxProps) {
-	console.log(isChecked);
 	return (
 		<div className={`${styles.inputContainer} ${className?.inputContainer || ""}`}>
 			<div

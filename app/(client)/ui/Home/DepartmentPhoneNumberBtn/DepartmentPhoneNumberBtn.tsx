@@ -1,48 +1,16 @@
-"use client";
-
-import { getCookieInClientComponent } from "@/app/services/client/utils.service";
-import { Department } from "@/app/types/data/departments.type";
-import { useElementWidth } from "@/app/utils/hooks/common/useElementWidth";
-import React, { use, useEffect, useState } from "react";
+import { getDepartmentHotline } from "@/app/services/server/utils.service";
 import styles from "./DepartmentPhoneNumberBtn.module.scss";
 
-export default function DepartmentPhoneNumberBtn({
-	departmentsPromise,
-}: {
-	departmentsPromise: Promise<Department[]>;
-}) {
-	const [number, setNumber] = useState("Loading...");
-	const { width, ref } = useElementWidth<HTMLDivElement>(6);
-	const departments = use(departmentsPromise);
-
-	useEffect(() => {
-		const id = getCookieInClientComponent("departmentId");
-		const department = departments.find((department) => `${department.id}` === id);
-
-		if (department) {
-			setNumber(department.hotline);
-		} else {
-			setNumber("Loading...");
-		}
-	}, []);
+export default async function DepartmentPhoneNumberBtn() {
+	const number = await getDepartmentHotline();
 
 	return (
-		<a href={`tel:${number}`} className={`${styles.link}`}>
-			<div
-				className={`btn yellow xxl brown ${styles.infoBtn}`}
-				ref={ref}
-				style={
-					width <= 728
-						? {
-								height: 0,
-								opacity: 0,
-								width: 0,
-								padding: 0,
-								border: "none",
-							}
-						: undefined
-				}
-			>
+		<a
+			href={`tel:${number}`}
+			aria-disabled={number === "loading"}
+			className={`${styles.link}`}
+		>
+			<div className={`btn yellow xxl brown ${styles.infoBtn}`}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="44"
@@ -57,7 +25,7 @@ export default function DepartmentPhoneNumberBtn({
 				</svg>
 				<div>
 					<p className={styles.title}>Гаряча лінія</p>
-					<address className={styles.phoneNumber}>{number}</address>
+					<address className={`${styles.phoneNumber}`}>{number}</address>
 				</div>
 			</div>
 		</a>

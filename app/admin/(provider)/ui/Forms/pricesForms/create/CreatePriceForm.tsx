@@ -1,10 +1,28 @@
 "use client";
 
-import React, { ChangeEvent, useEffect } from "react";
-import styles from "./CreatePriceForm.module.scss";
-import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
-import { RootState } from "@/app/utils/redux/store";
+import Checkbox from "@/app/admin/(provider)/ui/Checkbox/Checkbox";
+import PriceFormVariant from "@/app/admin/(provider)/ui/Forms/pricesForms/priceVariant/PriceFormVariant";
 import PriceFormTitleInput from "@/app/admin/(provider)/ui/Forms/pricesForms/title/PriceFormTitleInput";
+import PricesTable from "@/app/admin/(provider)/ui/Tables/PricesTable/PricesTable";
+import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
+import InputContainerWithCheckbox from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainerWithCheckbox/InputContainerWithCheckbox";
+import FormElementContainerWithCheckbox from "@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox";
+import { parsePriceSectionFormDataToPriceSectionCreateFormData } from "@/app/services/admin/prices.service";
+import { fulfilled } from "@/app/services/admin/response.service";
+import { FormInputError } from "@/app/types/data/form.type";
+import {
+	PriceFormData,
+	PriceFormUICheckboxEnum,
+	PriceHandleSubmitErrorIdType,
+	PriceSectionEnum,
+	PriceTitleEnum,
+	PriceVariantOptionsEnum,
+	TitlesFormData,
+} from "@/app/types/data/prices.type";
+import { FormElements } from "@/app/types/ui/form_components/inputContainers.type";
+import { usePricesFormHandleChange } from "@/app/utils/hooks/admin/pricesForm/usePricesFormHandleChange";
+import { usePricesFormSlice } from "@/app/utils/hooks/admin/pricesForm/usePricesFormSlice";
+import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import {
 	createPriceSectionTitle,
 	createPriceVariant,
@@ -16,29 +34,11 @@ import {
 	triggerOptionalServiceCheckbox,
 	triggerPriceVariantsCheckbox,
 } from "@/app/utils/redux/prices/pricesFormUiSlice";
-import {
-	PriceFormData,
-	PriceFormUICheckboxEnum,
-	PriceHandleSubmitErrorIdType,
-	PriceSectionEnum,
-	PriceTitleEnum,
-	PriceVariantOptionsEnum,
-	TitlesFormData,
-} from "@/app/types/data/prices.type";
-import { useParams, useRouter } from "next/navigation";
-import AnimatePresenceWithDynamicHeight from "@/app/common_ui/animated_components/AnimatePresenseWrapper/AnimatePresenseWithDynamicHeight/AnimatePresenceWithDynamicHeight";
-import { usePricesFormHandleChange } from "@/app/utils/hooks/admin/pricesForm/usePricesFormHandleChange";
-import { usePricesFormSlice } from "@/app/utils/hooks/admin/pricesForm/usePricesFormSlice";
-import InputContainerWithCheckbox from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainerWithCheckbox/InputContainerWithCheckbox";
-import Checkbox from "@/app/admin/(provider)/ui/Checkbox/Checkbox";
-import FormElementContainerWithCheckbox from "@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox";
-import PriceFormVariant from "@/app/admin/(provider)/ui/Forms/pricesForms/priceVariant/PriceFormVariant";
-import { FormElements } from "@/app/types/ui/form_components/inputContainers.type";
-import PricesTable from "@/app/admin/(provider)/ui/Tables/PricesTable/PricesTable";
-import { FormInputError } from "@/app/types/data/form.type";
-import { fulfilled } from "@/app/services/admin/response.service";
 import { createPriceSection } from "@/app/utils/redux/prices/pricesSlice";
-import { parsePriceSectionFormDataToPriceSectionCreateFormData } from "@/app/services/admin/prices.service";
+import { RootState } from "@/app/utils/redux/store";
+import { useParams, useRouter } from "next/navigation";
+import React, { ChangeEvent, useEffect } from "react";
+import styles from "./CreatePriceForm.module.scss";
 
 const sliceName = "pricesCreateForm";
 
@@ -223,20 +223,6 @@ export default function CreatePriceForm() {
 								error: { message },
 							});
 						}
-						if (!value.meetingDuration && meetingDurationCheckbox) {
-							const message = "Введіть тривалість";
-							dispatch(
-								setPricesPricesFieldValueError({
-									index,
-									field: PriceVariantOptionsEnum.DURATION,
-									message,
-								}),
-							);
-							errorsData.push({
-								id: `${PriceSectionEnum.PRICES}_${PriceVariantOptionsEnum.DURATION}_${index}`,
-								error: { message },
-							});
-						}
 						if (!value.meetingPrice && meetingPriceCheckbox) {
 							const message = "Введіть ціну заняття";
 							dispatch(
@@ -252,6 +238,8 @@ export default function CreatePriceForm() {
 							});
 						}
 						if (!value.coursePrice && meetingTotalPriceCheckbox) {
+							if (!index) return;
+
 							const message = "Введіть загальну ціну";
 							dispatch(
 								setPricesPricesFieldValueError({

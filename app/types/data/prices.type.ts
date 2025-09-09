@@ -10,7 +10,7 @@ export interface Price extends PriceFormData {}
 export interface Titles extends TitlesFormData {}
 export interface PriceSection {
 	id: number;
-	titles: Titles[];
+	titles: Titles[]; // array cannot be empty because form validation
 	optionalService: string | null;
 	prices: Price[] | null;
 }

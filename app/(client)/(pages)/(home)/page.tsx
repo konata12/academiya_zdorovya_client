@@ -5,7 +5,6 @@ import GoalsCards from "@/app/(client)/ui/Home/GoalsCards/GoalsCards";
 import HowWeTreatArticles from "@/app/(client)/ui/Home/HowWeTreatArticles/HowWeTreatArticles";
 import OurServicesList from "@/app/(client)/ui/Home/OurServicesList/OurServicesList";
 import WhatWeTreatHomeLists from "@/app/(client)/ui/Home/WhatWeTreatHomeList/WhatWeTreatHomeLists";
-import { fetchDepartments } from "@/app/services/server/fetchData.service";
 import logo from "@/public/icons/logo.svg";
 import avatars from "@/public/images/client/main_hero_avatars.png";
 import woman from "@/public/images/client/our_services.png";
@@ -16,8 +15,6 @@ import React from "react";
 import styles from "./page.module.scss";
 
 export default async function Home() {
-	const departments = fetchDepartments();
-
 	return (
 		<div className={"page"}>
 			<section className={styles.heroSection}>
@@ -45,7 +42,7 @@ export default async function Home() {
 					</div>
 
 					<div className={styles.buttons}>
-						<DepartmentPhoneNumberBtn departmentsPromise={departments} />
+						<DepartmentPhoneNumberBtn />
 						<div className={`btn yellow xxl brown ${btnStyles.infoBtn}`}>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"

@@ -7,3 +7,37 @@
 	@include hero-section-basic();
 	@include mix-bg-colors('/images/client/prices_hero_bg.jpg');
 }
+
+.pricesSection {
+	width: 100%;
+
+	.prices {
+		max-width: 1028px;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 64px;
+
+		@include respond-to(s) {
+			overflow-x: auto;
+			overflow-y: hidden;
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+			will-change: transform;
+			backface-visibility: hidden;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
+		}
+		@include respond-to(l) {
+			max-width: none;
+		}
+	}
+
+	@include respond-to(xl) {
+		display: flex;
+		justify-content: space-between;
+		gap: 64px;
+	}
+}

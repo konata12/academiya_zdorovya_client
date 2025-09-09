@@ -1,0 +1,142 @@
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
+
+.pricesTable {
+	width: 100%;
+	padding: $prices-table-container-padding;
+	background-color: $disabled-color;
+	border-radius: $prices-table-container-border-rad;
+	transition: all $anim-time $slow;
+	scroll-margin-top: 100px;
+
+	text-align: center;
+
+	&:hover {
+		background-color: $primary-color;
+
+		.title, .priceNearTitle {
+			color: $secondary-color;
+		}
+
+		.optionalService.optionalService {
+			color: $text-color-white;
+		}
+	}
+
+	.titles {
+		display: flex;
+		flex-direction: column;
+		gap: 32px;
+		padding: 40px 24px;
+
+		.priceTableTitle {
+			display: flex;
+			flex-wrap: nowrap;
+			justify-content: center;
+			gap: 16px;
+			color: $primary-color;
+
+			.title, .priceNearTitle {
+				display: flex;
+				align-items: center;
+				transition: all $anim-time $slow;
+
+				font-weight: $font-weight-med;
+				font-size: $price-table-title-fz;
+				text-wrap: wrap;
+
+				@include respond-to(s) {
+					font-size: $pc-h4-fz;
+				}
+				@include respond-to(m) {
+					font-size: $pc-h4-fz;
+				}
+			}
+
+			.title {
+				word-break: break-word;
+
+				@include respond-to(s) {
+					text-align: left;
+				}
+			}
+
+			.priceNearTitle {
+				@include respond-to(s) {
+					text-align: right;
+				}
+				@include respond-to(m) {
+					text-align: right;
+				}
+			}
+
+			@include respond-to(s) {
+				justify-content: space-between;
+			}
+		}
+
+		.optionalService {
+			width: 100%;
+			transition: all $anim-time $slow;
+
+			text-align: center;
+			font-size: $price-table-optionalService-fz;
+			color: $text-color-black;
+			word-wrap: break-word;
+
+			@include respond-to(s) {
+				text-align: left;
+				font-size: $mob-h6-fz;
+			}
+			@include respond-to(m) {
+				font-size: $mob-h6-fz;
+			}
+		}
+
+		@include respond-to(s) {
+			padding: 0;
+		}
+		@include respond-to(m) {
+			padding: $padding-6;
+		}
+	}
+
+	.tableScrollContainer {
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-behavior: smooth;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		will-change: transform;
+		backface-visibility: hidden;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		.table {
+			display: flex;
+			flex-direction: column;
+			min-width: 648px;
+			padding: $prices-table-padding;
+			border-radius: $prices-table-border-rad;
+
+			background-color: $background-color-secondary;
+
+			@include respond-to(s) {
+				padding: $padding-6;
+				margin-top: 48px;
+			}
+			@include respond-to(m) {
+				padding: $padding-6;
+			}
+		}
+	}
+
+	@include respond-to(s) {
+		padding: $padding-6;
+	}
+	@include respond-to(m) {
+		padding: $padding-6;
+	}
+}

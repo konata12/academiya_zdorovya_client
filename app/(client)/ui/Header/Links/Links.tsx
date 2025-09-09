@@ -24,13 +24,22 @@ export default function Links() {
 			<div className={`${styles.links} ${showLinks ? styles.active : ""}`}>
 				{/*	ADD ON MOBILE*/}
 				{width <= 1217 && (
-					<NavLink className={styles.link} url={"/"}>
+					<NavLink
+						className={styles.link}
+						url={"/"}
+						clickHandler={(e) => setShowLinks(!showLinks)}
+					>
 						Головна
 					</NavLink>
 				)}
 				{links.map((link) => {
 					return (
-						<NavLink className={styles.link} url={link.url} key={link.url}>
+						<NavLink
+							className={styles.link}
+							url={link.url}
+							clickHandler={(e) => setShowLinks(!showLinks)}
+							key={link.url}
+						>
 							{link.label}
 						</NavLink>
 					);
