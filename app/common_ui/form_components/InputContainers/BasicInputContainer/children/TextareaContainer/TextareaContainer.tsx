@@ -23,7 +23,7 @@ export function TextareaContainer({
 			className={className}
 		>
 			<AutoResizingTextarea
-				className={`input ${(errorForStyle && "wrong") || ""} ${styles.textarea} ${className?.textarea || ""}`}
+				className={`button ${(errorForStyle && "wrong") || ""} ${styles.textarea} ${className?.textarea || ""}`}
 				id={inputId}
 				minRows={minRows}
 				maxRows={maxRows}

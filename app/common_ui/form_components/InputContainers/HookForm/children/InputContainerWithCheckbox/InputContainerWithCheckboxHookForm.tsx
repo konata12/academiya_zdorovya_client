@@ -40,7 +40,7 @@ export default function HookFormInputContainerWithCheckbox<T extends Record<stri
 				}}
 			>
 				<input
-					className={`input
+					className={`button
                     ${(error && "wrong") || ""}
                     ${styles.input}
                     ${className?.input || ""}

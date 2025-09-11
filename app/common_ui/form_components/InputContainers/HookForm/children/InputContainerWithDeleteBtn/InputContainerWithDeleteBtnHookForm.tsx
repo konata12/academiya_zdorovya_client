@@ -3,9 +3,7 @@ import styles from "./InputContainerWithDeleteBtnHookForm.module.scss";
 import { HookFormInputContainerWithDeleteBtnProps } from "@/app/types/ui/form_components/inputContainers.type";
 import { FieldError, FieldErrors, Path } from "react-hook-form";
 
-export default function HookFormInputContainerWithDeleteBtn<
-	T extends Record<string, any>,
->({
+export default function HookFormInputContainerWithDeleteBtn<T extends Record<string, any>>({
 	label,
 	className = {},
 	name,
@@ -27,16 +25,11 @@ export default function HookFormInputContainerWithDeleteBtn<
 			? ((arrayError as any)?.[index]?.[fieldKey].message as string)
 			: error?.message;
 
-	const registerName =
-		index !== undefined ? (`${name}.${index}.value` as Path<T>) : name;
+	const registerName = index !== undefined ? (`${name}.${index}.value` as Path<T>) : name;
 
 	return (
-		<div
-			className={`${styles.inputContainer} ${className?.inputContainer || ""}`}
-		>
-			<div
-				className={`${styles.buttonContainer} ${className?.buttonContainer || ""}`}
-			>
+		<div className={`${styles.inputContainer} ${className?.inputContainer || ""}`}>
+			<div className={`${styles.buttonContainer} ${className?.buttonContainer || ""}`}>
 				<label
 					className={`inputLabel ${className?.inputLabel || ""}`}
 					htmlFor={inputId}
@@ -44,18 +37,14 @@ export default function HookFormInputContainerWithDeleteBtn<
 					{label}
 				</label>
 				{index !== undefined && index > 0 && (
-					<button
-						onClick={handleFunction}
-						className={`btn blue sm`}
-						type="button"
-					>
+					<button onClick={handleFunction} className={`btn blue sm`} type="button">
 						Видалити
 					</button>
 				)}
 			</div>
 
 			<input
-				className={`input
+				className={`button
                     ${styles.input}
                     ${className?.input || ""}
                     ${(errorMessage && "wrong") || ""}`}
@@ -64,9 +53,7 @@ export default function HookFormInputContainerWithDeleteBtn<
 				{...register(registerName, registerOptions)}
 			/>
 			{errorMessage && (
-				<p className={`${styles.error} ${className?.error || ""}`}>
-					{errorMessage}
-				</p>
+				<p className={`${styles.error} ${className?.error || ""}`}>{errorMessage}</p>
 			)}
 		</div>
 	);

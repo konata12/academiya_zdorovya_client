@@ -51,10 +51,7 @@ export function EmployeeSearchbarWithTable({
 			<p className={`title sm left`}>Хто лікує</p>
 
 			<div className={styles.searchBarContainer}>
-				<label
-					className={`inputLabel ${styles.serachBarTitle}`}
-					htmlFor="searchBar"
-				>
+				<label className={`inputLabel ${styles.serachBarTitle}`} htmlFor="searchBar">
 					Виберіть лікаря
 				</label>
 
@@ -83,7 +80,7 @@ export function EmployeeSearchbarWithTable({
 						</svg>
 					</div>
 					<input
-						className={`input ${styles.input} ${showList ? styles.on : ""}`}
+						className={`button ${styles.input} ${showList ? styles.on : ""}`}
 						type="text"
 						id={ServiceFormDataEnum.EMPLOYEES}
 						placeholder={`Введіть ім'я лікаря`}
@@ -133,9 +130,7 @@ export function EmployeeSearchbarWithTable({
 						>
 							{employees.map((employee, i) => {
 								const nameSurname = `${employee[ServiceEmployeesFormDataEnum.NAME]} ${employee[ServiceEmployeesFormDataEnum.SURNAME]}`;
-								const nameSurnameToRender = nameSurname.includes(
-									"undefined",
-								)
+								const nameSurnameToRender = nameSurname.includes("undefined")
 									? "Не завантажило ПІ лікаря"
 									: nameSurname;
 
@@ -150,8 +145,7 @@ export function EmployeeSearchbarWithTable({
 											<span>
 												{
 													employee[
-														ServiceEmployeesFormDataEnum
-															.POSITION
+														ServiceEmployeesFormDataEnum.POSITION
 													]
 												}
 											</span>
@@ -162,10 +156,7 @@ export function EmployeeSearchbarWithTable({
 														className={`btn cancel`}
 														type="button"
 														onClick={() =>
-															handleModalState(
-																false,
-																i,
-															)
+															handleModalState(false, i)
 														}
 													>
 														Скасувати видалення
@@ -182,13 +173,9 @@ export function EmployeeSearchbarWithTable({
 												</ModalWindow>
 											)}
 
-											<span
-												className={styles.tableLineOptions}
-											>
+											<span className={styles.tableLineOptions}>
 												<button
-													onClick={() =>
-														handleModalState(true, i)
-													}
+													onClick={() => handleModalState(true, i)}
 													type="button"
 													className={`btn gray sm`}
 												>
@@ -204,8 +191,7 @@ export function EmployeeSearchbarWithTable({
 						<p className={styles.tableUnderText}>Порядок збережено</p>
 					</CommonTable>
 					<p className={styles.dragReminder}>
-						Затисніть та переміщуйте послуги, щоб отримати бажаний
-						порядок послуг*
+						Затисніть та переміщуйте послуги, щоб отримати бажаний порядок послуг*
 					</p>
 				</>
 			)}

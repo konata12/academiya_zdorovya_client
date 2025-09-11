@@ -26,9 +26,7 @@ export default function InputContainerWithTwoInputsWithDeleteBtn({
 		<div
 			className={`${styles.inputContainer} ${className?.firstInput?.inputContainer || ""}`}
 		>
-			<div
-				className={`${styles.buttonContainer} ${className?.buttonContainer || ""}`}
-			>
+			<div className={`${styles.buttonContainer} ${className?.buttonContainer || ""}`}>
 				<label
 					className={`inputLabel ${className?.firstInput?.inputLabel || ""}`}
 					htmlFor={firstId}
@@ -36,27 +34,21 @@ export default function InputContainerWithTwoInputsWithDeleteBtn({
 					{labelOne}
 				</label>
 				{index !== undefined && index > 0 && (
-					<button
-						onClick={handleDelete}
-						className={`btn blue sm`}
-						type="button"
-					>
+					<button onClick={handleDelete} className={`btn blue sm`} type="button">
 						Видалити
 					</button>
 				)}
 			</div>
 			<div className={styles.firstInputContainer}>
 				<input
-					className={`input ${(errorOne?.message && "wrong") || ""} ${styles.input} ${className?.firstInput?.input || ""}`}
+					className={`button ${(errorOne?.message && "wrong") || ""} ${styles.input} ${className?.firstInput?.input || ""}`}
 					id={firstId}
 					value={valueOne}
 					type={typeOne}
 					onChange={changeEventOne}
 				/>
 				{errorOne && (
-					<p
-						className={`${styles.error} ${className?.firstInput?.error || ""}`}
-					>
+					<p className={`${styles.error} ${className?.firstInput?.error || ""}`}>
 						{errorOne.message}
 					</p>
 				)}
@@ -69,16 +61,14 @@ export default function InputContainerWithTwoInputsWithDeleteBtn({
 				{labelTwo}
 			</label>
 			<input
-				className={`input ${(errorTwo?.message && "wrong") || ""} ${styles.input} ${className?.secondInput?.input || ""}`}
+				className={`button ${(errorTwo?.message && "wrong") || ""} ${styles.input} ${className?.secondInput?.input || ""}`}
 				id={secondId}
 				value={valueTwo}
 				type={typeTwo}
 				onChange={changeEventTwo}
 			/>
 			{errorTwo && (
-				<p
-					className={`${styles.error} ${className?.secondInput?.error || ""}`}
-				>
+				<p className={`${styles.error} ${className?.secondInput?.error || ""}`}>
 					{errorTwo.message}
 				</p>
 			)}

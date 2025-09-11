@@ -1,0 +1,47 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	flex-grow: 1;
+	width: 100%;
+
+	input {
+		width: 100%;
+	}
+
+	a {
+		color: $text-color-black;
+		font-size: $pc-t1-fz;
+		font-weight: $font-weight-med;
+		text-decoration: none;
+		font-style: normal;
+		word-break: break-word;
+
+		margin-top: 6px;
+		transition: all $anim-time $slow;
+
+		&:hover {
+			color: $primary-color;
+		}
+	}
+
+	.submit {
+		margin-top: 40px;
+	}
+
+	.submitError {
+		max-width: none;
+
+		@include respond-to(m) {
+			font-size: $pc-h6-fz;
+		}
+	}
+
+	@include respond-to(xl) {
+		width: auto;
+		max-width: 502px;
+	}
+}

@@ -1,0 +1,79 @@
+@use '../../../../../styles/variables' as *;
+
+.selectContainer {
+
+	.selectedValue {
+		position: relative;
+		border-radius: $pc-input-border-rad;
+
+		.button {
+			cursor: pointer;
+			width: 100%;
+			text-align: left;
+
+			&.on {
+				outline: 2px $primary-color solid;
+			}
+			&.btnError {
+				outline: 2px $error-color solid;
+
+				p {
+					color: $error-color;
+				}
+			}
+
+			p {
+				line-height: 24px;
+				max-width: calc(100% - 32px);
+				overflow: hidden;
+				text-align: left;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+
+				transition: all $anim-time $slow;
+			}
+		}
+
+		.svg {
+			position: absolute;
+			top: 50%;
+			right: 28px;
+			transform: translateY(-50%);
+
+			border: none;
+			outline: none;
+			background-color: transparent;
+			display: block;
+			transition: all $slow $anim-time;
+
+			path {
+				fill: $text-color-black;
+				stroke: $text-color-black;
+				stroke-width: 0.3;
+				transition: all $slow $anim-time;
+			}
+
+			&.on {
+				transform: translateY(-50%) rotate(180deg);
+				fill: $primary-color;
+				stroke: $primary-color;
+
+				path {
+					fill: $primary-color;
+					stroke: $primary-color;
+				}
+			}
+		}
+
+		.error {
+			position: absolute;
+			bottom: -28px;
+			width: 100%;
+			border-radius: $border-rad-5;
+
+			color: $error-color;
+			text-align: center;
+			font-size: $pc-t2-fz;
+		}
+	}
+}

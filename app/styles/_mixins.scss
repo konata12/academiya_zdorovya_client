@@ -50,13 +50,14 @@
 	h1,
 	p {
 		color: $text-color-white;
+		max-width: none;
 	}
 
 	@include respond-to(s) {
-		padding: 93px 0;
+		padding: 93px 12px;
 	}
 	@include respond-to(m) {
-		padding: 93px 0;
+		padding: 93px 12px;
 	}
 }
 

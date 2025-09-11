@@ -1,9 +1,71 @@
 @use '../../../styles/variables' as *;
 @use '../../../styles/mixins' as *;
-@use '../../../styles/functions' as *;
 
 
 .heroSection {
 	@include hero-section-basic();
 	@include mix-bg-colors('/images/client/contact_us_hero_bg.jpg');
+}
+
+.contactsSection {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 128px;
+	max-width: 1228px;
+	width: 100%;
+	margin: 0 auto;
+
+	article {
+		order: 1;
+
+		address {
+			display: flex;
+			flex-direction: column;
+			gap: 48px;
+
+			.contactDataContainer {
+				display: flex;
+				align-items: center;
+				gap: 32px;
+
+				.text {
+					h3 {
+						font-style: normal;
+						font-size: $pc-t2-fz;
+						font-weight: $font-weight-reg;
+						margin-bottom: 12px;
+					}
+
+					p, a {
+						color: $text-color-black;
+						text-decoration: none;
+						font-style: normal;
+						word-break: break-word;
+						font-size: $pc-h5-fz;
+						font-weight: $font-weight-med;
+					}
+				}
+			}
+		}
+
+		@include respond-to(xl) {
+			order: -1;
+			flex: 0 1 550px;
+		}
+	}
+
+	@include respond-to(s) {
+		padding: 0 24px;
+	}
+	@include respond-to(m) {
+		padding: 0 24px;
+	}
+	@include respond-to(l) {
+		max-width: 813px;
+	}
+	@include respond-to(xl) {
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
 }

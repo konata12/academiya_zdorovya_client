@@ -54,7 +54,7 @@ export default function WhatWeTreat({
 
 	return (
 		<>
-			<p className={`title lg pb`}>Що лікуємо</p>
+			<p className={`title lg mb`}>Що лікуємо</p>
 			<CommonTable titles={titles}>
 				{!aboutTreatments.length ? (
 					<CommonTable404 error={error} status={status} />

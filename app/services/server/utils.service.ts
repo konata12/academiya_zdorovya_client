@@ -16,8 +16,12 @@ export async function getDepartmentIdFromCookiesAlsoCheckDepartments() {
 	return departmentId;
 }
 
-export async function getDepartmentHotline() {
+export async function getDepartmentByIdFromCookies() {
 	const departments = await fetchDepartments();
 	const id = await getDepartmentIdFromCookies();
-	return departments.find((department) => `${department.id}` === `${id}`)?.hotline;
+	return departments.find((department) => `${department.id}` === `${id}`);
+}
+
+export async function getDepartmentHotline() {
+	return (await getDepartmentByIdFromCookies())?.hotline;
 }

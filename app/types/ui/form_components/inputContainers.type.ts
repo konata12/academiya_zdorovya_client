@@ -1,26 +1,22 @@
-import { CheckboxProps } from "@/app/types/ui/form_components/form_basic";
-import {
-	FieldErrors,
-	Path,
-	RegisterOptions,
-	UseFormRegister,
-} from "react-hook-form";
 import { FormInputError } from "@/app/types/data/form.type";
+import { CheckboxProps } from "@/app/types/ui/form_components/form_basic";
 import { InputHTMLAttributes } from "react";
+import { FieldErrors, Path, RegisterOptions, UseFormRegister } from "react-hook-form";
 
-export type FormElements =
-	| HTMLInputElement
-	| HTMLTextAreaElement
-	| HTMLSelectElement;
+export type FormElements = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 export type ChangeEvent<T extends FormElements> = (e: React.ChangeEvent<T>) => void;
 
 // CONTAINER PROPS
 export interface HookFormInputContainerBasicProps<T extends Record<string, any>> {
+	placeHolder?: string;
 	children?: React.ReactNode;
 	className?: InputContainerBasicStyles;
-	label: string;
 	name: Path<T>; // This ensures the name is a key of T
 	errors: FieldErrors<T>;
+}
+export interface HookFormInputContainerWithLabelBasicProps<T extends Record<string, any>>
+	extends HookFormInputContainerBasicProps<T> {
+	label: string;
 }
 
 export interface FromElementContainerWithCheckboxProps extends CheckboxProps {
@@ -40,8 +36,16 @@ export interface HookFormInputContainerProps<T extends Record<string, any>>
 	className?: InputContainerStyles;
 	type?: React.HTMLInputTypeAttribute;
 }
+export interface HookFormInputContainerWithLabelProps<T extends Record<string, any>>
+	extends HookFormInputContainerWithLabelBasicProps<T> {
+	register: UseFormRegister<T>;
+	registerOptions?: RegisterOptions<T>;
+
+	className?: InputContainerStyles;
+	type?: React.HTMLInputTypeAttribute;
+}
 export interface HookFormTextareaContainerProps<T extends Record<string, any>>
-	extends HookFormInputContainerBasicProps<T> {
+	extends HookFormInputContainerWithLabelBasicProps<T> {
 	register: UseFormRegister<T>;
 	registerOptions?: RegisterOptions<T>;
 
@@ -49,15 +53,13 @@ export interface HookFormTextareaContainerProps<T extends Record<string, any>>
 	minRows?: number;
 	maxRows?: number;
 }
-export interface HookFormInputContainerWithCheckboxProps<
-	T extends Record<string, any>,
-> extends HookFormInputContainerProps<T>,
+export interface HookFormInputContainerWithCheckboxProps<T extends Record<string, any>>
+	extends HookFormInputContainerWithLabelProps<T>,
 		CheckboxProps {
 	className?: FormElementWithCheckboxStyles;
 }
-export interface HookFormInputContainerWithDeleteBtnProps<
-	T extends Record<string, any>,
-> extends HookFormInputContainerProps<T> {
+export interface HookFormInputContainerWithDeleteBtnProps<T extends Record<string, any>>
+	extends HookFormInputContainerWithLabelProps<T> {
 	fieldKey?: string;
 	index?: number;
 	handleFunction: (e: React.MouseEvent<HTMLButtonElement>) => void;

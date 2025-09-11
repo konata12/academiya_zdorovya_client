@@ -2,7 +2,8 @@
 
 import { DepartmentSelectOptions } from "@/app/(client)/types";
 import { useElementWidth } from "@/app/utils/hooks/common/useElementWidth";
-import React, { RefObject, useEffect, useRef } from "react";
+import { useSelect } from "@/app/utils/hooks/common/useSelect";
+import React, { RefObject, useEffect } from "react";
 import styles from "./DepartmentSelect.module.scss";
 
 interface DepartmentSelectProps {
@@ -23,31 +24,8 @@ export function DepartmentSelect({
 	const [triangleLeftPosition, setTriangleLeftPosition] = React.useState<number | "unset">(
 		"unset",
 	);
-	const listRef = useRef<HTMLDivElement>(null);
 	const { width, ref } = useElementWidth<HTMLDivElement>(5);
-
-	// HANDLE OUTSIDE CLICK CLOSE
-	useEffect(() => {
-		function handleClickOutside(event: MouseEvent) {
-			const departmentEl = parentRef?.current;
-			// Check if click target is NOT inside the referenced element
-			if (
-				listRef.current &&
-				!listRef.current.contains(event.target as Node) &&
-				(!departmentEl || !departmentEl.contains(event.target as Node))
-			) {
-				setShowList(false);
-			}
-		}
-
-		// Attach listener
-		document.addEventListener("mousedown", handleClickOutside);
-
-		// Cleanup
-		return () => {
-			document.removeEventListener("mousedown", handleClickOutside);
-		};
-	}, [listRef]);
+	const { listRef } = useSelect({ setShowList, parentRef });
 
 	// OBSERVE LIST TITLE WIDTH
 	useEffect(() => {

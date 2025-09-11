@@ -1,12 +1,9 @@
-import {
-	DepartmentContentSelectButtonsType,
-	DetailsContentFormBasicProps,
-} from "@/app/admin/(provider)/ui/Forms/depatrments/content/DepartmentContentForm";
+import { DetailsContentFormBasicProps } from "@/app/admin/(provider)/ui/Forms/depatrments/content/DepartmentContentForm";
+import { DepartmentContainerSearchBarList } from "@/app/admin/(provider)/ui/Forms/depatrments/content/DetailsContentSearchBar/DetailsContainerSearchBarList/DepartmentContainerSearchBarList";
 import { DepartmentContentEnum } from "@/app/types/data/departments.type";
 import { ServiceFormDataEnum } from "@/app/types/data/services.type";
 import React, { useState } from "react";
 import styles from "./DetailsContentSearchBar.module.scss";
-import { DepartmentContainerSearchBarList } from "@/app/admin/(provider)/ui/Forms/depatrments/content/DetailsContentSearchBar/DetailsContainerSearchBarList/DepartmentContainerSearchBarList";
 
 export function DepartmentContentSearchBar({ contentType }: DetailsContentFormBasicProps) {
 	const [query, setQuery] = useState("");
@@ -27,7 +24,7 @@ export function DepartmentContentSearchBar({ contentType }: DetailsContentFormBa
 	}
 	return (
 		<div className={styles.searchBarContainer}>
-			<label className={`inputLabel ${styles.serachBarTitle}`} htmlFor="searchBar">
+			<label className={`inputLabel ${styles.searchBarTitle}`} htmlFor="searchBar">
 				{label}
 			</label>
 
@@ -51,7 +48,7 @@ export function DepartmentContentSearchBar({ contentType }: DetailsContentFormBa
 					</svg>
 				</div>
 				<input
-					className={`input ${styles.input} ${showList ? styles.on : ""}`}
+					className={`button ${styles.input} ${showList ? styles.on : ""}`}
 					type="text"
 					id={ServiceFormDataEnum.EMPLOYEES}
 					placeholder={label}

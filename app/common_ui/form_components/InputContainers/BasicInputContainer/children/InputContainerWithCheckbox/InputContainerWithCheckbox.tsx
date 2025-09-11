@@ -43,7 +43,7 @@ export default function InputContainerWithCheckbox({
 				}}
 			>
 				<input
-					className={`input ${(error?.message && "wrong") || ""} ${styles.input} ${className?.input || ""} ${isChecked ? styles.active : ""}`}
+					className={`button ${(error?.message && "wrong") || ""} ${styles.input} ${className?.input || ""} ${isChecked ? styles.active : ""}`}
 					id={inputId}
 					value={value}
 					type={type}

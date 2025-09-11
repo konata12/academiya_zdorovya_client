@@ -55,7 +55,7 @@ export default function page({
 		<>
 			{pathname.includes("serviceType") || (
 				<>
-					<p className={`title lg pb`}>Послуги</p>
+					<p className={`title lg mb`}>Послуги</p>
 
 					<CommonTable titles={titles}>
 						{!services.length ? (

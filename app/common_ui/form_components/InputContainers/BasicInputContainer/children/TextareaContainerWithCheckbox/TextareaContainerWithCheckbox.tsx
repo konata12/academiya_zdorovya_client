@@ -45,7 +45,7 @@ export default function TextareaContainerWithCheckbox({
 				}}
 			>
 				<AutoResizingTextarea
-					className={`input ${(error?.message && "wrong") || ""} ${styles.input} ${className?.input || ""} ${isChecked ? styles.active : ""}`}
+					className={`button ${(error?.message && "wrong") || ""} ${styles.input} ${className?.input || ""} ${isChecked ? styles.active : ""}`}
 					id={inputId}
 					minRows={minRows}
 					maxRows={maxRows}

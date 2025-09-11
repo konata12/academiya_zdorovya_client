@@ -32,7 +32,7 @@ export default function CreateBookingServiceForm() {
 				Повна назва послуги
 			</label>
 			<input
-				className={`input `}
+				className={`button `}
 				type="text"
 				id="booking-service"
 				value={bookingServiceName}

@@ -52,7 +52,7 @@ export default function Departments({
 
 	return (
 		<>
-			<p className={`title lg pb`}>Відділення</p>
+			<p className={`title lg mb`}>Відділення</p>
 			<CommonTable titles={titles}>
 				{!departments.length ? (
 					<CommonTable404

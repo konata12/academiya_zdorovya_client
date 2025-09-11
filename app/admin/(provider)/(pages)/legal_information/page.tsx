@@ -34,7 +34,7 @@ export default function page() {
 
 	return (
 		<div>
-			<p className={`title lg pb`}>Юридична інформація</p>
+			<p className={`title lg mb`}>Юридична інформація</p>
 
 			<CommonTable
 				titles={titles}

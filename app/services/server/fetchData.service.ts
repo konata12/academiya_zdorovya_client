@@ -1,4 +1,6 @@
+import { ContactsFormRequest } from "@/app/(client)/ui/Forms/ContactsForm/ContactsForm";
 import { AboutTreatment } from "@/app/types/data/about_treatment.type";
+import { BookingService } from "@/app/types/data/booking_services.type";
 import { Department, DepartmentsService } from "@/app/types/data/departments.type";
 import { DetailsRedactorType } from "@/app/types/data/details.type";
 import { PriceSection } from "@/app/types/data/prices.type";
@@ -13,7 +15,7 @@ export async function fetchDepartments() {
 	// console.log(second - first);
 
 	const parsedData: Department[] = await res.json();
-	console.log("departments Data", parsedData);
+	// console.log("departments Data", parsedData);
 
 	return parsedData;
 }
@@ -41,6 +43,14 @@ export async function fetchPrices(departmentId: string) {
 
 	return parsedData;
 }
+export async function fetchBookingServices() {
+	const res = await fetch(`${basicUrl}/booking-services`);
+
+	const parsedData: BookingService[] = await res.json();
+	console.log("booking services Data", parsedData);
+
+	return parsedData;
+}
 
 // DATA WITH IMAGES
 export async function fetchWhatWeTreats() {
@@ -63,4 +73,25 @@ export async function fetchBannerNews() {
 	const parsedData: DepartmentsService[] = await res.json();
 
 	return parsedData;
+}
+
+// POST REQUESTS
+export async function postBooking(data: ContactsFormRequest) {
+	const res = await fetch(`${basicUrl}/booking`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(data),
+		credentials: "include",
+	});
+
+	console.log(res);
+
+	if (!res.ok) {
+		return {
+			message: "Помилка запису, спробуйте пізніше",
+		};
+	}
+	return;
 }

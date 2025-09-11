@@ -16,31 +16,20 @@ export default function InputContainerWithDeleteBtn({
 	const id = `${inputId}_${index}`;
 
 	return (
-		<div
-			className={`${styles.inputContainer} ${className?.inputContainer || ""}`}
-		>
-			<div
-				className={`${styles.buttonContainer} ${className?.buttonContainer || ""}`}
-			>
-				<label
-					className={`inputLabel ${className?.inputLabel || ""}`}
-					htmlFor={id}
-				>
+		<div className={`${styles.inputContainer} ${className?.inputContainer || ""}`}>
+			<div className={`${styles.buttonContainer} ${className?.buttonContainer || ""}`}>
+				<label className={`inputLabel ${className?.inputLabel || ""}`} htmlFor={id}>
 					{label}
 				</label>
 				{index !== undefined && index > 0 && (
-					<button
-						onClick={handleDelete}
-						className={`btn blue sm`}
-						type="button"
-					>
+					<button onClick={handleDelete} className={`btn blue sm`} type="button">
 						Видалити
 					</button>
 				)}
 			</div>
 
 			<input
-				className={`input ${(error?.message && "wrong") || ""} ${styles.input} ${className?.input || ""}`}
+				className={`button ${(error?.message && "wrong") || ""} ${styles.input} ${className?.input || ""}`}
 				id={id}
 				value={value}
 				type={type}
@@ -48,9 +37,7 @@ export default function InputContainerWithDeleteBtn({
 			/>
 
 			{error && (
-				<p className={`${styles.error} ${className?.error || ""}`}>
-					{error.message}
-				</p>
+				<p className={`${styles.error} ${className?.error || ""}`}>{error.message}</p>
 			)}
 		</div>
 	);

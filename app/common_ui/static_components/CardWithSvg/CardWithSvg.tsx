@@ -1,3 +1,4 @@
+import { SvgIcon } from "@/app/common_ui/images/SvgIcon/SvgIcon";
 import { JSX } from "react";
 import styles from "./CardWithSvg.module.scss";
 
@@ -11,7 +12,7 @@ interface CardWithSvgProps {
 export default function CardWithSvg({ icon, title, text, className }: CardWithSvgProps) {
 	return (
 		<article className={`${styles.card} ${className || ""}`}>
-			<div className={styles.icon}>{icon}</div>
+			<SvgIcon className={styles.icon}>{icon}</SvgIcon>
 			<div className={styles.text}>
 				<h3>{title}</h3>
 				<p>{text}</p>

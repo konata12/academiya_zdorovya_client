@@ -21,7 +21,7 @@ export default function InputContainer({
 			error={error}
 		>
 			<input
-				className={`input ${(errorForStyle && "wrong") || ""} ${styles.input} ${className?.input || ""}`}
+				className={`button ${(errorForStyle && "wrong") || ""} ${styles.input} ${className?.input || ""}`}
 				id={inputId}
 				type={type}
 				onChange={changeEvent}

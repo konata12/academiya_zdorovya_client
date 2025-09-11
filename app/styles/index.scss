@@ -94,7 +94,7 @@ body {
 		text-align: left;
 	}
 
-	&.pb {
+	&.mb {
 		margin-bottom: 64px;
 	}
 
@@ -115,6 +115,10 @@ body {
 
 	&.sm {
 		font-size: $pc-h3-fz;
+
+		@include respond-to(m) {
+			font-size: $pc-h4-fz;
+		}
 	}
 
 	&.xs {
@@ -136,7 +140,7 @@ body {
 	font-weight: $font-weight-med;
 }
 
-.input {
+.button {
 	background-color: $disabled-color;
 	border: none;
 	border-radius: $pc-input-border-rad;

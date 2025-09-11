@@ -1,0 +1,21 @@
+@use '../../../styles/variables' as *;
+
+.icon {
+	flex-shrink: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 50px;
+	height: 50px;
+	padding: $padding-10;
+	border-radius: $border-rad-7;
+	background: $primary-color;
+
+	svg {
+		path {
+			fill: $text-color-white;
+			stroke: $text-color-white;
+			transition: all $anim-time $slow;
+		}
+	}
+}

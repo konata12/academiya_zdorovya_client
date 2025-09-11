@@ -7,15 +7,15 @@
     margin: 64px 0 32px;
   }
 
-  .searchBarContainer {
+  .selectContainer {
 
-    .serachBarTitle {
+    .searchBarTitle {
       display: inline-block;
       width: 100%;
       margin: 64px 0 32px;
     }
 
-    .searchBar {
+    .selectedValue {
       position: relative;
       margin-bottom: 10px;
       border-radius: $pc-input-border-rad;
@@ -27,7 +27,7 @@
         transform: translateY(-50%);
       }
 
-      .input {
+      .button {
         width: 100%;
         padding-left: 58px;
 

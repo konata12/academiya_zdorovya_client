@@ -1,4 +1,4 @@
-import BasicInputContainerHookForm from "@/app/common_ui/form_components/InputContainers/HookForm/BasicInputContainerHookForm";
+import BasicInputContainerWithLabelHookForm from "@/app/common_ui/form_components/InputContainers/HookForm/BasicInputContainerWithLabelHookForm";
 import { HookFormTextareaContainerProps } from "@/app/types/ui/form_components/inputContainers.type";
 import styles from "./TextareaContainerHookForm.module.scss";
 import React from "react";
@@ -19,7 +19,7 @@ export default function HookFormTextareaContainer<T extends Record<string, any>>
 
 	return (
 		<>
-			<BasicInputContainerHookForm<T>
+			<BasicInputContainerWithLabelHookForm<T>
 				label={label}
 				className={childrenClassName}
 				name={name}
@@ -27,12 +27,12 @@ export default function HookFormTextareaContainer<T extends Record<string, any>>
 			>
 				<AutoResizingTextareaHookForm
 					{...register(name, registerOptions)}
-					className={`input ${(error && "wrong") || ""} ${styles.textarea} ${className?.textarea || ""}`}
+					className={`button ${(error && "wrong") || ""} ${styles.textarea} ${className?.textarea || ""}`}
 					id={name}
 					minRows={minRows}
 					maxRows={maxRows}
 				/>
-			</BasicInputContainerHookForm>
+			</BasicInputContainerWithLabelHookForm>
 		</>
 	);
 }

@@ -21,7 +21,7 @@ export default function page() {
 
 	return (
 		<>
-			<p className={`title lg pb`}>Виберіть відділення</p>
+			<p className={`title lg mb`}>Виберіть відділення</p>
 			<CommonTable titles={titles}>
 				{!departments.length ? (
 					<p className="fetchError">

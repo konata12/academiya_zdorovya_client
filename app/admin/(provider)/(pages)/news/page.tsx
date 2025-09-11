@@ -78,7 +78,7 @@ export default function page() {
 
 	return (
 		<div>
-			<p className={`title lg pb`}>Новини</p>
+			<p className={`title lg mb`}>Новини</p>
 
 			<div className={styles.allNews}>
 				<CommonTable titles={titles}>

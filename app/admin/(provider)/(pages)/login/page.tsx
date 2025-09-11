@@ -35,9 +35,9 @@ export default function Login() {
 			) : (
 				<div className={styles.container}>
 					<form className={styles.form} onSubmit={formSubmit}>
-						<p className={`title lg pb`}>Вхід</p>
+						<p className={`title lg mb`}>Вхід</p>
 						<input
-							className={`input ${styles.login}`}
+							className={`button ${styles.login}`}
 							type="text"
 							placeholder="Логін"
 							value={userName}
@@ -45,7 +45,7 @@ export default function Login() {
 							required
 						/>
 						<input
-							className={`input ${styles.password}`}
+							className={`button ${styles.password}`}
 							type="password"
 							placeholder="Пароль"
 							value={password}
