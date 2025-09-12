@@ -46,6 +46,9 @@
 		.black.black {
 			color: $primary-color;
 		}
+		.white.white {
+			color: $secondary-color;
+		}
 	}
 
 	svg {
@@ -63,6 +66,9 @@
 
 		&.black {
 			color: $text-color-black;
+		}
+		&.white {
+			color: $text-color-white;
 		}
 
 		@include respond-to(s) {
