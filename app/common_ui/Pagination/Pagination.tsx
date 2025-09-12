@@ -6,7 +6,6 @@ import styles from "./Pagination.module.scss";
 
 export interface PaginationQuery {
 	page: string;
-	pagesCount?: number;
 	isArrow?: boolean;
 }
 
@@ -75,10 +74,14 @@ export function Pagination({ dataCount, limit }: PaginationProps) {
 	};
 
 	return (
-		<div className={styles.container}>
-			<PaginationButton page={`${1}`} isArrow={true} pagesCount={pagesCount} />
-			{renderPaginationButtons()}
-			<PaginationButton page={`${pagesCount}`} isArrow={true} pagesCount={pagesCount} />
-		</div>
+		<>
+			{pagesCount !== 1 && (
+				<div className={styles.container}>
+					<PaginationButton page={`${1}`} isArrow={true} />
+					{renderPaginationButtons()}
+					<PaginationButton page={`${pagesCount}`} isArrow={true} />
+				</div>
+			)}
+		</>
 	);
 }

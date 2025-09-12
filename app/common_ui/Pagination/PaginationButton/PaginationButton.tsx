@@ -6,7 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { JSX } from "react";
 import styles from "./PaginationButton.module.scss";
 
-export function PaginationButton({ page, pagesCount, isArrow }: PaginationQuery) {
+export function PaginationButton({ page, isArrow }: PaginationQuery) {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
@@ -54,15 +54,11 @@ export function PaginationButton({ page, pagesCount, isArrow }: PaginationQuery)
 	}
 
 	return (
-		<>
-			{pagesCount !== 1 && (
-				<Link
-					href={url}
-					className={`${styles.link} ${page.length >= 4 ? styles.thousand : ""} ${queryPage === page && !isArrow ? styles.active : ""}`}
-				>
-					<span className={isArrow ? styles.arrow : styles.notArrow}>{value}</span>
-				</Link>
-			)}
-		</>
+		<Link
+			href={url}
+			className={`${styles.link} ${page.length >= 4 ? styles.thousand : ""} ${queryPage === page && !isArrow ? styles.active : ""}`}
+		>
+			<span className={isArrow ? styles.arrow : styles.notArrow}>{value}</span>
+		</Link>
 	);
 }
