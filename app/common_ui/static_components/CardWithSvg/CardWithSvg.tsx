@@ -2,7 +2,7 @@ import { SvgIcon } from "@/app/common_ui/images/SvgIcon/SvgIcon";
 import { JSX } from "react";
 import styles from "./CardWithSvg.module.scss";
 
-interface CardWithSvgProps {
+export interface CardWithSvgProps {
 	icon: JSX.Element;
 	title: string;
 	text: string;

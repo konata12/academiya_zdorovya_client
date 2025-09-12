@@ -1,4 +1,4 @@
-import styles from "./GoalsCards.module.scss";
+import styles from "./MainPageGoalsCards.module.scss";
 import CardWithSvg from "@/app/common_ui/static_components/CardWithSvg/CardWithSvg";
 
 const articlesData = [
@@ -92,7 +92,7 @@ const articlesData = [
 	},
 ];
 
-export default function GoalsCards() {
+export default function MainPageGoalsCards() {
 	return (
 		<div className={styles.container}>
 			{articlesData.map((item, i) => (

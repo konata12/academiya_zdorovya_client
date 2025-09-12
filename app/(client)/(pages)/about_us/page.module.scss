@@ -105,3 +105,17 @@
 	}
 
 }
+
+.goalsSection {
+
+	p {
+		max-width: none;
+
+		@include respond-to(s) {
+			text-align: left;
+		}
+		@include respond-to(m) {
+			text-align: left;
+		}
+	}
+}

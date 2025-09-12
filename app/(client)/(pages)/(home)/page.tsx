@@ -1,7 +1,7 @@
 import { FAQ } from "@/app/(client)/ui/common/sections/FAQ/FAQ";
 import DepartmentPhoneNumberBtn from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn";
 import btnStyles from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn.module.scss";
-import GoalsCards from "@/app/(client)/ui/Home/GoalsCards/GoalsCards";
+import MainPageGoalsCards from "@/app/(client)/ui/Home/MainPageGoalsCards/MainPageGoalsCards";
 import HowWeTreatArticles from "@/app/(client)/ui/Home/HowWeTreatArticles/HowWeTreatArticles";
 import OurServicesList from "@/app/(client)/ui/Home/OurServicesList/OurServicesList";
 import WhatWeTreatHomeLists from "@/app/(client)/ui/Home/WhatWeTreatHomeList/WhatWeTreatHomeLists";
@@ -134,7 +134,7 @@ export default async function Home() {
 					Відданість, професіоналізм, індивідуальний підхід та турбота про кожного
 					пацієнта – основа нашої роботи.
 				</p>
-				<GoalsCards />
+				<MainPageGoalsCards />
 			</section>
 			<section className="">REVIEWS</section>
 			<FAQ />

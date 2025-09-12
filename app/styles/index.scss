@@ -60,12 +60,14 @@ body {
 
 	h2 {
 		text-align: center;
+		word-break: break-word;
 	}
 
 	p {
 		max-width: 700px;
 
 		text-align: center;
+		word-break: break-word;
 		font-size: $pc-h6-fz;
 		line-height: 180%;
 
@@ -88,6 +90,7 @@ body {
 .title {
 	text-align: center;
 	font-weight: $font-weight-med;
+	word-break: break-word;
 	color: $text-color-black;
 
 	&.left {

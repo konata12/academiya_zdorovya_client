@@ -1,3 +1,4 @@
+import AboutUsPageGoalsCards from "@/app/(client)/ui/AboutUs/AboutUsPageGoalsCards/AboutUsPageGoalsCards";
 import btnStyles from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn.module.scss";
 import mainImg from "@/public/images/client/about_us_main.png";
 import Image from "next/image";
@@ -68,7 +69,14 @@ export default async function AboutUs() {
 					</Link>
 				</article>
 			</section>
-			<section>GOALS</section>
+			<section className={`container section ${styles.goalsSection}`}>
+				<h2 className={"title left lg"}>Наша мета та цінності</h2>
+				<p>
+					Відданість, професіоналізм, індивідуальний підхід та турбота про кожного
+					пацієнта – основа нашої роботи.
+				</p>
+				<AboutUsPageGoalsCards />
+			</section>
 			<section>OUR TEAM</section>
 			<section>NEWS CAROUSEL</section>
 		</div>
