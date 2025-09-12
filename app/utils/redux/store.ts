@@ -1,34 +1,39 @@
-import aboutTreatment from "@/app/utils/redux/about_treatment/aboutTreatmentSlice";
 import aboutTreatmentCreateFormSlice from "@/app/utils/redux/about_treatment/aboutTreatmentCreateFormSlice";
 import aboutTreatmentsFormUISlice from "@/app/utils/redux/about_treatment/aboutTreatmentsFormUISlice";
+import aboutTreatment from "@/app/utils/redux/about_treatment/aboutTreatmentSlice";
 import aboutTreatmentUpdateFormSlice from "@/app/utils/redux/about_treatment/aboutTreatmentUpdateFormSlice";
 import authSlice from "@/app/utils/redux/auth/authSlice";
+import bookingSlice from "@/app/utils/redux/booking/bookingSlice";
 import bookingServicesSlice from "@/app/utils/redux/booking_services/bookingServicesSlice";
-import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+import departmentsContentFormSlice from "@/app/utils/redux/departments/departmentsContentFormSlice";
 import departmentsSlice from "@/app/utils/redux/departments/departmentsSlice";
+import privacyPolicyUpdateDetailsOrderSlice from "@/app/utils/redux/details/legal_information/privacyPolicyUpdateDetailsOrderSlice";
+import publicOfferUpdateDetailsOrderSlice from "@/app/utils/redux/details/legal_information/publicOfferUpdateDetailsOrderSlice";
+import newsCreateDetailsOrderSlice from "@/app/utils/redux/details/news/newsCreateDetailsOrderSlice";
+import newsUpdateDetailsOrderSlice from "@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice";
+import serviceTypeCreateDetailsOrderSlice from "@/app/utils/redux/details/services/serviceTypeCreateDetailsOrderSlice";
+import serviceTypeUpdateDetailsOrderSlice from "@/app/utils/redux/details/services/serviceTypeUpdateDetailsOrderSlice";
 import employeeCreateFormSlice from "@/app/utils/redux/employees/employeeCreateFormSlice";
 import employeesFormUISlice from "@/app/utils/redux/employees/employeesFormUISlice";
 import employeesSlice from "@/app/utils/redux/employees/employeesSlice";
 import employeeUpdateFormSlice from "@/app/utils/redux/employees/employeeUpdateFormSlice";
+import legalInformationSlice from "@/app/utils/redux/legal_information/legalInformationSlice";
 import navigationSlice from "@/app/utils/redux/navigation/navigationSlice";
-import newsCreateDetailsOrderSlice from "@/app/utils/redux/details/news/newsCreateDetailsOrderSlice";
 import newsCreateFormSlice from "@/app/utils/redux/news/newsCreateFormSlice";
 import newsSlice from "@/app/utils/redux/news/newsSlice";
-import newsUpdateDetailsOrderSlice from "@/app/utils/redux/details/news/newsUpdateDetailsOrderSlice";
 import newsUpdateFormSlice from "@/app/utils/redux/news/newsUpdateFormSlice";
+import pricesCreateFormSlice from "@/app/utils/redux/prices/pricesCreateFormSlice";
 import pricesFormUiSlice from "@/app/utils/redux/prices/pricesFormUiSlice";
 import pricesSlice from "@/app/utils/redux/prices/pricesSlice";
+import pricesUpdateFormSlice from "@/app/utils/redux/prices/pricesUpdateFormSlice";
 import serviceCreateFormSlice from "@/app/utils/redux/services/serviceCreateFormSlice";
-import serviceUpdateFormSlice from "@/app/utils/redux/services/serviceUpdateFormSlice";
 import serviceFormUISlice from "@/app/utils/redux/services/serviceFromUISlice";
 import servicesSlice from "@/app/utils/redux/services/servicesSlice";
-import serviceTypeCreateDetailsOrderSlice from "@/app/utils/redux/details/services/serviceTypeCreateDetailsOrderSlice";
-import serviceTypeUpdateDetailsOrderSlice from "@/app/utils/redux/details/services/serviceTypeUpdateDetailsOrderSlice";
 import serviceTypeCreateFormSlice from "@/app/utils/redux/services/serviceTypeCreateFormSlice";
 import serviceTypeUpdateFormSlice from "@/app/utils/redux/services/serviceTypeUpdateFormSlice";
-import { combineReducers } from "redux";
+import serviceUpdateFormSlice from "@/app/utils/redux/services/serviceUpdateFormSlice";
 import { configureStore } from "@reduxjs/toolkit";
-import { PersistPartial } from "redux-persist/es/persistReducer";
+import { combineReducers } from "redux";
 import {
 	FLUSH,
 	PAUSE,
@@ -39,13 +44,8 @@ import {
 	REGISTER,
 	REHYDRATE,
 } from "redux-persist";
-import pricesCreateFormSlice from "@/app/utils/redux/prices/pricesCreateFormSlice";
-import pricesUpdateFormSlice from "@/app/utils/redux/prices/pricesUpdateFormSlice";
-import legalInformationSlice from "@/app/utils/redux/legal_information/legalInformationSlice";
-import publicOfferUpdateDetailsOrderSlice from "@/app/utils/redux/details/legal_information/publicOfferUpdateDetailsOrderSlice";
-import privacyPolicyUpdateDetailsOrderSlice from "@/app/utils/redux/details/legal_information/privacyPolicyUpdateDetailsOrderSlice";
-import departmentsContentFormSlice from "@/app/utils/redux/departments/departmentsContentFormSlice";
-import bookingSlice from "@/app/utils/redux/booking/bookingSlice";
+import { PersistPartial } from "redux-persist/es/persistReducer";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
 // REDUCERS
 

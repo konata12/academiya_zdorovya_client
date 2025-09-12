@@ -12,6 +12,7 @@ export interface BookingDepartmentsType {
 	city: number;
 	address: number;
 	notRepliedCount: number;
+	countAllBookings?: number;
 	bookings: BookingType[] | undefined;
 }
 export interface BookingType {
@@ -34,4 +35,10 @@ interface BookingError {
 	getAllNotRepliedCountForEveryDepartment: ErrorResponse | null;
 	getDepartmentBookings: ErrorResponse | null;
 	updateRepliedStatus: ErrorResponse | null;
+}
+
+// REQUEST TYPE
+export interface DepartmentBookingRequest {
+	countAllBookings: number;
+	bookings: BookingType[];
 }

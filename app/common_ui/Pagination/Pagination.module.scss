@@ -1,0 +1,14 @@
+@use '../../styles/variables' as *;
+
+.container {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	gap: 12px;
+	margin-top: 64px;
+
+	.dots {
+		font-size: $pc-h5-fz;
+	}
+}

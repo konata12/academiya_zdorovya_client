@@ -2,11 +2,12 @@ import {
 	BookingDepartmentsType,
 	BookingInit,
 	BookingType,
+	DepartmentBookingRequest,
 } from "@/app/types/data/booking.type";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance from "@/app/utils/axios";
-import { AxiosError } from "axios";
 import { ErrorResponse } from "@/app/types/data/response.type";
+import axiosInstance from "@/app/utils/axios";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 
 const initialState: BookingInit = {
 	allNotRepliedCount: null,
@@ -69,9 +70,13 @@ export const getAllNotRepliedCountForEveryDepartment = createAsyncThunk(
 );
 export const getDepartmentBookings = createAsyncThunk(
 	"booking/getAllForDepartment",
-	async (id: string, { rejectWithValue }) => {
+	async ({ id, page }: { id: string; page: string | null }, { rejectWithValue }) => {
 		try {
-			const response = await axiosInstance.get<BookingType[]>(`${baseUrl}/admin/${id}`);
+			const url =
+				page && page.length > 0
+					? `${baseUrl}/admin/${id}?page=${page}`
+					: `${baseUrl}/admin/${id}?page=1`;
+			const response = await axiosInstance.get<DepartmentBookingRequest>(url);
 			console.log(response);
 			return { id, data: response.data };
 		} catch (error) {
@@ -176,7 +181,7 @@ export const bookingSlice = createSlice({
 				(
 					state,
 					action: {
-						payload: { id: string; data: BookingType[] } | undefined;
+						payload: { id: string; data: DepartmentBookingRequest } | undefined;
 					},
 				) => {
 					if (action.payload !== undefined) {
@@ -189,8 +194,12 @@ export const bookingSlice = createSlice({
 								return `${department.id}` === id;
 							});
 
+						console.log(index);
+
 						if (index !== null && state.departments) {
-							state.departments[index].bookings = data;
+							console.log("data", data);
+							state.departments[index].bookings = data.bookings;
+							state.departments[index].countAllBookings = data.countAllBookings;
 						}
 					}
 				},

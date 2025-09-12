@@ -1,18 +1,19 @@
 "use client";
 
 import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
-import { RightArrow } from "@/app/common_ui/images/RightArrow";
-import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
-import { RootState } from "@/app/utils/redux/store";
-import { useParams } from "next/navigation";
-import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
 import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
+import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
+import { RightArrow } from "@/app/common_ui/images/RightArrow";
+import { Pagination } from "@/app/common_ui/Pagination/Pagination";
+import { useParsedDate } from "@/app/utils/hooks/common/useParsedDate";
 import {
 	getDepartmentBookings,
 	updateRepliedStatus,
 } from "@/app/utils/redux/booking/bookingSlice";
-import { useParsedDate } from "@/app/utils/hooks/common/useParsedDate";
+import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
+import { RootState } from "@/app/utils/redux/store";
+import { useParams, useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
 import styles from "./page.module.scss";
 
 const titles = ["ПІ пацієнта", "Номер телефону", "Послуга", "Дата", "Статус"];
@@ -23,19 +24,19 @@ export default function page() {
 	);
 
 	const dispatch = useAppDispatch();
+	const searchParams = useSearchParams();
 	const { getParsedDateStringWithMinutes } = useParsedDate();
 	const { departmentId } = useParams<{
 		departmentId: string;
 	}>();
+	const page = searchParams.get("page");
 
 	const department =
 		departments && departments.find((department) => `${department.id}` === departmentId);
 
 	useEffect(() => {
-		if (!department?.bookings) {
-			dispatch(getDepartmentBookings(departmentId));
-		}
-	}, []);
+		dispatch(getDepartmentBookings({ id: departmentId, page }));
+	}, [page]);
 
 	const errorUIMessage = (): string => {
 		if (status.getDepartmentBookings === "loading") return "Завантаження...";
@@ -59,6 +60,8 @@ export default function page() {
 		// MAKE REQUEST TO SERVER
 		dispatch(updateRepliedStatus({ id, departmentId }));
 	};
+
+	console.log("department:", department);
 
 	return (
 		<>
@@ -104,6 +107,8 @@ export default function page() {
 					))
 				)}
 			</CommonTable>
+
+			<Pagination dataCount={department?.countAllBookings || 1} limit={1} />
 		</>
 	);
 }

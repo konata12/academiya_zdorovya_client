@@ -1,0 +1,34 @@
+@use '../../../styles/variables' as *;
+
+.link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	font-size: $pc-h5-fz;
+	text-decoration: none;
+	color: $text-color-black;
+
+	height: 45px;
+	width: 45px;
+	border-radius: 50%;
+	transition: all $anim-time $slow;
+
+	&.thousand {
+		height: 55px;
+		width: 55px;
+	}
+
+	&.active,
+	&:hover {
+		background-color: $primary-color;
+		color: $text-color-white;
+	}
+
+	.arrow {
+		height: 24px;
+	}
+	.notArrow {
+		line-height: 24px;
+	}
+}
