@@ -194,10 +194,7 @@ export const bookingSlice = createSlice({
 								return `${department.id}` === id;
 							});
 
-						console.log(index);
-
 						if (index !== null && state.departments) {
-							console.log("data", data);
 							state.departments[index].bookings = data.bookings;
 							state.departments[index].countAllBookings = data.countAllBookings;
 						}

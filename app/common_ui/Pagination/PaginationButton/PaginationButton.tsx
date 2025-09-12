@@ -6,11 +6,12 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { JSX } from "react";
 import styles from "./PaginationButton.module.scss";
 
-export function PaginationButton({ page, isArrow }: PaginationQuery) {
+export function PaginationButton({ page, pagesCount, isArrow }: PaginationQuery) {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
 	const allParams = Object.fromEntries(searchParams.entries());
+	const queryPage = allParams.page;
 	allParams["page"] = page;
 	const urlQuery = Object.entries(allParams)
 		.map(([k, v]) => `${k}=${v}`)
@@ -27,9 +28,9 @@ export function PaginationButton({ page, isArrow }: PaginationQuery) {
 						height="24"
 						fill="none"
 						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
+						strokeWidth="2"
+						strokeLinecap="round"
+						strokeLinejoin="round"
 					>
 						<path d="M13 5 L6 12 L13 19" />
 						<path d="M19 5 L12 12 L19 19" />
@@ -42,9 +43,9 @@ export function PaginationButton({ page, isArrow }: PaginationQuery) {
 						height="24"
 						fill="none"
 						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
+						strokeWidth="2"
+						strokeLinecap="round"
+						strokeLinejoin="round"
 					>
 						<path d="M11 5l7 7-7 7" />
 						<path d="M5 5l7 7-7 7" />
@@ -53,11 +54,15 @@ export function PaginationButton({ page, isArrow }: PaginationQuery) {
 	}
 
 	return (
-		<Link
-			href={url}
-			className={`${styles.link} ${page.length >= 4 ? styles.thousand : ""}`}
-		>
-			<span className={isArrow ? styles.arrow : styles.notArrow}>{value}</span>
-		</Link>
+		<>
+			{pagesCount !== 1 && (
+				<Link
+					href={url}
+					className={`${styles.link} ${page.length >= 4 ? styles.thousand : ""} ${queryPage === page && !isArrow ? styles.active : ""}`}
+				>
+					<span className={isArrow ? styles.arrow : styles.notArrow}>{value}</span>
+				</Link>
+			)}
+		</>
 	);
 }

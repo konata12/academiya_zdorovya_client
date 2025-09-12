@@ -61,8 +61,6 @@ export default function page() {
 		dispatch(updateRepliedStatus({ id, departmentId }));
 	};
 
-	console.log("department:", department);
-
 	return (
 		<>
 			<div className="titleContainerWithReturnBtn">
@@ -108,7 +106,7 @@ export default function page() {
 				)}
 			</CommonTable>
 
-			<Pagination dataCount={department?.countAllBookings || 1} limit={1} />
+			<Pagination dataCount={department?.countAllBookings || 1} limit={15} />
 		</>
 	);
 }
