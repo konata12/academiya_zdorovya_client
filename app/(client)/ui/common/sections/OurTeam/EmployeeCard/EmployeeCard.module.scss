@@ -1,0 +1,41 @@
+@use '../../../../../../styles/variables' as *;
+@use '../../../../../../styles/mixins' as *;
+
+.container {
+	flex-grow: 1;
+	max-width: 442px;
+	width: 100%;
+	padding: 48px;
+	background-color: $background-color-secondary;
+	border-radius: $border-rad-3;
+
+	.imageContainer {
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+		aspect-ratio: 1/1;
+
+		background-image: url('/public/images/bg_blue_employee.jpg');
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: contain;
+
+		&.blue {
+			background-image: url('/public/images/bg_blue_employee.jpg');
+		}
+		&.gray {
+			background-image: url('/public/images/bg_grey_employee.jpg');
+		}
+
+		img {
+			width: 100%;
+			height: auto !important;
+			top: 2px !important;
+			left: 0 !important;
+		}
+	}
+
+	.btn {
+		width: 100%;
+	}
+}

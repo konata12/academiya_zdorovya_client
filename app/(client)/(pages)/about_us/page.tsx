@@ -1,4 +1,5 @@
 import AboutUsPageGoalsCards from "@/app/(client)/ui/AboutUs/AboutUsPageGoalsCards/AboutUsPageGoalsCards";
+import { OurTeam } from "@/app/(client)/ui/common/sections/OurTeam/OurTeam";
 import btnStyles from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn.module.scss";
 import mainImg from "@/public/images/client/about_us_main.png";
 import Image from "next/image";
@@ -7,7 +8,6 @@ import React from "react";
 import styles from "./page.module.scss";
 
 export default async function AboutUs() {
-	console.log("anus");
 	return (
 		<div className={"page"}>
 			<section className={`section ${styles.heroSection}`}>
@@ -77,7 +77,7 @@ export default async function AboutUs() {
 				</p>
 				<AboutUsPageGoalsCards />
 			</section>
-			<section>OUR TEAM</section>
+			<OurTeam />
 			<section>NEWS CAROUSEL</section>
 		</div>
 	);

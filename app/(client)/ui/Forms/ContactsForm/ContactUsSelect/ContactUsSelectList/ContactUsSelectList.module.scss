@@ -34,4 +34,28 @@
 			border-top: 2px $disabled-color solid;
 		}
 	}
+
+	// todo look to this scroll visual in tablet and mobile
+	@include respond-to(s) {
+		scroll-behavior: smooth;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		will-change: transform;
+		backface-visibility: hidden;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
+	@include respond-to(m) {
+		scroll-behavior: smooth;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		will-change: transform;
+		backface-visibility: hidden;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
 }
