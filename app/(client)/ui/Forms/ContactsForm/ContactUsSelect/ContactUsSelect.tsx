@@ -9,11 +9,19 @@ import styles from "./ContactUsSelect.module.scss";
 interface SelectProps {
 	list: ListElement[];
 	selectError: boolean;
+	selected: boolean;
 	parentHandleListSelect?: (id: number, label: string) => void;
 }
 
-export function ContactUsSelect({ list, selectError, parentHandleListSelect }: SelectProps) {
-	const [listValue, setListValue] = useState<string>("Оберіть послугу");
+const defaultValue = "Оберіть послугу";
+
+export function ContactUsSelect({
+	list,
+	selectError,
+	selected,
+	parentHandleListSelect,
+}: SelectProps) {
+	const [listValue, setListValue] = useState<string>(defaultValue);
 	const [showList, setShowList] = useState(false);
 
 	const selectRef = useRef<HTMLDivElement>(null);
@@ -42,7 +50,7 @@ export function ContactUsSelect({ list, selectError, parentHandleListSelect }: S
 						setShowList(!showList);
 					}}
 				>
-					<p>{listValue}</p>
+					<p>{selected ? listValue : defaultValue}</p>
 					<svg
 						className={`${styles.svg} ${showList ? styles.on : ""}`}
 						xmlns="http://www.w3.org/2000/svg"

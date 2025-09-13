@@ -28,15 +28,26 @@
 		}
 	}
 
-	.submit {
-		margin-top: 40px;
-	}
+	.submitContainer {
+		position: relative;
 
-	.submitError {
-		max-width: none;
+		.succeeded {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translateX(-50%);
+		}
 
-		@include respond-to(m) {
-			font-size: $pc-h6-fz;
+		.submit {
+			margin-top: 40px;
+		}
+
+		.submitError {
+			max-width: none;
+
+			@include respond-to(m) {
+				font-size: $pc-h6-fz;
+			}
 		}
 	}
 

@@ -5,7 +5,7 @@ import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/Su
 import BasicInputContainerHookForm from "@/app/common_ui/form_components/InputContainers/HookForm/children/BasicInputContainerHookForm/BasicInputContainerHookForm";
 import { postBooking } from "@/app/services/server/fetchData.service";
 import { BookingService } from "@/app/types/data/booking_services.type";
-import { ErrorBase } from "@/app/types/data/response.type";
+import { StatusType } from "@/app/types/data/response.type";
 import { PHONE_NUMBER } from "@/app/utils/regex";
 import Link from "next/link";
 import { JSX, use, useState } from "react";
@@ -27,14 +27,19 @@ export interface ContactsFormRequest {
 	bookingServiceId: number;
 }
 
+const formSubmitError = {
+	message: "Помилка запису, спробуйте пізніше",
+};
+
 export function ContactsForm({ bookingServicesPromise }: ContactFormProps): JSX.Element {
 	const bookingServices = use(bookingServicesPromise);
 
 	const [bookingServiceId, setBookingServiceId] = useState<number | null>(null);
 	const [selectError, setSelectError] = useState(false);
-	const [submitError, setSubmitError] = useState<ErrorBase | null>(null);
+	const [submitStatus, setSubmitStatus] = useState<StatusType>(null);
 
 	const {
+		reset,
 		register,
 		handleSubmit,
 		formState: { errors },
@@ -46,26 +51,26 @@ export function ContactsForm({ bookingServicesPromise }: ContactFormProps): JSX.
 	};
 
 	const book: SubmitHandler<ContactsForm> = async (data) => {
-		console.log("form data:", { ...data, bookingServiceId });
-		console.log(bookingServiceId);
 		if (!bookingServiceId) {
 			setSelectError(true);
 			return;
 		}
 
-		const response = await postBooking({
+		setSubmitStatus("loading");
+
+		const responseStatus = await postBooking({
 			...data,
 			bookingServiceId,
 		});
 
-		if (response) {
-			setSubmitError(response);
+		if (responseStatus) {
+			setSubmitStatus("succeeded");
+			setBookingServiceId(null);
+			reset();
 		} else {
-			setSubmitError(null);
+			setSubmitStatus("failed");
 		}
 	};
-
-	console.log("selectError", selectError);
 
 	return (
 		<form className={styles.form} onSubmit={handleSubmit(book)}>
@@ -104,16 +109,22 @@ export function ContactsForm({ bookingServicesPromise }: ContactFormProps): JSX.
 			<ContactUsSelect
 				list={bookingServices}
 				selectError={selectError}
+				selected={!!bookingServiceId}
 				parentHandleListSelect={handleListClick}
 			/>
 
 			<Link href={"/prices"}>Подивитись ціни на послуги</Link>
 
-			<SubmitButton
-				error={submitError}
-				label={"Записатись зараз"}
-				className={{ button: styles.submit, error: styles.submitError }}
-			/>
+			<div className={styles.submitContainer}>
+				{submitStatus === "succeeded" && (
+					<p className={styles.succeeded}>Запис успішно створено</p>
+				)}
+				<SubmitButton
+					error={submitStatus === "failed" ? formSubmitError : null}
+					label={"Записатись зараз"}
+					className={{ button: styles.submit, error: styles.submitError }}
+				/>
+			</div>
 		</form>
 	);
 }

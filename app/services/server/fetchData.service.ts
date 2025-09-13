@@ -86,10 +86,5 @@ export async function postBooking(data: ContactsFormRequest) {
 		credentials: "include",
 	});
 
-	if (!res.ok) {
-		return {
-			message: "Помилка запису, спробуйте пізніше",
-		};
-	}
-	return;
+	return res.ok;
 }
