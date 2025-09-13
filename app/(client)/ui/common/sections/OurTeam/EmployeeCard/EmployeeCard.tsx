@@ -1,4 +1,4 @@
-import { RightArrow } from "@/app/common_ui/images/RightArrow";
+import { EmployeeCardBtn } from "@/app/(client)/ui/common/sections/OurTeam/EmployeeCard/EmployeeCarbBtn/EmployeeCardBtn";
 import { Employee } from "@/app/types/data/employees.type";
 import Image from "next/image";
 import React from "react";
@@ -10,11 +10,11 @@ export function EmployeeCard({ employee }: { employee: Employee }) {
 			<div className={`${styles.imageContainer} ${styles[employee.backgroundImgColor]}`}>
 				<Image src={employee.image} alt={"Фото працівника"} fill />
 			</div>
-			<div></div>
-			<button className={`btn blue md returnBtn ${styles.btn}`}>
-				Дізнатися більше
-				<RightArrow />
-			</button>
+			<div className={styles.text}>
+				<h3 className={styles.name}>{`${employee.name} ${employee.surname}`}</h3>
+				<p className={styles.position}>{employee.position}</p>
+			</div>
+			<EmployeeCardBtn employee={employee} />
 		</article>
 	);
 }
