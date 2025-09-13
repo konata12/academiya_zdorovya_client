@@ -76,9 +76,7 @@ export default function SideNavigation() {
 	if (!sideNavigationIsOpen) return null;
 
 	return (
-		<>
-			<div className={styles.empty}></div>
-
+		<div className={styles.container}>
 			<div className={styles.sideNav}>
 				{routes.map((route) => {
 					return (
@@ -90,6 +88,6 @@ export default function SideNavigation() {
 					);
 				})}
 			</div>
-		</>
+		</div>
 	);
 }

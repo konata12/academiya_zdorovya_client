@@ -1,15 +1,15 @@
 @use '../../../../styles/variables' as *;
 
-.sideNav {
-	position: fixed;
-	top: 163px;
-	display: flex;
-	flex-direction: column;
-	clip-path: inset(-200px 0 -200px 0);
-}
 
-.empty {
-	max-width: 300px;
-	width: 100%;
-	color: transparent;
+.container {
+	position: relative;
+
+	.sideNav {
+		position: sticky;
+		top: 50%;
+		transform: translateY(-50%);
+		display: flex;
+		flex-direction: column;
+		clip-path: inset(-200px 0 -200px 0);
+	}
 }
