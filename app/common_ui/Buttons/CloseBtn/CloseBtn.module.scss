@@ -1,0 +1,51 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/functions' as *;
+
+.button {
+	position: relative;
+	display: flex;
+	cursor: pointer;
+	background-color: transparent;
+	border: none;
+	outline: none;
+
+	&:hover {
+
+		.cross {
+			transform: scale(0.7);
+
+			path {
+				fill: $primary-color;
+				stroke: $primary-color;
+			}
+		}
+		.circle {
+			transform: translate(-50%, -50%);
+		}
+	}
+
+	.cross {
+		z-index: 1;
+		transition: all $anim-time $slow;
+
+		path {
+			fill: $secondary-color;
+			stroke: $secondary-color;
+			transition: all $anim-time $slow;
+		}
+	}
+
+	.circle {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		border-radius: 50%;
+		transform: translate(-50%, -50%) scale(0.1);
+		transform-origin: center center;
+
+		fill: $secondary-color;
+		stroke: $secondary-color;
+		transition: all $anim-time $slow;
+	}
+}

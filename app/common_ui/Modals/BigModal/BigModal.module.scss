@@ -1,0 +1,42 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/functions' as *;
+
+.backgrond {
+	z-index: 110;
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	background-color: rgba-color($black-bg-color, 0.3);
+
+	.modal {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 50%;
+
+		background-color: $background-color-secondary;
+
+		.header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 27px 48px;
+			background-color: $primary-color;
+			border-bottom: 2px solid $secondary-color;
+
+			h4 {
+				color: $text-color-white;
+				font-size: $pc-t2-fz;
+				font-weight: $font-weight-reg;
+			}
+
+			@include respond-to(s) {
+				padding: 29px 12px;
+			}
+		}
+	}
+}
