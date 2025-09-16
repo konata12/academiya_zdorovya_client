@@ -18,7 +18,9 @@ export function EmployeeCardBtn({ employee }: { employee: Employee }) {
 				render={modalOpen}
 				label={"Про лікаря"}
 				closeHandler={() => setModalOpen(false)}
-			/>
+			>
+				123
+			</BigModal>
 		</div>
 	);
 }

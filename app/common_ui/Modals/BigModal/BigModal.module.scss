@@ -2,15 +2,16 @@
 @use '../../../styles/mixins' as *;
 @use '../../../styles/functions' as *;
 
-.backgrond {
-	z-index: 110;
+.backgroundContainer {
+	z-index: 111;
 
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100vh;
-	background-color: rgba-color($black-bg-color, 0.3);
+	background-color: transparent;
+	transition: all $anim-time $slow;
 
 	.modal {
 		position: absolute;
@@ -19,6 +20,7 @@
 		width: 50%;
 
 		background-color: $background-color-secondary;
+		transition: all 0.2s $slow;
 
 		.header {
 			display: flex;
@@ -39,4 +41,16 @@
 			}
 		}
 	}
+}
+
+.background {
+	z-index: 110;
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	background-color: rgba-color($black-bg-color, 0.5);
+	transition: all $anim-time $slow;
 }
