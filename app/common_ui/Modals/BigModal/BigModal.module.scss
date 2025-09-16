@@ -18,6 +18,7 @@
 		top: 0;
 		right: 0;
 		width: 50%;
+		min-width: $breakpoint-m;
 
 		background-color: $background-color-secondary;
 		transition: all 0.2s $slow;
@@ -39,6 +40,11 @@
 			@include respond-to(s) {
 				padding: 29px 12px;
 			}
+		}
+
+		@include respond-to(s) {
+			width: 100%;
+			min-width: unset;
 		}
 	}
 }
