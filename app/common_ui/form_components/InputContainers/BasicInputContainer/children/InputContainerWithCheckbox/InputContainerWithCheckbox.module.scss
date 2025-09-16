@@ -9,6 +9,10 @@
   .checkboxContainer {
     display: flex;
     justify-content: space-between;
+
+	  .label {
+		  margin-bottom: 0;
+	  }
   }
 
   .absoluteContainer {

@@ -19,6 +19,9 @@
 		right: 0;
 		width: 50%;
 		min-width: $breakpoint-m;
+		max-height: 100vh;
+		display: flex;
+		flex-direction: column;
 
 		background-color: $background-color-secondary;
 		transition: all 0.2s $slow;
