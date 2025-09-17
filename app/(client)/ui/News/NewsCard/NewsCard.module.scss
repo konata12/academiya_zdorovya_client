@@ -1,0 +1,126 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/functions' as *;
+
+.container {
+	display: flex;
+	gap: 48px;
+
+	flex: 1 1 592.5px;
+	max-width: 680px;
+	padding: 48px;
+	background-color: $background-color-secondary;
+	border-radius: $border-rad-3;
+
+	transition: all $anim-time $slow;
+	box-shadow: 0 0 44px 0 rgba-color($black-bg-color, 0.04);
+
+	&:hover {
+		box-shadow: 9px 14px 44px 0 rgba-color($black-bg-color, 0.20), 0 0 0 0 rgba-color($black-bg-color, 0.20);
+
+		.cardImage.cardImage {
+			transform: scale(1.2);
+		}
+	}
+
+	.shadowContainer {
+		align-self: center;
+		box-shadow: 3px 7px 37px 0 rgba-color($black-bg-color, 0.12), 0 0 0 0 rgba-color($black-bg-color, 0.08);
+		border-radius: $border-rad-6;
+
+		.imageContainer {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			clip-path: inset(0 0 0 0 round $border-rad-6);
+			min-width: 228px;
+			border-radius: $border-rad-6;
+
+			.cardImage {
+				border-radius: $border-rad-6;
+				position: unset !important;
+				height: auto !important;
+				transition: all $anim-time $slow;
+				transform-origin: center center;
+			}
+		}
+	}
+
+	.text {
+		flex-grow: 1;
+
+		.title {
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 1;
+			overflow: hidden;
+
+
+			text-align: left;
+			font-size: $pc-h5-fz;
+			font-weight: $font-weight-med;
+			text-overflow: ellipsis;
+
+			margin-bottom: 22px;
+
+			@include respond-to(s) {
+				font-size: $mob-h5-fz;
+				margin-bottom: 12px;
+			}
+			@include respond-to(m) {
+				font-size: $mob-h5-fz;
+			}
+		}
+
+		.date,
+		.description {
+			text-align: left;
+			font-size: $pc-t2-fz;
+
+			@include respond-to(s) {
+				font-size: $mob-t2-fz;
+			}
+			@include respond-to(m) {
+				font-size: $mob-t2-fz;
+			}
+		}
+
+		.date {
+			margin-bottom: 10px;
+		}
+
+		.description {
+			margin: 22px 0;
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+
+			text-overflow: ellipsis;
+
+			@include respond-to(s) {
+				-webkit-line-clamp: 1;
+			}
+		}
+
+		.link {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+		}
+	}
+
+	@include respond-to(s) {
+		flex-direction: column;
+		max-width: none;
+		padding: 38px;
+	}
+	@include respond-to(m) {
+		max-width: none;
+		padding: 38px;
+	}
+	@include respond-to(l) {
+		max-width: none;
+		padding: 38px;
+	}
+}

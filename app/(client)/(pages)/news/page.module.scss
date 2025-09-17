@@ -7,3 +7,11 @@
 	@include hero-section-basic();
 	@include mix-bg-colors('/images/client/news_hero_bg.jpg');
 }
+
+.cardsContainer {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 32px;
+}

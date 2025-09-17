@@ -12,7 +12,7 @@
 			@content;
 		}
 	} @else if $breakpoint ==l {
-		@media (min-width: $breakpoint-l) and (max-width: $breakpoint-xl) {
+		@media (min-width: $breakpoint-l) and (max-width: $container-max-width-l) {
 			@content;
 		}
 	} @else if $breakpoint ==xl {

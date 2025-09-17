@@ -4,6 +4,7 @@ import { BookingService } from "@/app/types/data/booking_services.type";
 import { Department, DepartmentsService } from "@/app/types/data/departments.type";
 import { DetailsRedactorType } from "@/app/types/data/details.type";
 import { Employee } from "@/app/types/data/employees.type";
+import { News } from "@/app/types/data/news.type";
 import { PriceSection } from "@/app/types/data/prices.type";
 
 const basicUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -73,10 +74,18 @@ export async function fetchEmployees() {
 
 	return parsedData;
 }
+// NEWS
+export async function fetchNewsCards() {
+	const res = await fetch(`${basicUrl}/news/getBasicData`);
+
+	const parsedData: News[] = await res.json();
+
+	return parsedData;
+}
 export async function fetchBannerNews() {
 	const res = await fetch(`${basicUrl}/news/banner`);
 
-	const parsedData: DepartmentsService[] = await res.json();
+	const parsedData: News[] = await res.json();
 
 	return parsedData;
 }
