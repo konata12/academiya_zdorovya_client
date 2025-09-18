@@ -5,7 +5,6 @@ import React from "react";
 
 export default async function AboutUs() {
 	const news = await fetchNewsCards();
-
 	console.log("news", news);
 
 	return (
@@ -14,21 +13,25 @@ export default async function AboutUs() {
 				<h1 className={"title lg"}>Новини</h1>
 				<p>Будьте в курсі останніх подій нашого центру</p>
 			</section>
-			<section className="news">NEWS Carousel</section>
-			<section className={`container section`}>
-				<h2 className={"title left lg"}>Інші новини</h2>
-				<p>
-					Перегляньте архів новин нашого центру та дізнайтеся про важливі події та
-					оновлення, які відбулися раніше.
-				</p>
-				<div className={styles.cardsContainer}>
-					{!news.length ? (
-						<p className={"title lg error"}>Новини відсутні</p>
-					) : (
-						news.map((data) => <NewsCard news={data} key={data.id} />)
-					)}
-				</div>
-			</section>
+			{!news.length ? (
+				<p className={"title lg"}>Новини відсутні</p>
+			) : (
+				<>
+					<section className="news">NEWS Carousel</section>
+					<section className={`container section`}>
+						<h2 className={"title left lg"}>Інші новини</h2>
+						<p>
+							Перегляньте архів новин нашого центру та дізнайтеся про важливі
+							події та оновлення, які відбулися раніше.
+						</p>
+						<div className={styles.cardsContainer}>
+							{news.map((data) => (
+								<NewsCard news={data} key={data.id} />
+							))}
+						</div>
+					</section>
+				</>
+			)}
 		</div>
 	);
 }

@@ -19,7 +19,7 @@ export default async function AboutUs() {
 				<p>Ознайомтесь з вартістю реабілітаційних програм у нашому центрі</p>
 			</section>
 			{!prices.length ? (
-				<p className={"title lg error"}>У цього відділення немає таблиць розцінок</p>
+				<p className={"title lg"}>У цього відділення немає таблиць розцінок</p>
 			) : (
 				<section className={`container ${styles.pricesSection}`}>
 					<SideNav list={pricesNamesList} />

@@ -1,3 +1,5 @@
+"use server";
+
 import { fetchDepartments } from "@/app/services/server/fetchData.service";
 import { cookies } from "next/headers";
 

@@ -13,7 +13,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import styles from "./ContactsForm.module.scss";
 
 interface ContactFormProps {
-	bookingServicesPromise: Promise<BookingService[]>;
+	bookingServices: BookingService[];
 }
 interface ContactsForm {
 	name: string;
@@ -31,9 +31,7 @@ const formSubmitError = {
 	message: "Помилка запису, спробуйте пізніше",
 };
 
-export function ContactsForm({ bookingServicesPromise }: ContactFormProps): JSX.Element {
-	const bookingServices = use(bookingServicesPromise);
-
+export function ContactsForm({ bookingServices }: ContactFormProps): JSX.Element {
 	const [bookingServiceId, setBookingServiceId] = useState<number | null>(null);
 	const [selectError, setSelectError] = useState(false);
 	const [submitStatus, setSubmitStatus] = useState<StatusType>(null);
@@ -51,6 +49,10 @@ export function ContactsForm({ bookingServicesPromise }: ContactFormProps): JSX.
 	};
 
 	const book: SubmitHandler<ContactsForm> = async (data) => {
+		if (bookingServiceId === 0) {
+			setSubmitStatus("failed");
+			return;
+		}
 		if (!bookingServiceId) {
 			setSelectError(true);
 			return;
@@ -109,7 +111,7 @@ export function ContactsForm({ bookingServicesPromise }: ContactFormProps): JSX.
 			<ContactUsSelect
 				list={bookingServices}
 				selectError={selectError}
-				selected={!!bookingServiceId}
+				selected={bookingServiceId !== null}
 				parentHandleListSelect={handleListClick}
 			/>
 

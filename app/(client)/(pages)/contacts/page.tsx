@@ -12,7 +12,8 @@ import styles from "./page.module.scss";
 
 export default async function ContactUs() {
 	const department = await getDepartmentByIdFromCookies();
-	const bookingServices = fetchBookingServices();
+	// todo select services by department id
+	const bookingServices = await fetchBookingServices();
 
 	return (
 		<div className={"page"}>
@@ -77,7 +78,7 @@ export default async function ContactUs() {
 					</address>
 				</article>
 
-				<ContactsForm bookingServicesPromise={bookingServices} />
+				<ContactsForm bookingServices={bookingServices} />
 			</section>
 		</div>
 	);

@@ -1,4 +1,5 @@
 import { ContactsFormRequest } from "@/app/(client)/ui/Forms/ContactsForm/ContactsForm";
+import { getDepartmentIdFromCookies } from "@/app/services/server/utils.service";
 import { AboutTreatment } from "@/app/types/data/about_treatment.type";
 import { BookingService } from "@/app/types/data/booking_services.type";
 import { Department, DepartmentsService } from "@/app/types/data/departments.type";
@@ -46,10 +47,29 @@ export async function fetchPrices(departmentId: string) {
 	return parsedData;
 }
 export async function fetchBookingServices() {
-	const res = await fetch(`${basicUrl}/booking-services`);
+	let departmentId = await getDepartmentIdFromCookies();
+
+	if (departmentId === undefined) {
+		departmentId = `${(await fetchDepartments())[0].id}`;
+	}
+
+	const res = await fetch(`${basicUrl}/booking-services/forDepartment`, {
+		headers: {
+			Cookie: `departmentId=${departmentId || ""}`,
+		},
+	});
 
 	const parsedData: BookingService[] = await res.json();
 	console.log("booking services Data", parsedData);
+
+	if ((parsedData as any).statusCode > 400) {
+		return [
+			{
+				id: 0,
+				name: "У цього відділення послуги для запису відсутні, записатись не вийде",
+			},
+		];
+	}
 
 	return parsedData;
 }
@@ -69,7 +89,17 @@ export async function fetchServicesTitles() {
 	return parsedData;
 }
 export async function fetchEmployees() {
-	const data = await fetch(`${basicUrl}/employees`);
+	let departmentId = await getDepartmentIdFromCookies();
+
+	if (departmentId === undefined) {
+		departmentId = `${(await fetchDepartments())[0].id}`;
+	}
+
+	const data = await fetch(`${basicUrl}/employees/forDepartment`, {
+		headers: {
+			Cookie: `departmentId=${departmentId || ""}`,
+		},
+	});
 	const parsedData: Employee[] = await data.json();
 
 	return parsedData;
