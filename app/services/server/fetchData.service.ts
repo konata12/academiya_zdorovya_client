@@ -10,6 +10,15 @@ import { PriceSection } from "@/app/types/data/prices.type";
 
 const basicUrl = process.env.NEXT_PUBLIC_API_URL;
 
+async function definitelyGetDepartmentId() {
+	let departmentId = await getDepartmentIdFromCookies();
+
+	if (departmentId === undefined) {
+		departmentId = `${(await fetchDepartments())[0].id}`;
+	}
+	return departmentId;
+}
+
 // DATA WITH NO IMAGES
 export async function fetchDepartments() {
 	// const first = performance.now();
@@ -47,11 +56,7 @@ export async function fetchPrices(departmentId: string) {
 	return parsedData;
 }
 export async function fetchBookingServices() {
-	let departmentId = await getDepartmentIdFromCookies();
-
-	if (departmentId === undefined) {
-		departmentId = `${(await fetchDepartments())[0].id}`;
-	}
+	let departmentId = await definitelyGetDepartmentId();
 
 	const res = await fetch(`${basicUrl}/booking-services/forDepartment`, {
 		headers: {
@@ -82,18 +87,21 @@ export async function fetchWhatWeTreats() {
 	return parsedData;
 }
 export async function fetchServicesTitles() {
-	const res = await fetch(`${basicUrl}/services/getBasicData`);
+	let departmentId = await definitelyGetDepartmentId();
+
+	const res = await fetch(`${basicUrl}/services/getBasicDataForDepartment`, {
+		headers: {
+			Cookie: `departmentId=${departmentId || ""}`,
+		},
+	});
 	const parsedData: DepartmentsService[] = await res.json();
-	// console.log("services Data", parsedData);
+
+	if ((parsedData as any).statusCode > 400) return [];
 
 	return parsedData;
 }
 export async function fetchEmployees() {
-	let departmentId = await getDepartmentIdFromCookies();
-
-	if (departmentId === undefined) {
-		departmentId = `${(await fetchDepartments())[0].id}`;
-	}
+	let departmentId = await definitelyGetDepartmentId();
 
 	const data = await fetch(`${basicUrl}/employees/forDepartment`, {
 		headers: {

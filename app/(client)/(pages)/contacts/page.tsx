@@ -12,7 +12,6 @@ import styles from "./page.module.scss";
 
 export default async function ContactUs() {
 	const department = await getDepartmentByIdFromCookies();
-	// todo select services by department id
 	const bookingServices = await fetchBookingServices();
 
 	return (

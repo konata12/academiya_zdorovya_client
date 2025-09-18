@@ -6,11 +6,10 @@ import { fetchServicesTitles } from "@/app/services/server/fetchData.service";
 import logo from "@/public/icons/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense } from "react";
 import styles from "./Footer.module.scss";
 
-export default function Footer() {
-	const services = fetchServicesTitles();
+export default async function Footer() {
+	const services = await fetchServicesTitles();
 
 	return (
 		<footer className={styles.footer}>
@@ -109,9 +108,7 @@ export default function Footer() {
 						</address>
 					</div>
 				</div>
-				<Suspense fallback={<p className={`loading ${styles.navFallback}`}></p>}>
-					<FooterNavBar servicesPromise={services} />
-				</Suspense>
+				<FooterNavBar services={services} />
 			</div>
 			<FooterBottom className={styles.mainBottom} />
 		</footer>
