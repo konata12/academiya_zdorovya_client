@@ -1,13 +1,11 @@
 import { SideNav } from "@/app/(client)/ui/common/SideNav/SideNav";
 import PriceTable from "@/app/(client)/ui/common/tables/PriceTable/PriceTable";
 import { fetchPrices } from "@/app/services/server/fetchData.service";
-import { getDepartmentIdFromCookiesAlsoCheckDepartments } from "@/app/services/server/utils.service";
 import React from "react";
 import styles from "./page.module.scss";
 
 export default async function AboutUs() {
-	const departmentId = await getDepartmentIdFromCookiesAlsoCheckDepartments();
-	const prices = await fetchPrices(departmentId);
+	const prices = await fetchPrices();
 	const pricesNamesList = prices.map((price) => {
 		return { label: price.titles[0].text, id: price.titles[0].text };
 	});
