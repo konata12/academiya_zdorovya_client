@@ -71,7 +71,7 @@ export function NewsCarousel({ news }: { news: News[] }) {
 
 					const tweenValue = 1 - Math.abs(diffToTarget * tweenFactor.current);
 					const scale = numberWithinRange(tweenValue, 0, 1).toString();
-					const blur = (1 - parseFloat(scale)) * 20;
+					const blur = Math.round((1 - parseFloat(scale)) * 20);
 					const tweenNode = tweenNodes.current[slideIndex];
 					tweenNode.style.transform = `scale(${scale})`;
 					tweenNode.style.filter = `blur(${blur}px)`;
@@ -119,7 +119,7 @@ export function NewsCarousel({ news }: { news: News[] }) {
 											href={`/news/${item.id}`}
 											className={`btn blue md returnBtn ${styles.link}`}
 										>
-											Дізнатися більше
+											<span>Дізнатися більше</span>
 											<RightArrow />
 										</Link>
 									</div>
