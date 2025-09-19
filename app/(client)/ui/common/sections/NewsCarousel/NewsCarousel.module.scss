@@ -126,14 +126,7 @@
 						}
 
 						.image {
-							width: 100%;
-							position: unset !important;
-							height: auto !important;
-
-							@include respond-to(s) {
-								height: 100% !important;
-								width: auto !important;
-							}
+							object-fit: cover;
 						}
 					}
 
