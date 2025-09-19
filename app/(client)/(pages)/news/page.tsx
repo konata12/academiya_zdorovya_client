@@ -4,7 +4,7 @@ import { NewsCard } from "@/app/(client)/ui/News/NewsCard/NewsCard";
 import { fetchNewsCards } from "@/app/services/server/fetchData.service";
 import React from "react";
 
-export default async function AboutUs() {
+export default async function News() {
 	const news = await fetchNewsCards();
 	console.log("news", news);
 

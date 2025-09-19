@@ -120,6 +120,15 @@ export async function fetchBannerNews() {
 
 	return parsedData;
 }
+export async function fetchOneNews(id: string) {
+	const res = await fetch(`${basicUrl}/news/${id}`);
+
+	console.log(res);
+
+	const parsedData: News = await res.json();
+
+	return parsedData;
+}
 
 // POST REQUESTS
 export async function postBooking(data: ContactsFormRequest) {
