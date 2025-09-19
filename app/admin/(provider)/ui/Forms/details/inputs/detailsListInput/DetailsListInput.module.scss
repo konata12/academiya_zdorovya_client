@@ -2,32 +2,46 @@
 @use '../../../../../../../styles/functions' as *;
 
 .list {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
 
-  .option {
-    width: 100%;
-    margin-left: 24px;
-    font-size: $details-from-list-fz;
+	.option {
+		position: relative;
+		font-size: $details-from-list-fz;
+		list-style-type: none;
+		padding-left: 28px;
 
-    &.numerable {
-      display: flex;
-      gap: 5px;
-      list-style-type: none;
-      margin-left: 0px;
-    }
+		&::before {
+			content: "•";
+			position: absolute;
+			left: 2px;
+			top: 2px;
+			font-size: $details-from-list-fz;
+		}
 
-    .button {
-      display: block;
-      width: 100%;
-      font-size: $details-from-list-fz;
-    }
-  }
+		&.numerable {
+			display: flex;
+			padding-left: 0;
+
+			&::before {
+				display: none;
+			}
+
+			.optionText {
+				margin-left: 13px;
+			}
+		}
+
+		.optionText {
+			font-size: $details-from-list-fz;
+		}
+	}
 }
 
 .error.error {
-  font-size: 14px;
-  top: -20px;
+	height: auto;
+	font-size: 14px;
+	top: -20px;
 }

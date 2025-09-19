@@ -1,4 +1,5 @@
 import { months } from "@/app/(client)/ui/News/NewsCard/NewsCard";
+import DetailsData from "@/app/common_ui/DetailsData/DetailsData";
 import { fetchOneNews } from "@/app/services/server/fetchData.service";
 import Image from "next/image";
 import React from "react";
@@ -33,6 +34,7 @@ export default async function NewsDetails({ params }: { params: { id: string } }
 					</div>
 				</div>
 			</div>
+			<DetailsData data={newsData.details} />
 		</article>
 	);
 }

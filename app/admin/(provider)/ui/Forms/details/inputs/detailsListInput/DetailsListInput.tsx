@@ -1,7 +1,4 @@
-import {
-	DetailsFormDataEnum,
-	ListFormComponentProps,
-} from "@/app/types/data/details.type";
+import { DetailsFormDataEnum, ListFormComponentProps } from "@/app/types/data/details.type";
 import React from "react";
 import styles from "./DetailsListInput.module.scss";
 import { useOrderedFormInput } from "@/app/utils/hooks/admin/detailsForm/useOrderedFormInput";
@@ -45,7 +42,7 @@ export default function DetailsListInput({
 								<AutoResizingTextarea
 									lineHeight={26}
 									padding={0}
-									className={`${styles.input} ${className?.option}`}
+									className={`${styles.optionText} ${className?.option}`}
 									placeholder={`Опція ${optionIndex + 1}`}
 									value={option}
 									onKeyDown={(e: React.KeyboardEvent) => {
