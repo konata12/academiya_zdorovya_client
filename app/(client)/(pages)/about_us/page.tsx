@@ -1,4 +1,5 @@
 import AboutUsPageGoalsCards from "@/app/(client)/ui/AboutUs/AboutUsPageGoalsCards/AboutUsPageGoalsCards";
+import { NewsCarouselFetchContainer } from "@/app/(client)/ui/common/sections/NewsCarousel/NewsCarouselFetchContainer";
 import { OurTeam } from "@/app/(client)/ui/common/sections/OurTeam/OurTeam";
 import btnStyles from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn.module.scss";
 import mainImg from "@/public/images/client/about_us_main.png";
@@ -78,7 +79,7 @@ export default async function AboutUs() {
 				<AboutUsPageGoalsCards />
 			</section>
 			<OurTeam />
-			<section>NEWS CAROUSEL</section>
+			<NewsCarouselFetchContainer />
 		</div>
 	);
 }

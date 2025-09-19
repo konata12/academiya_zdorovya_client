@@ -29,6 +29,7 @@
 		border-radius: $border-rad-6;
 
 		.imageContainer {
+			position: relative;
 			display: flex;
 			justify-content: center;
 			align-items: center;

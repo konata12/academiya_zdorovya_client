@@ -26,18 +26,6 @@ body {
 	margin: 0 auto;
 }
 
-.container {
-	margin: auto;
-	padding: 0 24px;
-
-	max-width: $container-max-width-xl;
-	width: 100%;
-
-	@include respond-to(s) {
-		padding: 0 12px;
-	}
-}
-
 .page {
 	display: flex;
 	flex-direction: column;
@@ -48,6 +36,18 @@ body {
 	}
 	@include respond-to(m) {
 		gap: 93px;
+	}
+}
+
+.container {
+	margin: auto;
+	padding: 0 24px;
+
+	max-width: $container-max-width-xl;
+	width: 100%;
+
+	@include respond-to(s) {
+		padding: 0 12px;
 	}
 }
 
@@ -145,6 +145,7 @@ body {
 	margin-bottom: 24px;
 }
 
+//BUTTONS
 .button {
 	background-color: $disabled-color;
 	border: none;
@@ -193,7 +194,6 @@ body {
 	}
 }
 
-//BUTTONS
 .btn {
 	cursor: pointer;
 	border: none;
@@ -383,6 +383,6 @@ body {
 }
 
 // SERVICE CLASSES
-.fw {
-	width: 100%;
-}
+//.underNewsCarousel {
+//	margin-top: -46px;
+//}

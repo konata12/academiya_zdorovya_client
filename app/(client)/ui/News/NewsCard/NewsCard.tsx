@@ -6,7 +6,7 @@ import Link from "next/link";
 import React from "react";
 import styles from "./NewsCard.module.scss";
 
-const months = [
+export const months = [
 	"Січень",
 	"Лютий",
 	"Березень",
@@ -32,6 +32,7 @@ export function NewsCard({ news }: { news: News }) {
 						src={news.backgroundImg}
 						alt={"Заставка новини"}
 						fill
+						sizes={"(min-width: 0px) auto"}
 					/>
 				</div>
 			</div>
@@ -42,7 +43,7 @@ export function NewsCard({ news }: { news: News }) {
 				<h5 className={styles.title}>{news.title}</h5>
 				<p className={styles.description}>{news.description}</p>
 				<Link
-					href={`/services/${news.id}`}
+					href={`/news/${news.id}`}
 					className={`btn blue md returnBtn ${styles.link}`}
 				>
 					Дізнатися більше

@@ -1,0 +1,182 @@
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
+
+.embla {
+	overflow: hidden;
+	padding-bottom: 46px;
+	margin-bottom: -46px;
+
+	.viewport {
+
+		.container {
+			display: flex;
+
+			.slideContainer {
+				flex: 0 0 70%;
+				display: flex;
+				justify-content: center;
+
+				.slide {
+					position: relative;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					min-width: 0;
+					max-width: 1228px;
+					width: 100%;
+					height: 590px;
+					overflow: hidden;
+
+					padding: 48px;
+					border-radius: $border-rad-2;
+					color: $text-color-white;
+
+					.text {
+						height: 100%;
+						max-width: 466px;
+						display: flex;
+						flex-direction: column;
+						justify-content: space-between;
+
+						.title {
+							display: -webkit-box;
+							-webkit-box-orient: vertical;
+							-webkit-line-clamp: 4;
+							overflow: hidden;
+
+							text-align: left;
+							font-size: $pc-h2-fz;
+							font-weight: $font-weight-med;
+							text-overflow: ellipsis;
+
+							@include respond-to(s) {
+								-webkit-line-clamp: 3;
+								font-size: $mob-h2-fz;
+							}
+							@include respond-to(m) {
+								-webkit-line-clamp: 3;
+								font-size: $mob-h2-fz;
+							}
+						}
+
+						.date {
+							font-size: $pc-t2-fz;
+							text-align: left;
+
+							margin-bottom: 22px;
+
+							@include respond-to(s) {
+								font-size: $mob-t2-fz;
+								margin-bottom: 14px;
+							}
+							@include respond-to(m) {
+								font-size: $mob-t2-fz;
+								margin-bottom: 14px;
+							}
+						}
+
+						.description {
+							font-size: $pc-t1-fz;
+							text-align: left;
+							text-overflow: ellipsis;
+
+							overflow: hidden;
+							display: -webkit-box;
+							-webkit-line-clamp: 3;
+							-webkit-box-orient: vertical;
+
+							@include respond-to(s) {
+								-webkit-line-clamp: 1;
+								font-size: $mob-t1-fz;
+							}
+							@include respond-to(m) {
+								font-size: $mob-t1-fz;
+							}
+						}
+
+						.link {
+							width: 100%;
+							display: flex;
+							justify-content: center;
+						}
+					}
+
+					.imageContainer {
+						z-index: -1;
+						position: absolute;
+						inset: 0;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+
+						&::after {
+							z-index: 1;
+							content: "";
+							position: absolute;
+							inset: 0;
+							background: linear-gradient(
+											270deg,
+											rgba(204, 219, 239, 0) 0%,
+											rgba(47, 48, 53, 0.64) 53.93%
+							);
+							pointer-events: none;
+						}
+
+						.image {
+							width: 100%;
+							position: unset !important;
+							height: auto !important;
+
+							@include respond-to(s) {
+								height: 100% !important;
+								width: auto !important;
+							}
+						}
+					}
+
+					@include respond-to(s) {
+						padding: 24px;
+						max-width: 325px;
+						height: 415px;
+					}
+					@include respond-to(m) {
+						padding: 38px;
+						max-width: 644px;
+						height: 400px;
+					}
+					@include respond-to(l) {
+						max-width: 906px;
+						height: 564px;
+					}
+				}
+			}
+		}
+	}
+
+	.arrows {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 24px;
+
+		width: 100%;
+		margin-top: 64px;
+
+		.arrow {
+			height: 84px;
+			width: 84px;
+			border-radius: 50%;
+			border: none;
+			outline: none;
+			background-color: $primary-color;
+			color: $text-color-white;
+			transition: all $anim-time $slow;
+
+			&:hover {
+				cursor: pointer;
+				color: $secondary-color;
+				box-shadow: 0 5px 46px 0 $primary-color-active;
+			}
+		}
+	}
+}

@@ -1,4 +1,5 @@
 import styles from "@/app/(client)/(pages)/news/page.module.scss";
+import { NewsCarouselFetchContainer } from "@/app/(client)/ui/common/sections/NewsCarousel/NewsCarouselFetchContainer";
 import { NewsCard } from "@/app/(client)/ui/News/NewsCard/NewsCard";
 import { fetchNewsCards } from "@/app/services/server/fetchData.service";
 import React from "react";
@@ -17,7 +18,7 @@ export default async function AboutUs() {
 				<p className={"title lg"}>Новини відсутні</p>
 			) : (
 				<>
-					<section className="news">NEWS Carousel</section>
+					<NewsCarouselFetchContainer />
 					<section className={`container section`}>
 						<h2 className={"title left lg"}>Інші новини</h2>
 						<p>

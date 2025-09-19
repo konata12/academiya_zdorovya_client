@@ -8,8 +8,6 @@ import { useRef } from "react";
 import styles from "./Footer.module.scss";
 
 export function FooterNavBar({ services }: { services: DepartmentsService[] }) {
-	console.log("services:", services);
-
 	const navRef = useRef<HTMLElement>(null);
 	const { scrollWidth, scrollX, handleScroll } = useCustomHorizontalScroll(navRef);
 

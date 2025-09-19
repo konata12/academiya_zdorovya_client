@@ -1,8 +1,9 @@
 import { FAQ } from "@/app/(client)/ui/common/sections/FAQ/FAQ";
+import { NewsCarouselFetchContainer } from "@/app/(client)/ui/common/sections/NewsCarousel/NewsCarouselFetchContainer";
 import DepartmentPhoneNumberBtn from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn";
 import btnStyles from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn.module.scss";
-import MainPageGoalsCards from "@/app/(client)/ui/Home/MainPageGoalsCards/MainPageGoalsCards";
 import HowWeTreatArticles from "@/app/(client)/ui/Home/HowWeTreatArticles/HowWeTreatArticles";
+import MainPageGoalsCards from "@/app/(client)/ui/Home/MainPageGoalsCards/MainPageGoalsCards";
 import OurServicesList from "@/app/(client)/ui/Home/OurServicesList/OurServicesList";
 import WhatWeTreatHomeLists from "@/app/(client)/ui/Home/WhatWeTreatHomeList/WhatWeTreatHomeLists";
 import logo from "@/public/icons/logo.svg";
@@ -99,7 +100,7 @@ export default async function Home() {
 					</div>
 				</div>
 			</section>
-			<section className="news">NEWS</section>
+			<NewsCarouselFetchContainer />
 			<section className={`container ${styles.whatWeTreatSection}`}>
 				<article>
 					<h2 className={"title left lg"}>Що ми лікуємо</h2>
