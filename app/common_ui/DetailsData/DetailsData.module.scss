@@ -1,6 +1,26 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
 .container {
 	display: flex;
 	flex-direction: column;
 	gap: 64px;
 	width: 100%;
+	max-width: 1028px;
+	margin: 0 auto;
+
+	font-size: $pc-t1-fz;
+	text-align: left;
+
+	p {
+		word-break: break-word;
+		line-height: 180%;
+	}
+
+	@include respond-to(s) {
+		font-size: $mob-t1-fz;
+	}
+	@include respond-to(m) {
+		font-size: $mob-t1-fz;
+	}
 }

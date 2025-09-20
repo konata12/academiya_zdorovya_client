@@ -1,0 +1,12 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.list {
+	list-style-position: inside;
+	padding-left: 12px;
+
+	li {
+		line-height: 180%;
+		word-break: break-word;
+	}
+}

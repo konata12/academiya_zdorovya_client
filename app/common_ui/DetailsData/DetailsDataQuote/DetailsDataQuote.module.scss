@@ -1,0 +1,35 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/functions' as *;
+
+.quote {
+	position: relative;
+	padding: 36px 48px;
+	clip-path: inset(-200px 0 -200px 0);
+
+	.text {
+		color: $primary-color;
+		line-height: 180%;
+	}
+
+	.author {
+		margin-top: 8px;
+		color: rgba-color($text-color-black, 0.5);
+		text-align: right;
+	}
+
+	.sideLine {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 2px;
+		height: 100%;
+		border-radius: 4px;
+		background-color: $primary-color;
+		box-shadow: -2px 0px 12px 0px $primary-color, 10px 0px 22px 0px $primary-color-active;
+	}
+
+	@include respond-to(s) {
+		padding: 36px 32px;
+	}
+}

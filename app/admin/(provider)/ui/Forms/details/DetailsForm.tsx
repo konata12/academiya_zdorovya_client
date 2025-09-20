@@ -548,6 +548,7 @@ export default function DetailsForm({
 										);
 
 									case DetailsFormDataEnum.LISTS:
+										// todo add order to input options
 										return (
 											<DetailsListInput
 												key={key}

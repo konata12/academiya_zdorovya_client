@@ -2,53 +2,53 @@
 @use '../../../../../../../styles/functions' as *;
 
 .container {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  width: 100%;
-  background-color: transparent;
-  padding: 36px 48px;
-  border-radius: none;
-  clip-path: inset(-200px 0 -200px 0);
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	width: 100%;
+	background-color: transparent;
+	padding: 36px 48px;
+	border-radius: none;
+	clip-path: inset(-200px 0 -200px 0);
 
-  .sideLine {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 2px;
-    height: 100%;
-    border-radius: 4px;
-    background-color: $primary-color;
-    box-shadow: -2px 0px 12px 0px $primary-color, 10px 0px 22px 0px $primary-color-active;
-  }
+	.sideLine {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 2px;
+		height: 100%;
+		border-radius: 4px;
+		background-color: $primary-color;
+		box-shadow: -2px 0px 12px 0px $primary-color, 10px 0px 22px 0px $primary-color-active;
+	}
 
-  .text {
-    font-size: $details-from-quoute-fz;
-    color: $primary-color;
+	.text {
+		font-size: $details-from-quoute-fz;
+		color: $primary-color;
 
-    &::placeholder {
-      color: rgba-color($primary-color, 0.5);
-    }
-  }
+		&::placeholder {
+			color: rgba-color($primary-color, 0.5);
+		}
+	}
 
-  .author {
-    width: 100%;
+	.author {
+		width: 100%;
 
-    font-size: $details-from-quoute-fz;
-    color: rgba-color($text-color-black, 0.5);
-    text-align: right;
+		font-size: $details-from-quoute-fz;
+		color: rgba-color($text-color-black, 0.5);
+		text-align: right;
 
-    &::placeholder {
-      color: rgba-color($text-color-black, 0.5);
-    }
-  }
+		&::placeholder {
+			color: rgba-color($text-color-black, 0.5);
+		}
+	}
 }
 
 .textErrorWrapper {
-  margin-bottom: 8px;
+	margin-bottom: 8px;
 }
 
 .authorError.authorError {
-  top: calc(100% + 4px),
+	top: calc(100% + 4px),
 }

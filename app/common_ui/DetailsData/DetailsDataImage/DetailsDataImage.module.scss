@@ -1,0 +1,52 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/functions' as *;
+
+.container {
+
+	.imageContainer {
+		position: relative;
+		overflow: hidden;
+		border-radius: $border-rad-4;
+		box-shadow: 3px 7px 37px 0 rgba-color($black-bg-color, 0.12), 0 0 0 0 rgba-color($black-bg-color, 0.08);
+
+		&.small {
+			height: 494px;
+
+			@include respond-to(s) {
+				height: 234px;
+			}
+			@include respond-to(m) {
+				height: 394px;
+			}
+		}
+
+		&.big {
+			height: 866px;
+
+			@include respond-to(s) {
+				height: 380px;
+			}
+			@include respond-to(m) {
+				height: 666px;
+			}
+		}
+
+		img {
+			object-fit: cover;
+		}
+	}
+
+	.description {
+		margin-top: 32px;
+		text-align: center;
+		font-size: $pc-t2-fz;
+
+		@include respond-to(s) {
+			font-size: $mob-t2-fz;
+		}
+		@include respond-to(m) {
+			font-size: $mob-t2-fz;
+		}
+	}
+}
