@@ -50,8 +50,8 @@ export function EmployeeSearchbarWithTable({
 		<div className={styles.employees}>
 			<p className={`title sm left`}>Хто лікує</p>
 
-			<div className={styles.searchBarContainer}>
-				<label className={`inputLabel ${styles.serachBarTitle}`} htmlFor="searchBar">
+			<div className={styles.selectContainer}>
+				<label className={`inputLabel ${styles.searchBarTitle}`} htmlFor="searchBar">
 					Виберіть лікаря
 				</label>
 

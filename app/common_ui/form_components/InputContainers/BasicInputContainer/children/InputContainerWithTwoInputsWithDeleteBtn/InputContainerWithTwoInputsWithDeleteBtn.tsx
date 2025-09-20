@@ -41,7 +41,7 @@ export default function InputContainerWithTwoInputsWithDeleteBtn({
 			</div>
 			<div className={styles.firstInputContainer}>
 				<input
-					className={`button ${(errorOne?.message && "wrong") || ""} ${styles.input} ${className?.firstInput?.input || ""}`}
+					className={`button ${errorOne?.message ? "wrong" : ""} ${styles.input} ${className?.firstInput?.input || ""}`}
 					id={firstId}
 					value={valueOne}
 					type={typeOne}

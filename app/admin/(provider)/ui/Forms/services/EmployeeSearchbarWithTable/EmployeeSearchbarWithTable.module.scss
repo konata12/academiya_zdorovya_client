@@ -3,100 +3,100 @@
 
 .employees {
 
-  .tableTitle {
-    margin: 64px 0 32px;
-  }
+	.tableTitle {
+		margin: 64px 0 32px;
+	}
 
-  .selectContainer {
+	.selectContainer {
 
-    .searchBarTitle {
-      display: inline-block;
-      width: 100%;
-      margin: 64px 0 32px;
-    }
+		.searchBarTitle {
+			display: inline-block;
+			width: 100%;
+			margin: 64px 0 32px;
+		}
 
-    .selectedValue {
-      position: relative;
-      margin-bottom: 10px;
-      border-radius: $pc-input-border-rad;
+		.searchBar {
+			position: relative;
+			margin-bottom: 10px;
+			border-radius: $pc-input-border-rad;
 
-      .magnifyingGlass {
-        position: absolute;
-        top: 50%;
-        left: 28px;
-        transform: translateY(-50%);
-      }
+			.magnifyingGlass {
+				position: absolute;
+				top: 50%;
+				left: 28px;
+				transform: translateY(-50%);
+			}
 
-      .button {
-        width: 100%;
-        padding-left: 58px;
+			.input {
+				width: 100%;
+				padding-left: 58px;
 
-        &.on {
-          outline: 2px $primary-color solid;
-        }
-      }
+				&.on {
+					outline: 2px $primary-color solid;
+				}
+			}
 
-      .arrow {
-        position: absolute;
-        top: 50%;
-        right: 28px;
-        transform: translateY(-50%);
+			.arrow {
+				position: absolute;
+				top: 50%;
+				right: 28px;
+				transform: translateY(-50%);
 
-        border: none;
-        outline: none;
-        background-color: transparent;
-        transition: all $slow $anim-time;
+				border: none;
+				outline: none;
+				background-color: transparent;
+				transition: all $slow $anim-time;
 
-        &.on {
-          transform: translateY(-50%) rotate(180deg); // Combine transforms
-        }
+				&.on {
+					transform: translateY(-50%) rotate(180deg); // Combine transforms
+				}
 
-        .svg {
-          display: block;
-          transition: all $slow $anim-time;
+				.svg {
+					display: block;
+					transition: all $slow $anim-time;
 
-          path {
-            fill: $text-color-black;
-            stroke: $text-color-black;
-            stroke-width: 0.3;
-            transition: all $slow $anim-time;
-          }
+					path {
+						fill: $text-color-black;
+						stroke: $text-color-black;
+						stroke-width: 0.3;
+						transition: all $slow $anim-time;
+					}
 
-          &.on {
-            fill: $primary-color;
-            stroke: $primary-color;
+					&.on {
+						fill: $primary-color;
+						stroke: $primary-color;
 
-            path {
-              fill: $primary-color;
-              stroke: $primary-color;
-            }
-          }
-        }
-      }
-    }
-  }
+						path {
+							fill: $primary-color;
+							stroke: $primary-color;
+						}
+					}
+				}
+			}
+		}
+	}
 
-  .mainBody {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+	.mainBody {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
 
-    .tableLineOptions {
-      margin-right: 14px;
-    }
-  }
+		.tableLineOptions {
+			margin-right: 14px;
+		}
+	}
 
-  .tableUnderText {
-    text-align: center;
-    @include rgba-text($text-color-black, 0.5);
-    font-size: 17px;
-    padding: 20px 0;
-  }
+	.tableUnderText {
+		text-align: center;
+		@include rgba-text($text-color-black, 0.5);
+		font-size: 17px;
+		padding: 20px 0;
+	}
 
-  .dragReminder {
-    text-align: center;
-    color: $text-color-black;
-    font-size: 17px;
-    padding: 32px 0 0;
-  }
+	.dragReminder {
+		text-align: center;
+		color: $text-color-black;
+		font-size: 17px;
+		padding: 32px 0 0;
+	}
 }
