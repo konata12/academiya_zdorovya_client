@@ -104,3 +104,18 @@
 		}
 	}
 }
+
+.returnBtn.returnBtn.returnBtn {
+	align-self: center;
+	margin-top: -58px;
+	padding: 28px;
+	font-size: $pc-t1-fz;
+	font-weight: $font-weight-med;
+
+	@include respond-to(s) {
+		margin-top: -29px;
+	}
+	@include respond-to(m) {
+		margin-top: -29px;
+	}
+}
