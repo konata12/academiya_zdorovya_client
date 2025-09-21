@@ -3,9 +3,9 @@ import { getDepartmentIdFromCookiesAlsoCheckDepartments } from "@/app/services/s
 import { AboutTreatment } from "@/app/types/data/about_treatment.type";
 import { BookingService } from "@/app/types/data/booking_services.type";
 import { Department, DepartmentsService } from "@/app/types/data/departments.type";
-import { DetailsRedactorType } from "@/app/types/data/details.type";
+import { UserDetailsRedactorType } from "@/app/types/data/details.type";
 import { Employee } from "@/app/types/data/employees.type";
-import { News } from "@/app/types/data/news.type";
+import { News, UserNews } from "@/app/types/data/news.type";
 import { PriceSection } from "@/app/types/data/prices.type";
 
 const basicUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -24,7 +24,7 @@ export async function fetchDepartments() {
 }
 export async function fetchLegalInfo(title: "privacyPolicy" | "publicOffer") {
 	const data = await fetch(`${basicUrl}/legal-information/${title}`);
-	const parsedData: DetailsRedactorType = await data.json();
+	const parsedData: UserDetailsRedactorType = await data.json();
 
 	return parsedData;
 }
@@ -123,9 +123,21 @@ export async function fetchBannerNews() {
 export async function fetchOneNews(id: string) {
 	const res = await fetch(`${basicUrl}/news/${id}`);
 
-	console.log(res);
+	const parsedData: UserNews = await res.json();
 
-	const parsedData: News = await res.json();
+	return parsedData;
+}
+// SERVICES
+export async function fetchServicesCards() {
+	let departmentId = await getDepartmentIdFromCookiesAlsoCheckDepartments();
+
+	const res = await fetch(`${basicUrl}/services/getBasicData`, {
+		headers: {
+			Cookie: `departmentId=${departmentId}`,
+		},
+	});
+
+	const parsedData: News[] = await res.json();
 
 	return parsedData;
 }

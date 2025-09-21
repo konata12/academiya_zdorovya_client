@@ -1,6 +1,17 @@
-import { DetailsRedactorType } from "@/app/types/data/details.type";
+import { DetailsRedactorType, UserDetailsRedactorType } from "@/app/types/data/details.type";
 import { ErrorsResponses, Status } from "@/app/types/data/response.type";
 import { FormInputError } from "@/app/types/data/form.type";
+
+// USER
+export interface UserNews {
+	id: number;
+	title: string;
+	description: string;
+	backgroundImg: string;
+	isBannerNews: boolean;
+	createdAt: string;
+	details: UserDetailsRedactorType;
+}
 
 // GENERAL TYPES
 export interface News {

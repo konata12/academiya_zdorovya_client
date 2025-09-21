@@ -1,23 +1,29 @@
 // noinspection DuplicatedCode
 
+import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
+import { EmployeeSearchbarWithTable } from "@/app/admin/(provider)/ui/Forms/services/EmployeeSearchbarWithTable/EmployeeSearchbarWithTable";
+import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
+import ModalWindow from "@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow";
 import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
-import _ from "lodash";
-import FormElementContainerWithCheckbox from "@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox";
+import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
+import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
+import { DraggableAreaContainer } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer";
+import { DraggableElementContainer } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableElementContainer/DraggableElementContainer";
+import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
+import { ImageInputPreviewFromIndexedDB } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB";
 import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
 import InputContainerWithTwoInputsWithDeleteBtn from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainerWithTwoInputsWithDeleteBtn/InputContainerWithTwoInputsWithDeleteBtn";
-import React, { useEffect } from "react";
-import styles from "./UpdateServicesForm.module.scss";
+import { TextareaContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer";
 import TextareaContainerWithCheckbox from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainerWithCheckbox/TextareaContainerWithCheckbox";
+import FormElementContainerWithCheckbox from "@/app/common_ui/form_components/InputContainers/HookForm/children/FormElementContainerWithCheckbox/FormElementContainerWithCheckbox";
+import { parseOrderedArrayToRequest } from "@/app/services/admin/order.service";
+import { fulfilled } from "@/app/services/admin/response.service";
 import {
-	addServiceUpdateTreatmentStagesValue,
-	deleteServiceUpdateEmployeesValue,
-	deleteServiceUpdateTreatmentStagesValue,
-	deleteServiceUpdateTypesValue,
-	resetServiceFromData,
-	setAllServiceUpdateFormData,
-	setServiceUpdateTreatmentStagesError,
-} from "@/app/utils/redux/services/serviceUpdateFormSlice";
-import { clear } from "idb-keyval";
+	parseServiceToServiceFormData,
+	transferServiceImagesBetweenIndexDBStores,
+} from "@/app/services/admin/service.service";
+import { ImageFormDataEnum } from "@/app/types/data/details.type";
+import { FormInputError } from "@/app/types/data/form.type";
 import {
 	CreateServiceFormData,
 	Service,
@@ -34,37 +40,16 @@ import {
 	ServiceTypesEnum,
 	ServiceTypeServiceFormData,
 } from "@/app/types/data/services.type";
-import { DraggableAreaContainer } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer";
-import { DraggableElementContainer } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableElementContainer/DraggableElementContainer";
-import { FormInputError } from "@/app/types/data/form.type";
-import { fulfilled } from "@/app/services/admin/response.service";
-import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
-import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
-import { ImageInputPreviewFromIndexedDB } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB";
 import {
 	OrderedListServiceTypeInterface,
 	useOrderedList,
 } from "@/app/utils/hooks/admin/dragAndDrop/useOrderedList";
-import { parseOrderedArrayToRequest } from "@/app/services/admin/order.service";
-import {
-	parseServiceToServiceFormData,
-	transferServiceImagesBetweenIndexDBStores,
-} from "@/app/services/admin/service.service";
-import {
-	setServiceTypeUpdateFormDataOnLink,
-	setServiceTypeUpdateFormInitData,
-} from "@/app/utils/redux/services/serviceTypeUpdateFormSlice";
-import {
-	resetServiceUpdateError,
-	setServiceUpdateError,
-	updateService,
-} from "@/app/utils/redux/services/servicesSlice";
-import { RootState } from "@/app/utils/redux/store";
-import { TextareaContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer";
-import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
-import { useParams, useRouter } from "next/navigation";
+import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
+import { useServiceFormChangeCheck } from "@/app/utils/hooks/admin/serviceForm/useServiceFormChangeCheck";
 import { useServiceFormHandleChange } from "@/app/utils/hooks/admin/serviceForm/useServiceFormHandleChange";
 import { useServiceFormSlice } from "@/app/utils/hooks/admin/serviceForm/useServiceFormSlice";
+import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
+import { setFormDefaultValuesNavigation } from "@/app/utils/redux/navigation/navigationSlice";
 import {
 	addModalState,
 	deleteModalState,
@@ -74,15 +59,31 @@ import {
 	setUpdatingState,
 	triggerServiceUICheckbox,
 } from "@/app/utils/redux/services/serviceFromUISlice";
-import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
-import ModalWindow from "@/app/admin/(provider)/ui/Modals/ModalWindow/ModalWindow";
-import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
-import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
-import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
-import { EmployeeSearchbarWithTable } from "@/app/admin/(provider)/ui/Forms/services/EmployeeSearchbarWithTable/EmployeeSearchbarWithTable";
-import { ImageFormDataEnum } from "@/app/types/data/details.type";
-import { useServiceFormChangeCheck } from "@/app/utils/hooks/admin/serviceForm/useServiceFormChangeCheck";
+import {
+	resetServiceUpdateError,
+	setServiceUpdateError,
+	updateService,
+} from "@/app/utils/redux/services/servicesSlice";
+import {
+	setServiceTypeUpdateFormDataOnLink,
+	setServiceTypeUpdateFormInitData,
+} from "@/app/utils/redux/services/serviceTypeUpdateFormSlice";
+import {
+	addServiceUpdateTreatmentStagesValue,
+	deleteServiceUpdateEmployeesValue,
+	deleteServiceUpdateTreatmentStagesValue,
+	deleteServiceUpdateTypesValue,
+	resetServiceFromData,
+	setAllServiceUpdateFormData,
+	setServiceUpdateTreatmentStagesError,
+} from "@/app/utils/redux/services/serviceUpdateFormSlice";
+import { RootState } from "@/app/utils/redux/store";
+import { clear } from "idb-keyval";
+import _ from "lodash";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import styles from "./UpdateServicesForm.module.scss";
 
 const storeName = "service_images";
 const indexedDBStoreName = "service_update_images";
@@ -535,7 +536,8 @@ export default function UpdateServiceForm() {
 			dispatch(resetServiceFromData());
 			dispatch(resetServiceUIFormData());
 			dispatch(setUpdatingState(false));
-			router.push("./");
+			dispatch(setFormDefaultValuesNavigation(true));
+			router.push("/admin/services");
 		}
 	};
 

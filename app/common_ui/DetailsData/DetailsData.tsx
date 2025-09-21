@@ -12,17 +12,19 @@ import {
 	ParagraphFormDataEnum,
 	QuoteFormDataEnum,
 	TitleFormDataEnum,
+	UserDetailsRedactorType,
 } from "@/app/types/data/details.type";
 import styles from "./DetailsData.module.scss";
 
 interface DetailsDataProps {
-	data: DetailsRedactorType;
+	data: UserDetailsRedactorType;
 	isLegalInfo?: boolean;
 }
 
 export default function DetailsData({ data, isLegalInfo }: DetailsDataProps) {
 	const parsedData = parseDetailsResponseToOrderArray(data);
 	console.log("parsedData: ", parsedData);
+
 	return (
 		<section className={styles.container}>
 			{parsedData.map((element, i) => {

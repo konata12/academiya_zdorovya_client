@@ -1,13 +1,15 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styles from "./DetailsForm.module.scss";
+import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
+import CreateDetailsInputBtn from "@/app/admin/(provider)/ui/Forms/details/createDetailsInputBtn/CreateDetailsInputBtn";
+import DetailsDraggableContainer from "@/app/admin/(provider)/ui/Forms/details/inputs/DetailsDraggableContainer";
+import DetailsImageInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput";
+import DetailsListInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsListInput/DetailsListInput";
+import DetailsParagraphInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsParagraphInput/DetailsParagraphInput";
+import DetailsQuoteInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsQuouteInput/DetailsQuoteInput";
+
+import DetailsTitleInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsTitleInput/DetailsTitleInput";
 import { DraggableAreaContainerForDetails } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainerForDetails";
 import { getIndexedDBStoreNameForDetailsImages } from "@/app/services/admin/details.service";
-import { RootState } from "@/app/utils/redux/store";
-import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
-import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
-import { useOrderedForm } from "@/app/utils/hooks/admin/detailsForm/useOrderedForm";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
+import { fulfilled } from "@/app/services/admin/response.service";
 import {
 	DescriptionImage,
 	DescriptionImageSize,
@@ -25,19 +27,17 @@ import {
 	OrderComponent,
 	QuoteError,
 } from "@/app/types/data/details.type";
-
-import DetailsTitleInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsTitleInput/DetailsTitleInput";
-import CreateDetailsInputBtn from "@/app/admin/(provider)/ui/Forms/details/createDetailsInputBtn/CreateDetailsInputBtn";
-import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
-import DetailsDraggableContainer from "@/app/admin/(provider)/ui/Forms/details/inputs/DetailsDraggableContainer";
-import DetailsParagraphInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsParagraphInput/DetailsParagraphInput";
-import DetailsQuoteInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsQuouteInput/DetailsQuoteInput";
-import DetailsListInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsListInput/DetailsListInput";
-import DetailsImageInput from "@/app/admin/(provider)/ui/Forms/details/inputs/detailsImageInput/DetailsImageInput";
 import { FormInputError } from "@/app/types/data/form.type";
-import { useServiceFormsDataCheckChange } from "@/app/utils/hooks/admin/serviceForm/useServiceFormsDataCheckChange";
-import { fulfilled } from "@/app/services/admin/response.service";
 import { checkIfDetailsFormDataChanged } from "@/app/utils/hooks/admin/detailsForm/useCheckIfDetailsFormDataChanged";
+import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
+import { useOrderedForm } from "@/app/utils/hooks/admin/detailsForm/useOrderedForm";
+import { useServiceFormsDataCheckChange } from "@/app/utils/hooks/admin/serviceForm/useServiceFormsDataCheckChange";
+import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
+import { RootState } from "@/app/utils/redux/store";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import React, { useCallback, useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import styles from "./DetailsForm.module.scss";
 
 export default function DetailsForm({
 	titles,

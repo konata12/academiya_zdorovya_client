@@ -1,7 +1,13 @@
-import { del, get, UseStore } from "idb-keyval";
+import { renameFile, renameFileOrBlob } from "@/app/services/admin/files.service";
+import {
+	AppDBSchema,
+	transferImageBetweenIndexDBStores,
+} from "@/app/services/admin/indexedDB.service";
+import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/admin/response.service";
 import {
 	DescriptionImage,
 	DescriptionList,
+	DescriptionListOption,
 	DescriptionParagraph,
 	DescriptionQuote,
 	DescriptionTitle,
@@ -27,14 +33,9 @@ import {
 	TitleFormDataEnum,
 	TitleOrderComponent,
 } from "@/app/types/data/details.type";
-import { getFileNameFromSignedURLAndSaveBlobInIndexedDB } from "@/app/services/admin/response.service";
-import { renameFile, renameFileOrBlob } from "@/app/services/admin/files.service";
 import { getIndexedDBStoreForImages } from "@/app/utils/hooks/admin/indexedDB/useIndexedDBStoreForImages";
+import { del, get, UseStore } from "idb-keyval";
 import { v4 as uuidv4 } from "uuid";
-import {
-	AppDBSchema,
-	transferImageBetweenIndexDBStores,
-} from "@/app/services/admin/indexedDB.service";
 
 // INDEXED DB
 export function clearDetailsIndexDB(details: DetailsRedactorType | null, store: UseStore) {
@@ -193,6 +194,18 @@ export async function parseDetailsResponse(
 	store: UseStore,
 ): Promise<DetailsRedactorType> {
 	const { images, ...data } = details;
+	console.log("data", data);
+	const parsedLists = data.lists.map((list) => {
+		return {
+			...list,
+			options: (list.options as unknown as DescriptionListOption[])
+				.sort((a, b) => a.order - b.order)
+				.map((option, i) => {
+					return option.option;
+				}),
+		};
+	});
+	console.log("parsedLists", parsedLists);
 	const parsedImages: DescriptionImage[] = await Promise.all(
 		images.map(async (imageData) => {
 			const { image, ...data } = imageData;
@@ -207,6 +220,7 @@ export async function parseDetailsResponse(
 
 	return {
 		...data,
+		lists: parsedLists,
 		images: parsedImages,
 	};
 }

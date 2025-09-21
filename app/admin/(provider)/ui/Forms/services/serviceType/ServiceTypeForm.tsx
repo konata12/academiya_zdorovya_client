@@ -1,13 +1,14 @@
+import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
 import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
-import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
-import React, { useEffect } from "react";
-import styles from "./ServiceTypeForm.module.scss";
+import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
+import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
 import { ErrorWrapper } from "@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper";
-import { FormInputError } from "@/app/types/data/form.type";
 import { ImageInputContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputContainer";
 import { ImageInputPreviewFromIndexedDB } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/ImageInputContainer/ImageInputPreviewFromIndexedDB/ImageInputPreviewFromIndexedDB";
+import InputContainer from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/InputContainer/InputContainer";
+import { TextareaContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer";
 import { parseDetailsResponseToOrderComponentArray } from "@/app/services/admin/details.service";
-import { RootState } from "@/app/utils/redux/store";
+import { FormInputError } from "@/app/types/data/form.type";
 import {
 	ServiceTypesDetailsSliceNameType,
 	ServiceTypesEnum,
@@ -15,18 +16,17 @@ import {
 	ServiceTypeServiceFormData,
 	ServiceTypesSliceNameType,
 } from "@/app/types/data/services.type";
-import { TextareaContainer } from "@/app/common_ui/form_components/InputContainers/BasicInputContainer/children/TextareaContainer/TextareaContainer";
-import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDetailsFormSlice";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { useServiceTypeFormHandleChange } from "@/app/utils/hooks/admin/serviceForm/useServiceTypeFormHandleChange";
-import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
-import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
-import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
-import { useServiceTypeFormSlice } from "@/app/utils/hooks/admin/serviceForm/useServiceTypeFormSlice";
-import Link from "next/link";
 import { useServiceFormsDataCheckChange } from "@/app/utils/hooks/admin/serviceForm/useServiceFormsDataCheckChange";
+import { useServiceTypeFormHandleChange } from "@/app/utils/hooks/admin/serviceForm/useServiceTypeFormHandleChange";
+import { useServiceTypeFormSlice } from "@/app/utils/hooks/admin/serviceForm/useServiceTypeFormSlice";
 import { useServiceTypeSetDetailsInitValue } from "@/app/utils/hooks/admin/serviceForm/useServiceTypeSetDetailsInitValue";
+import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
+import { RootState } from "@/app/utils/redux/store";
+import Link from "next/link";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import styles from "./ServiceTypeForm.module.scss";
 
 interface ServiceTypeFormProps {
 	sliceName: ServiceTypesSliceNameType;
@@ -63,9 +63,12 @@ export default function ServiceTypeForm({
 		useServiceTypeFormSlice(detailsSliceName);
 	const { setFormError } = useDetailsFormSlice(detailsSliceName);
 
-	if (!service?.serviceTypes?.[+serviceTypeIndex]) {
-		return <NotFoundFallback message={"Такого виду послуги не існує"} />;
-	}
+	console.log("service?.serviceTypes", service?.serviceTypes);
+
+	// todo check if 404 page is needed
+	// if (!service?.serviceTypes?.[+serviceTypeIndex]) {
+	// 	return <NotFoundFallback message={"Такого виду послуги не існує"} />;
+	// }
 
 	// WHEN OPENING PAGE SET DETAILS SLICE DATA
 	useEffect(() => {

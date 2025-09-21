@@ -1,5 +1,6 @@
 import { FAQ } from "@/app/(client)/ui/common/sections/FAQ/FAQ";
 import { NewsCarouselFetchContainer } from "@/app/(client)/ui/common/sections/NewsCarousel/NewsCarouselFetchContainer";
+import { Reviews } from "@/app/(client)/ui/common/sections/Reviews/Reviews";
 import DepartmentPhoneNumberBtn from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn";
 import btnStyles from "@/app/(client)/ui/Home/DepartmentPhoneNumberBtn/DepartmentPhoneNumberBtn.module.scss";
 import HowWeTreatArticles from "@/app/(client)/ui/Home/HowWeTreatArticles/HowWeTreatArticles";
@@ -137,7 +138,7 @@ export default async function Home() {
 				</p>
 				<MainPageGoalsCards />
 			</section>
-			<section className="">REVIEWS</section>
+			<Reviews />
 			<FAQ />
 		</div>
 	);

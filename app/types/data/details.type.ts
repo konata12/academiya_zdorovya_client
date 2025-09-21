@@ -260,3 +260,20 @@ export type DetailsRedactorType = {
 	lists: DescriptionList[];
 	images: DescriptionImage[];
 };
+
+// USER
+// IS NEEDED ONLY TO SORT RESPONSE LIST OPTIONS (костиль, що не переробляти пів адмінки)
+export interface DescriptionListOption extends OrderElementBasicType {
+	option: string;
+}
+export interface UserDescriptionList extends DetailsDataRenderElementBasicType {
+	[ListFormDataEnum.NUMERABLE]: boolean;
+	[ListFormDataEnum.OPTIONS]: DescriptionListOption[];
+}
+export type UserDetailsRedactorType = {
+	titles: DescriptionTitle[];
+	paragraphs: DescriptionParagraph[];
+	quotes: DescriptionQuote[];
+	lists: UserDescriptionList[];
+	images: DescriptionImage[];
+};

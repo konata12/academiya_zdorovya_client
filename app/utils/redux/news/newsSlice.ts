@@ -1,6 +1,8 @@
-import axiosInstance from "@/app/utils/axios";
-import { AxiosError } from "axios";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+	createNewsFormData,
+	parseNewsResponse,
+	updateNewsFormData,
+} from "@/app/services/admin/news.service";
 import {
 	CreateNewsFormData,
 	News,
@@ -8,15 +10,13 @@ import {
 	UpdateNewsFormData,
 } from "@/app/types/data/news.type";
 import { ErrorResponse } from "@/app/types/data/response.type";
-import {
-	createNewsFormData,
-	parseNewsResponse,
-	updateNewsFormData,
-} from "@/app/services/admin/news.service";
+import axiosInstance from "@/app/utils/axios";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 
 const initialState: NewsInit = {
 	news: [],
-	// need for every new to have seperate state for ModalWindow of every new
+	// need for every new to have separate state for ModalWindow of every new
 	newsIsModalOpen: [],
 	status: {
 		getAll: null,
@@ -39,9 +39,7 @@ const baseUrl = "news";
 export const fetchNews = createAsyncThunk("news/getAll", async (_, { rejectWithValue }) => {
 	try {
 		const response = await axiosInstance.get<News[]>(`${baseUrl}`);
-		const parsedNews = await parseNewsResponse(response.data);
-
-		return parsedNews;
+		return await parseNewsResponse(response.data);
 	} catch (error) {
 		if (error instanceof AxiosError) {
 			console.log(error);
