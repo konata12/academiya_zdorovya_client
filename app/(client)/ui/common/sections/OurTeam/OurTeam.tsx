@@ -1,14 +1,11 @@
 import { EmployeeCard } from "@/app/(client)/ui/common/sections/OurTeam/EmployeeCard/EmployeeCard";
 import { fetchEmployees } from "@/app/services/server/fetchData.service";
-import { getDepartmentIdFromCookies } from "@/app/services/server/utils.service";
 import { Employee } from "@/app/types/data/employees.type";
 import React from "react";
 import styles from "./OurTeam.module.scss";
 
 export async function OurTeam() {
 	const employees = await fetchEmployees();
-	console.log("employees:", employees);
-	console.log("employees.length:", employees.length);
 
 	return (
 		<>

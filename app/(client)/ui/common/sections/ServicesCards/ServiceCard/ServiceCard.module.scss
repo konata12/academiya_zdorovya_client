@@ -1,0 +1,106 @@
+@use '../../../../../../styles/variables' as *;
+@use '../../../../../../styles/mixins' as *;
+@use '../../../../../../styles/functions' as *;
+
+.container {
+	flex: 1 1 592.5px;
+	max-width: 680px;
+	padding: 48px;
+	background-color: $background-color-secondary;
+	border-radius: $border-rad-3;
+
+	transition: all $anim-time $slow;
+	box-shadow: 0 0 44px 0 rgba-color($black-bg-color, 0.04);
+
+	&:hover {
+		box-shadow: 9px 14px 44px 0 rgba-color($black-bg-color, 0.20), 0 0 0 0 rgba-color($black-bg-color, 0.20);
+
+		.cardImage {
+			transform: scale(1.1);
+		}
+	}
+
+	.imageContainer {
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		clip-path: inset(0 0 0 0 round $border-rad-6);
+		min-width: 228px;
+		aspect-ratio: 292/173;
+		border-radius: $border-rad-6;
+		margin-bottom: 48px;
+
+		.cardImage {
+			object-fit: cover;
+			border-radius: $border-rad-6;
+			transition: all $anim-time $slow;
+			transform-origin: center center;
+		}
+
+		@include respond-to(s) {
+			aspect-ratio: 275.00/162.93;
+			margin-bottom: 32px;
+		}
+		@include respond-to(m) {
+			aspect-ratio: 256.00/151.67;
+			margin-bottom: 32px;
+		}
+		@include respond-to(l) {
+			aspect-ratio: 376.50/223.06;
+		}
+	}
+
+	.text {
+
+		.title {
+			word-break: break-word;
+			text-align: left;
+			font-size: $pc-h4-fz;
+			font-weight: $font-weight-med;
+
+			@include respond-to(s) {
+				font-size: $mob-h3-fz;
+				margin-bottom: 12px;
+			}
+			@include respond-to(m) {
+				font-size: $mob-h3-fz;
+			}
+		}
+
+		.shortDescription {
+			word-break: break-word;
+			text-align: left;
+			font-size: $pc-t1-fz;
+			text-overflow: ellipsis;
+
+			margin: 32px 0;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+			overflow: hidden;
+
+			@include respond-to(s) {
+				font-size: $mob-t1-fz;
+				margin: 18px 0 24px;
+			}
+			@include respond-to(m) {
+				font-size: $mob-t1-fz;
+				margin: 18px 0 24px;
+			}
+		}
+	}
+
+	@include respond-to(s) {
+		padding: 38px;
+		max-width: none;
+		flex: 1 1 100%;
+	}
+	@include respond-to(m) {
+		padding: 38px;
+		flex: 1 1 325px;
+	}
+	@include respond-to(l) {
+		flex: 1 1 460px;
+	}
+}
