@@ -134,7 +134,12 @@ export function EmployeeCardBtn({ employee }: { employee: Employee }) {
 						<div
 							className={`${styles.imageContainer} ${styles[employee.backgroundImgColor]}`}
 						>
-							<Image src={employee.image} alt={"Фото працівника"} fill />
+							<Image
+								src={employee.image}
+								alt={"Фото працівника"}
+								fill
+								unoptimized={true}
+							/>
 						</div>
 					</div>
 

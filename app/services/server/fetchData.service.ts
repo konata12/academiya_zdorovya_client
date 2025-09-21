@@ -72,14 +72,6 @@ export async function fetchBookingServices() {
 
 	return parsedData;
 }
-
-// DATA WITH IMAGES
-export async function fetchWhatWeTreats() {
-	const data = await fetch(`${basicUrl}/about-treatment`);
-	const parsedData: AboutTreatment[] = await data.json();
-
-	return parsedData;
-}
 export async function fetchServicesTitles() {
 	let departmentId = await getDepartmentIdFromCookiesAlsoCheckDepartments();
 
@@ -91,6 +83,14 @@ export async function fetchServicesTitles() {
 	const parsedData: DepartmentsService[] = await res.json();
 
 	if ((parsedData as any).statusCode > 400) return [];
+
+	return parsedData;
+}
+
+// DATA WITH IMAGES
+export async function fetchWhatWeTreats() {
+	const data = await fetch(`${basicUrl}/about-treatment`);
+	const parsedData: AboutTreatment[] = await data.json();
 
 	return parsedData;
 }

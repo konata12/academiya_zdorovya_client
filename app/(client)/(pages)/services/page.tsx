@@ -2,6 +2,7 @@ import { FAQ } from "@/app/(client)/ui/common/sections/FAQ/FAQ";
 import { OurTeam } from "@/app/(client)/ui/common/sections/OurTeam/OurTeam";
 import { Reviews } from "@/app/(client)/ui/common/sections/Reviews/Reviews";
 import { ServicesCards } from "@/app/(client)/ui/common/sections/ServicesCards/ServicesCards";
+import { WhatWeTreatWithImages } from "@/app/(client)/ui/common/sections/WhatWeTreatWithImages/WhatWeTreatWithImages";
 import React from "react";
 import styles from "./page.module.scss";
 
@@ -15,7 +16,7 @@ export default function Services() {
 				</p>
 			</section>
 			<ServicesCards />
-			<section>What we treat</section>
+			<WhatWeTreatWithImages />
 			<OurTeam />
 			<Reviews />
 			<FAQ />
