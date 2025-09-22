@@ -7,7 +7,11 @@ import { UserDetailsRedactorType } from "@/app/types/data/details.type";
 import { Employee } from "@/app/types/data/employees.type";
 import { News, UserNews } from "@/app/types/data/news.type";
 import { PriceSection } from "@/app/types/data/prices.type";
-import { Service } from "@/app/types/data/services.type";
+import {
+	Service,
+	ServiceTypeResponseData,
+	ServiceTypeResponseDataUser,
+} from "@/app/types/data/services.type";
 
 const basicUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -138,6 +142,24 @@ export async function fetchServicesCards() {
 	});
 
 	const parsedData: Service[] = await res.json();
+	return parsedData;
+}
+export async function fetchOneService(id: string) {
+	let departmentId = await getDepartmentIdFromCookiesAlsoCheckDepartments();
+
+	const res = await fetch(`${basicUrl}/services/${id}`, {
+		headers: {
+			Cookie: `departmentId=${departmentId}`,
+		},
+	});
+
+	const parsedData: Service = await res.json();
+	return parsedData;
+}
+export async function fetchOneServiceType(id: string) {
+	const res = await fetch(`${basicUrl}/services/serviceTypes/${id}`);
+
+	const parsedData: ServiceTypeResponseDataUser = await res.json();
 	return parsedData;
 }
 

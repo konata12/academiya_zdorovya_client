@@ -15,7 +15,7 @@ const TWEEN_FACTOR_BASE = 0.15;
 const numberWithinRange = (number: number, min: number, max: number): number =>
 	Math.min(Math.max(number, min), max);
 
-export function NewsCarousel({ news }: { news: News[] }) {
+export function EmployeeCarousel({ news }: { news: News[] }) {
 	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 60 });
 	const tweenFactor = useRef(0);
 	const tweenNodes = useRef<HTMLElement[]>([]);

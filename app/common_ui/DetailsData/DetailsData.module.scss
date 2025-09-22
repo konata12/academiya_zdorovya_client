@@ -12,7 +12,12 @@
 	font-size: $pc-t1-fz;
 	text-align: left;
 
+	h3 {
+		white-space: pre-line;
+	}
+
 	p {
+		white-space: pre-line;
 		word-break: break-word;
 		line-height: 180%;
 	}

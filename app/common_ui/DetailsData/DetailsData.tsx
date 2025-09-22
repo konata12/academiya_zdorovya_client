@@ -6,7 +6,6 @@ import { DetailsDataTitle } from "@/app/common_ui/DetailsData/DetailsDataTitle/D
 import { parseDetailsResponseToOrderArray } from "@/app/services/server/details.service";
 import {
 	DetailsFormDataEnum,
-	DetailsRedactorType,
 	ImageFormDataEnum,
 	ListFormDataEnum,
 	ParagraphFormDataEnum,

@@ -1,0 +1,52 @@
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
+
+.link {
+	position: relative;
+	clip-path: inset(-200px 0 -200px 0);
+	border-left: 2px solid $disabled-color;
+	padding: 46px 30px;
+	transition: all $anim-time $slow;
+
+	&:hover {
+
+		.title {
+			color: $primary-color;
+		}
+
+		.description {
+			color: $primary-color;
+		}
+
+		.sideLine {
+			top: 0;
+			height: 100%;
+			background-color: $primary-color;
+			box-shadow: -2px 0px 12px 0px $primary-color, 10px 0px 22px 0px $primary-color-active;
+		}
+	}
+
+	.title {
+		margin-bottom: 36px;
+		color: $text-color-black;
+		font-size: $pc-h4-fz;
+		font-weight: $font-weight-med;
+		transition: all $anim-time $slow;
+	}
+
+	.description {
+		color: $text-color-black;
+		transition: all $anim-time $slow;
+	}
+
+	.sideLine {
+		position: absolute;
+		top: 30%;
+		left: -2px;
+		width: 2px;
+		height: 40%;
+		border-radius: 0px 4px 4px 0px;
+		background-color: $disabled-color;
+		transition: all $anim-time $slow;
+	}
+}

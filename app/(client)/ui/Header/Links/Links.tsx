@@ -9,11 +9,11 @@ import { useState } from "react";
 import styles from "./Links.module.scss";
 
 const links = [
-	{ label: "Про нас", url: "about_us" },
-	{ label: "Контакти", url: "contacts" },
-	{ label: "Послуги", url: "services" },
-	{ label: "Ціни", url: "prices" },
-	{ label: "Новини", url: "news" },
+	{ label: "Про нас", url: "/about_us" },
+	{ label: "Контакти", url: "/contacts" },
+	{ label: "Послуги", url: "/services" },
+	{ label: "Ціни", url: "/prices" },
+	{ label: "Новини", url: "/news" },
 ];
 export default function Links() {
 	const [showLinks, setShowLinks] = useState(false);
@@ -33,6 +33,7 @@ export default function Links() {
 					</NavLink>
 				)}
 				{links.map((link) => {
+					// todo fix header links active state
 					return (
 						<NavLink
 							className={styles.link}

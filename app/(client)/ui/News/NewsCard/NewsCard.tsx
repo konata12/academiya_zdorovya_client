@@ -32,7 +32,7 @@ export function NewsCard({ news }: { news: News }) {
 						src={news.backgroundImg}
 						alt={"Заставка новини"}
 						fill
-						sizes={"(min-width: 0px) auto"}
+						unoptimized={true}
 					/>
 				</div>
 			</div>

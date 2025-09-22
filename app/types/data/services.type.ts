@@ -1,5 +1,5 @@
 import { DraggableComponent } from "@/app/common_ui/animated_components/DraggableAreaContainers/DraggableAreaContainer";
-import { DetailsRedactorType } from "@/app/types/data/details.type";
+import { DetailsRedactorType, UserDetailsRedactorType } from "@/app/types/data/details.type";
 import { FormInputError } from "@/app/types/data/form.type";
 import { ErrorsResponses, Status } from "@/app/types/data/response.type";
 import { OrderElementBasicType } from "@/app/utils/hooks/admin/dragAndDrop/useOrderedList";
@@ -29,6 +29,7 @@ export interface ServiceResponseData extends Service {
 
 export interface ServiceTreatmentStageResponseData extends ServiceTreatmentStageType {}
 export interface ServiceTypeResponseData extends ServiceType {
+	id: number;
 	backgroundImg: string;
 	details: DetailsRedactorType;
 }
@@ -241,3 +242,12 @@ export type ServicesDataNotIncludedInDepartmentSelectionType = Exclude<
 	ServiceFormDataEnumType,
 	"id" | ServiceFormDataEnum.TITLE
 >;
+
+//USER TYPES
+export interface ServiceTypeResponseDataUser {
+	id: number;
+	backgroundImg: string;
+	title: string;
+	description: string;
+	details: UserDetailsRedactorType;
+}

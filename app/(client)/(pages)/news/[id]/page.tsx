@@ -1,8 +1,8 @@
+import { DetailsBanner } from "@/app/(client)/ui/common/sections/DetailsBanner/DetailsBanner";
 import { months } from "@/app/(client)/ui/News/NewsCard/NewsCard";
 import DetailsData from "@/app/common_ui/DetailsData/DetailsData";
 import { RightArrow } from "@/app/common_ui/images/RightArrow";
 import { fetchOneNews } from "@/app/services/server/fetchData.service";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import styles from "./page.module.scss";
@@ -14,28 +14,15 @@ export default async function NewsDetails({ params }: { params: { id: string } }
 
 	return (
 		<article className={`page container ${styles.page}`}>
-			<div className={styles.bannerContainer}>
-				<div className={styles.text}>
-					<h1 className={styles.title}>{newsData.title}</h1>
-					<p className={styles.description}>{newsData.description}</p>
-				</div>
-
-				<div className={styles.bannerShadow}>
-					<div className={styles.banner}>
-						<div className={styles.imageContainer}>
-							<Image
-								className={styles.image}
-								src={newsData.backgroundImg}
-								alt={"Новина"}
-								fill
-							/>
-						</div>
-						<p className={styles.date}>
-							{`${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`}
-						</p>
-					</div>
-				</div>
-			</div>
+			<DetailsBanner
+				title={newsData.title}
+				description={newsData.description}
+				imageSrc={newsData.backgroundImg}
+			>
+				<p className={styles.date}>
+					{`${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`}
+				</p>
+			</DetailsBanner>
 			<DetailsData data={newsData.details} />
 			<Link className={`btn blue md returnBtn ${styles.returnBtn}`} href="/news">
 				Повернутись до новин

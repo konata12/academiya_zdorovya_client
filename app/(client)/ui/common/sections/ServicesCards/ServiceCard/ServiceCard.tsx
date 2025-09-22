@@ -20,10 +20,7 @@ export function ServiceCard({ service }: { service: Service }) {
 			<div className={styles.text}>
 				<h3 className={styles.title}>{`${service.title}`}</h3>
 				<p className={styles.shortDescription}>{service.shortDescription}</p>
-				<Link
-					href={`/services/${service.id}`}
-					className={`btn blue md returnBtn ${styles.link}`}
-				>
+				<Link href={`/services/${service.id}`} className={`btn blue md returnBtn`}>
 					Дізнатися більше
 					<RightArrow />
 				</Link>

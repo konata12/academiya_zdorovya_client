@@ -56,6 +56,9 @@
 
 	.text {
 		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
 
 		.title {
 			display: -webkit-box;
@@ -63,51 +66,37 @@
 			-webkit-line-clamp: 1;
 			overflow: hidden;
 
-
 			text-align: left;
 			font-size: $pc-h5-fz;
 			font-weight: $font-weight-med;
 			text-overflow: ellipsis;
 
-			margin-bottom: 22px;
-
 			@include respond-to(s) {
 				font-size: $mob-h5-fz;
-				margin-bottom: 12px;
 			}
 			@include respond-to(m) {
 				font-size: $mob-h5-fz;
 			}
 		}
 
-		.date,
 		.description {
-			text-align: left;
-			font-size: $pc-t2-fz;
-
-			@include respond-to(s) {
-				font-size: $mob-t2-fz;
-			}
-			@include respond-to(m) {
-				font-size: $mob-t2-fz;
-			}
-		}
-
-		.date {
-			margin-bottom: 10px;
-		}
-
-		.description {
-			margin: 22px 0;
+			flex-grow: 1;
+			padding: 22px 0 32px;
 			overflow: hidden;
 			display: -webkit-box;
 			-webkit-line-clamp: 3;
 			-webkit-box-orient: vertical;
 
+			text-align: left;
+			font-size: $pc-t2-fz;
 			text-overflow: ellipsis;
 
 			@include respond-to(s) {
+				font-size: $mob-t2-fz;
 				-webkit-line-clamp: 1;
+			}
+			@include respond-to(m) {
+				font-size: $mob-t2-fz;
 			}
 		}
 

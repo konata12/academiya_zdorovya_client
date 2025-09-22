@@ -1,0 +1,113 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+
+.btn.btn.btn.btn {
+	flex: 0 1 550px;
+	width: auto;
+
+	@include respond-to(s) {
+		padding: 24px;
+	}
+}
+
+.description {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 128px;
+	margin-top: 128px;
+
+	.stages {
+		flex: 1 0 100%;
+
+		.link {
+			display: inline-block;
+			padding: 32px;
+			color: $text-color-black;
+			font-size: $pc-t1-fz;
+			font-weight: $font-weight-med;
+			text-decoration: none;
+
+			@include respond-to(s) {
+				font-size: $mob-t1-fz;
+			}
+			@include respond-to(m) {
+				font-size: $mob-t1-fz;
+			}
+		}
+
+		@include respond-to(xl) {
+			flex: 1;
+		}
+	}
+
+	.mainDescription {
+		flex: 1 0 100%;
+		order: -1;
+
+		@include respond-to(xl) {
+			order: unset;
+			flex: 0 1 50%;
+		}
+	}
+
+	p {
+		white-space: pre-line;
+		font-size: $pc-h6-fz;
+		line-height: 180%;
+
+		@include respond-to(s) {
+			font-size: $mob-h6-fz;
+		}
+		@include respond-to(m) {
+			font-size: $mob-h6-fz;
+		}
+	}
+
+	@include respond-to(s) {
+		margin-top: 93px;
+		gap: 93px;
+	}
+	@include respond-to(m) {
+		margin-top: 93px;
+		gap: 93px;
+	}
+	@include respond-to(l) {
+		gap: 186px;
+	}
+}
+
+.serviceTypesSection.serviceTypesSection {
+	align-items: flex-start;
+
+	p {
+		max-width: unset;
+	}
+
+	.cardsContainer {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 32px;
+	}
+}
+
+.employeesSection {
+	overflow: hidden;
+
+	.returnBtn.returnBtn.returnBtn {
+		align-self: center;
+		padding: 28px;
+		margin: 0 12px;
+		font-size: $pc-t1-fz;
+		font-weight: $font-weight-med;
+	}
+
+	@include respond-to(l) {
+		gap: 128px;
+	}
+	@include respond-to(xl) {
+		gap: 128px;
+	}
+}
