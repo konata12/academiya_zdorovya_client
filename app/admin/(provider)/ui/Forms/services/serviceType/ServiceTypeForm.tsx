@@ -61,13 +61,6 @@ export default function ServiceTypeForm({
 		useServiceTypeFormSlice(detailsSliceName);
 	const { setFormError } = useDetailsFormSlice(detailsSliceName);
 
-	console.log("service?.serviceTypes", service?.serviceTypes);
-
-	// todo check if 404 page is needed
-	// if (!service?.serviceTypes?.[+serviceTypeIndex]) {
-	// 	return <NotFoundFallback message={"Такого виду послуги не існує"} />;
-	// }
-
 	// WHEN OPENING PAGE SET DETAILS SLICE DATA
 	useEffect(() => {
 		const parsedDetails = details
@@ -78,13 +71,6 @@ export default function ServiceTypeForm({
 
 	// CHECK FORM CHANGED DATA BEFORE CHANGING PAGE
 	if (!isCreatePage) useServiceFormsDataCheckChange();
-
-	console.log({
-		title,
-		description,
-		backgroundImg,
-		details,
-	});
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
