@@ -33,7 +33,6 @@ export default function Links() {
 					</NavLink>
 				)}
 				{links.map((link) => {
-					// todo fix header links active state
 					return (
 						<NavLink
 							className={styles.link}
