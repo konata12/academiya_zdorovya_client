@@ -1,5 +1,4 @@
 import SubmitButton from "@/app/admin/(provider)/ui/Forms/common/submitButton/SubmitButton";
-import NotFoundFallback from "@/app/admin/(provider)/ui/NotFoundFallback/NotFoundFallback";
 import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
 import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
 import { ErrorWrapper } from "@/app/common_ui/error_components/ErrorWrapper/ErrorWrapper";
@@ -20,7 +19,6 @@ import { useDetailsFormSlice } from "@/app/utils/hooks/admin/detailsForm/useDeta
 import { useServiceFormsDataCheckChange } from "@/app/utils/hooks/admin/serviceForm/useServiceFormsDataCheckChange";
 import { useServiceTypeFormHandleChange } from "@/app/utils/hooks/admin/serviceForm/useServiceTypeFormHandleChange";
 import { useServiceTypeFormSlice } from "@/app/utils/hooks/admin/serviceForm/useServiceTypeFormSlice";
-import { useServiceTypeSetDetailsInitValue } from "@/app/utils/hooks/admin/serviceForm/useServiceTypeSetDetailsInitValue";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
 import Link from "next/link";
@@ -281,7 +279,7 @@ export default function ServiceTypeForm({
 
 				<Link
 					className={`btn blue sm`}
-					href={`/admin/services/${isCreatePage ? "create" : "update"}/preview`}
+					href={`/admin/services/${isCreatePage ? "create" : `update/${id}`}/serviceType/${serviceTypeIndex}/preview`}
 				>
 					Дивитись сторінку новини
 				</Link>

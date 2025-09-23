@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import styles from "./Main.module.scss";
 import SideNavigation from "@/app/admin/(provider)/ui/SideNavigation/SideNavigation";
 import { useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
 import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import styles from "./Main.module.scss";
 
 export default function Main({
 	children,
@@ -14,7 +14,9 @@ export default function Main({
 
 	const pathname = usePathname();
 	const router = useRouter();
-	const isLoginPage = pathname.split("/")[2] === "login";
+	const isLoginPage = pathname.includes("login");
+	const isPreviewPage = pathname.includes("preview");
+	const isBookingPage = pathname.includes("bookings");
 
 	useEffect(() => {
 		if (accessToken && isLoginPage) router.push("/admin/departments");
@@ -33,7 +35,7 @@ export default function Main({
 					<div className={styles.not_logged_in}>Ввійдіть в адмін панель</div>
 				) : (
 					<div
-						className={`${styles.children} ${pathname.includes("bookings") ? styles.widerContainer : ""}`}
+						className={`${styles.children} ${isBookingPage || isPreviewPage ? styles.widerContainer : ""}`}
 					>
 						{children}
 					</div>

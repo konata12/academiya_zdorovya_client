@@ -13,9 +13,12 @@
 	}
 
 	.author {
+		display: inline-block;
+		width: 100%;
 		margin-top: 8px;
 		color: rgba-color($text-color-black, 0.5);
 		text-align: right;
+		font-style: unset;
 	}
 
 	.sideLine {

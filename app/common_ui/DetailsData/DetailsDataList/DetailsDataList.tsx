@@ -12,7 +12,9 @@ export function DetailsDataList({
 			{numerable ? (
 				<ol className={styles.list}>
 					{options.map((item, index) => (
-						<li key={index}>{item}</li>
+						<li key={index}>
+							<span className={styles.space}>{item}</span>
+						</li>
 					))}
 				</ol>
 			) : (

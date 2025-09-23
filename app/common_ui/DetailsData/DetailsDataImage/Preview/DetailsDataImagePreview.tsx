@@ -8,6 +8,7 @@ import previewStyles from "./DetailsDataImagePreview.module.scss";
 export function DetailsDataImagePreview({
 	description,
 	image,
+	imageStoreName,
 	size,
 }: {
 	description: string;
@@ -15,7 +16,7 @@ export function DetailsDataImagePreview({
 	imageStoreName: string;
 	size: DescriptionImageSize;
 }) {
-	const imageUrl = useGetImageUrlFromIndexedDBImage(image, "news_update_images");
+	const imageUrl = useGetImageUrlFromIndexedDBImage(image, imageStoreName);
 	return (
 		<div className={styles.container}>
 			<div
