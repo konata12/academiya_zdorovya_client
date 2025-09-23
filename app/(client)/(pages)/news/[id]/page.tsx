@@ -1,4 +1,4 @@
-import { DetailsBanner } from "@/app/(client)/ui/common/sections/DetailsBanner/DetailsBanner";
+import { DetailsBanner } from "@/app/common_ui/sections/DetailsBanner/DetailsBanner";
 import { months } from "@/app/(client)/ui/News/NewsCard/NewsCard";
 import DetailsData from "@/app/common_ui/DetailsData/DetailsData";
 import { RightArrow } from "@/app/common_ui/images/RightArrow";

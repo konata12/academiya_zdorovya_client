@@ -1,6 +1,5 @@
 import { ContactUsBtn } from "@/app/(client)/ui/common/buttons/ContactUsBtn/ContactUsBtn";
-import { DetailsBanner } from "@/app/(client)/ui/common/sections/DetailsBanner/DetailsBanner";
-import { NewsCard } from "@/app/(client)/ui/News/NewsCard/NewsCard";
+import { DetailsBanner } from "@/app/common_ui/sections/DetailsBanner/DetailsBanner";
 import { ServicesStages } from "@/app/(client)/ui/Services/ServicesStages/ServicesStages";
 import { ServiceTypeCard } from "@/app/(client)/ui/Services/ServiceTypeCard/ServiceTypeCard";
 import { RightArrow } from "@/app/common_ui/images/RightArrow";
@@ -11,7 +10,6 @@ import styles from "./page.module.scss";
 
 export default async function SingleServiceData({ params }: { params: { id: string } }) {
 	const service = await fetchOneService(params.id);
-	console.log(service);
 
 	return (
 		<div className={"page"}>

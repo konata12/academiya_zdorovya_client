@@ -8,7 +8,7 @@ import { BookingService } from "@/app/types/data/booking_services.type";
 import { StatusType } from "@/app/types/data/response.type";
 import { PHONE_NUMBER } from "@/app/utils/regex";
 import Link from "next/link";
-import { JSX, use, useState } from "react";
+import { JSX, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styles from "./ContactsForm.module.scss";
 
@@ -74,6 +74,7 @@ export function ContactsForm({ bookingServices }: ContactFormProps): JSX.Element
 		}
 	};
 
+	// todo add checkpoint for agreement for using personal data
 	return (
 		<form className={styles.form} onSubmit={handleSubmit(book)}>
 			<BasicInputContainerHookForm<ContactsForm>

@@ -1,6 +1,6 @@
-import styles from "./DetailsBanner.module.scss";
 import Image from "next/image";
 import React from "react";
+import styles from "./DetailsBanner.module.scss";
 
 interface Props {
 	title: string;
@@ -28,9 +28,6 @@ export function DetailsBanner({ title, description, imageSrc, children }: Props)
 						/>
 					</div>
 					{children}
-					{/*<p className={styles.date}>*/}
-					{/*	{`${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`}*/}
-					{/*</p>*/}
 				</div>
 			</div>
 		</div>

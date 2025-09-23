@@ -262,9 +262,9 @@ export default function UpdateNewsForm() {
 			<div className={styles.preview}>
 				<p className={`title sm left ${styles.title}`}>Попередній перегляд</p>
 
-				<SafeLink className={`btn blue sm`} href={`/admin/news/create/preview`}>
+				<Link className={`btn blue sm`} href={`/admin/news/update/${id}/preview`}>
 					Дивитись сторінку новини
-				</SafeLink>
+				</Link>
 			</div>
 
 			<SubmitButton error={error.update} label="Оновити дані" />

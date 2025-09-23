@@ -1,27 +1,30 @@
 import { DetailsDataImage } from "@/app/common_ui/DetailsData/DetailsDataImage/DetailsDataImage";
+import { DetailsDataImagePreview } from "@/app/common_ui/DetailsData/DetailsDataImage/Preview/DetailsDataImagePreview";
 import { DetailsDataList } from "@/app/common_ui/DetailsData/DetailsDataList/DetailsDataList";
 import { DetailsDataParagraph } from "@/app/common_ui/DetailsData/DetailsDataParagraph/DetailsDataParagraph";
 import { DetailsDataQuote } from "@/app/common_ui/DetailsData/DetailsDataQuote/DetailsDataQuoute";
 import { DetailsDataTitle } from "@/app/common_ui/DetailsData/DetailsDataTitle/DetailsDataTitle";
-import { parseDetailsUserResponseToOrderArray } from "@/app/services/server/details.service";
+import { getIndexedDBStoreNameForDetailsImages } from "@/app/services/admin/details.service";
 import {
 	DetailsFormDataEnum,
+	DetailsOrderSliceNameType,
 	ImageFormDataEnum,
 	ListFormDataEnum,
 	ParagraphFormDataEnum,
 	QuoteFormDataEnum,
 	TitleFormDataEnum,
-	UserDetailsRedactorType,
 } from "@/app/types/data/details.type";
-import styles from "./DetailsData.module.scss";
+import { useAppSelector } from "@/app/utils/redux/hooks";
+import { RootState } from "@/app/utils/redux/store";
+import styles from "../DetailsData.module.scss";
 
-interface DetailsDataProps {
-	data: UserDetailsRedactorType;
-	isLegalInfo?: boolean;
-}
-
-export default function DetailsData({ data, isLegalInfo }: DetailsDataProps) {
-	const parsedData = parseDetailsUserResponseToOrderArray(data);
+export default function DetailsDataPreview({
+	orderSliceName,
+}: {
+	orderSliceName: DetailsOrderSliceNameType;
+}) {
+	const parsedData = useAppSelector((state: RootState) => state[orderSliceName].order);
+	const imageStoreName = getIndexedDBStoreNameForDetailsImages(orderSliceName);
 	console.log("parsedData: ", parsedData);
 
 	return (
@@ -31,7 +34,7 @@ export default function DetailsData({ data, isLegalInfo }: DetailsDataProps) {
 					case DetailsFormDataEnum.TITLES:
 						return (
 							<DetailsDataTitle
-								title={element[TitleFormDataEnum.TITLE]}
+								title={element.data[TitleFormDataEnum.TITLE]}
 								key={i}
 							/>
 						);
@@ -39,8 +42,7 @@ export default function DetailsData({ data, isLegalInfo }: DetailsDataProps) {
 					case DetailsFormDataEnum.PARAGRAPHS:
 						return (
 							<DetailsDataParagraph
-								text={element[ParagraphFormDataEnum.TEXT]}
-								isLegalInfo={isLegalInfo}
+								text={element.data[ParagraphFormDataEnum.TEXT]}
 								key={i}
 							/>
 						);
@@ -48,8 +50,8 @@ export default function DetailsData({ data, isLegalInfo }: DetailsDataProps) {
 					case DetailsFormDataEnum.QUOTES:
 						return (
 							<DetailsDataQuote
-								text={element[QuoteFormDataEnum.TEXT]}
-								author={element[QuoteFormDataEnum.AUTHOR]}
+								text={element.data[QuoteFormDataEnum.TEXT]}
+								author={element.data[QuoteFormDataEnum.AUTHOR]}
 								key={i}
 							/>
 						);
@@ -57,18 +59,19 @@ export default function DetailsData({ data, isLegalInfo }: DetailsDataProps) {
 					case DetailsFormDataEnum.LISTS:
 						return (
 							<DetailsDataList
-								numerable={element[ListFormDataEnum.NUMERABLE]}
-								options={element[ListFormDataEnum.OPTIONS]}
+								numerable={element.data[ListFormDataEnum.NUMERABLE]}
+								options={element.data[ListFormDataEnum.OPTIONS]}
 								key={i}
 							/>
 						);
 
 					case DetailsFormDataEnum.IMAGES:
 						return (
-							<DetailsDataImage
-								description={element[ImageFormDataEnum.DESCRIPTION]}
-								image={element[ImageFormDataEnum.IMAGE]}
-								size={element[ImageFormDataEnum.SIZE]}
+							<DetailsDataImagePreview
+								description={element.data[ImageFormDataEnum.DESCRIPTION]}
+								image={element.data[ImageFormDataEnum.IMAGE]}
+								imageStoreName={imageStoreName}
+								size={element.data[ImageFormDataEnum.SIZE]}
 								key={i}
 							/>
 						);

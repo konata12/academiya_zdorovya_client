@@ -1,5 +1,5 @@
 import { ContactUsBtn } from "@/app/(client)/ui/common/buttons/ContactUsBtn/ContactUsBtn";
-import { DetailsBanner } from "@/app/(client)/ui/common/sections/DetailsBanner/DetailsBanner";
+import { DetailsBanner } from "@/app/common_ui/sections/DetailsBanner/DetailsBanner";
 import DetailsData from "@/app/common_ui/DetailsData/DetailsData";
 import { RightArrow } from "@/app/common_ui/images/RightArrow";
 import { fetchOneServiceType } from "@/app/services/server/fetchData.service";

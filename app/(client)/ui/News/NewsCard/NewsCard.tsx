@@ -1,4 +1,3 @@
-import { EmployeeCardBtn } from "@/app/(client)/ui/common/sections/OurTeam/EmployeeCard/EmployeeCarbBtn/EmployeeCardBtn";
 import { RightArrow } from "@/app/common_ui/images/RightArrow";
 import { News } from "@/app/types/data/news.type";
 import Image from "next/image";

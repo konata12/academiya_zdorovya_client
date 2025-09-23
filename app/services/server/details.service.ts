@@ -12,7 +12,7 @@ import {
 	UserDetailsTitleComponent,
 } from "@/app/types/data/server/details.type";
 
-export function parseDetailsResponseToOrderArray(
+export function parseDetailsUserResponseToOrderArray(
 	details: UserDetailsRedactorType,
 ): OrderUserDetailsComponent[] {
 	const parsedTitles: UserDetailsTitleComponent[] = details.titles.map((title) => {

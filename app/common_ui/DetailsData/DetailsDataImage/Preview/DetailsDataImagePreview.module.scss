@@ -1,0 +1,15 @@
+@use '../../../../styles/variables' as *;
+
+.imageContainer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: $disabled-color;
+
+	img {
+		position: unset !important;
+		height: auto !important;
+		width: auto !important;
+		object-fit: contain;
+	}
+}

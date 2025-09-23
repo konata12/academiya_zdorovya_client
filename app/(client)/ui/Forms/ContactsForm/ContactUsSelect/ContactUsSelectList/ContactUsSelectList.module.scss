@@ -35,7 +35,6 @@
 		}
 	}
 
-	// todo look to this scroll visual in tablet and mobile
 	@include respond-to(s) {
 		scroll-behavior: smooth;
 		scrollbar-width: none;
