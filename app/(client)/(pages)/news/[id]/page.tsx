@@ -10,7 +10,6 @@ import styles from "./page.module.scss";
 export default async function NewsDetails({ params }: { params: { id: string } }) {
 	const newsData = await fetchOneNews(params.id);
 	const date = new Date(newsData.createdAt);
-	console.log("newsData", newsData);
 
 	return (
 		<article className={`page container ${styles.page}`}>
