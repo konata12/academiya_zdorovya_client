@@ -8,7 +8,7 @@ import { BookingService } from "@/app/types/data/booking_services.type";
 import { StatusType } from "@/app/types/data/response.type";
 import { PHONE_NUMBER } from "@/app/utils/regex";
 import Link from "next/link";
-import { JSX, useState } from "react";
+import React, { JSX, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styles from "./ContactsForm.module.scss";
 
@@ -19,6 +19,7 @@ interface ContactsForm {
 	name: string;
 	surname: string;
 	phoneNumber: string;
+	agreed: boolean;
 }
 export interface ContactsFormRequest {
 	name: string;
@@ -47,8 +48,12 @@ export function ContactsForm({ bookingServices }: ContactFormProps): JSX.Element
 		setBookingServiceId(id);
 		setSelectError(false);
 	};
-
 	const book: SubmitHandler<ContactsForm> = async (data) => {
+		const { agreed, ...requestData } = data;
+		// VALIDATING
+		if (!agreed) {
+			return;
+		}
 		if (bookingServiceId === 0) {
 			setSubmitStatus("failed");
 			return;
@@ -57,11 +62,10 @@ export function ContactsForm({ bookingServices }: ContactFormProps): JSX.Element
 			setSelectError(true);
 			return;
 		}
-
 		setSubmitStatus("loading");
 
 		const responseStatus = await postBooking({
-			...data,
+			...requestData,
 			bookingServiceId,
 		});
 
@@ -74,7 +78,6 @@ export function ContactsForm({ bookingServices }: ContactFormProps): JSX.Element
 		}
 	};
 
-	// todo add checkpoint for agreement for using personal data
 	return (
 		<form className={styles.form} onSubmit={handleSubmit(book)}>
 			<BasicInputContainerHookForm<ContactsForm>
@@ -117,6 +120,24 @@ export function ContactsForm({ bookingServices }: ContactFormProps): JSX.Element
 			/>
 
 			<Link href={"/prices"}>Подивитись ціни на послуги</Link>
+
+			<div className={styles.agreeContainer}>
+				<input
+					{...register("agreed", {
+						required: "",
+					})}
+					type={"checkbox"}
+					id={"agreed"}
+					required
+				/>
+				<span>
+					<label htmlFor={"agreed"}>
+						Я надаю згоду на обробку моїх персональних даних для цілей зворотного
+						зв’язку та запису на послугу відповідно до{" "}
+					</label>
+					<Link href={"/privacyPolicy"}>Політики конфіденційності</Link>
+				</span>
+			</div>
 
 			<div className={styles.submitContainer}>
 				{submitStatus === "succeeded" && (

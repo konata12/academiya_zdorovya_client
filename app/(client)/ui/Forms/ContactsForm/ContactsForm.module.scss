@@ -12,7 +12,7 @@
 		width: 100%;
 	}
 
-	a {
+	& > a {
 		color: $text-color-black;
 		font-size: $pc-t1-fz;
 		font-weight: $font-weight-med;
@@ -25,6 +25,17 @@
 
 		&:hover {
 			color: $primary-color;
+		}
+	}
+
+	.agreeContainer {
+		display: flex;
+		align-items: flex-start;
+		gap: 16px;
+
+		input {
+			margin-top: 5px;
+			width: 15px;
 		}
 	}
 
