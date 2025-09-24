@@ -1,27 +1,33 @@
+"use client";
+
 import { ContactUsBtn } from "@/app/(client)/ui/common/buttons/ContactUsBtn/ContactUsBtn";
-import { EmployeesCarousel } from "@/app/(client)/ui/common/carousels/EmployeeCarousel/EmployeesCarousel";
-import { DetailsBanner } from "@/app/common_ui/sections/DetailsBanner/DetailsBanner";
 import { ServicesStages } from "@/app/(client)/ui/Services/ServicesStages/ServicesStages";
-import { ServiceTypeCard } from "@/app/(client)/ui/Services/ServiceTypeCard/ServiceTypeCard";
+import { ServiceTypeCardPreview } from "@/app/(client)/ui/Services/ServiceTypeCard/preview/ServiceTypeCardPreview";
 import { RightArrow } from "@/app/common_ui/images/RightArrow";
-import { fetchOneService } from "@/app/services/server/fetchData.service";
+import { DetailsBannerPreview } from "@/app/common_ui/sections/DetailsBanner/Preview/DetailsBannerPreview";
+import { useGetImageUrlFromIndexedDBImage } from "@/app/utils/hooks/admin/indexedDB/useGetImageUrlFromIndexedDBImage";
+import { useAppSelector } from "@/app/utils/redux/hooks";
+import { RootState } from "@/app/utils/redux/store";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 import styles from "./page.module.scss";
 
-export default async function SingleServiceData({ params }: { params: { id: string } }) {
-	const service = await fetchOneService(params.id);
+export default function SingleServiceData() {
+	const service = useAppSelector((state: RootState) => state.serviceUpdateForm);
+	const imageUrl = useGetImageUrlFromIndexedDBImage(service.image, "service_update_images");
+	const pathname = usePathname();
 
 	return (
 		<div className={"page"}>
 			<section className={"container"}>
-				<DetailsBanner
+				<DetailsBannerPreview
 					title={service.title}
 					description={service.shortDescription}
-					imageSrc={service.image}
+					imageSrc={imageUrl}
 				>
 					<ContactUsBtn className={styles.btn} />
-				</DetailsBanner>
+				</DetailsBannerPreview>
 
 				<div className={styles.description}>
 					<article className={styles.stages}>
@@ -42,11 +48,11 @@ export default async function SingleServiceData({ params }: { params: { id: stri
 				<p>{service.serviceTypesDescription}</p>
 				{service.serviceTypes && (
 					<div className={styles.cardsContainer}>
-						{service.serviceTypes.map((data) => (
-							<ServiceTypeCard
+						{service.serviceTypes.map((data, i) => (
+							<ServiceTypeCardPreview
 								serviceType={data}
-								key={data.id}
-								serviceId={params.id}
+								imageStoreName={"service_update_images"}
+								key={i}
 							/>
 						))}
 					</div>
@@ -54,10 +60,13 @@ export default async function SingleServiceData({ params }: { params: { id: stri
 			</section>
 			<section className={`section ${styles.employeesSection}`}>
 				<div className={`container`}>123</div>
-				<EmployeesCarousel />
+				{/*<EmployeesCarousel />*/}
 
-				<Link className={`btn blue md returnBtn ${styles.returnBtn}`} href="/services">
-					Повернутись до послуг
+				<Link
+					className={`btn blue md returnBtn ${styles.returnBtn}`}
+					href={pathname.replace("/preview", "")}
+				>
+					Повернутись до послуги
 					<RightArrow />
 				</Link>
 			</section>

@@ -879,7 +879,10 @@ export default function UpdateServiceForm() {
 			<div className={styles.preview}>
 				<p className={`title sm left ${styles.title}`}>Попередній перегляд</p>
 
-				<SafeLink className={`btn blue sm`} href={`/admin/services/update/preview`}>
+				<SafeLink
+					className={`btn blue sm`}
+					href={`/admin/services/update/${id}/preview`}
+				>
 					Дивитись сторінку послуги
 				</SafeLink>
 			</div>

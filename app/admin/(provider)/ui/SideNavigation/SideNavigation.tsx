@@ -1,9 +1,9 @@
-import { useAppSelector } from "@/app/utils/redux/hooks";
-import styles from "./SideNavigation.module.scss";
 import SideNavButton from "@/app/admin/(provider)/ui/SideNavigation/SideNavButton/SideNavButton";
+import { useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
 import { useParams, usePathname } from "next/navigation";
 import { useCallback } from "react";
+import styles from "./SideNavigation.module.scss";
 
 type Route = {
 	label: string;
@@ -23,7 +23,14 @@ export const routes: Route[] = [
 	{ label: "Відгуки", path: "/admin/reviews" },
 	{ label: "Новини", path: "/admin/news", checkRender: true },
 ];
-const notRenderRoutes = ["create", "update", "privacyPolicy", "publicOffer"];
+const notRenderRoutes = [
+	"create",
+	"update",
+	"privacyPolicy",
+	"publicOffer",
+	"serviceType",
+	"preview",
+];
 
 export default function SideNavigation() {
 	const { accessToken } = useAppSelector((state: RootState) => state.auth);
@@ -39,21 +46,15 @@ export default function SideNavigation() {
 			const route = routes.find((route) => pathname.includes(route.path));
 
 			// IF SERVICE PAGE
-			if (
-				route &&
-				route.path === "/admin/services" &&
-				!pathname.includes("serviceType")
-			) {
-				return true;
-			} else if (
-				route &&
-				route.path === "/admin/services" &&
-				!pathname.includes("serviceType")
-			) {
-				return false;
+			if (pathname.includes("/admin/services")) {
+				if (pathname.includes("preview")) {
+					return false;
+				} else if (!pathname.includes("serviceType")) {
+					return true;
+				}
 			}
 			// ELSE IF DEPARTMENT CONTENT PAGE
-			else if (route && pathname.includes("/admin/departments_content") && id) {
+			else if (pathname.includes("/admin/departments_content") && id) {
 				return false;
 			}
 			// ELSE IF BOOKINGS PAGES
@@ -71,6 +72,7 @@ export default function SideNavigation() {
 	);
 
 	const sideNavigationIsOpen = checkIsSideNavigationOpen(routes);
+	console.log("sideNavigationIsOpen", sideNavigationIsOpen);
 
 	if (isLoginPage && !accessToken) return null;
 	if (!sideNavigationIsOpen) return null;

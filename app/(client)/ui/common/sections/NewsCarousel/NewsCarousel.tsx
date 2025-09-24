@@ -4,6 +4,7 @@ import { months } from "@/app/(client)/ui/News/NewsCard/NewsCard";
 import { RightArrow } from "@/app/common_ui/images/RightArrow";
 import { News } from "@/app/types/data/news.type";
 import { EmblaCarouselType, EmblaEventType } from "embla-carousel";
+import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,7 +17,7 @@ const numberWithinRange = (number: number, min: number, max: number): number =>
 	Math.min(Math.max(number, min), max);
 
 export function NewsCarousel({ news }: { news: News[] }) {
-	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 60 });
+	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 60 }, [Autoplay()]);
 	const tweenFactor = useRef(0);
 	const tweenNodes = useRef<HTMLElement[]>([]);
 
