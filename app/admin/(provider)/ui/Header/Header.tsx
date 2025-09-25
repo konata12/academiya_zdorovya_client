@@ -1,13 +1,14 @@
-import Image from "next/image";
-import logo from "@/public/icons/logo_admin.png";
-import styles from "./Header.module.scss";
 import NavLink from "@/app/admin/(provider)/ui/Links/NavLink/NavLink";
 import { routes } from "@/app/admin/(provider)/ui/SideNavigation/SideNavigation";
-import { usePathname } from "next/navigation";
+import { logout } from "@/app/utils/redux/auth/authSlice";
+import { getAllNotRepliedCount } from "@/app/utils/redux/booking/bookingSlice";
 import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { RootState } from "@/app/utils/redux/store";
+import logo from "@/public/icons/logo_admin.png";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { getAllNotRepliedCount } from "@/app/utils/redux/booking/bookingSlice";
+import styles from "./Header.module.scss";
 
 export default function Header() {
 	const { allNotRepliedCount, errors } = useAppSelector((state: RootState) => state.booking);
@@ -26,24 +27,26 @@ export default function Header() {
 			? "Помилка при отриманні"
 			: allNotRepliedCount;
 
-	return (
-		<div className={`${styles.header}`}>
-			<div
-				className={`adminContainer ${styles.container} ${isLoginPage && styles.login}`}
-			>
-				<div className={styles.logo}>
-					<Image src={logo} alt="logo" />
-				</div>
+	const logoutAction = () => {
+		dispatch(logout());
+		window.location.reload();
+	};
 
-				<div className={styles.links}>
-					<NavLink url="/admin/departments" urlsForActive={urlsForRedactive}>
-						Редактор сайту
-					</NavLink>
-					<NavLink url="/admin/bookings">
-						Записи на прийом ({notRepliedCount})
-					</NavLink>
-				</div>
+	return (
+		<div className={`${styles.header} ${isLoginPage && styles.login}`}>
+			<div className={styles.logo}>
+				<Image src={logo} alt="logo" />
 			</div>
+
+			<div className={styles.links}>
+				<NavLink url="/admin/departments" urlsForActive={urlsForRedactive}>
+					Редактор сайту
+				</NavLink>
+				<NavLink url="/admin/bookings">Записи на прийом ({notRepliedCount})</NavLink>
+			</div>
+			<button className={`btn gray sm ${styles.logout}`} onClick={logoutAction}>
+				Вийти
+			</button>
 		</div>
 	);
 }

@@ -24,7 +24,6 @@ export const login = createAsyncThunk(
 				userName,
 				password,
 			});
-			console.log(response);
 			return response.data;
 		} catch (error) {
 			if (error instanceof AxiosError) {
@@ -39,12 +38,28 @@ export const login = createAsyncThunk(
 	},
 );
 
+export const logout = createAsyncThunk("auth/logout", async (_, { rejectWithValue }) => {
+	try {
+		const response = await axiosInstance.patch("auth/logout");
+		console.log(response);
+		return response.data;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			console.log(error);
+			const serializableError: ErrorResponse = {
+				message: error.response?.data.message || "Unexpected client error",
+				statusCode: error.status || 500,
+			};
+			return rejectWithValue(serializableError);
+		}
+	}
+});
+
 export const refreshTokens = createAsyncThunk(
 	"auth/refreshTokens",
 	async (_, { rejectWithValue }) => {
 		try {
 			const response = await axiosInstance.post("auth/refresh");
-			// console.log(response.data)
 			return response.data;
 		} catch (error) {
 			console.log(error);
@@ -72,6 +87,18 @@ export const authSlice = createSlice({
 				state.status.login = "failed";
 				state.accessToken = null;
 				state.error.login = action.payload as ErrorResponse;
+			})
+
+			// LOGOUT
+			.addCase(logout.pending, (state) => {
+				state.accessToken = null;
+			})
+			.addCase(logout.fulfilled, (state) => {
+				console.log("logged out");
+				state.accessToken = null;
+			})
+			.addCase(logout.rejected, (state) => {
+				state.accessToken = null;
 			})
 
 			// REFRESH

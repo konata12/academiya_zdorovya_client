@@ -10,33 +10,42 @@
 	overflow: hidden;
 	z-index: 9999;
 
-	.container {
-		height: 100%;
-		position: relative;
-		display: flex;
-		justify-content: center;
+	display: flex;
+	justify-content: center;
 
-		&.login {
 
-			.logo {
-				position: unset;
-			}
-
-			.links {
-				display: none;
-			}
-		}
+	&.login {
 
 		.logo {
-			position: absolute;
-			left: 24px;
-			height: 100%;
-			padding-top: 8px;
+			position: unset;
 		}
 
 		.links {
-			display: flex;
-			height: 100%;
+			display: none;
 		}
+
+		.logout {
+			display: none;
+		}
+	}
+
+	.logo {
+		position: absolute;
+		left: 24px;
+		height: 100%;
+		padding-top: 8px;
+	}
+
+	.links {
+		display: flex;
+		justify-self: center;
+		height: 100%;
+	}
+
+	.logout {
+		position: absolute;
+		top: 50%;
+		right: 24px;
+		transform: translateY(-50%);
 	}
 }
