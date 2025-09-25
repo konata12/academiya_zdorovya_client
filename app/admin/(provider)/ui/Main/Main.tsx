@@ -10,11 +10,11 @@ export default function Main({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { accessToken, status } = useAppSelector((state: RootState) => state.auth);
+	const { accessToken } = useAppSelector((state: RootState) => state.auth);
 
 	const pathname = usePathname();
 	const router = useRouter();
-	const isLoginPage = pathname.includes("login");
+	const isLoginPage = pathname === "/admin/login";
 	const isPreviewPage = pathname.includes("preview");
 	const isBookingPage = pathname.includes("bookings");
 
@@ -22,24 +22,16 @@ export default function Main({
 		if (accessToken && isLoginPage) router.push("/admin/departments");
 	}, [accessToken]);
 
-	const authStatus = status.login === "succeeded" || status.refresh === "succeeded";
-	const renderLoginFallback = isLoginPage && !accessToken && authStatus;
-
 	return (
 		<div className={styles.main}>
 			<div className={`adminContainer ${styles.mainContainer}`}>
 				<SideNavigation />
 
-				{/* RENDER MAIN CONTENT */}
-				{renderLoginFallback ? (
-					<div className={styles.not_logged_in}>Ввійдіть в адмін панель</div>
-				) : (
-					<div
-						className={`${styles.children} ${isBookingPage || isPreviewPage ? styles.widerContainer : ""}`}
-					>
-						{children}
-					</div>
-				)}
+				<div
+					className={`${styles.children} ${isBookingPage || isPreviewPage ? styles.widerContainer : ""}`}
+				>
+					{children}
+				</div>
 			</div>
 		</div>
 	);

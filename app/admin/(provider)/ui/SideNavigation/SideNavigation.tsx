@@ -72,7 +72,6 @@ export default function SideNavigation() {
 	);
 
 	const sideNavigationIsOpen = checkIsSideNavigationOpen(routes);
-	console.log("sideNavigationIsOpen", sideNavigationIsOpen);
 
 	if (isLoginPage && !accessToken) return null;
 	if (!sideNavigationIsOpen) return null;

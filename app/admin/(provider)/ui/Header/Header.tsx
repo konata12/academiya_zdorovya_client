@@ -11,16 +11,15 @@ import { useEffect } from "react";
 import styles from "./Header.module.scss";
 
 export default function Header() {
+	const { accessToken } = useAppSelector((state: RootState) => state.auth);
 	const { allNotRepliedCount, errors } = useAppSelector((state: RootState) => state.booking);
 
 	const dispatch = useAppDispatch();
-	const pathname = usePathname();
 
 	useEffect(() => {
 		dispatch(getAllNotRepliedCount());
 	}, []);
 
-	const isLoginPage = pathname.split("/")[2] === "login";
 	const urlsForRedactive = routes.map((route) => route.path);
 	const notRepliedCount =
 		errors.getAllNotRepliedCount || allNotRepliedCount === null
@@ -33,7 +32,7 @@ export default function Header() {
 	};
 
 	return (
-		<div className={`${styles.header} ${isLoginPage && styles.login}`}>
+		<div className={`${styles.header} ${accessToken ? "" : styles.login}`}>
 			<div className={styles.logo}>
 				<Image src={logo} alt="logo" />
 			</div>
