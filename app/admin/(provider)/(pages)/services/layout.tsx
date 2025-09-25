@@ -1,8 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
-import styles from "./layout.module.scss";
+import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
+import DeleteModalWindow from "@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow";
+import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
+import CommonTable404 from "@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404";
+import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
 import { checkCreatePage, getUrlLastElement } from "@/app/services/admin/navigation.service";
+import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
+import { setUpdatingState } from "@/app/utils/redux/services/serviceFromUISlice";
 import {
 	closeServiceModal,
 	deleteService as deleteServiceAction,
@@ -10,15 +15,9 @@ import {
 	openServiceModal,
 } from "@/app/utils/redux/services/servicesSlice";
 import { RootState } from "@/app/utils/redux/store";
-import { useAppDispatch, useAppSelector } from "@/app/utils/redux/hooks";
 import { usePathname } from "next/navigation";
-
-import SafeLink from "@/app/admin/(provider)/ui/Links/SafeLink/SafeLink";
-import CommonTable from "@/app/admin/(provider)/ui/Tables/Common/CommonTable";
-import CommonTable404 from "@/app/admin/(provider)/ui/Tables/Common/CommonTable404/CommonTable404";
-import TableLine from "@/app/admin/(provider)/ui/Tables/ListOption/TableLine";
-import DeleteModalWindow from "@/app/admin/(provider)/ui/Modals/DeleteModalWindow/DeleteModalWindow";
-import { setUpdatingState } from "@/app/utils/redux/services/serviceFromUISlice";
+import React, { useEffect } from "react";
+import styles from "./layout.module.scss";
 
 const titles = ["Назва", "Опції"];
 
@@ -35,6 +34,7 @@ export default function page({
 	const dispatch = useAppDispatch();
 	const pathname = usePathname();
 	const isCreatePage = checkCreatePage(pathname);
+	const notRenderTable = pathname.includes("serviceType") || pathname.includes("preview");
 
 	useEffect(() => {
 		dispatch(fetchServices());
@@ -53,7 +53,7 @@ export default function page({
 
 	return (
 		<>
-			{pathname.includes("serviceType") || (
+			{notRenderTable || (
 				<>
 					<p className={`title lg mb`}>Послуги</p>
 

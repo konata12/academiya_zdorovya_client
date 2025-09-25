@@ -21,7 +21,6 @@
     "framer-motion": "^12.4.7",
     "idb": "^8.0.3",
     "idb-keyval": "^6.2.2",
-    "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "next": "^15.2.0-canary.16",
     "react": "^19.0.0",
