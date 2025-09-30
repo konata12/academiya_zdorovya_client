@@ -1,0 +1,27 @@
+@use '../../../../../styles/variables' as *;
+
+.arrows {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 24px;
+
+	width: 100%;
+
+	.arrow {
+		height: 84px;
+		width: 84px;
+		border-radius: 50%;
+		border: none;
+		outline: none;
+		background-color: $primary-color;
+		color: $text-color-white;
+		transition: all $anim-time $slow;
+
+		&:hover {
+			cursor: pointer;
+			color: $secondary-color;
+			box-shadow: 0 5px 46px 0 $primary-color-active;
+		}
+	}
+}

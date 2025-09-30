@@ -9,6 +9,7 @@ import { News, UserNews } from "@/app/types/data/news.type";
 import { PriceSection } from "@/app/types/data/prices.type";
 import {
 	Service,
+	ServiceResponseDataUser,
 	ServiceTypeResponseData,
 	ServiceTypeResponseDataUser,
 } from "@/app/types/data/services.type";
@@ -153,7 +154,7 @@ export async function fetchOneService(id: string) {
 		},
 	});
 
-	const parsedData: Service = await res.json();
+	const parsedData: ServiceResponseDataUser = await res.json();
 	return parsedData;
 }
 export async function fetchOneServiceType(id: string) {

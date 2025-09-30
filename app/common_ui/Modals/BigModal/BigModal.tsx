@@ -1,6 +1,9 @@
+"use client";
+
 import { CloseBtn } from "@/app/common_ui/Buttons/CloseBtn/CloseBtn";
 import { AnimatePresence, motion } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import styles from "./BigModal.module.scss";
 
 interface BigModalProps {
@@ -13,13 +16,20 @@ interface BigModalProps {
 export function BigModal({ render, label, closeHandler, children }: BigModalProps) {
 	const backgroundRef = useRef<HTMLDivElement>(null);
 	const modalRef = useRef<HTMLDivElement>(null);
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		setMounted(true); // now safe to access document
+	}, []);
 
 	const handleOutsideClick = (e: MouseEvent<HTMLDivElement, MouseEvent>) => {
 		if (e.target !== backgroundRef.current) return;
 		closeHandler();
 	};
 
-	return (
+	if (!mounted) return null;
+
+	return createPortal(
 		<AnimatePresence>
 			{render && (
 				<>
@@ -52,6 +62,7 @@ export function BigModal({ render, label, closeHandler, children }: BigModalProp
 					></motion.div>
 				</>
 			)}
-		</AnimatePresence>
+		</AnimatePresence>,
+		document.body,
 	);
 }

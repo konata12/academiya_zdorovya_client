@@ -1,4 +1,4 @@
-import { EmployeeCardBtn } from "@/app/(client)/ui/common/sections/OurTeam/EmployeeCard/EmployeeCarbBtn/EmployeeCardBtn";
+import { EmployeeCardBtn } from "@/app/(client)/ui/common/cards/EmployeeCard/EmployeeCarbBtn/EmployeeCardBtn";
 import { Employee } from "@/app/types/data/employees.type";
 import Image from "next/image";
 import React from "react";

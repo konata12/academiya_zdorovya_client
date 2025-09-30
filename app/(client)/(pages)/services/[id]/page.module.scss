@@ -94,7 +94,16 @@
 }
 
 .employeesSection {
-	overflow: hidden;
+	.carouselViewport {
+		width: 446px;
+
+		@include respond-to(s) {
+			width: 324px;
+		}
+		@include respond-to(m) {
+			width: 324px;
+		}
+	}
 
 	.returnBtn.returnBtn.returnBtn {
 		align-self: center;

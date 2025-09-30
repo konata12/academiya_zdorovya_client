@@ -1,4 +1,4 @@
-import { EmployeeCard } from "@/app/(client)/ui/common/sections/OurTeam/EmployeeCard/EmployeeCard";
+import { EmployeeCard } from "@/app/(client)/ui/common/cards/EmployeeCard/EmployeeCard";
 import { fetchEmployees } from "@/app/services/server/fetchData.service";
 import { Employee } from "@/app/types/data/employees.type";
 import React from "react";
