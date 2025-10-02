@@ -1,10 +1,11 @@
 "use client";
 
+import { DepartmentSelect } from "@/app/(client)/ui/Header/Departments_select/DepartmentSelect/DepartmentSelect";
+import { DepartmentSelectModal } from "@/app/(client)/ui/Header/Departments_select/DepartmentSelectModal/DepartmentSelectModal";
+import { getCookieInClientComponent } from "@/app/services/client/utils.service";
+import { Department } from "@/app/types/data/departments.type";
 import React, { use, useEffect, useRef, useState } from "react";
 import styles from "./DepartmentsSelectContainer.module.scss";
-import { DepartmentSelect } from "@/app/(client)/ui/Header/Departments_select/DepartmentSelect/DepartmentSelect";
-import { Department } from "@/app/types/data/departments.type";
-import { getCookieInClientComponent } from "@/app/services/client/utils.service";
 
 export default function DepartmentsSelectContainer({
 	departmentsPromise,
@@ -73,6 +74,11 @@ export default function DepartmentsSelectContainer({
 				showList={showList}
 				departments={departmentsList}
 				setDepartment={setSelectedDepartment}
+				setShowList={setShowList}
+			/>
+			<DepartmentSelectModal
+				parentRef={componentRef}
+				departments={departmentsList}
 				setShowList={setShowList}
 			/>
 		</div>

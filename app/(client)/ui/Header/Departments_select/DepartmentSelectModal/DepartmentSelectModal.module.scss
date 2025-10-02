@@ -1,0 +1,68 @@
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/functions' as *;
+@use '../../../../../styles/mixins' as *;
+
+
+.container {
+	z-index: 1;
+	position: absolute;
+	top: 65px;
+	right: -50px;
+	min-width: 250px;
+	opacity: 0;
+
+	.modalBackground {
+		z-index: -1;
+		display: none;
+		position: fixed;
+		inset: 0;
+		opacity: 0;
+		background-color: rgba-color($black-bg-color, 0.2);
+	}
+
+	.triangle {
+		z-index: 1;
+		position: absolute;
+		top: -12px;
+		right: 43px;
+		filter: drop-shadow(0 0 0 rgba-color($black-bg-color, 0.08)) drop-shadow(3px 7px 37px rgba($black-bg-color, 0.12));
+		transition: all $slow $anim-time;
+
+		@include respond-to(s) {
+			right: unset;
+			left: 30px;
+		}
+	}
+
+	.modalContent {
+		display: flex;
+		flex-direction: column;
+		max-height: 508px;
+		overflow-y: auto;
+		padding: 28px;
+
+		border-radius: $border-rad-5;
+		background-color: #fff;
+		filter: drop-shadow(0 0 0 rgba-color($black-bg-color, 0.08)) drop-shadow(3px 7px 37px rgba($black-bg-color, 0.12));
+
+		.department {
+			padding: 16px 0 24px;
+
+			font-size: $pc-t2-fz;
+		}
+
+		.btnContainer {
+			display: flex;
+			gap: 16px;
+
+			.btn {
+				width: 142px;
+			}
+		}
+	}
+
+	@include respond-to(s) {
+		right: unset;
+		left: 10px;
+	}
+}
