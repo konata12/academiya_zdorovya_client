@@ -77,6 +77,7 @@ export function WhatWeTreatWithImagesDataRender({ data }: { data: AboutTreatment
 						src={data[selected].image}
 						alt={`Зображення: ${data[selected].title}`}
 						fill
+						loading="eager"
 						unoptimized={true}
 					/>
 				</div>

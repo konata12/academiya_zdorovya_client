@@ -1,46 +1,43 @@
 @use '../../../../../../styles/variables' as *;
 
 .priceVariantShape {
-  position: relative;
-  z-index: 0;
+	position: relative;
+	z-index: 0;
 }
 
 .priceVariantWrap {
-  z-index: 5;
-  position: relative;
-  top: 0;
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 48px;
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 48px;
 
-  &.additional {
-    padding-top: 64px;
-  }
+	&.additional {
+		padding-top: 64px;
+	}
 
-  .additionalTitle {
-    width: 100%;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+	.additionalTitle {
+		width: 100%;
+		margin-bottom: 12px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
 
-  .variantOptions {
-    display: flex;
-    width: 100%;
-    gap: 32px;
+	.variantOptions {
+		display: flex;
+		max-width: 100%;
+		gap: 32px;
 
-    .variant {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
+		.variant {
+			display: flex;
+			flex-direction: column;
+			flex-grow: 1;
 
-      .button {
-        display: flex;
-        max-width: none;
-        width: 100%;
-      }
-    }
-  }
+			.input {
+				display: flex;
+				max-width: none;
+				width: 100%;
+			}
+		}
+	}
 }

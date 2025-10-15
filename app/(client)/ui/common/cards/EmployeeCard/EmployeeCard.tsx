@@ -13,6 +13,7 @@ export function EmployeeCard({ employee }: { employee: Employee }) {
 					src={employee.image}
 					alt={"Фото працівника"}
 					fill
+					loading="eager"
 					unoptimized={true}
 				/>
 			</div>

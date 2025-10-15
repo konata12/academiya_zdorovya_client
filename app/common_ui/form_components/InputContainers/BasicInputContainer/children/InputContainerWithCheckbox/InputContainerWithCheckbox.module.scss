@@ -1,43 +1,43 @@
 @use '../../../../../../styles/variables' as *;
 
 .inputContainer {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
 
-  .checkboxContainer {
-    display: flex;
-    justify-content: space-between;
+	.checkboxContainer {
+		display: flex;
+		justify-content: space-between;
 
-	  .label {
-		  margin-bottom: 0;
-	  }
-  }
+		.label {
+			margin-bottom: 0;
+		}
+	}
 
-  .absoluteContainer {
-    padding-top: 32px;
+	.absoluteContainer {
+		padding-top: 24px;
 
-    .button {
-      width: 100%;
-      pointer-events: none;
-      opacity: 0;
+		.input {
+			width: 100%;
+			pointer-events: none;
+			opacity: 0;
 
-      transition: all $anim-time $slow;
+			transition: all $anim-time $slow;
 
-      &.active {
-        pointer-events: auto;
-        opacity: 1;
-      }
-    }
+			&.active {
+				pointer-events: auto;
+				opacity: 1;
+			}
+		}
 
-    .error {
-      width: 100%;
-      border-radius: $border-rad-5;
+		.error {
+			width: 100%;
+			border-radius: $border-rad-5;
 
-      color: $error-color;
-      text-align: center;
-      font-size: $pc-h6-fz;
-    }
-  }
+			color: $error-color;
+			text-align: center;
+			font-size: $pc-h6-fz;
+		}
+	}
 }

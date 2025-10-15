@@ -30,7 +30,6 @@ body {
 	display: flex;
 	flex-direction: column;
 	gap: 186px;
-	overflow: hidden;
 
 	@include respond-to(s) {
 		gap: 93px;

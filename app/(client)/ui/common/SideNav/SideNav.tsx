@@ -11,6 +11,7 @@ interface SideNavProps {
 
 export function SideNav({ list }: SideNavProps) {
 	return (
+		// todo fix sticky position
 		<div className={styles.container}>
 			<nav className={styles.sideNav}>
 				{list.map((item, i) => (

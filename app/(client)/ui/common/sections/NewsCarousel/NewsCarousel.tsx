@@ -130,6 +130,7 @@ export function NewsCarousel({ news }: { news: News[] }) {
 											src={item.backgroundImg}
 											alt={"Новина"}
 											fill
+											loading="eager"
 											unoptimized={true}
 										/>
 									</div>

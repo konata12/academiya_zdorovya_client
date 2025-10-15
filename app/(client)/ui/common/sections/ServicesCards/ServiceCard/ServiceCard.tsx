@@ -14,6 +14,7 @@ export function ServiceCard({ service }: { service: Service }) {
 					src={service.image}
 					alt={"Фото працівника"}
 					fill
+					loading="eager"
 					unoptimized={true}
 				/>
 			</div>
